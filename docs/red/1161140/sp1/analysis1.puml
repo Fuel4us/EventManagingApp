@@ -1,0 +1,17 @@
+@startuml  analysis1
+
+skinparam monochrome true
+skinparam shadowing false
+hide footbox
+
+actor User
+database Database order 100
+
+User -> Browser : Opens the events
+Browser ->> Server : getCalendarEvents()
+Server -> Database : findAll()
+
+Server -->> Browser : return
+Browser -> Browser : display
+
+@enduml
