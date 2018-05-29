@@ -37,3 +37,12 @@ gradle-app.setting
 **/reports/
 
 
+db/nsheets.h2.db
+db/nsheets.lock.db
+db/nsheets.trace.db
+nsheets/.classpath
+nsheets/.project
+server/.classpath
+server/.project
+shared/.classpath
+shared/.project
