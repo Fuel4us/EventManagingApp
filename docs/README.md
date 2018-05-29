@@ -21,28 +21,30 @@ These are links for the individual pages/folders of each Student. The first one 
 
 | Group | Student Number     | Student Name                        | Link 							  |
 |------|--------------------|-------------------------------------|------------------------------------|
-| White  | **s4567890**      			| John Doe					|[John Doe](white/s4567890/) |
-| Red  |     	 	 			| 						|						 |
-| Red  |			      			| 							|								 |
-| Red  | 			      			| 							|								 |
-| Red  | 			      			| 							|								 |
-| Red  | 			      			| 							|								 |
-| Red  | 			      			| 							|								 |
-| Red  | 			      			| 							|								 |
-| Green | 			      			| 							|								 |
-| Green | 			      			| 							|								 |
-| Green | 			      			| 							|								 |
-| Green | 			      			| 							|								 |
-| Green | 			      			| 							|								 |
-| Green | 			      			| 							|								 |
-| Green | 			      			| 							|								 |
-| Blue | 			      			| 							|								 |
-| Blue | 			      			| 							|								 |
-| Blue | 			      			| 							|								 |
-| Blue | 			      			| 							|								 |
-| Blue | 			      			| 							|								 |
-| Blue | 			      			| 							|								 |
-| Blue | 			      			| 							|								 |
+| White  | **s4567890** | John Doe |[John Doe](white/s4567890/) |
+| Red  | **1161292** | Tiago Rios |[Tiago Rios](red/1161292/) |
+| Red  | **1160600** | João Reis |[João Reis](red/1160600/) |
+| Red  | **1160630** | José Monteiro |[José Monteiro](red/1160630/) |
+| Red  | **1161140** | Gonçalo Silva |[Gonçalo Silva](red/1161140/) |
+| Red  | **1160634** | Pedro Vieira |[Pedro Vieira](red/1160634/) |
+| Red  | **1160760** | Tiago Babo |[Tiago Babo](red/1160760/) |
+| Red  | **1160629** | José Espírito Santo |[José Santo](red/1160629/) |
+| Red  | **1150990** | Bernardo Carreira |[Bernardo Carreira](red/1150990/) |
+| Green | **1140317** | Carlos Figueiredo |[Carlos Figueiredo](green/1140317/) |
+| Green | **1140302** | Diogo Monteiro |[Diogo Monteiro](green/1140302/) |
+| Green | **1150503** | Gonçalo Fonseca |[Gonçalo Fonseca](green/1150503/) |
+| Green | **1160557** | Hilário Coelho |[Hilário Coelho](green/1160557/) |
+| Green | **1160832** | Mário Vaz |[Mário Vaz](green/1160832/) |
+| Green | **1160815** | Leandro Pinto |[Leandro Pinto](green/1160815/) |
+| Green | **1140572** | Pedro Rodrigues |[Pedro Rodrigues](green/1140572/) |
+| Green | **1160998** | Rúben Ribeiro |[Rúben Ribeiro](green/1160998/) |
+| Blue | **1161611** | Ana Mafalda |[Ana Mafalda](blue/1161611/) |
+| Blue | **1050475** | Hernâni Gil |[Hernâni Gil](blue/1050475/) |
+| Blue | **1150455** | João Pires |[João Pires](blue/1150455/) |
+| Blue | **1150478** | João Pereira |[João Pereira](blue/1150478/) |
+| Blue | **1160713** | Josué Lapa |[Josué Lapa](blue/1160713/) |
+| Blue | **1150372** | Pedro Alves |[Pedro Alves](blue/1150372/) |
+| Blue | **1140403** | Tiago Correia |[Tiago Correia](blue/1140403/) |
 
 # 3. Planning Overview
 
@@ -59,27 +61,29 @@ This is a table that should display the overall planning of the team. This is si
 | Group | Student                      | Sprint1                                        | Sprint2                                      | Sprint3 							          |
 |------|------------------------------|------------------------------------------------|----------------------------------------------|----------------------------------------------|
 | White  | [John Doe](white/s4567890/) | [Core00.0](white/s4567890/sp1)            | [IPC00.0](white/s45678901/sp2)           | [Lang00.0](white/s4567890/sp3) |
-| Red  | 						| 				            | 					          | 	 |
-| Red  |			      			| 							|								 |		|
-| Red  | 			      			| 							|								 |		|
-| Red  | 			      			| 							|								 |		|
-| Red  | 			      			| 							|								 |		|
-| Red  | 			      			| 							|								 |		|
-| Red  | 			      			| 							|								 |		|
-| Green | 			      			| 							|								 |		|
-| Green | 			      			| 							|								 |		|
-| Green | 			      			| 							|								 |		|
-| Green | 			      			| 							|								 |		|	
-| Green | 			      			| 							|								 |		|
-| Green | 			      			| 							|								 |		|
-| Green | 			      			| 							|								 |		|
-| Blue | 			      			| 							|								 |		|
-| Blue | 			      			| 							|								 |		|
-| Blue | 			      			| 							|								 |		|
-| Blue | 			      			| 							|								 |		|
-| Blue | 			      			| 							|								 |		|
-| Blue | 			      			| 							|								 |		|
-| Blue | 			      			| 							|								 |		|
+| Red  | [Tiago Rios](red/1161292/) | [Core01.1](red/1161292/sp1) | 					          | 	 |
+| Red  | [João Reis](red/1160600/) | [Core03.1](red/1160600/sp1) |								 |		|
+| Red  | [José Monteiro](red/1160630/) | [Core04.1](red/1160630/sp1) |								 |		|
+| Red  | [Gonçalo Silva](red/1161140/) | [Core06.1](red/1161140/sp1) |								 |		|
+| Red  | [Pedro Vieira](red/1160634/) | [Core07.1](red/1160634/sp1) |								 |		|
+| Red  | [Tiago Babo](red/1160760/) | [Core05.1](red/1160760/sp1) |								 |		|
+| Red  | [José Santo](red/1160629/) | [Core02.1](red/1160629/sp1) |								 |		|
+| Red  | [Bernardo Carreira](red/1150990/) | [Core08.1](red/1150990/sp1) |								 |		|
+| Green | [Carlos Figueiredo](green/1140317/) | [IPC06.1](white/1140317/sp1) |								 |		|
+| Green | [Diogo Monteiro](green/1140302/) | [IPC02.1](white/1140302/sp1) |								 |		|
+| Green | [Gonçalo Fonseca](green/1150503/) | [IPC03.1](white/1150503/sp1) |								 |		|
+| Green | [Hilário Coelho](green/1160557/) | [IPC01.1](white/1160557/sp1) |								 |		|	
+| Green | [Mário Vaz](green/1160832/) | [IPC07.1](white/1160832/sp1) |								 |		|
+| Green | [Leandro Pinto](green/1160815/) | [IPC08.1](white/1160815/sp1) |								 |		|
+| Green | [Pedro Rodrigues](green/1140572/) | [IPC06.1](white/1140572/sp1) |								 |		|
+| Green | [Rúben Ribeiro](green/1160998/) | [IPC05.1](white/1160998/sp1) |								 |		|
+| Blue | [Ana Mafalda](blue/1161611/) | [Lang04.1](blue/1161611/sp1) |								 |		|
+| Blue | [Hernâni Gil](blue/1050475/) | [Lang03.1](blue/1050475/sp1) |								 |		|
+| Blue | [João Pires](blue/1150455/) | [Lang02.1](blue/1150455/sp1) |								 |		|
+| Blue | [João Pereira](blue/1150478/) | [Lang05.1](blue/1150478/sp1) |								 |		|
+| Blue | [Josué Lapa](blue/1160713/) | [Lang07.1](blue/1160713/sp1) |								 |		|
+| Blue | [Pedro Alves](blue/1150372/) | [Lang01.1](blue/1150372/sp1) |								 |		|
+| Blue | [Tiago Correia](blue/1140403/) | [Lang06.1](blue/1150372/sp1) |								 |		|
 
 # 5. Requirements
 
