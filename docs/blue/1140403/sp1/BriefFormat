@@ -1,1 +1,65 @@
 
+Lang06.1-Macros Language 
+
+##Observations
+
+- Macros should be designed as a complete new language in the application.
+
+- Its initial grammar should be very simple and "inspired" in the language of the 
+formulas.
+
+- A macro is simply a sequence of formulas that are executed sequentially.
+
+- The formulas are the same as those used in the cells
+
+- Each line of the macro may contain a formula or be a comment. A comment is a 
+line that starts with the character ";"
+
+- In the macros, the lines can not start with "="
+
+- The macro is to be associated with the current workbook.    //Workbook will have one macro
+
+- The result of executing a macro is the result of the last executed instruction.
+
+-The new window should have an area to edit the text of the macro and button to 
+run the macro
+
+-The result of the execution of the macro should appear in the window
+
+##Brief Format
+
+The user starts the process of editing and executing a macro. The system opens the 
+macro and displays it. The user edits the macro and executes it. The system shows
+the result of the macro. The use case ends
+
+
+##Complex Format
+
+###Primary Author
+
+* User
+    
+
+###Interested Parties and their interests
+
+User: The user wants to edit and execute a single macro
+
+
+###Pre-conditions
+
+
+
+###Post-conditions
+    
+
+###Primary flux
+1. 
+2. 
+3.
+4. 
+
+5. 
+6. 
+    
+
+###Extensions
