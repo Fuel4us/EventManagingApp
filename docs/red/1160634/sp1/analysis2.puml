@@ -6,13 +6,8 @@ skinparam defaultFontName FG Virgil
 skinparam shadowing false
 
 actor User
+collections CTextNotes
 
-User -> Browser : request view preview chart
-Browser -> Server : getCellInfo(cell)
-database DataBase
-Server -> DataBase: fecth
-Server --> Browser : return
-Browser -> Browser : display
-
+User -> CTextNotes : see a list
 
 @enduml

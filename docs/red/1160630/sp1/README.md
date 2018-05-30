@@ -2,6 +2,8 @@
 ===============================
 
 # 1. General Notes
+In Application Engineering (EAPLI) were shown several standards/patterns for project development.
+The of LAPR4 is to take advantage of the knowledge acquired in EAPLI and apply it, however for this iteration, as we are limited in a matter of time and it is the first time that we came in contact with the project, I found it well to ignore the TDD standard (test-driven development) for at least this iteration. This way I tried as hard as I could to implement my Use Case based on the domain model, and as I was implementing it, I improved my project structure skills.
 
 
 
@@ -23,21 +25,30 @@ We can specify this requirements in 2 User Stories:
 
 # 3. Analysis
 
+As this iteration is our first contact with the project, we have to deepen our knowledge about the project itself, and the libraries and toolkits that it uses.
+This way 3 research points were established:
+* Study of the project organization,this is: classes, packages and layers...;
+* Read the main GWT toolkit documentation;
+* Explore more about Material Design guidelines;
+* Deepen the knowledge about this "new" UI;
+* Find out if the project's database is close to the one learned in the EAPLI curricular unit, if not, investigate it;
 
 
-## 3.1 GWT and Project Structure
+## 3.1 Project Structure and new "UI"
 
 
    
-## 3.2 Application Startup and GWTP
+## 3.2 GWT Toolkit
 
 
 
-## 3.3 Server and RPC
+## 3.3 Material Design
 
-	
 
-## 3.4 Analysis Diagrams
+## 3.4 Data Base
+
+
+## 3.45Analysis Diagrams
 
 
 

@@ -1,0 +1,27 @@
+@startuml  analysis2
+
+skinparam monochrome true
+skinparam shadowing false
+hide footbox
+
+actor User
+database Database order 100
+
+alt Creates an event
+	User -> Browser : Creates an event
+	Browser ->> Server : createCalendarEvent()
+	Server -> Database : save()
+else Edits an event
+	User -> Browser : Edits an event
+	Browser ->> Server : updateCalendarEvent()
+	Server -> Database : update()
+else Deletes an event
+	User -> Browser : Deletes an event
+	Browser ->> Server : deleteCalendarEvent()
+	Server -> Database : delete()
+end
+
+Server -->> Browser : return
+Browser -> Browser : display
+
+@enduml

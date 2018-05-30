@@ -1,0 +1,16 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:m="urn:import:gwt.material.design.client.ui">
+    <g:HTMLPanel>
+        <m:MaterialFAB>
+            <m:MaterialButton type="FLOATING" iconType="ADD" size="LARGE"/>
+            <m:MaterialFABList>
+                <m:MaterialButton ui:field="newEventButton" type="FLOATING" iconType="EVENT" tooltip="New Event"
+                                  tooltipPosition="LEFT"/>
+            </m:MaterialFABList>
+        </m:MaterialFAB>
+
+        <m:MaterialDatePicker ui:field="dp" placeholder="Date"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

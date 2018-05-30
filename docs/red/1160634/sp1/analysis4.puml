@@ -1,0 +1,25 @@
+@startuml  analysis4.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+collections CTextNotes
+
+User -> CTextNotes : select a text note
+
+CTextNotes -> TextNotes : see the history of modifications
+
+TextNotes -> TextNotes : display history
+
+collections CTimeStamp
+
+loop
+
+    TextNotes -> CTimeStamp : display the time stamp and the first line
+
+end
+
+@enduml
