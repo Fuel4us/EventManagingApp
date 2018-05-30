@@ -26,6 +26,7 @@ import pt.isep.nsheets.client.application.home.HomeModule;
 import pt.isep.nsheets.client.application.login.LoginModule;
 import pt.isep.nsheets.client.application.menu.MenuModule;
 import pt.isep.nsheets.client.application.workbook.WorkbookModule;
+import pt.isep.nsheets.client.application.notes.NotesModule;
 
 public class ApplicationModule extends AbstractPresenterModule {
     @Override
@@ -35,6 +36,7 @@ public class ApplicationModule extends AbstractPresenterModule {
         install(new MenuModule());
         install(new AboutModule());
         install(new WorkbookModule());
+        install(new NotesModule());
         install(new LoginModule());
 
         bindPresenter(ApplicationPresenter.class, ApplicationPresenter.MyView.class, ApplicationView.class, ApplicationPresenter.MyProxy.class);

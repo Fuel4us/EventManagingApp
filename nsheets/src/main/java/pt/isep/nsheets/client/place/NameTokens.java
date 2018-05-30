@@ -27,10 +27,16 @@ public class NameTokens {
 
 	public static final String workbook = "workbook";
         
+        public static final String notes = "notes";
+        
         public static final String login = "login";
 
 	public static String getWorkbook() {
 		return workbook;
+	}
+        
+        public static String getNotes() {
+		return notes;
 	}
 
 	public static String getAbout() {
