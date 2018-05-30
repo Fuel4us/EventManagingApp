@@ -29,6 +29,8 @@ public class NameTokens {
         
         public static final String login = "login";
 
+    public static final String calendar = "calendar";
+
 	public static String getWorkbook() {
 		return workbook;
 	}
@@ -45,4 +47,7 @@ public class NameTokens {
 		return login;
 	}
 
+    public static String getCalendar() {
+        return calendar;
+    }
 }

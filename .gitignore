@@ -4,8 +4,7 @@ bin/
 target/
 
 .metadata
-.ideia
-.idea
+.idea/
 
 # OS Files #
 .DS_Store
