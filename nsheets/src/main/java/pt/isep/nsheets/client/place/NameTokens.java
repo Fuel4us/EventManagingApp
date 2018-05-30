@@ -35,6 +35,8 @@ public class NameTokens {
 
     public static final String calendar = "calendar";
 
+    public static final String export = "export";
+
     public static String getWorkbook() {
         return workbook;
     }
@@ -62,4 +64,6 @@ public class NameTokens {
     public static String getCalendar() {
         return calendar;
     }
+
+    public static String getExport() { return export; }
 }
