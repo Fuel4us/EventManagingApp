@@ -10,7 +10,11 @@ actor User
 User -> Browser : click cell verified icon
 Browser --> User : shows a popup menu
 User -> Browser : choose the option to access the chart
-Browser --> Browser : display chart
+Browser -> Server : getCellInfo(cell)
+database DataBase
+Server -> DataBase : fetch
+Server --> Browser : return
+Browser -> Browser : display chart
 
 
 @enduml

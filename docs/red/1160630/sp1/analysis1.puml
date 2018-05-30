@@ -11,6 +11,9 @@ User -> Browser : new chart
 Browser --> User : asks for data to create table
 User -> Browser : Inserts data to create Chart
 User -> Browser : Block the information
+Browser -> Server : saveInfoInCell(information)
+database DataBase
+Server -> DataBase : save
 
 
 @enduml
