@@ -5,6 +5,7 @@ target/
 
 .metadata
 .ideia
+.idea
 
 # OS Files #
 .DS_Store
