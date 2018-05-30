@@ -50,6 +50,9 @@
     
     <inherits name="pt.isep.nsheets.client.Resources"/>
 
+    <!--Google charts-->
+    <inherits name="com.googlecode.gwt.charts.Charts"/>
+
 
     <!-- Specify the paths for translatable code                    -->
     <source path='client'/>
