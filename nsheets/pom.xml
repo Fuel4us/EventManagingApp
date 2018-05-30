@@ -330,5 +330,11 @@
 			<artifactId>antlr4gwt-annotations</artifactId>
 			<version>4.4.8</version>
 		</dependency>
+	 <dependency>
+	  <groupId>com.googlecode.gwt-charts</groupId>
+	  <artifactId>gwt-charts</artifactId>
+	  <version>0.9.10</version>
+	  <type>jar</type>
+	 </dependency>
 	</dependencies>
 </project>
