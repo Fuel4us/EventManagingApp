@@ -8,7 +8,11 @@ skinparam shadowing false
 actor User
 
 User -> Browser : request view preview chart
-Browser --> Browser : open the preview chart
+Browser -> Server : getCellInfo(cell)
+database DataBase
+Server -> DataBase: fecth
+Server --> Browser : return
+Browser -> Browser : display
 
 
 @enduml

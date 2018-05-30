@@ -66,6 +66,9 @@
 			<m.html:ListItem waves="DEFAULT">
 				<m:MaterialLink targetHistoryToken="{tokens.getWorkbook}" iconPosition="LEFT" iconType="INSERT_DRIVE_FILE" text="Workbook"/>
 			</m.html:ListItem>
+                        <m.html:ListItem waves="DEFAULT">
+				<m:MaterialLink targetHistoryToken="{tokens.getChart}" iconPosition="LEFT" iconType="INSERT_CHART" text="Charts"/>
+			</m.html:ListItem>
 			<m.html:ListItem waves="DEFAULT">
 				<m:MaterialLink targetHistoryToken="{tokens.getCalendar}" iconPosition="LEFT" iconType="EVENT" text="Calendar"/>
 			</m.html:ListItem>
