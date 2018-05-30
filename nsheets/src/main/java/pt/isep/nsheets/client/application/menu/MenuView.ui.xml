@@ -76,6 +76,9 @@
                 <m:MaterialLink targetHistoryToken="{tokens.getCalendar}" iconPosition="LEFT" iconType="EVENT" text="Calendar"/>
             </m.html:ListItem>
             <m.html:ListItem waves="DEFAULT">
+                <m:MaterialLink targetHistoryToken="{tokens.getExport}" iconPosition="LEFT" iconType="FILE_DOWNLOAD" text="Export"/>
+            </m.html:ListItem>
+            <m.html:ListItem waves="DEFAULT">
                 <m:MaterialLink targetHistoryToken="{tokens.getAbout}" iconPosition="LEFT" iconType="INFO_OUTLINE" text="About"/>
             </m.html:ListItem>
         </m:MaterialSideNavPush>
