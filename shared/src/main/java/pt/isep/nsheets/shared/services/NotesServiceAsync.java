@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pt.isep.nsheets.shared.services;
 
 import java.util.ArrayList;
@@ -15,8 +10,17 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface NotesServiceAsync {
 
+    /**
+     *
+     * @param callback
+     */
     void getNotes(AsyncCallback<ArrayList<NoteDTO>> callback);
 
+    /**
+     *
+     * @param notesDTO
+     * @param callback
+     */
     void addNote(NoteDTO notesDTO, AsyncCallback<NoteDTO> callback);
 
 }
