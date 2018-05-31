@@ -1,0 +1,16 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:m="urn:import:gwt.material.design.client.ui">
+
+	<m:MaterialPanel>
+		<g:HTMLPanel ui:field="htmlPanel">
+			<br/>
+			Export the current workbook:
+			<br/>
+		</g:HTMLPanel>
+		<m:MaterialButton text="Export to CSV" waves="LIGHT" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT"/>
+
+	</m:MaterialPanel>
+
+</ui:UiBinder>

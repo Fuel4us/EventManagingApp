@@ -4,18 +4,16 @@
              xmlns:m="urn:import:gwt.material.design.client.ui">
              
              
- <m:MaterialPanel>            
-    <g:HTMLPanel ui:field="htmlPanel">
- 	        
-    </g:HTMLPanel>
-    
-    <m:MaterialFAB>
- 		<m:MaterialButton type="FLOATING" iconType="ADD" size="LARGE"/>
- 		<m:MaterialFABList>
- 			<m:MaterialButton ui:field="newWorkbookButton" type="FLOATING" waves="LIGHT" iconType="INSERT_DRIVE_FILE" tooltip="Tesseeteee" tooltipPosition="LEFT"/>
- 		</m:MaterialFABList>
- 	</m:MaterialFAB>
- 	
+ <m:MaterialPanel>
+    <m:MaterialRow>
+        <m:MaterialColumn grid="s4" offset="s4" >   
+            <g:HTMLPanel>
+                <m:MaterialTextBox ui:field="txtEmail" type="EMAIL" placeholder="Email" iconType="ACCOUNT_CIRCLE" />
+                <m:MaterialTextBox ui:field="txtPassword" type="PASSWORD" placeholder="Password" />
+                <m:MaterialButton ui:field="btnLogin" text="Login" waves="LIGHT" size="LARGE"/>
+            </g:HTMLPanel>
+        </m:MaterialColumn>
+    </m:MaterialRow>
  </m:MaterialPanel> 
  	
 </ui:UiBinder>
