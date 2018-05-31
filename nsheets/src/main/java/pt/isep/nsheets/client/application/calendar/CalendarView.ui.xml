@@ -5,37 +5,58 @@
              xmlns:ma="urn:import:gwt.material.design.addins.client">
     <g:HTMLPanel>
         <ma:emptystate.MaterialEmptyState height="50vh" iconType="EVENT" iconColor="BLUE" title="No Events"
-                                          description="You don't have any events" textColor="BLUE"
+                                          description="This calendar has no events" textColor="BLUE"
                                           backgroundColor="WHITE"/>
         <m:MaterialFAB>
-            <m:MaterialButton ui:field="CreateCalendarEventButton" type="FLOATING" waves="LIGHT" iconType="ADD"
+            <m:MaterialButton type="FLOATING" waves="LIGHT" iconType="ADD"
                               size="LARGE"/>
-            <m:MaterialButton ui:field="ConfirmCalendarEventButton" type="FLOATING" waves="LIGHT" iconType="CHECK"
-                              size="LARGE"/>
+            <m:MaterialFABList>
+                <m:MaterialButton ui:field="createCalendarEventButton" type="FLOATING" waves="LIGHT"
+                                  iconType="EVENT" tooltip="New Event" tooltipPosition="LEFT" size="LARGE"/>
+            </m:MaterialFABList>
         </m:MaterialFAB>
 
-        <m:MaterialFAB>
-        </m:MaterialFAB>
+        <m:MaterialModal ui:field="newEventModal" type="FIXED_FOOTER" dismissible="false">
+            <m:MaterialModalContent>
+                <m:MaterialTitle title="New Event"/>
 
-        <m:MaterialTextBox name="CalendarEventNameButton" ui:field="nameBox" label="Name"/>
-        <m:MaterialTextBox name="CalendarEventDescriptionButton" label="Description"/>
+                <m:MaterialTextBox name="calendarEventNameButton" ui:field="nameBox" label="Name"/>
+                <m:MaterialTextArea name="calendarEventDescriptionButton" label="Description"/>
 
-        <m:MaterialDatePicker ui:field="CalendarEventDatePicker" placeholder="Date"/>
-        <ma:timepicker.MaterialTimePicker ui:field="CalendarEventTimePicker" placeholder="Hour" hour24="true"/>
+                <m:MaterialRow>
+                    <m:MaterialColumn grid="s6">
+                        <m:MaterialDatePicker ui:field="calendarEventDatePicker" placeholder="Date" container="BODY"/>
+                    </m:MaterialColumn>
+                    <m:MaterialColumn grid="s4">
+                        <ma:timepicker.MaterialTimePicker ui:field="calendarEventTimePicker" placeholder="Hour"
+                                                          hour24="true"/>
+                    </m:MaterialColumn>
+                </m:MaterialRow>
 
-         
-        <ma:combobox.MaterialComboBox>
-            <m:html.Option value="15" text="15 minutes"/>
-            <m:html.Option value="30" text="30 minutes"/>
-            <m:html.Option value="45" text="45 minutes"/>
-        </ma:combobox.MaterialComboBox>
+                <m:MaterialTitle description="Duration"/>
+                <m:MaterialRange ui:field="calendarEventDuration" min="1" max="59" value="15"/>
 
-        Duration
-        <m:MaterialRadioButton name="CalendarEventDuration" text="15 minutes"/>
-        <m:MaterialRadioButton name="CalendarEventDuration" text="30 minutes"/>
-        <m:MaterialRadioButton name="CalendarEventDuration" text="45 minutes"/>
-        <m:MaterialRadioButton name="CalendarEventDuration" text="1 hour"/>
-        <m:MaterialRadioButton name="CalendarEventDuration" text="2 hours"/>
-        <m:MaterialRadioButton name="CalendarEventDuration" text="All day"/>
+                <!--<m:MaterialListBox placeholder="Duration">
+                    <m:html.Option ui:field="duration15" text="15 minutes"/>
+                    <m:html.Option ui:field="duration30" text="30 minutes"/>
+                    <m:html.Option ui:field="duration45" text="45 minutes"/>
+                    <m:html.Option ui:field="duration60" text="1 hour"/>
+                    <m:html.Option ui:field="duration0" text="All day"/>
+                </m:MaterialListBox>-->
+
+                <!--<m:MaterialRadioButton name="calendarEventDuration" text="15 minutes"/>
+                 <m:MaterialRadioButton name="calendarEventDuration" text="30 minutes"/>
+                 <m:MaterialRadioButton name="calendarEventDuration" text="45 minutes"/>
+                 <m:MaterialRadioButton name="calendarEventDuration" text="1 hour"/>
+                 <m:MaterialRadioButton name="calendarEventDuration" text="2 hours"/>
+                 <m:MaterialRadioButton name="calendarEventDuration" text="All day"/>-->
+
+            </m:MaterialModalContent>
+            <m:MaterialModalFooter>
+                <m:MaterialButton ui:field="cancelCalendarEventButton" type="FLAT" text="Cancel"/>
+                <m:MaterialButton ui:field="confirmCalendarEventButton" type="FLAT" text="Create Event"/>
+            </m:MaterialModalFooter>
+        </m:MaterialModal>
+
     </g:HTMLPanel>
 </ui:UiBinder>

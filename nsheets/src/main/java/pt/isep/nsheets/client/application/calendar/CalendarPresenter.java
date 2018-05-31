@@ -30,7 +30,7 @@ public class CalendarPresenter extends Presenter<CalendarPresenter.MyView, Calen
     protected void onReveal() {
         super.onReveal();
 
-        SetPageTitleEvent.fire("Calendar", "", "", "", this);
+        SetPageTitleEvent.fire("Calendar", "Manage your calendars and events", "", "", this);
     }
 
 }
