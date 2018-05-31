@@ -5,9 +5,7 @@
  */
 package pt.isep.nsheets.client.application.chart;
 
-import com.gargoylesoftware.htmlunit.javascript.host.event.InputEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.KeyEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;

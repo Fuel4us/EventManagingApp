@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -22,7 +21,6 @@ import gwt.material.design.client.ui.MaterialCardTitle;
 import gwt.material.design.client.ui.MaterialColumn;
 import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialRow;
-import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
 
 class HomeView extends ViewImpl implements HomePresenter.MyView {

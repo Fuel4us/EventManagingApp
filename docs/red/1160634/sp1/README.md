@@ -431,3 +431,14 @@ Commits:
 
 [Core07.1 Added all US Analysis SD, us and dm](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/3b1c2f95dcea4f67814f5fc7fd0efcf663f9b979)
 
+[Core07.1 Beggining of UI](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/854ec17d61203923b9682e875fd3292d6dfe1d21)
+
+[Core07.1 Beggining of Server and Database of US1, 2 and 3]()
+
+
+
+
+
+
+
+

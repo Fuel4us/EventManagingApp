@@ -46,3 +46,4 @@ server/.classpath
 server/.project
 shared/.classpath
 shared/.project
+/server/nbproject/
