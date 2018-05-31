@@ -60,12 +60,12 @@ public class AddUserControllerTest {
 	public void testNormalBehaviour() throws Exception {
 		System.out.println("testNormalBehaviour");
 
-		final User expected = new User("1160557@isep.ipp.pt", "Hilario", "coelho98");
+		final User expected = new User("1160557@isep.ipp.pt", "Hilario", "coelho98", "123pass", false);
 
 		AddUserController ctrl = new AddUserController();
 
 		User result = ctrl.addUser(expected.toDTO());
 
-		assertTrue("the added WorkbookDescription does not have the same data as input", expected.sameAs(result));
+		assertTrue("the added User does not have the same data as input", expected.sameAs(result));
 	}
 }
