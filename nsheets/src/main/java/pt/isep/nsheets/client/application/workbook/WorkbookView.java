@@ -127,7 +127,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 			rows.add(new SheetCell(sh, k));
 		}
 		customTable.setRowData(0, rows);
-
 	}
 
 	@Inject
