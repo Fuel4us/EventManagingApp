@@ -20,31 +20,43 @@
  */
 package pt.isep.nsheets.shared.core;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 /**
  * A workbook which can contain several spreadsheets.
  * @author Einar Pehrson
  */
+@Entity
 public class Workbook implements Iterable<Spreadsheet>, Serializable {
 
 	/** The unique version identifier used for serialization */
 	private static final long serialVersionUID = -6324252462576447242L;
 
 	/** The spreadsheets of which the workbook consists */
+        @OneToMany(
+                cascade = CascadeType.ALL,
+                targetEntity = SpreadsheetImpl.class
+        )
 	private List<Spreadsheet> spreadsheets = new ArrayList<Spreadsheet>();
 
 	/** The cell listeners that have been registered on the cell */
+        @Transient
 	private transient List<WorkbookListener> listeners
 		= new ArrayList<WorkbookListener>();
 
 	/** The number of spreadsheets that have been created in the workbook */
 	private int createdSpreadsheets;
+        
+        @Id
+        private Long id;
 
 	/**
 	 * Creates a new empty workbook.
@@ -195,6 +207,14 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 		for (WorkbookListener listener : listeners)
 			listener.spreadsheetRenamed(spreadsheet);
 	}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 /*
  * GENERAL

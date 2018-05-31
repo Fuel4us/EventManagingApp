@@ -20,7 +20,6 @@
  */
 package pt.isep.nsheets.shared.core;
 
-import java.io.IOException;
 //import java.io.ObjectInputStream;		// not supported in GWT
 //import java.io.ObjectOutputStream;		// not supported in GWT
 import java.util.ArrayList;
@@ -29,6 +28,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import pt.isep.nsheets.shared.core.formula.Formula;
 import pt.isep.nsheets.shared.core.formula.Reference;
@@ -43,6 +47,7 @@ import pt.isep.nsheets.shared.ext.ExtensionManager;
  * The implementation of the <code>Cell</code> interface.
  * @author Einar Pehrson
  */
+@Entity
 public class CellImpl implements Cell {
 
 	/** The unique version identifier used for serialization */
@@ -52,6 +57,7 @@ public class CellImpl implements Cell {
 	private Spreadsheet spreadsheet;
 
 	/** The address of the cell */
+        @OneToOne
 	private Address address;
 
 	/** The value of the cell */
@@ -70,12 +76,18 @@ public class CellImpl implements Cell {
 	private SortedSet<Cell> dependents = new TreeSet<Cell>();
 
 	/** The cell listeners that have been registered on the cell */
+        @Transient
 	private transient List<CellListener> listeners
 		= new ArrayList<CellListener>();
 
 	/** The cell extensions that have been instantiated */
+        @Transient
 	private transient Map<String, CellExtension> extensions = 
 		new HashMap<String, CellExtension>();
+        
+        @Id
+        @GeneratedValue
+        private Long id;
 
 	/**
 	 * Creates a new cell at the given address in the given spreadsheet.
@@ -394,6 +406,14 @@ public class CellImpl implements Cell {
 	public String toString() {
 		return address.toString();
 	}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 	/**
 	 * Customizes deserialization by recreating the listener list and by catching

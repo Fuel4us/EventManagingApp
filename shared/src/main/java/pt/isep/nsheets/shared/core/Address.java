@@ -21,11 +21,16 @@
 package pt.isep.nsheets.shared.core;
 
 import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 
 /**
  * An address in a spreadsheet that denotes to the location of a cell.
  * @author Einar Pehrson
  */
+@Entity
 public class Address implements Comparable<Address>, Serializable {
 
 	/** The unique version identifier used for serialization */
@@ -44,7 +49,15 @@ public class Address implements Comparable<Address>, Serializable {
 	private int row;
 
 	/** A string representation of the address */
+        @Transient
 	private transient String string;
+        
+        @Id
+        @GeneratedValue
+        private Long id;
+        
+        protected Address() {
+        }
 
 	/**
 	 * Creates a new address from the given column and row indices.

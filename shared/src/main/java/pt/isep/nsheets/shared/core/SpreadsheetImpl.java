@@ -20,7 +20,6 @@
  */
 package pt.isep.nsheets.shared.core;
 
-import java.io.IOException;
 // import java.io.ObjectInputStream;		// not supported in GWT
 // import java.io.ObjectOutputStream;	// not supported in GWT
 import java.util.ArrayList;
@@ -30,6 +29,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.ext.Extension;
@@ -40,6 +45,7 @@ import pt.isep.nsheets.shared.ext.SpreadsheetExtension;
  * The implementation of the <code>Spreadsheet</code> interface.
  * @author Einar Pehrson
  */
+@Entity
 public class SpreadsheetImpl implements Spreadsheet {
 
 	/** The unique version identifier used for serialization */
@@ -49,9 +55,11 @@ public class SpreadsheetImpl implements Spreadsheet {
 	public static final String BASE_TITLE = "Sheet ";
 
 	/** The workbook to which the spreadsheet belongs */
+        @ManyToOne
 	private Workbook workbook;
 
 	/** The cells that have been instantiated */
+        @ManyToMany (targetEntity = CellImpl.class)
 	private Map<Address, Cell> cells = new HashMap<Address, Cell>();
 
 	/** The title of the spreadsheet */
@@ -64,15 +72,22 @@ public class SpreadsheetImpl implements Spreadsheet {
 	private int rows = 0;
 
 	/** The cell listeners that have been registered on the cell */
+        @Transient
 	private transient List<CellListener> cellListeners
 		= new ArrayList<CellListener>();
 
 	/** The cell listener that forwards events from all cells */
+        @Transient
 	private transient CellListener eventForwarder = new EventForwarder();
 
 	/** The spreadsheet extensions that have been instantiated */
+        @Transient
 	private transient Map<String, SpreadsheetExtension> extensions = 
 		new HashMap<String, SpreadsheetExtension>();
+        
+        @Id
+        @GeneratedValue
+        private Long id;
 
 	/**
 	 * Creates a new spreadsheet.
@@ -270,6 +285,14 @@ public class SpreadsheetImpl implements Spreadsheet {
 		}
 		return extension;
 	}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 /*
  * GENERAL
