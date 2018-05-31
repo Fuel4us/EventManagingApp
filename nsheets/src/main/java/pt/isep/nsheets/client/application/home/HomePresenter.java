@@ -15,6 +15,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import gwt.material.design.client.ui.MaterialToast;
 
 import com.gwtplatform.mvp.client.annotations.NameToken;
+import gwt.material.design.client.ui.MaterialModal;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
@@ -25,11 +26,12 @@ import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
 public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter.MyProxy> {
 
 	private MyView view;
-
+        
 	interface MyView extends View {
 		void setContents(ArrayList<WorkbookDescriptionDTO> contents);
-
 		void addClickHandler(ClickHandler ch);
+                void openModal();
+                void closeModal();
 	}
 
 	@NameToken(NameTokens.home)
@@ -44,7 +46,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 		this.view = view;
 
 		this.view.addClickHandler(event -> {
-
+                        this.view.openModal();
 			WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
 
 			// Set up the callback object.

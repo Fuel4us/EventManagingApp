@@ -20,10 +20,13 @@ import gwt.material.design.client.ui.MaterialCardContent;
 import gwt.material.design.client.ui.MaterialCardTitle;
 import gwt.material.design.client.ui.MaterialColumn;
 import gwt.material.design.client.ui.MaterialLabel;
+import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialRow;
 import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
 
 class HomeView extends ViewImpl implements HomePresenter.MyView {
+
+        
 
 	interface Binder extends UiBinder<Widget, HomeView> {
 	}
@@ -33,6 +36,9 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
 
 	@UiField
 	MaterialButton newWorkbookButton;
+        
+        @UiField
+	MaterialModal modal;
 	
 	@Inject
 	HomeView(Binder uiBinder) {
@@ -94,5 +100,15 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
 		// TODO Auto-generated method stub
 		
 		newWorkbookButton.addClickHandler( ch );
-	}	
+	}
+        
+        @Override
+        public void openModal() {
+            this.modal.open();
+        }
+        
+        @Override
+        public void closeModal() {
+            this.modal.close();
+        }
 }
