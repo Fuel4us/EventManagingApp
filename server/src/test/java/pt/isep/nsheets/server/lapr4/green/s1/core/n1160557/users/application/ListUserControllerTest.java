@@ -75,7 +75,7 @@ public class ListUserControllerTest {
 		public void testBtestDatabaseInsertion() throws Exception {
 			System.out.println("testBtestDatabaseInsertion");
 
-			final User expected = new User("1160557@isep.ipp.pt", "Hilario", "coelho98");
+			final User expected = new User("1160557@isep.ipp.pt", "Hilario", "coelho98", "123pass", false);
 
 			AddUserController ctrlAdd = new AddUserController();
 

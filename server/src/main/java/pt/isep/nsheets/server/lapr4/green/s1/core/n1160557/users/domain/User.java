@@ -29,14 +29,19 @@ public class User implements AggregateRoot<Long>, Serializable {
     private String email;
     private String name;
     private String nickname;
+    private String password;
+    private boolean superUser;
 
-    public User(String email, String name, String nickname) throws IllegalArgumentException {
-        if (email == null || name == null || nickname == null)
-            throw new IllegalArgumentException("email or name or nickname must be non-null");
-        
+    public User(String email, String name, String nickname, String password, boolean superUser) throws IllegalArgumentException {
+        if (email == null || name == null || nickname == null || password == null) {
+            throw new IllegalArgumentException("email or name or nickname or password must be non-null");
+        }
+
         this.email = email;
         this.name = name;
         this.nickname = nickname;
+        this.password = password;
+        this.superUser = superUser;
     }
 
     // It is mandatory to have a default constructor with no arguments to be
@@ -45,6 +50,8 @@ public class User implements AggregateRoot<Long>, Serializable {
         this.email = "";
         this.name = "";
         this.nickname = "";
+        this.password = "";
+        this.superUser = false;
     }
 
     public String getEmail() {
@@ -59,12 +66,21 @@ public class User implements AggregateRoot<Long>, Serializable {
         return this.nickname;
     }
 
+    public String getPassword() {
+        return this.password;
+    }
+
+    public boolean isSuperuser() {
+        return this.superUser;
+    }
+
     @Override
     public String toString() {
-        if (this.email == null)
+        if (this.email == null) {
             return super.toString();
-        else
+        } else {
             return this.email + " " + this.name + " " + this.nickname;
+        }
     }
 
     @Override
@@ -74,18 +90,30 @@ public class User implements AggregateRoot<Long>, Serializable {
         }
 
         final User that = (User) other;
-        if (this == that) 
+        if (this == that) {
             return true;
-        
-        if (!this.email.equals(that.email))
+        }
+
+        if (!this.email.equals(that.email)) {
             return false;
-        
-        if (!this.name.equals(that.name))
+        }
+
+        if (!this.name.equals(that.name)) {
             return false;
-        
-        if (!this.nickname.equals(that.nickname))
+        }
+
+        if (!this.nickname.equals(that.nickname)) {
             return false;
-        
+        }
+
+        if (!this.password.equals(that.password)) {
+            return false;
+        }
+
+        if (this.superUser != this.superUser) {
+            return false;
+        }
+
         return true;
     }
 
@@ -100,10 +128,10 @@ public class User implements AggregateRoot<Long>, Serializable {
     }
 
     public UserDTO toDTO() {
-            return new UserDTO(this.email, this.name, this.nickname);
+        return new UserDTO(this.email, this.name, this.nickname, this.password, this.superUser);
     }
 
     public static User fromDTO(UserDTO dto) throws IllegalArgumentException {
-            return new User(dto.getEmail(), dto.getName(), dto.getNickname());
+        return new User(dto.getEmail(), dto.getName(), dto.getNickname(), dto.getPassword(), dto.isSuperuser());
     }
 }
