@@ -433,9 +433,9 @@ Commits:
 
 [Core07.1 Beggining of UI](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/854ec17d61203923b9682e875fd3292d6dfe1d21)
 
-[Core07.1 Beggining of Server and Database of US1, 2 and 3]()
+[Core07.1 Beggining of Server and Database of US1, 2 and 3](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/2247e70ba43932a5e174ae8b58be4958221048eb)
 
-
+[Core07.1 Fix package problem, added class needed to both persistance.xml and beggining of javaDoc]()
 
 
 

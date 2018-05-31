@@ -1,3 +1,5 @@
+package pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.persistence.jpa;
+
 //package pt.isep.nsheets.server.lapr4.red.s1.core.1160634.notes.persistence.jpa;
 //
 //import pt.isep.nsheets.server.lapr4.red.s1.core.1160634.notes.domain.Note;

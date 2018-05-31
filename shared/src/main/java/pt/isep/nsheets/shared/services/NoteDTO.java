@@ -8,26 +8,43 @@ import java.io.Serializable;
  */
 @SuppressWarnings("serial")
 public class NoteDTO implements Serializable {
-	
-	private String titleNote;
-	private String textNote;
-	
-	public NoteDTO(String titleNote, String textNote) {
-		this.titleNote=titleNote;
-		this.textNote=textNote;		
-	}
 
-	// It is mandatory to have a default constructor with no arguments to be serializable!
-	public NoteDTO() {
-		this.titleNote="";
-		this.textNote="";
-	}
-	
-	public String getTitleNote() {
-		return this.titleNote;
-	}
+    private String titleNote;
+    private String textNote;
 
-	public String getTextNote() {
-		return this.textNote;
-	}
+    /**
+     *
+     * @param titleNote
+     * @param textNote
+     */
+    public NoteDTO(String titleNote, String textNote) {
+        this.titleNote = titleNote;
+        this.textNote = textNote;
+    }
+
+    // It is mandatory to have a default constructor with no arguments to be serializable!
+
+    /**
+     *
+     */
+    public NoteDTO() {
+        this.titleNote = "";
+        this.textNote = "";
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getTitleNote() {
+        return this.titleNote;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getTextNote() {
+        return this.textNote;
+    }
 }

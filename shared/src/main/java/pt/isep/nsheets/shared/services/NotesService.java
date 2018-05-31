@@ -11,6 +11,18 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("notesService")
 public interface NotesService extends RemoteService {
-	ArrayList<NoteDTO> getNotes();
-	NoteDTO addNotes(NoteDTO notesDTO) throws DataException;
+
+    /**
+     *
+     * @return
+     */
+    ArrayList<NoteDTO> getNotes();
+
+    /**
+     *
+     * @param notesDTO
+     * @return
+     * @throws DataException
+     */
+    NoteDTO addNote(NoteDTO notesDTO) throws DataException;
 }
