@@ -19,6 +19,7 @@
  */
 package pt.isep.nsheets.client.application.workbook;
 
+import com.google.gwt.event.dom.client.ClickEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +27,16 @@ import javax.inject.Inject;
 
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.gwtplatform.mvp.client.ViewImpl;
 
 import com.google.gwt.user.client.ui.Panel;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
+import gwt.material.design.client.constants.IconType;
+import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialFAB;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.table.MaterialDataTable;
@@ -39,160 +44,161 @@ import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
+import pt.isep.nsheets.client.application.chart.ChartView;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
 // public class WorkbookView extends NavigatedView implements WorkbookPresenter.MyView {
 public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
-	public MaterialTextBox getFirstBox() {
-		return firstBox;
-	}
+    public MaterialTextBox getFirstBox() {
+        return firstBox;
+    }
 
-	public MaterialIcon getFirstButton() {
-		return firstButton;
-	}
+    public MaterialIcon getFirstButton() {
+        return firstButton;
+    }
+
+    @UiField
+    MaterialTextBox firstBox;
+    @UiField
+    MaterialIcon firstButton;
+
+    @UiField
+    MaterialDataTable<SheetCell> customTable;
+
+    @UiField
+    MaterialPopupMenu popupMenu;
 
 
-	@UiField
-	MaterialTextBox firstBox;
-	@UiField
-	MaterialIcon firstButton;
+    interface Binder extends UiBinder<Widget, WorkbookView> {
+    }
 
-	@UiField
-	MaterialDataTable<SheetCell> customTable;
+    private pt.isep.nsheets.shared.core.Cell activeCell = null;
 
-	@UiField
-	MaterialPopupMenu popupMenu;
+    public void setActiveCell(pt.isep.nsheets.shared.core.Cell cell) {
+        this.activeCell = cell;
 
-	interface Binder extends UiBinder<Widget, WorkbookView> {
-	}
+        this.customTable.getTableTitle().setText(cell.toString() + ": " + cell.getContent().toString());
+        this.firstBox.setText(cell.getContent().toString());
+    }
 
-	private pt.isep.nsheets.shared.core.Cell activeCell = null;
+    public pt.isep.nsheets.shared.core.Cell getActiveCell() {
+        return this.activeCell;
+    }
 
-	public void setActiveCell(pt.isep.nsheets.shared.core.Cell cell) {
-		this.activeCell = cell;
+    public MaterialDataTable<SheetCell> getTable() {
+        return customTable;
+    }
 
-		this.customTable.getTableTitle().setText(cell.toString() + ": " + cell.getContent().toString());
-		this.firstBox.setText(cell.getContent().toString());
-	}
+    class SheetCell {
 
-	public pt.isep.nsheets.shared.core.Cell getActiveCell() {
-		return this.activeCell;
-	}
+        private Spreadsheet sheet;
+        private int row = -1;
 
-	public MaterialDataTable<SheetCell> getTable() {
-		return customTable;
-	}
+        public SheetCell(Spreadsheet sheet, int row) {
+            this.row = row;
+            this.sheet = sheet;
+        }
 
-	class SheetCell {
+        pt.isep.nsheets.shared.core.Cell getCell(int column) {
+            return this.sheet.getCell(column, this.row);
+        }
+    }
 
-		private Spreadsheet sheet;
-		private int row = -1;
+    void initWorkbook() {
+        // Test the initialization of an Workbook
 
-		public SheetCell(Spreadsheet sheet, int row) {
-			this.row = row;
-			this.sheet = sheet;
-		}
+        String contents[][][] = {{ // first spreadsheet
+            {"10", "9", "8", "7", "a", "b", "c"}, {"8", "=1+7", "6", "5", "4", "3", "2"},
+            {"1", "2", "3", "4", "5", "6", "7"},}};
 
-		pt.isep.nsheets.shared.core.Cell getCell(int column) {
-			return this.sheet.getCell(column, this.row);
-		}
-	}
+        Workbook wb = new Workbook(contents);
+        Spreadsheet sh = wb.getSpreadsheet(0);
 
-	void initWorkbook() {
-		// Test the initialization of an Workbook
+        int columnNumber = 0;
 
-		String contents[][][] = { { // first spreadsheet
-				{ "10", "9", "8", "7", "a", "b", "c" }, { "8", "=1+7", "6", "5", "4", "3", "2" },
-				{ "1", "2", "3", "4", "5", "6", "7" }, } };
+        // Add the columns...
+        customTable.addColumn(new SheetWidgetColumn(-1, this));
+        for (int i = 0; i < sh.getColumnCount(); ++i) {
 
-		Workbook wb = new Workbook(contents);
-		Spreadsheet sh = wb.getSpreadsheet(0);
+            // Add a column for the column :-)
+            customTable.addColumn(new SheetWidgetColumn(columnNumber, this));
 
-		int columnNumber = 0;
+            ++columnNumber;
+        }
 
-		// Add the columns...
-		customTable.addColumn(new SheetWidgetColumn(-1, this));
-		for (int i = 0; i < sh.getColumnCount(); ++i) {
+        // int rowIndex = 0;
+        List<SheetCell> rows = new ArrayList<>();
+        for (int k = 0; k < sh.getRowCount(); k++) {
+            rows.add(new SheetCell(sh, k));
+        }
+        customTable.setRowData(0, rows);
+    }
 
-			// Add a column for the column :-)
-			customTable.addColumn(new SheetWidgetColumn(columnNumber, this));
+    @Inject
+    WorkbookView(Binder uiBinder) {
 
-			++columnNumber;
-		}
+        initWidget(uiBinder.createAndBindUi(this));
 
-		// int rowIndex = 0;
-		List<SheetCell> rows = new ArrayList<>();
-		for (int k = 0; k < sh.getRowCount(); k++) {
-			rows.add(new SheetCell(sh, k));
-		}
-		customTable.setRowData(0, rows);
-	}
+        firstButton.addClickHandler(event -> {
+            if (activeCell != null) {
+                String result = "";
+                try {
+                    activeCell.setContent(firstBox.getText());
+                } catch (FormulaCompilationException e) {
+                    // TODO Auto-generated catch block
+                    // e.printStackTrace();
+                    result = e.getMessage();
+                } finally {
+                    //resultLabel.setText(result);
 
-	@Inject
-	WorkbookView(Binder uiBinder) {
+                    // refresh the table...
+                    customTable.getView().setRedraw(true);
+                    customTable.getView().refresh();
 
-		initWidget(uiBinder.createAndBindUi(this));
+                    // refresh the active cell
+                    this.setActiveCell(activeCell);
+                }
+            }
+            // Window.alert("Hello");
+        });
 
-		firstButton.addClickHandler(event -> {
-			if (activeCell != null) {
-				String result = "";
-				try {
-					activeCell.setContent(firstBox.getText());
-				} catch (FormulaCompilationException e) {
-					// TODO Auto-generated catch block
-					// e.printStackTrace();
-					result = e.getMessage();
-				} finally {
-					//resultLabel.setText(result);
+        // It is possible to create your own custom renderer per table
+        // When you use the BaseRenderer you can override certain draw
+        // methods to create elements the way you would like.
+        customTable.getView().setRenderer(new SheetRenderer<SheetCell>());
 
-					// refresh the table...
-					customTable.getView().setRedraw(true);
-					customTable.getView().refresh();
+        initWorkbook();
 
-					// refresh the active cell
-					this.setActiveCell(activeCell);
-				}
-			}
-			// Window.alert("Hello");
-		});
+        // Set the visible range of the table for pager (later)
+        customTable.setVisibleRange(0, 2001);
 
-		// It is possible to create your own custom renderer per table
-		// When you use the BaseRenderer you can override certain draw
-		// methods to create elements the way you would like.
-		customTable.getView().setRenderer(new SheetRenderer<SheetCell>());
+        // Configure the tables long press duration configuration.
+        // The short press is when a click is held less than this duration.
+        customTable.setLongPressDuration(400);
 
-		initWorkbook();
+        customTable.addRowContextMenuHandler(event -> {
+            // Firing Row Context will automatically select the row where it was right
+            // clicked
+            customTable.selectRow($(event.getRow()).asElement(), true);
+            popupMenu.setSelected(event.getModel());
+            // Get the PageX and getPageY
+            popupMenu.setPopupPosition(event.getMouseEvent().getPageX(), event.getMouseEvent().getPageY());
+            popupMenu.open();
+        });
 
-		// Set the visible range of the table for pager (later)
-		customTable.setVisibleRange(0, 2001);
+        // Added access to ToolPanel to add icon widget
+        Panel panel = customTable.getScaffolding().getToolPanel();
+        panel.clear();
+        panel.setVisible(false);
 
-		// Configure the tables long press duration configuration.
-		// The short press is when a click is held less than this duration.
-		customTable.setLongPressDuration(400);
+        customTable.getTableTitle().setText("The Future Worksheet!");
+    }
 
-		customTable.addRowContextMenuHandler(event -> {
-			// Firing Row Context will automatically select the row where it was right
-			// clicked
-			customTable.selectRow($(event.getRow()).asElement(), true);
-			popupMenu.setSelected(event.getModel());
-			// Get the PageX and getPageY
-			popupMenu.setPopupPosition(event.getMouseEvent().getPageX(), event.getMouseEvent().getPageY());
-			popupMenu.open();
-		});
+    @Override
+    protected void onAttach() {
+        super.onAttach();
 
-		// Added access to ToolPanel to add icon widget
-		Panel panel = customTable.getScaffolding().getToolPanel();
-		panel.clear();
-		panel.setVisible(false);
-
-		customTable.getTableTitle().setText("The Future Worksheet!");
-	}
-
-	@Override
-	protected void onAttach() {
-		super.onAttach();
-
-		// table.getTableTitle().setText("The Future Worksheet!");
-	}
+        // table.getTableTitle().setText("The Future Worksheet!");
+    }
 }
