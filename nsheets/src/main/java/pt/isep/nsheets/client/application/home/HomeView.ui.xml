@@ -10,10 +10,10 @@
        
        <m:MaterialModal ui:field="modal" type="DEFAULT">
             <m:MaterialModalContent>
-                <m:MaterialTextBox label="NAME" grid="s12"/>
-                <m:MaterialTextBox label="DESCRIPTION" grid="s12"/>
+                <m:MaterialTextBox ui:field="name" label="NAME" grid="s12"/>
+                <m:MaterialTextBox ui:field="description" label="DESCRIPTION" grid="s12"/>
                 
-                <m:MaterialButton ui:field="save_btn" text="Save" waves="GREEN" backgroundColor="WHITE" textColor="BLACK" iconType="SAVE" iconPosition="RIGHT" iconColor="BLUE"/>
+                <m:MaterialButton ui:field="saveButton" text="Save" waves="GREEN" backgroundColor="WHITE" textColor="BLACK" iconType="SAVE" iconPosition="RIGHT" iconColor="BLUE"/>
             </m:MaterialModalContent>
         </m:MaterialModal>
         

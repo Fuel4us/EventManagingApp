@@ -30,8 +30,13 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 	interface MyView extends View {
 		void setContents(ArrayList<WorkbookDescriptionDTO> contents);
 		void addClickHandler(ClickHandler ch);
+                
                 void openModal();
                 void closeModal();
+                void buttonClickHandler(ClickHandler ch);
+                
+                String title();
+                String description();
 	}
 
 	@NameToken(NameTokens.home)
@@ -47,25 +52,29 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
 		this.view.addClickHandler(event -> {
                         this.view.openModal();
-			WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
+                        
+                        this.view.buttonClickHandler(e -> {
+                            WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
 
-			// Set up the callback object.
-			AsyncCallback<WorkbookDescriptionDTO> callback = new AsyncCallback<WorkbookDescriptionDTO>() {
-				public void onFailure(Throwable caught) {
-					MaterialToast.fireToast("Error! " + caught.getMessage());
-				}
+                            // Set up the callback object.
+                            AsyncCallback<WorkbookDescriptionDTO> callback = new AsyncCallback<WorkbookDescriptionDTO>() {
+                                    public void onFailure(Throwable caught) {
+                                            MaterialToast.fireToast("Error! " + caught.getMessage());
+                                    }
 
-				public void onSuccess(WorkbookDescriptionDTO result) {
-					MaterialToast.fireToast("New Workbook Created...", "rounded");
-					
-					refreshView();
-				}
-			};
+                                    public void onSuccess(WorkbookDescriptionDTO result) {
+                                            MaterialToast.fireToast("New Workbook Created", "rounded");
 
-			WorkbookDescriptionDTO wdDto = new WorkbookDescriptionDTO("WorkbookDescription 123",
-					"New WorkbookDescription 123 Description");
-			workbooksSvc.addWorkbookDescription(wdDto, callback);
-		});
+                                            refreshView();
+                                    }
+                            };
+
+                            WorkbookDescriptionDTO wdDto = new WorkbookDescriptionDTO(this.view.title(), this.view.description());
+                            workbooksSvc.addWorkbookDescription(wdDto, callback);
+                            
+                            this.view.closeModal();
+                        });
+                });
 	}
 
 	private void refreshView() {
