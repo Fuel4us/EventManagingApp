@@ -1,13 +1,9 @@
 package pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.domain;
 
 import java.io.Serializable;
-import java.util.Objects;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 import eapli.framework.domain.AggregateRoot;
 
@@ -95,10 +91,7 @@ public class Note implements AggregateRoot<Long>, Serializable {
         if (!this.titleNote.equals(that.titleNote)) {
             return false;
         }
-        if (!this.textNote.equals(that.textNote)) {
-            return false;
-        }
-        return true;
+        return this.textNote.equals(that.textNote);
     }
 
     @Override

@@ -22,10 +22,8 @@ public class NoteDTO implements Serializable {
         this.textNote = textNote;
     }
 
-    // It is mandatory to have a default constructor with no arguments to be serializable!
-
     /**
-     *
+     * It is mandatory to have a default constructor with no arguments to be serializable!
      */
     public NoteDTO() {
         this.titleNote = "";

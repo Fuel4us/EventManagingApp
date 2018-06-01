@@ -1,8 +1,6 @@
 package pt.isep.nsheets.server.services;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.Properties;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -14,10 +12,8 @@ import pt.isep.nsheets.shared.services.NotesService;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.application.AddNoteController;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.application.ListNoteController;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.domain.Note;
-import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.persistence.PersistenceContext;
-import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.persistence.PersistenceSettings;
-import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.persistence.NoteRepository;
-import pt.isep.nsheets.shared.services.NoteDTO;
+import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
+import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;
 import pt.isep.nsheets.shared.services.DataException;
 import pt.isep.nsheets.shared.services.NoteDTO;
 
@@ -28,7 +24,7 @@ public class NotesServiceImpl extends RemoteServiceServlet implements NotesServi
         Properties props = new Properties();
         
         props.put("persistence.repositoryFactory",
-                "pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.persistence.jpa.JpaRepositoryFactory");
+                "pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.jpa.JpaRepositoryFactory");
         props.put("persistence.persistenceUnit", "lapr4.NSheetsPU");
 
         // Other JPA properties that one might want to override from the ones in
@@ -54,7 +50,7 @@ public class NotesServiceImpl extends RemoteServiceServlet implements NotesServi
         
         Iterable<Note> notesAux = ctrl.listNotes();
         
-        notesAux.forEach(wb -> notes.add(wb.toDTO()));
+        notesAux.forEach(n -> notes.add(n.toDTO()));
         
         return notes;
     }
