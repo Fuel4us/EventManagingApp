@@ -1,20 +1,11 @@
 grammar Formula;
 
-options {
-	language=Java;
-	output=AST;
-}	
-
-@parser::header {
-	package pt.isep.nsheets.shared.core.formula.compiler;
-}
-
 @header {
-    package pt.isep.nsheets.shared.core.formula.compiler;
+	//package pt.isep.nsheets.shared.core.formula.compiler;
 }
 	         
 expression
-	: EQ comparisonGlobal <<EOF>>
+	: EQ comparisonGlobal EOF
 	;
 	
 comparisonGlobal
@@ -72,13 +63,8 @@ literal
 assignment
 	: 	CELL_REF ASSIGN concatenation
 	;
-	
-function_loops
-	:	FOR ICHA comparisonFor FCHA
-	;
-	
 
-fragment LETTER: ('a'..'z'|'A'..'Z') ;
+LETTER: ('a'..'z'|'A'..'Z') ;
   
 FUNCTION : 
 	  ( LETTER )+ 
@@ -107,9 +93,8 @@ QUOT: '"'
 NUMBER: DIGITNOTZERO ( DIGIT )+ FRACTIONALPART? 
 		| DIGIT FRACTIONALPART;
 		
-FRACTIONALPART: ( COMMA ( DIGIT )+ )
+FRACTIONALPART: ( COMMA ( DIGIT )+ );
 
-fragment 
 DIGIT : '0'..'9' ;
 DIGITNOTZERO : '1'..'9' ;
 
