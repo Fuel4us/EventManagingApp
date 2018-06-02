@@ -9,7 +9,7 @@ expression
 	;
 	
 comparisonGlobal
-	: ICHA comparison FCHA
+	: ICHA? comparison FCHA?
 	| FOR ICHA concatenationFor FCHA
 	;
 	
