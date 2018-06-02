@@ -265,3 +265,4 @@ Some Questions/Issues identified during the work in this feature increment:
 # 8. Work Log
 
 * [Documentation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/73fa7376c16d864f906acb1d6c4330e11339b0af)
+* [Lang 05.1 - Creation of form package and its classes (FormModule, FormPresenter, FormView, FormView.ui (XML)). Some modifications.] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/9a876d02eddc867c8f003fc0f9651d2d177cba06)
