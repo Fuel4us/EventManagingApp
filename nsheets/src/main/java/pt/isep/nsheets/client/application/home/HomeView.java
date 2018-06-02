@@ -82,10 +82,11 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
                         }
 
                         public void onSuccess(WorkbookDescriptionDTO result) {
+                                MaterialToast.fireToast(result.getName());
                         }
                 };
                 
-                //workbooksSvc.findByName(name);
+                workbooksSvc.findByName(wb.getName(), callback);
             });
             
             return card;

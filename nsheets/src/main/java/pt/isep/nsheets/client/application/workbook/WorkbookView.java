@@ -45,6 +45,7 @@ import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
 import pt.isep.nsheets.client.application.chart.ChartView;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
 // public class WorkbookView extends NavigatedView implements WorkbookPresenter.MyView {
@@ -108,12 +109,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     void initWorkbook() {
         // Test the initialization of an Workbook
 
-        String contents[][][] = {{ // first spreadsheet
-            {"10", "9", "8", "7", "a", "b", "c"}, {"8", "=1+7", "6", "5", "4", "3", "2"},
-            {"1", "2", "3", "4", "5", "6", "7"},}};
-
-        Workbook wb = new Workbook(contents);
-        Spreadsheet sh = wb.getSpreadsheet(0);
+        Spreadsheet sh = Settings.getInstance().getSpreadsheet(0);
 
         int columnNumber = 0;
 
