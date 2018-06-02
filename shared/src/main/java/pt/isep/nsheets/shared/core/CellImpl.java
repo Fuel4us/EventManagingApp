@@ -415,6 +415,21 @@ public class CellImpl implements Cell {
         this.id = id;
     }
 
+//    @Override
+//    public boolean hasChart() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public List<Chart> chartList() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public boolean addChart(Chart chart) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+
 	/**
 	 * Customizes deserialization by recreating the listener list and by catching
 	 * exceptions when extensions are not found.

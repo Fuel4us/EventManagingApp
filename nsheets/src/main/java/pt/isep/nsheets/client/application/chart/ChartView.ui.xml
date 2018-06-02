@@ -20,7 +20,7 @@
         }
         
         .card{
-        height: 50vh;
+        border-radius: 1rem!important;
         }
         
         .btn_row{
@@ -28,6 +28,20 @@
         text-align: end;
         }
         
+        .center{
+        justify-content: center; 
+        margin: 10px auto;
+        }
+        
+        .btn{
+        border-radius: 1.5rem!important;
+        }
+        
+        .chart_content{
+        overflow-y: scroll;
+        height: 100%;
+        overflow-x: visible;
+        }
             
     </ui:style>	
         
@@ -35,22 +49,17 @@
                
     <g:HTMLPanel addStyleNames="{style.panel}">
         
-        <m:MaterialCard ui:field="edit_card" addStyleNames="{style.block}">
-            <m:MaterialCardTitle text="Edit Chart Info"  textColor="BLACK"/>
+        <m:MaterialCard ui:field="edit_card" addStyleNames="{style.block} {style.card}">
+            <m:MaterialCardTitle text="Edit Chart"  textColor="BLACK"/>
                        
             <m:MaterialRow>
                 <m:MaterialTextBox ui:field="name_textbox" label="Chart Name"/>
             </m:MaterialRow>
             <m:MaterialRow>
-                <m:MaterialColumn grid="s12 m6 l3">
+                <m:MaterialColumn>
                     <m:MaterialLabel text="Apply in"/>
                 </m:MaterialColumn>
-                <m:MaterialColumn grid="s6 m5 l2">
-                    <m:MaterialRadioButton ui:field="col_r_btn" name="infoType" text="Column"/>
-                </m:MaterialColumn>
-                <m:MaterialColumn grid="s6 m5 l2">
-                    <m:MaterialRadioButton ui:field="row_r_btn" name="infoType" text="Row"/>
-                </m:MaterialColumn>
+                <m:MaterialSwitch ui:field="switch_isRow" value="true" onLabel="Row" offLabel="Column"/>
             </m:MaterialRow>
             <m:MaterialRow>
                 <m:MaterialColumn grid="s6 m4 l2">
@@ -61,32 +70,27 @@
                 </m:MaterialColumn>
             </m:MaterialRow>
             <m:MaterialRow>
-                <m:MaterialColumn grid="s6 m4 l3">
-                    <m:MaterialLabel text="Consider First Element"/>
+                <m:MaterialColumn >
+                    <m:MaterialLabel text="Consider First Elements Title"/>
                 </m:MaterialColumn>
-                <m:MaterialColumn grid="s5 m3 l2">
-                    <m:MaterialRadioButton ui:field="accept_r_btn" name="acceptFirst" text="Yes"/>
-                </m:MaterialColumn>
-                <m:MaterialColumn grid="s5 m3 l2">
-                    <m:MaterialRadioButton ui:field="refuse_r_btn" name="acceptFirst" text="No"/>
-                </m:MaterialColumn>
+                <m:MaterialSwitch ui:field="switch_considerFist" value="true" onLabel="Yes" offLabel="No"/>
             </m:MaterialRow>
             
             <m:MaterialRow addStyleNames="{style.btn_row}">
-                <m:MaterialButton ui:field="save_btn" text="Save" waves="GREEN" backgroundColor="WHITE" textColor="BLACK" iconType="SAVE" iconPosition="RIGHT" iconColor="GREEN"/>
+                <m:MaterialButton ui:field="save_btn" addStyleNames="{style.btn}" text="Save" waves="GREEN" backgroundColor="WHITE" textColor="BLACK" iconType="SAVE" iconPosition="RIGHT" iconColor="GREEN"/>
             </m:MaterialRow>
             
             
-            <m:MaterialAnchorButton ui:field="chart_button" type="FLOATING" iconType="INSERT_CHART" size="LARGE" waves="DEFAULT" layoutPosition="ABSOLUTE" right="-20" top="150"/>
+            <m:MaterialAnchorButton ui:field="chart_button" type="FLOATING" iconType="INSERT_CHART" size="LARGE" waves="LIGHT" layoutPosition="ABSOLUTE" right="-20" top="150"/>
             
         </m:MaterialCard>
         
-        <m:MaterialCard ui:field="chart_card" addStyleNames="{style.block}">
-            <m:MaterialCardTitle text="Bar Chart" textColor="BLACK"/>
-            <m:MaterialCardContent ui:field="cardContent" addStyleNames="no-padding">
-                <m:MaterialAnchorButton  ui:field="edit_button" type="FLOATING" iconType="CREATE" size="LARGE" waves="DEFAULT" layoutPosition="ABSOLUTE" left="-20" top="100"/>
+        <m:MaterialCard ui:field="chart_card" addStyleNames="{style.block} {style.card}" textAlign="CENTER">
+            <m:MaterialCardTitle ui:field="chart_name" textColor="BLACK"/>
+            <m:MaterialCardContent ui:field="cardContent" addStyleNames="no-padding {style.chart_content} {style.center}">
+                <m:MaterialAnchorButton ui:field="edit_button" type="FLOATING" iconType="CREATE" size="LARGE" waves="LIGHT" layoutPosition="ABSOLUTE" left="-20" top="100"/>
             </m:MaterialCardContent>
-              
+            <m:MaterialButton ui:field="save_chart_btn" addStyleNames="{style.center} {style.btn}" text="Save Chart" waves="GREEN" backgroundColor="WHITE" textColor="BLACK" iconType="POLL" iconPosition="RIGHT" iconColor="GREEN"/>
         </m:MaterialCard>
         
 	
