@@ -6,8 +6,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
-import gwt.material.design.client.ui.MaterialButton;
-import gwt.material.design.client.ui.MaterialTextArea;
+import gwt.material.design.addins.client.window.MaterialWindow;
 import javax.inject.Inject;
 
 /**
@@ -19,24 +18,41 @@ class FormView extends ViewImpl implements FormPresenter.MyView {
     interface Binder extends UiBinder<Widget, FormView> {
     }
 
+    @UiField
+    MaterialWindow window;
+    @UiField
+    MaterialWindow windowEditor;
+
     @Inject
     FormView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
     }
 
+    @UiHandler("btnOpenWindow")
+    void onOpenWindow(ClickEvent e) {
+        window.open();
+    }
+    
+    @UiHandler("btnOpenWindowEditor")
+    void onOpenWindowEditor(ClickEvent e) {
+        windowEditor.open();
+    }
+    
+     /**
     @UiField
     MaterialTextArea formArea;
 
     @UiField
     MaterialButton addRow;
 
-    /*@UiHandler("addRow")
+    @UiHandler("addRow")
     void onClick(ClickEvent e) {
         //myAddFunction();
         setFormAreaText("Botão está a funcionar");
-    }*/
+    }
 
     public void setFormAreaText(String text) {
         formArea.setText(text);
-    }
+    }*/
+
 }
