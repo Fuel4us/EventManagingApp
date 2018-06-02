@@ -4,9 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Properties;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -48,24 +45,12 @@ public class AddNoteControllerTest {
         PersistenceContext.setSettings(extensionSettings);
     }
 
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
 //    @Test
 //    public void testNormalBehaviour() throws Exception {
 //        System.out.println("testNormalBehaviour");
 //
-//        final String titleNote = "Title Note 1";
-//        final String textNote = "Text of Note 1";
+//        final String titleNote = "Title";
+//        final String textNote = "Text";
 //
 //        final Note expected = new Note(titleNote, textNote);
 //

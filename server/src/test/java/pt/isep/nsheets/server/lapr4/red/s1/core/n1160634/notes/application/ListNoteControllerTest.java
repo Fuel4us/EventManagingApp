@@ -4,9 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Properties;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -49,48 +46,35 @@ public class ListNoteControllerTest {
         PersistenceContext.setSettings(extensionSettings);
     }
 
-    @AfterClass
-    public static void tearDownClass() {
+    @Test
+    public void testAensureGetNotesEmpty() {
+        System.out.println("testAensureGetNotesEmpty");
+
+        ListNoteController ctrl = new ListNoteController();
+
+        Iterable<Note> notes = ctrl.listNotes();
+
+        assertTrue("the list of Notes is not empty", !notes.iterator().hasNext());
     }
 
-    @Before
-    public void setUp() {
+    @Test
+    public void testBtestDatabaseInsertion() throws Exception {
+        System.out.println("testBtestDatabaseInsertion");
 
+        final String titleNote = "Title";
+        final String textNote = "Text";
+
+        final Note expected = new Note(titleNote, textNote);
+
+        AddNoteController ctrlAdd = new AddNoteController();
+
+        Note result = ctrlAdd.addNote(expected.toDTO());
+
+        ListNoteController ctrlList = new ListNoteController();
+
+        Iterable<Note> notes = ctrlList.listNotes();
+
+        assertTrue("the added Note is not in the database", notes.iterator().hasNext());
     }
-
-    @After
-    public void tearDown() {
-    }
-
-//    @Test
-//    public void testAensureGetNotesEmpty() {
-//        System.out.println("testAensureGetNotesEmpty");
-//
-//        ListNoteController ctrl = new ListNoteController();
-//
-//        Iterable<Note> notes = ctrl.listNotes();
-//
-//        assertTrue("the list of Notes is not empty", !notes.iterator().hasNext());
-//    }
-
-//    @Test
-//    public void testBtestDatabaseInsertion() throws Exception {
-//        System.out.println("testBtestDatabaseInsertion");
-//
-//        final String titleNote = "Title Note 1";
-//        final String textNote = "Text of Note 1";
-//
-//        final Note expected = new Note(titleNote, textNote);
-//
-//        AddNoteController ctrlAdd = new AddNoteController();
-//
-//        Note result = ctrlAdd.addNote(expected.toDTO());
-//
-//        ListNoteController ctrlList = new ListNoteController();
-//
-//        Iterable<Note> notes = ctrlList.listNotes();
-//
-//        assertTrue("the added Note is not in the database", notes.iterator().hasNext());
-//    }
 
 }
