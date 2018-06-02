@@ -18,19 +18,29 @@ import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
-import pt.isep.nsheets.shared.services.NotesServiceAsync;
-import pt.isep.nsheets.shared.services.NotesService;
-import pt.isep.nsheets.shared.services.NoteDTO;
+//import pt.isep.nsheets.shared.services.NotesServiceAsync;
+//import pt.isep.nsheets.shared.services.NotesService;
+//import pt.isep.nsheets.shared.services.NoteDTO;
 
 public class NotesPresenter extends Presenter<NotesPresenter.MyView, NotesPresenter.MyProxy> {
 
-//    private MyView view;
+    private MyView view;
 
     interface MyView extends View {
 
+        void addClickHandlerModalOpen(ClickHandler ch);
+
+        void buttonClickHandlerSaveNote(ClickHandler ch);
+
+        void openModal();
+
 //        void setContents(ArrayList<NoteDTO> contents);
-//
-//        void addClickHandler(ClickHandler ch);
+
+        String titleNote();
+
+        String textNote();
+
+        void closeModal();
     }
 
     @NameToken(NameTokens.notes)
@@ -42,29 +52,36 @@ public class NotesPresenter extends Presenter<NotesPresenter.MyView, NotesPresen
     NotesPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
 
-//        this.view = view;
+        this.view = view;
+
+        this.view.addClickHandlerModalOpen(event -> {
+
+            this.view.openModal();
+
+//            this.view.buttonClickHandlerSaveNote(event2 -> {
+//                NotesServiceAsync notesSvc = GWT.create(NotesService.class);
 //
-//        this.view.addClickHandler(event -> {
+//                // Set up the callback object.
+//                AsyncCallback<NoteDTO> callback = new AsyncCallback<NoteDTO>() {
+//                    @Override
+//                    public void onFailure(Throwable caught) {
+//                        MaterialToast.fireToast("Error! " + caught.getMessage());
+//                    }
 //
-//            NotesServiceAsync notesSvc = GWT.create(NotesService.class);
+//                    @Override
+//                    public void onSuccess(NoteDTO result) {
+//                        MaterialToast.fireToast("New Note Created...", "rounded");
 //
-//            // Set up the callback object.
-//            AsyncCallback<NoteDTO> callback = new AsyncCallback<NoteDTO>() {
-//                public void onFailure(Throwable caught) {
-//                    MaterialToast.fireToast("Error! " + caught.getMessage());
-//                }
+//                        refreshView();
+//                    }
+//                };
 //
-//                public void onSuccess(NoteDTO result) {
-//                    MaterialToast.fireToast("New Note Created...", "rounded");
-//
-//                    refreshView();
-//                }
-//            };
-//
-//            NoteDTO notesDto = new NoteDTO("TitleNote 123",
-//                    "New NoteText 123 Text");
-//            notesSvc.addNote(notesDto, callback);
-//        });
+//                NoteDTO notesDto = new NoteDTO(this.view.titleNote(), this.view.textNote());
+//                notesSvc.addNote(notesDto, callback);
+//                
+//                this.view.closeModal();
+//            });
+        });
     }
 
 //    private void refreshView() {
@@ -72,10 +89,12 @@ public class NotesPresenter extends Presenter<NotesPresenter.MyView, NotesPresen
 //
 //        // Set up the callback object.
 //        AsyncCallback<ArrayList<NoteDTO>> callback = new AsyncCallback<ArrayList<NoteDTO>>() {
+//            @Override
 //            public void onFailure(Throwable caught) {
 //                // TODO: Do something with errors.
 //            }
 //
+//            @Override
 //            public void onSuccess(ArrayList<NoteDTO> result) {
 //                view.setContents(result);
 //            }
