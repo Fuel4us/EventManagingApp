@@ -22,27 +22,44 @@ Uncomment this for XHTML entities
                 <m:MaterialPanel padding="32" textAlign="CENTER" height="300px">
                     
                     <!--  CODE OF FORM -->                 
-                       
-                    <m:MaterialLabel text="Helps me escape from the reality I live in." fontSize="1.2em" />   
-                                   
-                </m:MaterialPanel>              
+                                        
+                    <!--  <m:MaterialTextBox readOnly="true" text="Testing the static box!" label="Static Text Box" grid="s12"/> -->  
+                    <m:MaterialLabel text="Helps me escape from the reality I live in." fontSize="1.2em" />     
+                                                     
+                </m:MaterialPanel>                     
             </ma:window.MaterialWindow>       
-        </m:MaterialRow>
+        </m:MaterialRow>   
         
         <m:MaterialRow addStyleNames="code">
-            <m:MaterialTitle title="Form Editor Window" description="The window that shows the Form Editor, where you can edit the Form."/>
-            <m:MaterialButton ui:field="btnOpenWindowEditor" text="Open Form Editor" textColor="BLACK" />
-            <ma:window.MaterialWindow ui:field="windowEditor" width="50%" title="FORM EDITOR">              
-                <m:MaterialPanel padding="32" textAlign="CENTER" height="300px">
-                    
-                    <!--  CODE OF FORM EDITOR-->                 
-                       
-                    <m:MaterialLabel text="Love to edit." fontSize="1.2em" />   
-                                   
-                </m:MaterialPanel>              
-            </ma:window.MaterialWindow>       
+            <m:MaterialTitle title="Form Editor Window" description="The window that shows the Form Editor, where you can edit the Form, by adding rows, removing rows, editing rows and test the design of the Form!"/>
+            <m:MaterialButton ui:field="btnOpenWindowEditor" text="Open Form Editor" textColor="WHITE"/>
+            <ma:window.MaterialWindow ui:field="windowTab" backgroundColor="GREY_LIGHTEN_4" title="Form Editor" toolbarColor="BLUE_DARKEN_2">
+                <m:MaterialRow ui:field="tabsPanel" shadow="1" marginBottom="0">
+                    <m:MaterialColumn grid="l6 m12 s12">
+                        <m:MaterialTab indicatorColor="WHITE" width="50%">
+                            <m:MaterialTabItem waves="LIGHT">
+                                <m:MaterialLink text="Add Row" href="#addRow" textColor="WHITE"/>
+                            </m:MaterialTabItem>
+                            <m:MaterialTabItem waves="LIGHT">
+                                <m:MaterialLink text="Remove Row" href="#removeRow" textColor="WHITE"/>
+                            </m:MaterialTabItem>
+                            <m:MaterialTabItem waves="LIGHT">
+                                <m:MaterialLink text="Edit Row" href="#editRow" textColor="WHITE"/>
+                            </m:MaterialTabItem> 
+                        </m:MaterialTab>
+                    </m:MaterialColumn>
+                </m:MaterialRow>
+                <m:MaterialPanel m:id="addRow"  padding="32"  height="300px" textAlign="CENTER" overflow="AUTO">
+                    <m:MaterialLabel text="adding rows." fontSize="1.2em" />
+                </m:MaterialPanel>
+                <m:MaterialPanel m:id="removeRow"  padding="32"  height="300px" textAlign="CENTER" overflow="AUTO">
+                    <m:MaterialLabel text="removing rows" fontSize="1.2em" />
+                </m:MaterialPanel>
+                <m:MaterialPanel m:id="editRow"  padding="32"  height="300px" textAlign="CENTER" overflow="AUTO">
+                    <m:MaterialLabel text="editing rows" fontSize="1.2em" />
+                </m:MaterialPanel>
+            </ma:window.MaterialWindow>
         </m:MaterialRow>
-     
         
         
     </g:HTMLPanel>

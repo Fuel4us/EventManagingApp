@@ -19,9 +19,7 @@ class FormView extends ViewImpl implements FormPresenter.MyView {
     }
 
     @UiField
-    MaterialWindow window;
-    @UiField
-    MaterialWindow windowEditor;
+    MaterialWindow window, windowTab;
 
     @Inject
     FormView(Binder uiBinder) {
@@ -34,8 +32,8 @@ class FormView extends ViewImpl implements FormPresenter.MyView {
     }
     
     @UiHandler("btnOpenWindowEditor")
-    void onOpenWindowEditor(ClickEvent e) {
-        windowEditor.open();
+    void onOpenWindowWithTab(ClickEvent e) {
+        windowTab.open();
     }
     
      /**
