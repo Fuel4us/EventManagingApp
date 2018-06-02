@@ -9,4 +9,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface UsersService extends RemoteService {
 
     ArrayList<UserDTO> getUsers();
+    
+    UserDTO attemptLogin(String email, String password);
 }

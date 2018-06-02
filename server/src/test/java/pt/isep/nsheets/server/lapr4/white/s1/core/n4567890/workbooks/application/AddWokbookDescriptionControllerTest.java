@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.domain.WorkbookDescription;
@@ -56,7 +57,7 @@ public class AddWokbookDescriptionControllerTest {
 	public void tearDown() {
 	}
 
-	// @Ignore
+	 //@Ignore
 	@Test
 	public void testNormalBehaviour() throws Exception {
 		System.out.println("testNormalBehaviour");

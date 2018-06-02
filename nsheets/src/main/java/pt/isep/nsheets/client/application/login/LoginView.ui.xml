@@ -8,8 +8,8 @@
     <m:MaterialRow>
         <m:MaterialColumn grid="s4" offset="s4" >   
             <g:HTMLPanel>
-                <m:MaterialTextBox ui:field="txtEmail" type="EMAIL" placeholder="Email" iconType="ACCOUNT_CIRCLE" />
-                <m:MaterialTextBox ui:field="txtPassword" type="PASSWORD" placeholder="Password" />
+                <m:MaterialTextBox ui:field="txtEmail" type="EMAIL" value="1160557@isep.ipp.pt" placeholder="Email" iconType="ACCOUNT_CIRCLE" />
+                <m:MaterialTextBox ui:field="txtPassword" type="PASSWORD" value="123asd" placeholder="Password" />
                 <m:MaterialButton ui:field="btnLogin" text="Login" waves="LIGHT" size="LARGE"/>
             </g:HTMLPanel>
         </m:MaterialColumn>
