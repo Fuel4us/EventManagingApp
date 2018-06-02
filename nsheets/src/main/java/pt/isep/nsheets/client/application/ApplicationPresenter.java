@@ -30,6 +30,7 @@ import com.gwtplatform.mvp.client.proxy.Proxy;
 
 import pt.isep.nsheets.client.application.menu.MenuPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
+import pt.isep.nsheets.client.security.CurrentUser;
 
 public class ApplicationPresenter
         extends Presenter<ApplicationPresenter.MyView, ApplicationPresenter.MyProxy> 

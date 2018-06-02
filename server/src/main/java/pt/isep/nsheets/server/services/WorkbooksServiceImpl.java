@@ -77,5 +77,21 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
 		
 		return wd.toDTO();
 	}
+        
+        @Override
+        public WorkbookDescriptionDTO findByName(String name) throws DataException {
+            PersistenceContext.setSettings(this.getPersistenceSettings());
 
+            AddWorkbookDescriptionController ctrl = new AddWorkbookDescriptionController();
+
+            WorkbookDescription wd=null; 
+
+            try {
+                wd = ctrl.findByName(name);
+            } catch (DataConcurrencyException | DataIntegrityViolationException e) {
+                throw new DataException((Throwable) e);
+            }
+
+            return wd.toDTO();
+        }
 }

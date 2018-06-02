@@ -1,5 +1,6 @@
 package pt.isep.nsheets.client.application.home;
 
+import com.google.gwt.core.client.GWT;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -7,6 +8,7 @@ import javax.inject.Inject;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -22,11 +24,13 @@ import gwt.material.design.client.ui.MaterialColumn;
 import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialRow;
+import gwt.material.design.client.ui.MaterialTextBox;
+import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
+import pt.isep.nsheets.shared.services.WorkbooksService;
+import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
 
 class HomeView extends ViewImpl implements HomePresenter.MyView {
-
-        
 
 	interface Binder extends UiBinder<Widget, HomeView> {
 	}
@@ -35,11 +39,14 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
 	HTMLPanel htmlPanel;
 
 	@UiField
-	MaterialButton newWorkbookButton;
+	MaterialButton newWorkbookButton, saveButton;
         
         @UiField
 	MaterialModal modal;
-	
+        
+        @UiField
+        MaterialTextBox name, description;
+        
 	@Inject
 	HomeView(Binder uiBinder) {
 		initWidget(uiBinder.createAndBindUi(this));		
@@ -49,23 +56,40 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
 	    MaterialCard card=new MaterialCard();
 	    card.setBackgroundColor(Color.BLUE_DARKEN_1);
 	    
-        MaterialCardContent cardContent=new MaterialCardContent();
-        cardContent.setTextColor(Color.WHITE);
-        
-        MaterialCardTitle cardTitle=new MaterialCardTitle();
-        cardTitle.setText(wb.getName());
-        cardTitle.setIconType(IconType.INSERT_DRIVE_FILE);
-        cardTitle.setIconPosition(IconPosition.RIGHT);
+            MaterialCardContent cardContent=new MaterialCardContent();
+            cardContent.setTextColor(Color.WHITE);
 
-        MaterialLabel label=new MaterialLabel();
-        label.setText(wb.getDescription());
+            MaterialCardTitle cardTitle=new MaterialCardTitle();
+            cardTitle.setText(wb.getName());
+            cardTitle.setIconType(IconType.INSERT_DRIVE_FILE);
+            cardTitle.setIconPosition(IconPosition.RIGHT);
 
-        cardContent.add(cardTitle);
-        cardContent.add(label);
-        
-        card.add(cardContent);
-		
-        return card;
+            MaterialLabel label=new MaterialLabel();
+            label.setText(wb.getDescription());
+
+            cardContent.add(cardTitle);
+            cardContent.add(label);
+
+            card.add(cardContent);
+            
+            card.addClickHandler(e -> {
+                WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
+
+                // Set up the callback object.
+                AsyncCallback<WorkbookDescriptionDTO> callback = new AsyncCallback<WorkbookDescriptionDTO>() {
+                        public void onFailure(Throwable caught) {
+                                MaterialToast.fireToast("Error! " + caught.getMessage());
+                        }
+
+                        public void onSuccess(WorkbookDescriptionDTO result) {
+                                MaterialToast.fireToast(result.getName());
+                        }
+                };
+                
+                workbooksSvc.findByName(wb.getName(), callback);
+            });
+            
+            return card;
 	}
 
 	@Override
@@ -95,6 +119,11 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
 		
 	}
 	
+        @Override
+        public void buttonClickHandler(ClickHandler ch) {
+            saveButton.addClickHandler(ch);
+        }
+        
 	@Override
 	public void addClickHandler(ClickHandler ch) {
 		// TODO Auto-generated method stub
@@ -110,5 +139,15 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
         @Override
         public void closeModal() {
             this.modal.close();
+        }
+        
+        @Override
+        public String title(){
+            return this.name.getValue();
+        }
+        
+        @Override
+        public String description(){
+            return this.description.getValue();
         }
 }

@@ -15,10 +15,10 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import gwt.material.design.client.ui.MaterialToast;
 
 import com.gwtplatform.mvp.client.annotations.NameToken;
-import gwt.material.design.client.ui.MaterialModal;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
+import pt.isep.nsheets.client.security.CurrentUser;
 import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
 import pt.isep.nsheets.shared.services.WorkbooksService;
 import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
@@ -30,8 +30,13 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 	interface MyView extends View {
 		void setContents(ArrayList<WorkbookDescriptionDTO> contents);
 		void addClickHandler(ClickHandler ch);
+                
                 void openModal();
                 void closeModal();
+                void buttonClickHandler(ClickHandler ch);
+                
+                String title();
+                String description();
 	}
 
 	@NameToken(NameTokens.home)
@@ -47,25 +52,29 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
 		this.view.addClickHandler(event -> {
                         this.view.openModal();
-			WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
+                });
+                
+                this.view.buttonClickHandler(e -> {
+                    WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
 
-			// Set up the callback object.
-			AsyncCallback<WorkbookDescriptionDTO> callback = new AsyncCallback<WorkbookDescriptionDTO>() {
-				public void onFailure(Throwable caught) {
-					MaterialToast.fireToast("Error! " + caught.getMessage());
-				}
+                    // Set up the callback object.
+                    AsyncCallback<WorkbookDescriptionDTO> callback = new AsyncCallback<WorkbookDescriptionDTO>() {
+                            public void onFailure(Throwable caught) {
+                                    MaterialToast.fireToast("Error! " + caught.getMessage());
+                            }
 
-				public void onSuccess(WorkbookDescriptionDTO result) {
-					MaterialToast.fireToast("New Workbook Created...", "rounded");
-					
-					refreshView();
-				}
-			};
+                            public void onSuccess(WorkbookDescriptionDTO result) {
+                                    MaterialToast.fireToast("New Workbook Created", "rounded");
 
-			WorkbookDescriptionDTO wdDto = new WorkbookDescriptionDTO("WorkbookDescription 123",
-					"New WorkbookDescription 123 Description");
-			workbooksSvc.addWorkbookDescription(wdDto, callback);
-		});
+                                    refreshView();
+                            }
+                    };
+
+                    WorkbookDescriptionDTO wdDto = new WorkbookDescriptionDTO(this.view.title(), this.view.description());
+                    workbooksSvc.addWorkbookDescription(wdDto, callback);
+
+                    this.view.closeModal();
+                });
 	}
 
 	private void refreshView() {
@@ -93,4 +102,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
 		refreshView();
 	}
+        
+        
 }

@@ -53,7 +53,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
 
     @Override
     public Expression visitExpression(FormulaParser.ExpressionContext ctx) {
-        return visit(ctx.comparison());
+        return visit(ctx.comparisonGlobal());
     }
 
     @Override

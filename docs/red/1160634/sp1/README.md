@@ -3,7 +3,7 @@
 
 # 1. General Notes
 
-Nothing to report.
+[Had a prblem on this regard](https://moodle.isep.ipp.pt/mod/forum/discuss.php?d=16911)
 
 # 2. Requirements
 
@@ -319,14 +319,6 @@ Following the guidelines for JPA from EAPLI we envision a scenario like the foll
 
 ![SD US1](design1.png)
 
-Notes:  
-- The diagram only depicts the less technical details of the scenario;  
-- For clarity reasons details such as the PersistenceContext or the RepositoryFactory are not depicted in this diagram.   
-- **WorkbookServices** realizes the GWT RPC mechanism;  
-- **ListWorkbookDescriptionController** is the *use case controller*;  
-- **ListWorkbookDescriptionServices** is to group together all the services related to WorkbookDescription. 
-
-**For US2**
 **For US2**
 
 ![SD US2](design2.png)
@@ -338,6 +330,14 @@ Notes:
 **For US4**
 
 ![SD US4](design4.png)
+
+Notes:  
+- The diagrams only depicts the less technical details of the scenario;  
+- For clarity reasons details such as the PersistenceContext or the RepositoryFactory are not depicted in this diagram.   
+- **NoteServices** realizes the GWT RPC mechanism;  
+- **ListÑoteController** is the *use case controller*;  
+- **ListNoteServices** is to group together all the services related to Note.
+
 
 ## 4.3. Classes
 
@@ -387,26 +387,32 @@ Since Presenters should only depend on a View interface we added a new method to
 
 Then, we implemented the *addClickHandler* in the HomeView class and call this method in the constructor of the HomePresenter. In the constructor our handler class the server method that adds a new workbook description.   
 
+**For US3**
+
+**For US4**
+
+
 **Code Organization**  
 
 We followed the recommended organization for packages:  
 - Code should be added (when possible) inside packages that identify the group, sprint, functional area and author;
-- For instance, we used **lapr4.white.s1.core.n4567890**
+- For instance, I used **lapr4.red.s1.core.n1160634**
 
 The code for this sprint:  
 Project **server**    
-- pt.isep.nsheets.server.**lapr4.white.s1.core.n4567890**.workbooks.application: contains the controllers  
-- pt.isep.nsheets.server.**lapr4.white.s1.core.n4567890**.workbooks.domain: contains the domain classes  
+- pt.isep.nsheets.server.**lapr4.red.s1.core.n1160634**.notes.application: contains the controllers  
+- pt.isep.nsheets.server.**lapr4.red.s1.core.n1160634**.notes.domain: contains the domain classes
+- pt.isep.nsheets.server.**lapr4.red.s1.core.n1160634**.notes.persistence: contains the persistence/JPA classes  
 - pt.isep.nsheets.server.**lapr4.white.s1.core.n4567890**.workbooks.persistence: contains the persistence/JPA classes 
-- Updated the existing class: **pt.isep.nsheets.server.WorkbookServiceImpl**
+- Updated the existing class: **pt.isep.nsheets.server.NoteServiceImpl**
 
 Project **shared**  
-- Added the class: **pt.isep.nsheets.shared.services.DataException**: This class is new and is used to return database exceptions from the server  
-- Updated the classes: **pt.isep.nsheets.shared.services.WorkbookService** and **pt.isep.nsheets.shared.services.WorkbookServiceAsync**  
+- Updated the classes: **pt.isep.nsheets.shared.services.NoteService** and **pt.isep.nsheets.shared.services.NoteServiceAsync**  
 
 Project **NShests** 
 - Updated the classes: **pt.isep.nsheets.client.aaplication.home.HomeView** and **pt.isep.nsheets.client.aaplication.home.HomePresenter**  
 - Updated the file: **pt.isep.nsheets.client.aaplication.home.HomeView.ui.xml**  
+- Created the package (and the classes of that package): **pt.isep.nsheets.client.aaplication.notes** 
 
 
 # 6. Integration/Demonstration
@@ -419,7 +425,7 @@ Project **NShests**
 
 Some Questions/Issues identified during the work in this feature increment:
 
-1. The method getWorkbooks in the WorkbooksService returns an ArrayList. Maybe we should not bind the result to a specific collection implementation.
+Nothing to report.
 
 # 8. Work Log
 
@@ -437,7 +443,15 @@ Commits:
 
 [Core07.1 Fix package problem, added class needed to both persistance.xml and beggining of javaDoc](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/7476a0ed3036b836cb709bd3d7f9fb0f0ad02904)
 
-[Core07.1 Database, beggining of units testing of database / persistance and beggining of javaDoc]()
+[Core07.1 Database, beggining of units testing of database / persistance and beggining of javaDoc](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/041c34f94ab5f2297e918f76715ca0d2383cc1ab)
+
+[Core07.1 dm]()
+
+[Core07.1 UI]()
+
+[Core07.1 server / database]()
+
+
 
 
 

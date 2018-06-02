@@ -7,7 +7,6 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
-
 import pt.isep.nsheets.shared.services.NotesService;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.application.AddNoteController;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.application.ListNoteController;
@@ -38,7 +37,7 @@ public class NotesServiceImpl extends RemoteServiceServlet implements NotesServi
         // props.put("eclipselink.logging.level", "FINE");
         return new PersistenceSettings(props);
     }
-    
+
     @Override
     public ArrayList<NoteDTO> getNotes() {
         // Setup the persistence settings
@@ -54,10 +53,9 @@ public class NotesServiceImpl extends RemoteServiceServlet implements NotesServi
         
         return notes;
     }
-    
+
     @Override
-    public NoteDTO addNote(NoteDTO noteDTO)
-            throws DataException {
+    public NoteDTO addNote(NoteDTO noteDTO) throws DataException {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
         
@@ -73,5 +71,5 @@ public class NotesServiceImpl extends RemoteServiceServlet implements NotesServi
         
         return note.toDTO();
     }
-    
+
 }

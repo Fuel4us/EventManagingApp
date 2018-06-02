@@ -1,5 +1,6 @@
 package pt.isep.nsheets.server.services;
 
+import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.application.LoginUserController;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -48,5 +49,13 @@ public class UsersServiceImpl extends RemoteServiceServlet implements UsersServi
         usrs.forEach(u -> users.add(u.toDTO()));
 
         return users;
+    }
+    
+    @Override
+    public UserDTO attemptLogin(String email, String password) {
+        LoginUserController ctrl = new LoginUserController();
+        UserDTO u = ctrl.attemptLogin(email, password);
+        
+        return u;
     }
 }

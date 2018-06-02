@@ -50,15 +50,15 @@ public class ExcelExpressionCompiler implements ExpressionCompiler {
      * The character that signals that a cell's content is a formula ('=')
      */
     public static final char FORMULA_STARTER = '=';
-    
+
     private Language language = null;
 
     /**
      * Creates the Excel expression compiler.
      */
     public ExcelExpressionCompiler() {
-    		// (ATB) Instantiate the language
-    		language=LanguageManager.getInstance().getLanguage("excel");
+        // (ATB) Instantiate the language
+        language = LanguageManager.getInstance().getLanguage("excel");
 //    		language=new ExcelLanguage();
     }
 
@@ -92,11 +92,11 @@ public class ExcelExpressionCompiler implements ExpressionCompiler {
         if (eval.getNumberOfErrors() > 0) {
             throw new FormulaCompilationException(eval.getErrorsMessage());
         }
-     
+
         return result;
     }
-    
-      public static class FormulaErrorListener extends BaseErrorListener {
+
+    public static class FormulaErrorListener extends BaseErrorListener {
 
         private StringBuilder buf;
 
