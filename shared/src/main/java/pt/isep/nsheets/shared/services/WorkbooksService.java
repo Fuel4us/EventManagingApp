@@ -7,6 +7,10 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("workbooksService")
 public interface WorkbooksService extends RemoteService {
+    
 	ArrayList<WorkbookDescriptionDTO> getWorkbooks();
+        
 	WorkbookDescriptionDTO addWorkbookDescription(WorkbookDescriptionDTO wdDto) throws DataException;
+        
+        WorkbookDescriptionDTO findByName(String name) throws DataException;
 }

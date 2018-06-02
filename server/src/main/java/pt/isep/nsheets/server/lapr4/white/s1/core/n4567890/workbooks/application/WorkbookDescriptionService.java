@@ -24,4 +24,10 @@ public class WorkbookDescriptionService {
         
         return wb;
     }
+    
+    public WorkbookDescription findByName(String name) throws DataConcurrencyException, DataIntegrityViolationException {
+        final WorkbookDescriptionRepository workbookDescriptionRepository = PersistenceContext.repositories().workbookDescriptions();
+        
+        return workbookDescriptionRepository.findByName(name);
+    }
 }
