@@ -36,8 +36,10 @@ public class NameTokens {
     public static final String calendar = "calendar";
 
     public static final String export = "export";
-    
+
     public static final String chat = "chat";
+
+    public static final String form = "form";
 
     public static String getWorkbook() {
         return workbook;
@@ -66,10 +68,16 @@ public class NameTokens {
     public static String getCalendar() {
         return calendar;
     }
-    
-    public static String getChat() {
-		return chat;
-	}
 
-    public static String getExport() { return export; }
+    public static String getChat() {
+        return chat;
+    }
+
+    public static String getExport() {
+        return export;
+    }
+    
+    public static String getForm() {
+        return form;
+    }
 }

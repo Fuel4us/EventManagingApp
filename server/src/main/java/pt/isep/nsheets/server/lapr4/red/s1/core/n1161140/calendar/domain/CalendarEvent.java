@@ -2,11 +2,13 @@ package pt.isep.nsheets.server.lapr4.red.s1.core.n1161140.calendar.domain;
 
 import eapli.framework.domain.AggregateRoot;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
+@Entity
 public class CalendarEvent implements AggregateRoot<Long>, Serializable {
 
     @Id

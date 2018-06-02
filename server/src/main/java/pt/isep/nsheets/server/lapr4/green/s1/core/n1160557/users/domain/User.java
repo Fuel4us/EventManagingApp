@@ -31,6 +31,7 @@ public class User implements AggregateRoot<Long>, Serializable {
     private String nickname;
     private String password;
     private boolean superUser;
+    private boolean loggedIn;
 
     public User(String email, String name, String nickname, String password, boolean superUser) throws IllegalArgumentException {
         if (email == null || name == null || nickname == null || password == null) {
@@ -110,7 +111,7 @@ public class User implements AggregateRoot<Long>, Serializable {
             return false;
         }
 
-        if (this.superUser != this.superUser) {
+        if (this.superUser != that.superUser) {
             return false;
         }
 
