@@ -26,7 +26,7 @@ import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialRow;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
-import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.WorkbooksService;
 import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
 
@@ -52,7 +52,7 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
 		initWidget(uiBinder.createAndBindUi(this));		
 	}
 	
-	private MaterialCard createCard(WorkbookDescriptionDTO wb) {
+	private MaterialCard createCard(WorkbookDTO wb) {
 	    MaterialCard card=new MaterialCard();
 	    card.setBackgroundColor(Color.BLUE_DARKEN_1);
 	    
@@ -60,12 +60,12 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
             cardContent.setTextColor(Color.WHITE);
 
             MaterialCardTitle cardTitle=new MaterialCardTitle();
-            cardTitle.setText(wb.getName());
+            cardTitle.setText(wb.name);
             cardTitle.setIconType(IconType.INSERT_DRIVE_FILE);
             cardTitle.setIconPosition(IconPosition.RIGHT);
 
             MaterialLabel label=new MaterialLabel();
-            label.setText(wb.getDescription());
+            label.setText(wb.description);
 
             cardContent.add(cardTitle);
             cardContent.add(label);
@@ -76,31 +76,31 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
                 WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
 
                 // Set up the callback object.
-                AsyncCallback<WorkbookDescriptionDTO> callback = new AsyncCallback<WorkbookDescriptionDTO>() {
+                AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
                         public void onFailure(Throwable caught) {
                                 MaterialToast.fireToast("Error! " + caught.getMessage());
                         }
 
-                        public void onSuccess(WorkbookDescriptionDTO result) {
-                                MaterialToast.fireToast(result.getName());
+                        public void onSuccess(WorkbookDTO result) {
+                                MaterialToast.fireToast(result.name);
                         }
                 };
                 
-                workbooksSvc.findByName(wb.getName(), callback);
+                workbooksSvc.findByName(wb.name, callback);
             });
             
             return card;
 	}
 
 	@Override
-	public void setContents(ArrayList<WorkbookDescriptionDTO> contents) {
+	public void setContents(ArrayList<WorkbookDTO> contents) {
 		int colCount=1;
 		
 		MaterialRow row=null;
 		
 		htmlPanel.clear();
 		
-		for (WorkbookDescriptionDTO wb: contents) {
+		for (WorkbookDTO wb: contents) {
 			MaterialCard card=createCard(wb);
 			
 			if (colCount==1) {

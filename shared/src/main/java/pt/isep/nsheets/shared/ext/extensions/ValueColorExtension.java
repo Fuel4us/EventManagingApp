@@ -4,7 +4,7 @@ import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.SpreadsheetExtension;
-import pt.isep.nsheets.shared.services.SpreadsheetDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
 
 public class ValueColorExtension extends Extension {
 
@@ -43,10 +43,10 @@ public class ValueColorExtension extends Extension {
             return null;
         }
 
-        @Override
-        public Spreadsheet fromDTO() throws FormulaCompilationException {
-            return null;
-        }
+//        @Override
+//        public Spreadsheet fromDTO() throws FormulaCompilationException {
+//            return null;
+//        }
 
         class ValueColorListener implements CellListener{
 

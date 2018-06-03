@@ -119,6 +119,8 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
                 matrix,
                 view.isRow(),
                 view.isConsiderFirstField());
+        Workbook wb = new Workbook("Teste", "Teste", matrix);
+        Spreadsheet ss = wb.getSpreadsheet(0);
 
         return dto;
     }

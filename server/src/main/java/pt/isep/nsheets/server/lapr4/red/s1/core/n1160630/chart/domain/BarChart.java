@@ -134,8 +134,8 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
     @Override
     public Chart newInstanceFromDTO(ChartDTO dto) throws IllegalArgumentException {
         //FIX ME 
-        Workbook wb = new Workbook(dto.getContent());
-        Chart chart = new BarChart(dto.getGraph_name(),
+        Workbook wb = new Workbook("Teste", "Teste", dto.getContent());
+        Chart chart = new  BarChart(dto.getGraph_name(),
                 wb.getSpreadsheet(0),
                 dto.getFirstAddress(),
                 dto.getLastAddress(),

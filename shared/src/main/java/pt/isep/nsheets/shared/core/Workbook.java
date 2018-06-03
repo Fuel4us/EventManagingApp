@@ -21,8 +21,8 @@
 package pt.isep.nsheets.shared.core;
 
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
-import pt.isep.nsheets.shared.services.SpreadsheetDTO;
-import pt.isep.nsheets.shared.services.WorkbookDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,7 +44,10 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 
 	/** The unique version identifier used for serialization */
 	private static final long serialVersionUID = -6324252462576447242L;
-
+        
+        private String name;
+        private String description;
+        
 	/** The spreadsheets of which the workbook consists */
         @OneToMany(
                 cascade = CascadeType.ALL,
@@ -74,14 +77,19 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 	 * of blank spreadsheets.
 	 * @param sheets the number of sheets to create initially
 	 */
-	public Workbook(int sheets) {
-		for (int i = 0; i < sheets; i++)
-			spreadsheets.add(new SpreadsheetImpl(this,
-				getNextSpreadsheetTitle()));
+	public Workbook(String name, String description, int sheets) {
+            this.name = name;
+            this.description = description;
+            
+            for (int i = 0; i < sheets; i++)
+                    spreadsheets.add(new SpreadsheetImpl(this,
+                            getNextSpreadsheetTitle()));
 	}
 
-	public Workbook(List<Spreadsheet> spreadsheets) {
-		this.spreadsheets = spreadsheets;
+	public Workbook(String name, String description, List<Spreadsheet> spreadsheets) {
+            this.name = name;
+            this.description = description;
+            this.spreadsheets = spreadsheets;
 	}
 
 	/**
@@ -89,10 +97,13 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 	 * spreadsheets initially.
 	 * @param contents the content matrices to use when creating spreadsheets
 	 */
-	public Workbook(String[][]... contents) {
-		for (String[][] content : contents)
-			spreadsheets.add(new SpreadsheetImpl(this,
-				getNextSpreadsheetTitle(), content));
+	public Workbook(String name, String description, String[][]... contents) {
+            this.name = name;
+            this.description = description;
+            
+            for (String[][] content : contents)
+                    spreadsheets.add(new SpreadsheetImpl(this,
+                            getNextSpreadsheetTitle(), content));
 	}
 
 	/**
@@ -161,6 +172,14 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 		return spreadsheets.iterator();
 	}
 
+        public String name() {
+            return name;
+        }
+
+        public String description() {
+            return description;
+        }
+        
 /*
  * EVENT HANDLING
  */
@@ -226,19 +245,25 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         this.id = id;
     }
 
-	public WorkbookDTO toDTO() {
-		List<SpreadsheetDTO> spreadsheetDTOS = new ArrayList<>();
-		for(Spreadsheet ss : this.spreadsheets)
-			spreadsheetDTOS.add(ss.toDTO());
-		return new WorkbookDTO(spreadsheetDTOS, this.createdSpreadsheets);
-	}
+    public WorkbookDTO toDTO() {
+            List<SpreadsheetDTO> spreadsheetDTOS = new ArrayList<>();
+            for(Spreadsheet ss : this.spreadsheets)
+                    spreadsheetDTOS.add(ss.toDTO());
+            return new WorkbookDTO(this.name, this.description, spreadsheetDTOS);
+    }
 
-	public static Workbook fromDTO(WorkbookDTO dto) throws IllegalArgumentException, FormulaCompilationException {
-		List<Spreadsheet> spreadsheet = new ArrayList<>();
-		for(SpreadsheetDTO ss : dto.getSpreadsheets())
-			spreadsheet.add(ss.fromDTO());
-		return new Workbook(spreadsheet);
-	}
+    public static Workbook fromDTO(WorkbookDTO dto) throws IllegalArgumentException, FormulaCompilationException {
+            if(dto.spreadsheets.isEmpty())
+                return new Workbook(dto.name, dto.description, dto.createdSpreadsheets);
+            else {
+                List<Spreadsheet> spreadsheet = new ArrayList<>();
+
+                for(SpreadsheetDTO ss : dto.spreadsheets)
+                        spreadsheet.add(SpreadsheetImpl.fromDTO(ss));
+
+                return new Workbook(dto.name, dto.description, spreadsheet);
+            }
+    }
 	/*
  * GENERAL
  */
