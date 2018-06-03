@@ -6,12 +6,10 @@
              
     <m:MaterialPanel>
  	
-        <m:MaterialCard ui:field="message_card">
+        <m:MaterialCard ui:field="messageCard">
             <!-->Message Colection<!-->
-            <m:MaterialRow>
-                <m:MaterialCollection ui:field="messageCollection">
-                </m:MaterialCollection>  
-            </m:MaterialRow>
+            <m:MaterialCollection ui:field="messageCollection">
+            </m:MaterialCollection>  
         </m:MaterialCard>
         
         

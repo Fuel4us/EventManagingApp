@@ -3,6 +3,7 @@ package pt.isep.nsheets.client.application.chat;
 import com.google.gwt.core.client.GWT;
 
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
@@ -31,9 +32,10 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 
     interface MyView extends View {
 
-        void setContents (ArrayList<MessagesDTO> contents);
+        void setContents(ArrayList<MessagesDTO> contents);
+
         void buttonClickHandler(ClickHandler ch);
-        
+
         String text();
     }
 
@@ -43,7 +45,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
     }
 
     private CurrentUser user;
-    
+
     @Inject
     ChatPresenter(EventBus eventBus, MyView view, MyProxy proxy, CurrentUser currentUser) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
@@ -64,35 +66,33 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
                 @Override
                 public void onSuccess(MessagesDTO result) {
                     MaterialToast.fireToast("New Message Created", "rounded");
-                    
+
                     refreshMessages();
                 }
 
             };
             MessagesDTO mDTO = new MessagesDTO(view.text(), new Date(), this.user.getUser().getNickname());
             messagesSvc.addMessage(mDTO, callback);
-            
-            refreshMessages();
         });
     }
 
     private void refreshMessages() {
         //update the message containers
-        
+
         MessagesServiceAsync messagesSvc = GWT.create(MessagesService.class);
 
-		// Set up the callback object.
-		AsyncCallback<ArrayList<MessagesDTO>> callback = new AsyncCallback<ArrayList<MessagesDTO>>() {
-			public void onFailure(Throwable caught) {
-				// TODO: Do something with errors.
-			}
+        // Set up the callback object.
+        AsyncCallback<ArrayList<MessagesDTO>> callback = new AsyncCallback<ArrayList<MessagesDTO>>() {
+            public void onFailure(Throwable caught) {
+                // TODO: Do something with errors.
+            }
 
-			public void onSuccess(ArrayList<MessagesDTO> result) {
-				view.setContents(result);
-			}
-		};
+            public void onSuccess(ArrayList<MessagesDTO> result) {
+                view.setContents(result);
+            }
+        };
 
-		messagesSvc.getMessages(callback);
+        messagesSvc.getMessages(callback);
     }
 
     @Override
@@ -101,6 +101,19 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 
         SetPageTitleEvent.fire("Chat", "Public Online Chat", "", "", this);
 
-        refreshMessages();
+        this.timer();
+    }
+
+    private void timer() {
+        // Create a new timer that calls Window.alert().
+        Timer t = new Timer() {
+            @Override
+            public void run() {
+                refreshMessages();
+            }
+        };
+
+        // Schedule the timer to run once in 1 second.
+        t.scheduleRepeating(1000);
     }
 }

@@ -8,6 +8,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.client.constants.CollectionType;
@@ -45,6 +46,9 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
     @UiField
     MaterialCollection messageCollection;
 
+    //@UiField
+    //MaterialCard messageCard;
+    
     @Inject
     ChatView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
@@ -53,19 +57,26 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
     @Override
     public void setContents(ArrayList<MessagesDTO> contents) {
         //update the message container
+        //messageCard.clear();
         messageCollection.clear();
 
+        //final ScrollPanel scrollMessagesPanel = new ScrollPanel();
+        //scrollMessagesPanel.setSize("1150px", "350px");
+        
         for (MessagesDTO m : contents) {
             MaterialCollectionItem card = createCard(m);
 
             messageCollection.add(card);
         }
+
+        //scrollMessagesPanel.add(messageCollection);
+        //messageCard.add(scrollMessagesPanel);
     }
 
     private MaterialCollectionItem createCard(MessagesDTO m) {
         MaterialCollectionItem card = new MaterialCollectionItem();
         card.setType(CollectionType.AVATAR);
-        
+
         MaterialImage avatar = new MaterialImage();
         avatar.setUrl("https://cdn.pixabay.com/photo/2016/11/18/23/38/child-1837375_960_720.png");
         avatar.setType(ImageType.CIRCLE);
@@ -86,7 +97,7 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
         card.add(userLabel);
         card.add(textLabel);
         card.add(dateLabel);
-        
+
         return card;
     }
 
