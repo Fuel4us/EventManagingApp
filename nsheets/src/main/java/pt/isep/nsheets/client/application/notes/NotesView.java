@@ -30,12 +30,11 @@ import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialRow;
 import gwt.material.design.client.ui.MaterialTextArea;
 import gwt.material.design.client.ui.MaterialTextBox;
-import gwt.material.design.client.ui.MaterialTitle;
 import gwt.material.design.client.ui.MaterialToast;
 
-//import pt.isep.nsheets.shared.services.NoteDTO;
-//import pt.isep.nsheets.shared.services.NotesService;
-//import pt.isep.nsheets.shared.services.NotesServiceAsync;
+import pt.isep.nsheets.shared.services.NoteDTO;
+import pt.isep.nsheets.shared.services.NotesService;
+import pt.isep.nsheets.shared.services.NotesServiceAsync;
 
 class NotesView extends ViewImpl implements NotesPresenter.MyView {
 
@@ -85,34 +84,34 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
         emptyState.setVisible(false);
     }
 
-//    @Override
-//    public void setContents(ArrayList<NoteDTO> contents) {
-//        int colCount = 1;
-//
-//        MaterialRow row = null;
-//
-//        htmlPanel.clear();
-//
-//        for (NoteDTO note : contents) {
-//            MaterialCard card = createCard(note);
-//
-//            if (colCount == 1) {
-//                row = new MaterialRow();
-//                htmlPanel.add(row);
-//                ++colCount;
-//                if (colCount >= 4) {
-//                    colCount = 1;
-//                }
-//            }
-//
-//            MaterialColumn col = new MaterialColumn();
-//            col.setGrid("l4");
-//            row.add(col);
-//
-//            col.add(card);
-//        }
-//
-//    }
+    @Override
+    public void setContents(ArrayList<NoteDTO> contents) {
+        int colCount = 1;
+
+        MaterialRow row = null;
+
+        htmlPanel.clear();
+
+        for (NoteDTO note : contents) {
+            MaterialCard card = createCard(note);
+
+            if (colCount == 1) {
+                row = new MaterialRow();
+                htmlPanel.add(row);
+                ++colCount;
+                if (colCount >= 4) {
+                    colCount = 1;
+                }
+            }
+
+            MaterialColumn col = new MaterialColumn();
+            col.setGrid("l4");
+            row.add(col);
+
+            col.add(card);
+        }
+
+    }
 
     @Override
     public String titleNote() {
@@ -132,63 +131,63 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
         this.modal.close();
     }
 
-//    private MaterialCard createCard(NoteDTO note) {
-//        MaterialCard card = new MaterialCard();
-//        card.setBackgroundColor(Color.BLUE_DARKEN_1);
-//
-//        MaterialCardContent cardContent = new MaterialCardContent();
-//        cardContent.setTextColor(Color.WHITE);
-//
-//        MaterialCardTitle cardTitle = new MaterialCardTitle();
-//        cardTitle.setText(note.getTitleNote());
-//
-//        MaterialLabel label = new MaterialLabel();
-//        label.setText(note.getTextNote());
-//
-//        MaterialCardAction cardAction = new MaterialCardAction();
-//        cardAction.setTextAlign(TextAlign.RIGHT);
-//
-//        MaterialButton editBtn = new MaterialButton("Edit", IconType.EDIT, ButtonType.FLOATING);
-//        editBtn.setWaves(WavesType.LIGHT);
-//        editBtn.setBackgroundColor(Color.GREY);
-//        editBtn.setTooltip("Edit");
-////        editButton.addStyleName("margin-right: 10px");
-//
-//        MaterialButton removeBtn = new MaterialButton("Remove", IconType.REMOVE, ButtonType.FLOATING);
-//        removeBtn.setWaves(WavesType.LIGHT);
-//        removeBtn.setBackgroundColor(Color.GREY);
-//        removeBtn.setTooltip("Remove");
-////        removeButton.addStyleName("margin-right: 10px");
-//
-//        cardContent.add(cardTitle);
-//        cardContent.add(label);
-//
-//        cardAction.add(editBtn);
-//        cardAction.add(removeBtn);
-//
-//        card.add(cardContent);
-//        card.add(cardAction);
-//
-//        card.addClickHandler(e -> {
-//            NotesServiceAsync notesSvc = GWT.create(NotesService.class);
-//
-//            // Set up the callback object.
-//            AsyncCallback<NoteDTO> callback = new AsyncCallback<NoteDTO>() {
-//                @Override
-//                public void onFailure(Throwable caught) {
-//                    MaterialToast.fireToast("Error! " + caught.getMessage());
-//                }
-//
-//                @Override
-//                public void onSuccess(NoteDTO result) {
-//                    MaterialToast.fireToast("Note saved!");
-//                }
-//            };
-//
-//            //notesSvc.findByName(name);
-//        });
-//
-//        return card;
-//    }
+    private MaterialCard createCard(NoteDTO note) {
+        MaterialCard card = new MaterialCard();
+        card.setBackgroundColor(Color.BLUE_DARKEN_1);
+
+        MaterialCardContent cardContent = new MaterialCardContent();
+        cardContent.setTextColor(Color.WHITE);
+
+        MaterialCardTitle cardTitle = new MaterialCardTitle();
+        cardTitle.setText(note.getTitleNote());
+
+        MaterialLabel label = new MaterialLabel();
+        label.setText(note.getTextNote());
+
+        MaterialCardAction cardAction = new MaterialCardAction();
+        cardAction.setTextAlign(TextAlign.RIGHT);
+
+        MaterialButton editBtn = new MaterialButton("Edit", IconType.EDIT, ButtonType.FLOATING);
+        editBtn.setWaves(WavesType.LIGHT);
+        editBtn.setBackgroundColor(Color.GREY);
+        editBtn.setTooltip("Edit");
+//        editButton.addStyleName("margin-right: 10px");
+
+        MaterialButton removeBtn = new MaterialButton("Remove", IconType.REMOVE, ButtonType.FLOATING);
+        removeBtn.setWaves(WavesType.LIGHT);
+        removeBtn.setBackgroundColor(Color.GREY);
+        removeBtn.setTooltip("Remove");
+//        removeButton.addStyleName("margin-right: 10px");
+
+        cardContent.add(cardTitle);
+        cardContent.add(label);
+
+        cardAction.add(editBtn);
+        cardAction.add(removeBtn);
+
+        card.add(cardContent);
+        card.add(cardAction);
+
+        card.addClickHandler(e -> {
+            NotesServiceAsync notesSvc = GWT.create(NotesService.class);
+
+            // Set up the callback object.
+            AsyncCallback<NoteDTO> callback = new AsyncCallback<NoteDTO>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error! " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(NoteDTO result) {
+                    MaterialToast.fireToast("Note saved!");
+                }
+            };
+
+            //notesSvc.findByName(name);
+        });
+
+        return card;
+    }
 
 }
