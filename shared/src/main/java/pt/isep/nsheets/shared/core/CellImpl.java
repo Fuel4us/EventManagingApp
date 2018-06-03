@@ -42,6 +42,7 @@ import pt.isep.nsheets.shared.core.formula.util.ReferenceTransposer;
 import pt.isep.nsheets.shared.ext.CellExtension;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
+import pt.isep.nsheets.shared.services.ChartDTO;
 
 /**
  * The implementation of the <code>Cell</code> interface.
@@ -84,6 +85,8 @@ public class CellImpl implements Cell {
         @Transient
 	private transient Map<String, CellExtension> extensions = 
 		new HashMap<String, CellExtension>();
+        
+        private List<ChartDTO> chartList = new ArrayList<>();
         
         @Id
         @GeneratedValue
@@ -413,6 +416,21 @@ public class CellImpl implements Cell {
 
     public void setId(Long id) {
         this.id = id;
+    }
+    
+    @Override
+    public boolean hasChart() {
+        return this.chartList.size() > 0;
+    }
+
+    @Override
+    public List<ChartDTO> chartList() {
+        return this.chartList;
+    }
+
+    @Override
+    public boolean addChart(ChartDTO chart) {
+        return this.chartList.add(chart);
     }
 
 //    @Override

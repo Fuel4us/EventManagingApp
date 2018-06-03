@@ -20,6 +20,7 @@
  */
 package pt.isep.nsheets.shared.ext;
 
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -30,6 +31,7 @@ import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Value;
 import pt.isep.nsheets.shared.core.formula.Formula;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
+import pt.isep.nsheets.shared.services.ChartDTO;
 
 /**
  * A base class for extensions of cells in a spreadsheet that uses delegation
@@ -160,4 +162,19 @@ public abstract class CellExtension implements Cell, CellListener {
 	public void cellCleared(Cell cell) {}
 
 	public void cellCopied(Cell cell, Cell source) {}
+        
+        @Override
+        public boolean hasChart(){
+            return delegate.hasChart();
+        }
+        
+        @Override
+        public List<ChartDTO> chartList(){
+            return delegate.chartList();
+        }
+        
+        @Override
+        public boolean addChart(ChartDTO chart){
+            return delegate.addChart(chart);
+        }
 }

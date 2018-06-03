@@ -28,6 +28,7 @@ import java.util.SortedSet;
 import pt.isep.nsheets.shared.core.formula.Formula;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.ext.Extensible;
+import pt.isep.nsheets.shared.services.ChartDTO;
 
 /**
  * A cell in a spreadsheet.
@@ -156,11 +157,11 @@ public interface Cell extends Comparable<Cell>, Extensible<Cell>, Serializable {
         
  /*
   * CHARTS
-  */       
-//        
-//        public boolean hasChart();
-//        
-//        public List<Chart> chartList();
-//        
-//        public boolean addChart(Chart chart);
+  */   
+        
+        public boolean hasChart();
+        
+        public List<ChartDTO> chartList();
+        
+        public boolean addChart(ChartDTO chart);
 }
