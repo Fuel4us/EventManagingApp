@@ -42,7 +42,8 @@ At this point in the Project, due to GWT restrictions, and as extensions must in
 
 ## 4.4. Design Patterns and Best Practices
 
-*Present and explain how you applied design patterns and best practices.*
+Applied Strategy pattern for each of the Extensions
+Applied Singleton pattern for ExtensionManager
 
 # 5. Implementation
 

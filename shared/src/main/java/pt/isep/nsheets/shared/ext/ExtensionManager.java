@@ -20,6 +20,8 @@
  */
 package pt.isep.nsheets.shared.ext;
 
+import pt.isep.nsheets.shared.ext.extensions.ValueColorExtension;
+
 import java.util.Collection;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -38,14 +40,11 @@ public class ExtensionManager {
 	private SortedMap<String, Extension> extensionMap
 		= new TreeMap<String, Extension>();
 
-	/** The class loader used to load extensions */
-	// not supported in gwt
-//	private Loader loader = new Loader();
-
 	/**
 	 * Creates the extensions manager.
 	 */
 	private ExtensionManager() {
+		instantiateExtensions();
 	}
 
 	/**
@@ -74,10 +73,13 @@ public class ExtensionManager {
 		return extensionMap.get(name);
 	}
 
-	public void instantiateExtensions(){
+	private void instantiateExtensions(){
 		//instantiate extensions here like
 		//Extension extensions=new ActualExtension();
 		// extensionMap.put(extensions.getName(), extensions);
+		Extension extension = new ValueColorExtension("Value Colour Extension");
+		extensionMap.put(extension.getName(), extension);
+
 	}
 
 }
