@@ -53,7 +53,9 @@
             <m:MaterialCardTitle text="Edit Chart"  textColor="BLACK"/>
                        
             <m:MaterialRow>
-                <m:MaterialTextBox ui:field="name_textbox" label="Chart Name"/>
+                <m:MaterialColumn grid="s12">
+                    <m:MaterialTextBox ui:field="name_textbox" label="Chart Name"/>
+                </m:MaterialColumn>
             </m:MaterialRow>
             <m:MaterialRow>
                 <m:MaterialColumn>
@@ -88,7 +90,7 @@
         <m:MaterialCard ui:field="chart_card" addStyleNames="{style.block} {style.card}" textAlign="CENTER">
             <m:MaterialCardTitle ui:field="chart_name" textColor="BLACK"/>
             <m:MaterialCardContent ui:field="cardContent" addStyleNames="no-padding {style.chart_content} {style.center}">
-                <m:MaterialAnchorButton ui:field="edit_button" type="FLOATING" iconType="CREATE" size="LARGE" waves="LIGHT" layoutPosition="ABSOLUTE" left="-20" top="100"/>
+                <m:MaterialAnchorButton ui:field="edit_button" type="FLOATING" iconType="CREATE" size="LARGE" waves="LIGHT" layoutPosition="ABSOLUTE" left="-20" top="150"/>
             </m:MaterialCardContent>
             <m:MaterialButton ui:field="save_chart_btn" addStyleNames="{style.center} {style.btn}" text="Save Chart" waves="GREEN" backgroundColor="WHITE" textColor="BLACK" iconType="POLL" iconPosition="RIGHT" iconColor="GREEN"/>
         </m:MaterialCard>
