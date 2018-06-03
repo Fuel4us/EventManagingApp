@@ -23,6 +23,6 @@ public class Settings {
     }
     
     private Settings(){
-//        WORKBOOK_BEING_USED = new Workbook(SPREADSHEET_DEFAULT);
+        WORKBOOK_BEING_USED = new Workbook("Title", "Tile", SPREADSHEET_DEFAULT);
     }
 }
