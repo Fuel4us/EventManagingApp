@@ -65,10 +65,7 @@
             </m.html:ListItem>
             <m.html:ListItem waves="DEFAULT">
                 <m:MaterialLink targetHistoryToken="{tokens.getWorkbook}" iconPosition="LEFT" iconType="INSERT_DRIVE_FILE" text="Workbook"/>
-            </m.html:ListItem>
-             <m.html:ListItem waves="DEFAULT">
-                <m:MaterialLink targetHistoryToken="{tokens.getForm}" iconPosition="LEFT" iconType="INSERT_DRIVE_FILE" text="Form"/>
-            </m.html:ListItem>
+            </m.html:ListItem>          
             <m.html:ListItem waves="DEFAULT">
                 <m:MaterialLink targetHistoryToken="{tokens.getChat}" iconPosition="LEFT" iconType="CHAT" text="Chat"/>
             </m.html:ListItem>

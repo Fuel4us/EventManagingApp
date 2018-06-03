@@ -23,11 +23,7 @@ package pt.isep.nsheets.shared.ext;
 import java.util.Iterator;
 import java.util.SortedSet;
 
-import pt.isep.nsheets.shared.core.Address;
-import pt.isep.nsheets.shared.core.Cell;
-import pt.isep.nsheets.shared.core.CellListener;
-import pt.isep.nsheets.shared.core.Spreadsheet;
-import pt.isep.nsheets.shared.core.Workbook;
+import pt.isep.nsheets.shared.core.*;
 
 /**
  * A base class for extensions of spreadsheets that uses delegation

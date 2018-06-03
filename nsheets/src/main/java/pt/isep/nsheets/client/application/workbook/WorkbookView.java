@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -34,6 +35,7 @@ import com.gwtplatform.mvp.client.ViewImpl;
 
 import com.google.gwt.user.client.ui.Panel;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
+import gwt.material.design.client.ui.*;
 import gwt.material.design.client.constants.IconType;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialFAB;
@@ -59,16 +61,36 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         return firstButton;
     }
 
-    @UiField
-    MaterialTextBox firstBox;
-    @UiField
-    MaterialIcon firstButton;
+	@UiField
+	MaterialTextBox firstBox;
+	@UiField
+	MaterialIcon firstButton;
 
+	/*
+	Conditional UI Objects @1050475
+	 */
+	@UiField
+	MaterialTitle conditionalTitle;
     @UiField
-    MaterialDataTable<SheetCell> customTable;
+	MaterialIcon conditionalButton;
+    @UiField
+	MaterialTextBox conditionalText2;
+	@UiField
+	MaterialIcon conditionalModalCloseButton;
+	@UiField
+	MaterialIcon conditionalModalDoneButton;
+	@UiField
+	MaterialModal conditionalModal;
+	@UiField
+	MaterialListBox lstConditions;
+	/* End of Conditional UI Objects */
+
+	@UiField
+	MaterialDataTable<SheetCell> customTable;
 
     @UiField
     MaterialPopupMenu popupMenu;
+
 
 
     interface Binder extends UiBinder<Widget, WorkbookView> {
@@ -163,6 +185,40 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         // When you use the BaseRenderer you can override certain draw
         // methods to create elements the way you would like.
         customTable.getView().setRenderer(new SheetRenderer<SheetCell>());
+
+        conditionalButton.addClickHandler(event -> {
+            if (activeCell != null) {
+				conditionalModal.open();
+				conditionalTitle.setTitle("Conditional Formating of Cell "+activeCell.getAddress().toString());
+            }
+        });
+
+		conditionalModalDoneButton.addClickHandler(event ->{
+			MaterialToast t = new MaterialToast();
+			t.fireToast(lstConditions.getSelectedItemText());
+			/*
+				FIREWORKS NEEDED
+			 */
+
+			conditionalModal.close();
+		});
+
+		lstConditions.addValueChangeHandler(event ->{
+			if(lstConditions.getSelectedIndex()==6){
+				conditionalText2.setVisibility(Style.Visibility.VISIBLE);
+			}else{
+				conditionalText2.setVisibility(Style.Visibility.HIDDEN);
+			}
+		});
+
+		conditionalModalCloseButton.addClickHandler(event -> {
+			conditionalModal.close();
+		});
+
+		// It is possible to create your own custom renderer per table
+		// When you use the BaseRenderer you can override certain draw
+		// methods to create elements the way you would like.
+		customTable.getView().setRenderer(new SheetRenderer<SheetCell>());
 
         initWorkbook();
 

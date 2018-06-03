@@ -1,5 +1,6 @@
 package pt.isep.nsheets.client.application.chat;
 
+import com.google.gwt.core.client.GWT;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -8,7 +9,9 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -24,18 +27,19 @@ import gwt.material.design.client.ui.MaterialColumn;
 import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialRow;
 import gwt.material.design.client.ui.MaterialTextBox;
+import gwt.material.design.client.ui.MaterialToast;
+import java.util.Date;
+import pt.isep.nsheets.shared.services.MessagesDTO;
 import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
+import pt.isep.nsheets.shared.services.WorkbooksService;
+import pt.isep.nsheets.shared.services.MessagesService;
+import pt.isep.nsheets.shared.services.MessagesServiceAsync;
 
 class ChatView extends ViewImpl implements ChatPresenter.MyView {
-
+    
     interface Binder extends UiBinder<Widget, ChatView> {
     }
 
-    @UiField
-    HTMLPanel htmlPanel;
-
-    @UiField
-    MaterialButton newWorkbookButton;
     @UiField
     MaterialButton sendButton;
 
@@ -45,72 +49,19 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
     @Inject
     ChatView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
-        
-        sendButton.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                Window.alert("Send Button clicked!\n Message: " + txtMessage.getText());
-            }
-        });
-        
     }
-
-    private MaterialCard createCard(WorkbookDescriptionDTO wb) {
-        MaterialCard card = new MaterialCard();
-        card.setBackgroundColor(Color.BLUE_DARKEN_1);
-
-        MaterialCardContent cardContent = new MaterialCardContent();
-        cardContent.setTextColor(Color.WHITE);
-
-        MaterialCardTitle cardTitle = new MaterialCardTitle();
-        cardTitle.setText(wb.getName());
-        cardTitle.setIconType(IconType.INSERT_DRIVE_FILE);
-        cardTitle.setIconPosition(IconPosition.RIGHT);
-
-        MaterialLabel label = new MaterialLabel();
-        label.setText(wb.getDescription());
-
-        cardContent.add(cardTitle);
-        cardContent.add(label);
-
-        card.add(cardContent);
-
-        return card;
+    
+    @Override
+    public void buttonClickHandler(ClickHandler ch) {
+        sendButton.addClickHandler(ch);
     }
 
     @Override
-    public void setContents(ArrayList<WorkbookDescriptionDTO> contents) {
-        int colCount = 1;
-
-        MaterialRow row = null;
-
-        htmlPanel.clear();
-
-        for (WorkbookDescriptionDTO wb : contents) {
-            MaterialCard card = createCard(wb);
-
-            if (colCount == 1) {
-                row = new MaterialRow();
-                htmlPanel.add(row);
-                ++colCount;
-                if (colCount >= 4) {
-                    colCount = 1;
-                }
-            }
-
-            MaterialColumn col = new MaterialColumn();
-            col.setGrid("l4");
-            row.add(col);
-
-            col.add(card);
-        }
-
+    public String text() {
+        String text = this.txtMessage.getValue();
+        //txtMessage.clear();
+        
+        return text;
     }
-
-    @Override
-    public void addClickHandler(ClickHandler ch) {
-        // TODO Auto-generated method stub
-
-        newWorkbookButton.addClickHandler(ch);
-    }
+    
 }

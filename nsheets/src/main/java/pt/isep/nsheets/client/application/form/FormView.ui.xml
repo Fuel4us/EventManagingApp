@@ -4,88 +4,63 @@ Uncomment this for XHTML entities
 -->
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
-             xmlns:m="urn:import:gwt.material.design.client.ui">
+             xmlns:m="urn:import:gwt.material.design.client.ui"
+             xmlns:ma="urn:import:gwt.material.design.addins.client"
+             xmlns:demo="urn:import:gwt.material.design.demo.client.ui"
+             xmlns:m.demo="urn:import:gwt.material.design.demo.client.ui">
     
     <ui:import field="pt.isep.nsheets.client.place.NameTokens.home"/>   
     <ui:with field="res" type="pt.isep.nsheets.client.resources.AppResources"/>
     <ui:with field="tokens" type="pt.isep.nsheets.client.place.NameTokens"/> 
 
     <g:HTMLPanel>
+          
+        <m:MaterialRow addStyleNames="code">
+            <m:MaterialTitle title="Form Window" description="The window that shows the Form."/>
+            <m:MaterialButton ui:field="btnOpenWindow" text="Open Form" textColor="WHITE" />
+            <ma:window.MaterialWindow ui:field="window" width="50%" title="FORM">              
+                <m:MaterialPanel padding="32" textAlign="CENTER" height="300px">
+                    
+                    <!--  CODE OF FORM -->                 
+                                        
+                    <!--  <m:MaterialTextBox readOnly="true" text="Testing the static box!" label="Static Text Box" grid="s12"/> -->  
+                    <m:MaterialLabel text="Helps me escape from the reality I live in." fontSize="1.2em" />     
+                                                     
+                </m:MaterialPanel>                     
+            </ma:window.MaterialWindow>       
+        </m:MaterialRow>   
         
-        <m:MaterialRow marginTop="20">
-            <g:Hyperlink text="Return Home" targetHistoryToken="{home}" />
+        <m:MaterialRow addStyleNames="code">
+            <m:MaterialTitle title="Form Editor Window" description="The window that shows the Form Editor, where you can edit the Form, by adding rows, removing rows, editing rows and test the design of the Form!"/>
+            <m:MaterialButton ui:field="btnOpenWindowEditor" text="Open Form Editor" textColor="WHITE"/>
+            <ma:window.MaterialWindow ui:field="windowTab" backgroundColor="GREY_LIGHTEN_4" title="Form Editor" toolbarColor="BLUE_DARKEN_2">
+                <m:MaterialRow ui:field="tabsPanel" shadow="1" marginBottom="0">
+                    <m:MaterialColumn grid="l6 m12 s12">
+                        <m:MaterialTab indicatorColor="WHITE" width="50%">
+                            <m:MaterialTabItem waves="LIGHT">
+                                <m:MaterialLink text="Add Row" href="#addRow" textColor="WHITE"/>
+                            </m:MaterialTabItem>
+                            <m:MaterialTabItem waves="LIGHT">
+                                <m:MaterialLink text="Remove Row" href="#removeRow" textColor="WHITE"/>
+                            </m:MaterialTabItem>
+                            <m:MaterialTabItem waves="LIGHT">
+                                <m:MaterialLink text="Edit Row" href="#editRow" textColor="WHITE"/>
+                            </m:MaterialTabItem> 
+                        </m:MaterialTab>
+                    </m:MaterialColumn>
+                </m:MaterialRow>
+                <m:MaterialPanel m:id="addRow"  padding="32"  height="300px" textAlign="CENTER" overflow="AUTO">
+                    <m:MaterialLabel text="adding rows." fontSize="1.2em" />
+                </m:MaterialPanel>
+                <m:MaterialPanel m:id="removeRow"  padding="32"  height="300px" textAlign="CENTER" overflow="AUTO">
+                    <m:MaterialLabel text="removing rows" fontSize="1.2em" />
+                </m:MaterialPanel>
+                <m:MaterialPanel m:id="editRow"  padding="32"  height="300px" textAlign="CENTER" overflow="AUTO">
+                    <m:MaterialLabel text="editing rows" fontSize="1.2em" />
+                </m:MaterialPanel>
+            </ma:window.MaterialWindow>
         </m:MaterialRow>
         
-        <style>
-            table, td {
-            border-style: hidden;
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            background-color: #e0f7fa;
-            color: black;
-            }, th {
-            background-color: #4CAF50;
-            color: white;
-            }
-        </style>
-                
-        <h2>
-            <b><i>FORM TABLE</i></b>
-        </h2>
         
-        <table id="myTable">
-            <tr>
-                <td>Row1 | cell1</td>
-                <td>Row1 | cell2</td>
-            </tr>
-            <tr>
-                <td>Row2 | cell1</td>
-                <td>Row2 | cell2</td>
-            </tr>
-            <tr>
-                <td>Row3 | cell1</td>
-                <td>Row3 | cell2</td>
-            </tr>
-        </table>
-        <br>
-        </br>
-        
-        
-        <m:MaterialRow addStyleNames="buttons">
-            <m:MaterialButton ui:field="addRow" text="ADD ROW" waves="LIGHT"  backgroundColor="WHITE" textColor="CYAN"/>
-            <m:MaterialButton text="EDIT ROW" waves="LIGHT" backgroundColor="WHITE" textColor="CYAN"/>
-            <m:MaterialButton text="PLAY FORM" waves="LIGHT" backgroundColor="WHITE" textColor="CYAN"/>
-            <m:MaterialButton text="CLOSE FORM" waves="LIGHT" backgroundColor="WHITE" textColor="CYAN"/>
-            <m:MaterialTextBox readOnly="true" text="Testing the static box!" label="Static Text Box" grid="s12"/>
-        </m:MaterialRow>
-        
-        <div>
-            <b>Validate Form:</b>
-            <br/> 
-            <m:MaterialTextArea ui:field="formArea" label="Enter Data:"/>
-        </div>
-        
-        <img src="Form.png" width="500" height="333"></img>
-        
-        <button type="button" onclick="myAddFunction()" data-toggle="tooltip" data-placement="top" title="add row"></button>
-        <button type="button" onclick="myDeleteFunction()">Remove Row</button>
-
-        <script>
-            function myAddFunction() {
-            var table = document.getElementById("myTable");
-            var row = table.insertRow(0);
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            cell1.innerHTML = "NEW CELL1";
-            cell2.innerHTML = "NEW CELL2";
-            }
-        </script>
-        
-        <script>
-            function myDeleteFunction() {
-            document.getElementById("NSheetsForm").deleteRow(0);
-            }
-        </script>
     </g:HTMLPanel>
 </ui:UiBinder>

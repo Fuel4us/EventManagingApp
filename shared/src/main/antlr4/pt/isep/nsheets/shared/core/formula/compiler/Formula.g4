@@ -1,15 +1,29 @@
 grammar Formula;
+
 @header {
-//    package pt.isep.nsheets.shared.core.formula.compiler;
+	//package pt.isep.nsheets.shared.core.formula.compiler;
 }
 	         
 expression
-	: EQ comparison /* EOF */
+	: EQ comparisonGlobal EOF
+	;
+	
+comparisonGlobal
+	: ICHA? comparison FCHA?
+	| FOR ICHA concatenationFor FCHA
 	;
 	
 comparison
 	: concatenation
-		( ( EQ | NEQ | GT | LT | LTEQ | GTEQ ) concatenation )?
+		( (sinal) concatenation )? (SEMI comparison)?
+	;
+	
+concatenationFor
+	:	((assignment) SEMI)? (comparison SEMI)? CELL_REF sinal concatenation SEMI assignment
+	;
+
+sinal
+	:	( EQ | NEQ | GT | LT | LTEQ | GTEQ )
 	;
 
 concatenation
@@ -18,35 +32,39 @@ concatenation
         | <assoc=right> concatenation POWER concatenation
         | concatenation ( MULTI | DIV ) concatenation
         | concatenation ( PLUS | MINUS ) concatenation
-        | concatenation AMP concatenation 
+        | concatenation AMP concatenation
         ;
-
+		
 
 atom
 	:	function_call
 	|	reference
 	|	literal
-	|	LPAR comparison RPAR
+	|	LPAR concatenation RPAR
+	|   assignment
 	;
 
 function_call
 	:	FUNCTION LPAR
-		( comparison ( SEMI comparison )* )?
-		RPAR
+		comparison RPAR
 	;
 
 reference
 	:	CELL_REF
 		( ( COLON ) CELL_REF )?
+		| temp_reference
 	;
-
+	
 literal
 	:	NUMBER
 	|	STRING
 	;
 	
+assignment
+	: 	CELL_REF ASSIGN concatenation
+	;
 
-fragment LETTER: ('a'..'z'|'A'..'Z') ;
+LETTER: ('a'..'z'|'A'..'Z') ;
   
 FUNCTION : 
 	  ( LETTER )+ 
@@ -54,13 +72,16 @@ FUNCTION :
 	 
  
 CELL_REF
-	:
-		( ABS )? LETTER ( LETTER )?
+	:	( ABS )? LETTER ( LETTER )?
 		( ABS )? ( DIGIT )+
+	;
+	
+
+temp_reference
+    :	UNDERSCORE LETTER+ ( LBRACKET DIGIT RBRACKET )?
 	;
 
 /* String literals, i.e. anything inside the delimiters */
-
 STRING  : QUOT ('\\"' | ~'"')* QUOT
         ;
 
@@ -69,10 +90,13 @@ QUOT: '"'
 	;
 
 /* Numeric literals */
-NUMBER: ( DIGIT )+ ( COMMA ( DIGIT )+ )? ;
+NUMBER: DIGITNOTZERO ( DIGIT )* FRACTIONALPART? 
+		| DIGIT FRACTIONALPART;
+		
+FRACTIONALPART: ( COMMA ( DIGIT )+ );
 
-fragment 
 DIGIT : '0'..'9' ;
+DIGITNOTZERO : '1'..'9' ;
 
 /* Comparison operators */
 EQ		: '=' ;
@@ -97,12 +121,23 @@ PERCENT : '%' ;
 fragment ABS : '$' ;
 fragment EXCL:  '!'  ;
 COLON	: ':' ;
+UNDERSCORE : '_' ;
  
 /* Miscellaneous operators */
 COMMA	: ',' ;
 SEMI	: ';' ;
 LPAR	: '(' ;
-RPAR	: ')' ; 
+RPAR	: ')' ;
+ICHA	: '{' ;
+FCHA	: '}' ;
+LBRACKET : '[' ;
+RBRACKET : ']' ;
+
+/* Assignment Operator */
+ASSIGN 	: ':=' ;
+
+/* For Operator */
+FOR : 'FOR';	
 
 /* White-space (ignored) */
 WS: ( ' ' | '\r' '\n' | '\n' | '\t' ) -> skip ;

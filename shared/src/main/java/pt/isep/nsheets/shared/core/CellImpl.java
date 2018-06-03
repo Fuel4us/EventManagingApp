@@ -110,7 +110,7 @@ public class CellImpl implements Cell {
 	 * @param content the content of the cell
 	 * @throws FormulaCompilationException if an incorrectly formatted formula was entered
 	 */
-	CellImpl(Spreadsheet spreadsheet, Address address, String content) throws FormulaCompilationException {
+	public CellImpl(Spreadsheet spreadsheet, Address address, String content) throws FormulaCompilationException {
 		this(spreadsheet, address);
 		storeContent(content);
 		reevaluate();
@@ -414,6 +414,21 @@ public class CellImpl implements Cell {
     public void setId(Long id) {
         this.id = id;
     }
+
+//    @Override
+//    public boolean hasChart() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public List<Chart> chartList() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public boolean addChart(Chart chart) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
 	/**
 	 * Customizes deserialization by recreating the listener list and by catching
