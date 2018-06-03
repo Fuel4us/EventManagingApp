@@ -22,8 +22,6 @@ package pt.isep.nsheets.shared.ext;
 
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Spreadsheet;
-//import csheets.ui.ctrl.UIController;
-//import csheets.ui.ext.UIExtension;
 
 /**
  * An interface for extensions to the CleanSheets application.
@@ -31,20 +29,21 @@ import pt.isep.nsheets.shared.core.Spreadsheet;
  */
 public abstract class Extension implements Comparable<Extension> {
 
-	/** The name of the extension */
+	/** The name of the extensions */
 	private final String name;
 
-	/** The base key to use for properties of the extension */
+	/** The base key to use for properties of the extensions */
 	private final String basePropKey;
 
+
 	/**
-	 * Creates a new extension.
-	 * @param name the name of the extension
+	 * Creates a new extensions.
+	 * @param name the name of the extensions
 	 */
 	public Extension(String name) {
 		this.name = name;
 
-		// Builds UI extension base property key
+		// Builds UI extensions base property key
 		String basePropKey = "";
 		for (String token : name.toLowerCase().split(" "))
 			basePropKey += token;
@@ -52,25 +51,25 @@ public abstract class Extension implements Comparable<Extension> {
 	}
 
 	/**
-	 * Returns the name of the extension.
-	 * @return the name of the extension
+	 * Returns the name of the extensions.
+	 * @return the name of the extensions
 	 */
 	public final String getName() {
 		return name;
 	}
 
 	/**
-	 * Returns the base key to use for properties of the UI extension.
-	 * @return the base key to use for properties of the UI extension
+	 * Returns the base key to use for properties of the UI extensions.
+	 * @return the base key to use for properties of the UI extensions
 	 */
 	public final String getPropertyKey() {
 		return basePropKey;
 	}
 
 	/**
-	 * Compares this extension with the given extension for order.
+	 * Compares this extensions with the given extensions for order.
 	 * Ordering is done by the extensions' names.
-	 * @param extension the extension to compared to
+	 * @param extension the extensions to compared to
 	 * @return a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
 	 */
 	public final int compareTo(Extension extension) {
@@ -78,27 +77,27 @@ public abstract class Extension implements Comparable<Extension> {
 	}
 
 	/**
-	 * Returns an extension of the given spreadsheet.
+	 * Returns an extensions of the given spreadsheet.
 	 * @param spreadsheet the spreadsheet to extend
-	 * @return a spreadsheet extension, or null if none is provided
+	 * @return a spreadsheet extensions, or null if none is provided
 	 */
 	public SpreadsheetExtension extend(Spreadsheet spreadsheet) {
 		return null;
 	}
 
 	/**
-	 * Returns an extension of the given cell.
+	 * Returns an extensions of the given cell.
 	 * @param cell the cell to extend
-	 * @return a cell extension, or null if none is provided
+	 * @return a cell extensions, or null if none is provided
 	 */
 	public CellExtension extend(Cell cell) {
 		return null;
 	}
 
 	/**
-	 * Returns the user interface extension of this extension.
+	 * Returns the user interface extensions of this extensions.
 	 * @param uiController the user interface controller
-	 * @return a user interface extension, or null if none is provided
+	 * @return a user interface extensions, or null if none is provided
 	 */
 //	public UIExtension getUIExtension(UIController uiController) {
 //		return null;

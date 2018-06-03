@@ -38,16 +38,16 @@ import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
  */
 public abstract class CellExtension implements Cell, CellListener {
 
-	/** The delegate of the extension */
+	/** The delegate of the extensions */
 	private Cell delegate;
 
-	/** The name of the extension to which the cell extension belongs */
+	/** The name of the extensions to which the cell extensions belongs */
 	private String name;
 
 	/**
-	 * Creates a new cell extension.
-	 * @param delegate the delegate of the extension
-	 * @param name the name of the extension to which the cell extension belongs
+	 * Creates a new cell extensions.
+	 * @param delegate the delegate of the extensions
+	 * @param name the name of the extensions to which the cell extensions belongs
 	 */
 	public CellExtension(Cell delegate, String name) {
 		this.delegate = delegate;
@@ -56,16 +56,16 @@ public abstract class CellExtension implements Cell, CellListener {
 	}
 
 	/**
-	 * Returns the extension's delegate.
-	 * @return the extension's delegate, i.e. the cell to which it belongs
+	 * Returns the extensions's delegate.
+	 * @return the extensions's delegate, i.e. the cell to which it belongs
 	 */
 	public final Cell getDelegate() {
 		return delegate;
 	}
 
 	/**
-	 * Returns the name of the extension to which the cell extension belongs.
-	 * @return the name of the extension to which the cell extension belongs
+	 * Returns the name of the extensions to which the cell extensions belongs.
+	 * @return the name of the extensions to which the cell extensions belongs
 	 */
 	public final String getName() {
 		return name;

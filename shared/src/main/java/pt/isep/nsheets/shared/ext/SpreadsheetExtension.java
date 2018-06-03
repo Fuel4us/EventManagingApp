@@ -36,16 +36,16 @@ import pt.isep.nsheets.shared.core.Workbook;
  */
 public abstract class SpreadsheetExtension implements Spreadsheet {
 
-	/** The delegate of the extension */
+	/** The delegate of the extensions */
 	private Spreadsheet delegate;
 
-	/** The name of the extension to which the spreadsheet extension belongs */
+	/** The name of the extensions to which the spreadsheet extensions belongs */
 	private String name;
 
 	/**
-	 * Creates a new spreadsheet extension.
-	 * @param delegate the delegate of the extension
-	 * @param name the name of the extension to which the spreadsheet extension belongs
+	 * Creates a new spreadsheet extensions.
+	 * @param delegate the delegate of the extensions
+	 * @param name the name of the extensions to which the spreadsheet extensions belongs
 	 */
 	public SpreadsheetExtension(Spreadsheet delegate, String name) {
 		this.delegate = delegate;
@@ -53,8 +53,8 @@ public abstract class SpreadsheetExtension implements Spreadsheet {
 	}
 
 	/**
-	 * Returns the name of the extension to which the spreadsheet extension belongs.
-	 * @return the name of the extension to which the spreadsheet extension belongs
+	 * Returns the name of the extensions to which the spreadsheet extensions belongs.
+	 * @return the name of the extensions to which the spreadsheet extensions belongs
 	 */
 	public final String getName() {
 		return name;

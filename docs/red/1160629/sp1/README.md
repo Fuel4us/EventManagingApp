@@ -7,13 +7,16 @@
 
 # 2. Requirements
 
-*In this section you should describe the requirements for this sprint.*
-
+A functioning Extension framework must be developed, to support extensions that allow to change cell content/style
+	
 # 3. Analysis
 
-*In this section you should describe the study/analysis/research you developed in order to design a solution.*
+
+
 
 ## 3.1 GWT and Project Structure
+
+At this point in the Project, due to GWT restrictions, and as extensions must influence the Client aswell as the Server, instantiation of extensions will be hardcoded, and they will all be defined before runtime.
 
 ## 3.2 Application Startup and GWTP
 
@@ -43,7 +46,7 @@
 
 # 5. Implementation
 
-*If required you should present in this section more details about the implementation. For instance, configuration files, grammar files, etc. You may also explain the organization of you code. You may reference important commits.*
+As most of the implementation used in CSheets is compatible with NSheets, the main work that had to be done was to restructure the ExtensionManager class to comply with GWT restrictions.
 
 # 6. Integration/Demonstration
 
