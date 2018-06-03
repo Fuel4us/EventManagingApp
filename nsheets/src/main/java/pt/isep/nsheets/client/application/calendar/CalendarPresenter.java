@@ -16,6 +16,9 @@ import pt.isep.nsheets.shared.services.*;
 
 import java.util.ArrayList;
 
+/**
+ * @author Gonçalo Silva
+ */
 public class CalendarPresenter extends Presenter<CalendarPresenter.MyView, CalendarPresenter.MyProxy> {
 
     private MyView view;
@@ -40,25 +43,5 @@ public class CalendarPresenter extends Presenter<CalendarPresenter.MyView, Calen
         super.onReveal();
 
         SetPageTitleEvent.fire("Calendar", "Manage your calendars and events", "", "", this);
-
-        refreshView();
     }
-
-    private void refreshView() {
-        CalendarEventServiceAsync workbooksSvc = GWT.create(CalendarEventService.class);
-
-        // Set up the callback object.
-        AsyncCallback<ArrayList<CalendarEventDTO>> callback = new AsyncCallback<ArrayList<CalendarEventDTO>>() {
-            public void onFailure(Throwable caught) {
-                // TODO: Do something with errors.
-            }
-
-            public void onSuccess(ArrayList<CalendarEventDTO> result) {
-                view.setContents(result);
-            }
-        };
-
-        workbooksSvc.getWorkbooks(callback);
-    }
-
 }

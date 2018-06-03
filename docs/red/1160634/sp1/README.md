@@ -5,6 +5,7 @@
 
 [Had a prblem on this regard](https://moodle.isep.ipp.pt/mod/forum/discuss.php?d=16911)
 
+
 # 2. Requirements
 
 Core07.1 - It should be possible to create, edit and remove text notes. A user can have one or more notes. There should be a window to list the textual notes of a user. A text note should be entered as multiline text in which the first line is interpreted as the title of the text note. The time stamp of the creation of the note should be also associated with the text note. The application should maintain the history of modifications for each text note. When a text note is selected, the application should display it's history. For each version, the application should display the time stamp and the first line (i.e., the title).
@@ -17,6 +18,7 @@ US3 - As a User of the Application I want to enter a text note that must be a mu
 
 US4 - As a User of the Application I want to see the history of modifications for each text note. When a text note is selected, the application should display it's history. For each version, the application should display the time stamp and the first line (i.e., the title).
 
+
 # 3. Analysis
 
 *In this section you should describe the study/analysis/research you developed in order to design a solution.*
@@ -28,6 +30,7 @@ For this feature increment, since it is the first one to be developed in a new p
 - Understand how the Home Page is implemented (for instance, how the UI gets the Workbook Descriptions that are displayed)  
 
 - Understand how to integrate a relational database into the project (Will be assuming JPA since it is studied in EAPLI)   
+
 
 ## 3.1 GWT and Project Structure
 
@@ -59,7 +62,8 @@ Therefore:
    The shared package is where shared code between server and client should reside. See [GWT - What to put in the shared folder?](https://stackoverflow.com/questions/5664601/gwt-what-to-put-in-the-shared-folder?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa) and also [using GWT RPC](http://www.gwtproject.org/doc/latest/tutorial/RPC.html).
    
    In this project the shared, server and client (i.e, nsheets) code are separated also in Maven modules (but they could all be in the same project/maven module). 
-   
+
+
 ## 3.2 Application Startup and GWTP
 
 As described before the entry point for the application is the class **pt.isep.nsheets.client.gin.ClientModule**.
@@ -110,6 +114,7 @@ Then we can use this instances to access the widgets link in:
         new MaterialAnimation().transition(Transition.BOUNCEINLEFT).animate(this.title);
         new MaterialAnimation().transition(Transition.BOUNCEINLEFT).animate(this.description);
     }    
+
 
 ## 3.3 Server and RPC
 
@@ -331,11 +336,15 @@ Following the guidelines for JPA from EAPLI we envision a scenario like the foll
 
 ![SD US4](design4.png)
 
-Notes:  
+Notes:
+- For US1, it is intended that a user can have one or moore Notes
+- For US3, the modal has a MaterialTextBox for the Title of the Note and a MaterialTextArea for the Text of the Note, for the porpuse of clarity in the UI.
 - The diagrams only depicts the less technical details of the scenario;  
 - For clarity reasons details such as the PersistenceContext or the RepositoryFactory are not depicted in this diagram.   
-- **NoteServices** realizes the GWT RPC mechanism;  
-- **ListÑoteController** is the *use case controller*;  
+- **NoteServices** realizes the GWT RPC mechanism;
+- **AddNoteController** is one *use case controller*;   
+- **ListNoteController** is one *use case controller*;
+- **AddNoteServices** is to add a Note to the noteRepository;
 - **ListNoteServices** is to group together all the services related to Note.
 
 
@@ -354,6 +363,7 @@ By memory we apply/use:
 - MVP  
 
 **TODO:** Exemplify the realization of these patterns using class diagrams and/or SD with roles marked as stereotypes. 
+
 
 # 5. Implementation
 
@@ -419,6 +429,7 @@ Project **NShests**
 
 *In this section document your contribution and efforts to the integration of your work with the work of the other elements of the team and also your work regarding the demonstration (i.e., tests, updating of scripts, etc.)*
 
+
 # 7. Final Remarks 
 
 *In this section present your views regarding alternatives, extra work and future work on the issue.*
@@ -426,6 +437,7 @@ Project **NShests**
 Some Questions/Issues identified during the work in this feature increment:
 
 Nothing to report.
+
 
 # 8. Work Log
 
@@ -445,14 +457,17 @@ Commits:
 
 [Core07.1 Database, beggining of units testing of database / persistance and beggining of javaDoc](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/041c34f94ab5f2297e918f76715ca0d2383cc1ab)
 
-[Core07.1 dm]()
+[Core07.1 dm](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/0f7d0fbbd462fbef5ce077746d40e5ceebe264f4)
 
-[Core07.1 UI]()
+[Core07.1 UI](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/fe2f4de0f98bc5cc2bf30cca72fa1a21a5ebeaf7)
 
-[Core07.1 server / database]()
+[Core07.1 server / database](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/09a93f41016e31faf57e06ad018034ac789a7397)
 
+[Core07.1 Doc: dm and design 1 to 4](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/a22806ab324df69894a8b18a5fe2f2f1a2aca930)
 
+[Core07.1 UI, Server and Database fixes](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/64568258634d136f475582771ec79342dfb85da2)
 
+[Core07.1 US1 and 2 done]()
 
 
 
