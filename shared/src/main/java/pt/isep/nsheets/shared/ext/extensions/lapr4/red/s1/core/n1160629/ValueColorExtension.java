@@ -1,4 +1,4 @@
-package pt.isep.nsheets.shared.ext.extensions;
+package pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629;
 
 import com.google.gwt.dev.shell.BrowserChannel;
 import pt.isep.nsheets.shared.core.*;
@@ -17,6 +17,14 @@ public class ValueColorExtension extends Extension {
      */
     public ValueColorExtension(String name) {
         super(name);
+    }
+
+    public static Configuration getConfig() {
+        return config;
+    }
+
+    public static void setConfig(Configuration config) {
+        ValueColorExtension.config=config;
     }
 
     public static Configuration config = new Configuration();
@@ -85,42 +93,5 @@ public class ValueColorExtension extends Extension {
         }
     }
 
-    static class Configuration {
-        private String posBgColor="#ffffff";
-        private String posFgColor="#000000";
-        private String nesBgColor="#ffffff";
-        private String nesFgColor="#000000";
 
-        public void setPosBgColor(String posBgColor) {
-            this.posBgColor = posBgColor;
-        }
-
-        public void setPosFgColor(String posFgColor) {
-            this.posFgColor = posFgColor;
-        }
-
-        public void setNesBgColor(String nesBgColor) {
-            this.nesBgColor = nesBgColor;
-        }
-
-        public void setNesFgColor(String nesFgColor) {
-            this.nesFgColor = nesFgColor;
-        }
-
-        public String getPosBgColor() {
-            return posBgColor;
-        }
-
-        public String getPosFgColor() {
-            return posFgColor;
-        }
-
-        public String getNesBgColor() {
-            return nesBgColor;
-        }
-
-        public String getNesFgColor() {
-            return nesFgColor;
-        }
-    }
 }

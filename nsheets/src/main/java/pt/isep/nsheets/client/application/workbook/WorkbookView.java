@@ -39,12 +39,15 @@ import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.table.MaterialDataTable;
+import pt.isep.nsheets.server.lapr4.red.s1.core.n1160629.extensions.application.ConfigureValueColorExtensionController;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629.Configuration;
+import pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629.ValueColorExtension;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
