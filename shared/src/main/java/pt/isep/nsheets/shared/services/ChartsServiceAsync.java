@@ -4,7 +4,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import java.util.ArrayList;
 
 /**
- *
+ * The chart service Async interface
  * @author pedromonteiro
  */
 public interface ChartsServiceAsync {

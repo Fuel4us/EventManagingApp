@@ -2,24 +2,21 @@ package pt.isep.nsheets.client.application.workbook;
 
 import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.dom.client.Style;
-import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import gwt.material.design.client.constants.ButtonType;
 import gwt.material.design.client.constants.Color;
+import gwt.material.design.client.constants.IconPosition;
 import gwt.material.design.client.constants.IconType;
 import gwt.material.design.client.constants.TextAlign;
 import gwt.material.design.client.ui.MaterialButton;
-import gwt.material.design.client.ui.MaterialDropDown;
 import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.table.cell.WidgetColumn;
 import pt.isep.nsheets.client.application.workbook.WorkbookView.SheetCell;
-import pt.isep.nsheets.client.place.NameTokens;
-import pt.isep.nsheets.client.place.ParameterTokens;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
-public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialLabel> {
+public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
 
     /**
      * The lowest character to be used in a column name
@@ -60,22 +57,69 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialLabel> {
         return TextAlign.CENTER;
     }
 
-    @Override
-    public MaterialLabel getValue(SheetCell object) {
-        MaterialLabel badge = new MaterialLabel();
+        @Override
+    public MaterialButton getValue(SheetCell object) {
+        MaterialButton btn = new MaterialButton();
         if (this.colNumber == -1) {
-            badge.setText("" + (object.getCell(0).getAddress().getRow() + 1));
+            btn.setText("" + (object.getCell(0).getAddress().getRow() + 1));
         } else {
-            badge.setText(object.getCell(this.colNumber).getValue().toString());
+            Cell cell = object.getCell(this.colNumber);
+            String value = cell.getValue().toString();
+            if(cell.hasChart()) {
+                btn.setIconType(IconType.INSERT_CHART);
+                btn.setIconPosition(IconPosition.LEFT);
+            }
+            btn.setText(value);
+            
         }
-        badge.setLayoutPosition(Style.Position.RELATIVE);
+        
+            btn.setTextColor(Color.BLACK);
+            btn.setType(ButtonType.FLAT);
 
-        return badge;
+        return btn;
     }
+//    @Override
+//    public MaterialLabel getValue(SheetCell object) {
+//        MaterialLabel badge = new MaterialLabel();
+//        if (this.colNumber == -1) {
+//            badge.setText("" + (object.getCell(0).getAddress().getRow() + 1));
+//        } else {
+//            badge.setText(object.getCell(this.colNumber).getValue().toString());
+//        }
+//        badge.setLayoutPosition(Style.Position.RELATIVE);
+//
+//        return badge;
+//    }
 
-    @Override
-    public MaterialLabel render(Context context, SheetCell object) {
-        MaterialLabel widget = getValue(object);
+//    @Override
+//    public MaterialLabel render(Context context, SheetCell object) {
+//        MaterialLabel widget = getValue(object);
+//
+//        // Add a click handler...
+//        widget.addClickHandler(event -> {
+//
+//            Cell cell = object.getCell(context.getColumn() - 1);
+//            if (context.getColumn() > 0) {
+//                this.view.setActiveCell(cell);
+//                MaterialToast.fireToast("Cell " + cell.getContent() + " active");
+//                if (cell.hasChart()) {
+//                    updateCellCharts(cell);
+//                    this.view.popChart.setPopupPosition(event.getClientX(), event.getClientY());
+//                    this.view.popChart.open();
+//                }
+////				this.view.getTable().getTableTitle().setText(object.getCell(context.getColumn()-1).toString()+": "+object.getCell(context.getColumn()-1).getContent().toString());
+////				this.view.getFirstBox().setText(object.getCell(context.getColumn()-1).getContent().toString());
+//
+//            }
+//
+//        });
+//
+//        return widget;
+//    }
+    
+          @Override
+    public MaterialButton render(Context context, SheetCell object) {
+        MaterialButton widget = getValue(object);
 
         // Add a click handler...
         widget.addClickHandler(event -> {
@@ -83,7 +127,6 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialLabel> {
             Cell cell = object.getCell(context.getColumn() - 1);
             if (context.getColumn() > 0) {
                 this.view.setActiveCell(cell);
-                MaterialToast.fireToast("Cell " + cell.getContent() + " active");
                 if (cell.hasChart()) {
                     updateCellCharts(cell);
                     this.view.popChart.setPopupPosition(event.getClientX(), event.getClientY());
@@ -99,15 +142,18 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialLabel> {
         return widget;
     }
     
-    protected void updateCellCharts(Cell cell){
-        
+protected void updateCellCharts(Cell cell){
         view.chart_dropdown.clear();
         for(ChartDTO chart: cell.chartList()){
             MaterialLink link = new MaterialLink(chart.getGraph_name(),null,IconType.INSERT_CHART);
+//            link.setTargetHistoryToken(NameTokens.getChart());
+            link.setTextColor(Color.BLACK);
+//            
             link.addClickHandler(event ->{
-                MaterialToast.fireToast(link.getText());
             });
+            
             view.chart_dropdown.add(link);
+            
         }
     }
 }

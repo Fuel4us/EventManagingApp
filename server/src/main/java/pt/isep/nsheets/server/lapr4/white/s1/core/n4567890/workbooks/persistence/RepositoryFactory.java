@@ -11,6 +11,7 @@ import pt.isep.nsheets.server.lapr4.green.s1.core.n1160815.users.persistence.Mes
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160629.extensions.persistence.ConfigurationRepository;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.persistence.ChartRepository;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.persistence.NoteRepository;
+import pt.isep.nsheets.server.lapr4.red.s1.core.n1161140.calendar.persistence.CalendarEventRepository;
 
 /**
  * @author Paulo Gandra Sousa
@@ -20,9 +21,10 @@ public interface RepositoryFactory {
 
     PersistenceSettings setSettings(PersistenceSettings settings);
     
-    WorkbookDescriptionRepository workbookDescriptions();
+    WorkbookRepository workbooks();
     UserRepository users();
     NoteRepository notes();
+    CalendarEventRepository calendarEvents();
 //    SpreadsheetRepository spreadsheets();
     ChartRepository charts();
     MessagesRepository messages();

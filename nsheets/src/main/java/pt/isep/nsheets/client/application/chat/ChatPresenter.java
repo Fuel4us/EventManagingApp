@@ -1,7 +1,6 @@
 package pt.isep.nsheets.client.application.chat;
 
 import com.google.gwt.core.client.GWT;
-import java.util.ArrayList;
 
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -20,7 +19,6 @@ import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import pt.isep.nsheets.shared.services.MessagesDTO;
-import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
 import pt.isep.nsheets.shared.services.MessagesService;
 import pt.isep.nsheets.shared.services.MessagesServiceAsync;
 

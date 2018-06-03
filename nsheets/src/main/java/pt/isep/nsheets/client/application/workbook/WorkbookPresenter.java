@@ -49,9 +49,9 @@ import pt.isep.nsheets.shared.services.ConfigurationServiceAsync;
 
 public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, WorkbookPresenter.MyProxy> {
 
+    
 	interface MyView extends View {
 		public MaterialTextBox getFirstBox();
-
 		public MaterialIcon getFirstButton();
 	}
 
@@ -89,6 +89,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 	@Override
 	protected void onReset() {
 		super.onReset();
+                
 
 		getView().getFirstButton().addClickHandler(new ClickHandler() {
 
@@ -128,8 +129,9 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 //
 //				placeManager.revealPlace(request);
 			}
-
 		});
+                
+               
 	}
 	
     @Override
@@ -139,8 +141,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         SetPageTitleEvent.fire("Workbook", "The current Workbook", "", "", this);
     }
     
-    protected void goToChartPage(){
-        
+    private void redirectToChartPage() {
         String token = placeManager
                 .getCurrentPlaceRequest()
                 .getParameter(ParameterTokens.REDIRECT, NameTokens.getChat());
@@ -148,4 +149,6 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 
         placeManager.revealPlace(placeRequest);
     }
+    
 }
+

@@ -20,13 +20,8 @@
  */
 package pt.isep.nsheets.shared.core.formula.lang;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 //import pt.isep.nsheets.shared.CleanSheets;
 import pt.isep.nsheets.shared.core.formula.BinaryOperator;

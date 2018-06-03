@@ -47,4 +47,30 @@ public class UserDTO implements Serializable {
     public boolean isSuperuser() {
         return this.superUser;
     }
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof UserDTO))
+            return false;
+
+        final UserDTO that = (UserDTO) other;
+        if (this == that)
+            return true;
+
+        if (!this.email.equals(that.email))
+            return false;
+
+        if (!this.name.equals(that.name))
+            return false;
+
+        if (!this.nickname.equals(that.nickname))
+            return false;
+
+        if (!this.password.equals(that.password))
+            return false;
+
+        if (this.superUser != that.superUser)
+            return false;
+
+        return true;
+    }
 }

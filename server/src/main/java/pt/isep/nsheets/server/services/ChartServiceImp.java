@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Properties;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.application.AddChartController;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.Chart;
-import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.application.ListWorkbookDescriptionController;
 import pt.isep.nsheets.shared.services.ChartType;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;

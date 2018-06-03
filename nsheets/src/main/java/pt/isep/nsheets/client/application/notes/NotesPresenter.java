@@ -18,9 +18,9 @@ import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
-//import pt.isep.nsheets.shared.services.NotesServiceAsync;
-//import pt.isep.nsheets.shared.services.NotesService;
-//import pt.isep.nsheets.shared.services.NoteDTO;
+import pt.isep.nsheets.shared.services.NotesServiceAsync;
+import pt.isep.nsheets.shared.services.NotesService;
+import pt.isep.nsheets.shared.services.NoteDTO;
 
 public class NotesPresenter extends Presenter<NotesPresenter.MyView, NotesPresenter.MyProxy> {
 
@@ -34,7 +34,7 @@ public class NotesPresenter extends Presenter<NotesPresenter.MyView, NotesPresen
 
         void openModal();
 
-//        void setContents(ArrayList<NoteDTO> contents);
+        void setContents(ArrayList<NoteDTO> contents);
 
         String titleNote();
 
@@ -58,50 +58,50 @@ public class NotesPresenter extends Presenter<NotesPresenter.MyView, NotesPresen
 
             this.view.openModal();
 
-//            this.view.buttonClickHandlerSaveNote(event2 -> {
-//                NotesServiceAsync notesSvc = GWT.create(NotesService.class);
-//
-//                // Set up the callback object.
-//                AsyncCallback<NoteDTO> callback = new AsyncCallback<NoteDTO>() {
-//                    @Override
-//                    public void onFailure(Throwable caught) {
-//                        MaterialToast.fireToast("Error! " + caught.getMessage());
-//                    }
-//
-//                    @Override
-//                    public void onSuccess(NoteDTO result) {
-//                        MaterialToast.fireToast("New Note Created...", "rounded");
-//
-//                        refreshView();
-//                    }
-//                };
-//
-//                NoteDTO notesDto = new NoteDTO(this.view.titleNote(), this.view.textNote());
-//                notesSvc.addNote(notesDto, callback);
-//                
-//                this.view.closeModal();
-//            });
+            this.view.buttonClickHandlerSaveNote(event2 -> {
+                NotesServiceAsync notesSvc = GWT.create(NotesService.class);
+
+                // Set up the callback object.
+                AsyncCallback<NoteDTO> callback = new AsyncCallback<NoteDTO>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        MaterialToast.fireToast("Error! " + caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(NoteDTO result) {
+                        MaterialToast.fireToast("New Note Created...", "rounded");
+
+                        refreshView();
+                    }
+                };
+
+                NoteDTO notesDto = new NoteDTO(this.view.titleNote(), this.view.textNote());
+                notesSvc.addNote(notesDto, callback);
+                
+                this.view.closeModal();
+            });
         });
     }
 
-//    private void refreshView() {
-//        NotesServiceAsync notesSvc = GWT.create(NotesService.class);
-//
-//        // Set up the callback object.
-//        AsyncCallback<ArrayList<NoteDTO>> callback = new AsyncCallback<ArrayList<NoteDTO>>() {
-//            @Override
-//            public void onFailure(Throwable caught) {
-//                // TODO: Do something with errors.
-//            }
-//
-//            @Override
-//            public void onSuccess(ArrayList<NoteDTO> result) {
-//                view.setContents(result);
-//            }
-//        };
-//
-//        notesSvc.getNotes(callback);
-//    }
+    private void refreshView() {
+        NotesServiceAsync notesSvc = GWT.create(NotesService.class);
+
+        // Set up the callback object.
+        AsyncCallback<ArrayList<NoteDTO>> callback = new AsyncCallback<ArrayList<NoteDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                // TODO: Do something with errors.
+            }
+
+            @Override
+            public void onSuccess(ArrayList<NoteDTO> result) {
+                view.setContents(result);
+            }
+        };
+
+        notesSvc.getNotes(callback);
+    }
 
     @Override
     protected void onReveal() {
@@ -109,7 +109,7 @@ public class NotesPresenter extends Presenter<NotesPresenter.MyView, NotesPresen
 
         SetPageTitleEvent.fire("Notes", "Make your notes", "", "", this);
 
-//        refreshView();
+        refreshView();
     }
 
 }

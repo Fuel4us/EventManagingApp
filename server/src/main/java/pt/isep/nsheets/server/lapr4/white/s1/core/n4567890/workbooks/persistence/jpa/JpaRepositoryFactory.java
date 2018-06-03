@@ -13,9 +13,10 @@ import pt.isep.nsheets.server.lapr4.red.s1.core.n1160629.extensions.persistence.
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.persistence.ChartRepository;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.persistence.NoteRepository;
 
+import pt.isep.nsheets.server.lapr4.red.s1.core.n1161140.calendar.persistence.CalendarEventRepository;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.RepositoryFactory;
-import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.WorkbookDescriptionRepository;
+import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.WorkbookRepository;
 
 /**
  *
@@ -24,24 +25,29 @@ import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence
 public class JpaRepositoryFactory implements RepositoryFactory {
 
     private PersistenceSettings settings=null;
-    
+
     public PersistenceSettings setSettings(PersistenceSettings settings) {
         return this.settings=settings;
     }
 
     @Override
-    public WorkbookDescriptionRepository workbookDescriptions() {
-        return new JpaWorkbookDescriptionRepository(this.settings);
+    public WorkbookRepository workbooks() {
+        return new JpaWorkbookRepository(this.settings);
     }
 
     @Override
     public UserRepository users() {
         return new JpaUserRepository(this.settings);
     }
-    
+
     @Override
     public NoteRepository notes() {
         return new JpaNoteRepository(this.settings);
+    }
+
+    @Override
+    public CalendarEventRepository calendarEvents() {
+        return new JpaCalendarEventRepository(this.settings);
     }
 
 //    @Override
@@ -53,7 +59,7 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     public ChartRepository charts() {
         return new JpaChartRepository(this.settings);
     }
-    
+
     @Override
     public MessagesRepository messages() {
         return new JpaMessagesRepository(this.settings);

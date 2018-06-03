@@ -47,6 +47,7 @@
     <url-pattern>/nsheets/usersService</url-pattern>
   </servlet-mapping>
 
+    <!-- Servlet for Extension Configuration -->
   <servlet>
     <servlet-name>configurationServiceServlet</servlet-name>
     <servlet-class>pt.isep.nsheets.server.services.ConfigurationServiceImpl</servlet-class>
@@ -56,4 +57,28 @@
     <servlet-name>configurationServiceServlet</servlet-name>
     <url-pattern>/nsheets/configurationService</url-pattern>
   </servlet-mapping>
+
+    <!-- Servlets for the notes -->
+    <servlet>
+        <servlet-name>notesServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.NotesServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>notesServiceServlet</servlet-name>
+        <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
+        <url-pattern>/nsheets/notesService</url-pattern>
+    </servlet-mapping>
+
+    <!-- Servlets for the charts -->
+    <servlet>
+        <servlet-name>chartServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.ChartServiceImp</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>chartServiceServlet</servlet-name>
+        <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
+        <url-pattern>/nsheets/chartsService</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -3,19 +3,20 @@ package pt.isep.nsheets.shared.services;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * @author Gonçalo Silva
+ */
 public class CalendarEventDTO implements Serializable {
 
     String name;
     String description;
     Date date;
-    Date time;
     Integer duration;
 
-    public CalendarEventDTO(String name, String description, Date date, Date time, Integer duration) {
+    public CalendarEventDTO(String name, String description, Date date, Integer duration) {
         this.name = name;
         this.description = description;
         this.date = date;
-        this.time = time;
         this.duration = duration;
     }
 
@@ -45,14 +46,6 @@ public class CalendarEventDTO implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
     }
 
     public Integer getDuration() {
