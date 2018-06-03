@@ -28,7 +28,6 @@ import com.google.gwt.i18n.client.LocaleInfo;
 //import java.text.NumberFormat;	// Not supported in GWT
 import com.google.gwt.i18n.client.NumberFormat; // replaces java.text.NumberFormat in gwt
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 //import java.text.ParsePosition;	// Not supported in GWT
 import java.util.Arrays;

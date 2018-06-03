@@ -2,20 +2,13 @@ package pt.isep.nsheets.client.application.workbook;
 
 import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.dom.client.Style;
-import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
-import gwt.material.design.client.constants.ButtonType;
-import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.constants.IconType;
 import gwt.material.design.client.constants.TextAlign;
-import gwt.material.design.client.ui.MaterialButton;
-import gwt.material.design.client.ui.MaterialDropDown;
 import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.table.cell.WidgetColumn;
 import pt.isep.nsheets.client.application.workbook.WorkbookView.SheetCell;
-import pt.isep.nsheets.client.place.NameTokens;
-import pt.isep.nsheets.client.place.ParameterTokens;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
