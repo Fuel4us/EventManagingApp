@@ -10,7 +10,7 @@ import pt.isep.nsheets.shared.core.SpreadsheetImpl;
  */
 public class JpaSpreadsheetRepository extends NSheetsJpaRepositoryBase<Spreadsheet, Long> implements SpreadsheetRepository {
 
-    JpaSpreadsheetRepository(PersistenceSettings settings) {
+    public JpaSpreadsheetRepository(PersistenceSettings settings) {
         super(settings);
     }
 }

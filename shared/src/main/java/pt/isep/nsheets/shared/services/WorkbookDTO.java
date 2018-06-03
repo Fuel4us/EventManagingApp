@@ -2,6 +2,7 @@ package pt.isep.nsheets.shared.services;
 
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Workbook;
+import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class WorkbookDTO implements Serializable {
         return createdSpreadsheets;
     }
 
-    public Workbook fromDTO() throws IllegalArgumentException {
+    public Workbook fromDTO() throws IllegalArgumentException, FormulaCompilationException {
         List<Spreadsheet> spreadsheet = new ArrayList<>();
         for (SpreadsheetDTO ss : this.getSpreadsheets())
             spreadsheet.add(ss.fromDTO());
