@@ -1,16 +1,16 @@
 package pt.isep.nsheets.shared.services;
 
 import java.util.ArrayList;
-
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 @RemoteServiceRelativePath("workbooksService")
 public interface WorkbooksService extends RemoteService {
     
-	ArrayList<WorkbookDescriptionDTO> getWorkbooks();
+	ArrayList<WorkbookDTO> getWorkbooks();
         
-	WorkbookDescriptionDTO addWorkbookDescription(WorkbookDescriptionDTO wdDto) throws DataException;
+	WorkbookDTO addWorkbookDescription(WorkbookDTO wdDto) throws DataException;
         
-        WorkbookDescriptionDTO findByName(String name) throws DataException;
+        WorkbookDTO findByName(String name) throws DataException;
 }
