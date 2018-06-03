@@ -7,6 +7,7 @@ package pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistenc
 
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.persistence.UserRepository;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.persistence.NoteRepository;
+import pt.isep.nsheets.server.lapr4.red.s1.core.n1161140.calendar.persistence.CalendarEventRepository;
 
 /**
  * @author Paulo Gandra Sousa
@@ -19,4 +20,5 @@ public interface RepositoryFactory {
     WorkbookDescriptionRepository workbookDescriptions();
     UserRepository users();
     NoteRepository notes();
+    CalendarEventRepository calendarEvents();
 }

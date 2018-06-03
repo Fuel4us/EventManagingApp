@@ -8,6 +8,7 @@ package pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistenc
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.persistence.UserRepository;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.persistence.NoteRepository;
 
+import pt.isep.nsheets.server.lapr4.red.s1.core.n1161140.calendar.persistence.CalendarEventRepository;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.RepositoryFactory;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.WorkbookDescriptionRepository;
@@ -37,5 +38,10 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     @Override
     public NoteRepository notes() {
         return new JpaNoteRepository(this.settings);
+    }
+
+    @Override
+    public CalendarEventRepository calendarEvents() {
+        return new JpaCalendarEventRepository(this.settings);
     }
 }
