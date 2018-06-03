@@ -2,32 +2,33 @@ package pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.applicatio
 
 import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
-import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.domain.WorkbookDescription;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
-import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.WorkbookDescriptionRepository;
-import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
+import pt.isep.nsheets.shared.core.Workbook;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
+import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.WorkbookRepository;
+import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 
 public class WorkbookDescriptionService {
 
-    public Iterable<WorkbookDescription> allWorkbookDescriptions() {
+    public Iterable<Workbook> allWorkbooks() {
 
-        final WorkbookDescriptionRepository workbookDescriptionRepository = PersistenceContext.repositories().workbookDescriptions();
-        return workbookDescriptionRepository.findAll();
+        final WorkbookRepository workbookRepository = PersistenceContext.repositories().workbooks();
+        return workbookRepository.findAll();
     }
 
-    public WorkbookDescription addWorkbookDescription(WorkbookDescriptionDTO dto) throws DataConcurrencyException, DataIntegrityViolationException {
+    public Workbook addWorkbook(WorkbookDTO dto) throws DataConcurrencyException, DataIntegrityViolationException, IllegalArgumentException, FormulaCompilationException {
 
-        final WorkbookDescriptionRepository workbookDescriptionRepository = PersistenceContext.repositories().workbookDescriptions();
+        final WorkbookRepository workbookRepository = PersistenceContext.repositories().workbooks();
         
-        WorkbookDescription wb=WorkbookDescription.fromDTO(dto);
-        workbookDescriptionRepository.save(wb);
+        Workbook wb=Workbook.fromDTO(dto);
+        workbookRepository.save(wb);
         
         return wb;
     }
     
-    public WorkbookDescription findByName(String name) throws DataConcurrencyException, DataIntegrityViolationException {
-        final WorkbookDescriptionRepository workbookDescriptionRepository = PersistenceContext.repositories().workbookDescriptions();
+    public Workbook findByName(String name) throws DataConcurrencyException, DataIntegrityViolationException {
+        final WorkbookRepository workbookRepository = PersistenceContext.repositories().workbooks();
         
-        return workbookDescriptionRepository.findByName(name);
+        return workbookRepository.findByName(name);
     }
 }

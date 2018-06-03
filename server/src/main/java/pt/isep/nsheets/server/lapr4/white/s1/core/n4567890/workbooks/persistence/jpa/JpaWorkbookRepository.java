@@ -2,18 +2,18 @@ package pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistenc
 
 import java.util.HashMap;
 import java.util.Map;
-import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.domain.WorkbookDescription;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;
-import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.WorkbookDescriptionRepository;
+import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.WorkbookRepository;
+import pt.isep.nsheets.shared.core.Workbook;
 
-public class JpaWorkbookDescriptionRepository extends NSheetsJpaRepositoryBase<WorkbookDescription, Long> implements WorkbookDescriptionRepository {
+public class JpaWorkbookRepository extends NSheetsJpaRepositoryBase<Workbook, Long> implements WorkbookRepository {
 
-    JpaWorkbookDescriptionRepository(PersistenceSettings settings) {
+    JpaWorkbookRepository(PersistenceSettings settings) {
         super(settings);
     }
 
     @Override
-    public WorkbookDescription findByName(String name) {
+    public Workbook findByName(String name) {
         final Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         
