@@ -463,9 +463,11 @@ Commits:
 
 [Core07.1 server / database](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/09a93f41016e31faf57e06ad018034ac789a7397)
 
-[Core07.1 Doc: dm and design 1 to 4]()
+[Core07.1 Doc: dm and design 1 to 4](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/a22806ab324df69894a8b18a5fe2f2f1a2aca930)
 
-[Core07.1 UI, Server and Database fixes]()
+[Core07.1 UI, Server and Database fixes](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/64568258634d136f475582771ec79342dfb85da2)
+
+[Core07.1 US1 and 2 done]()
 
 
 

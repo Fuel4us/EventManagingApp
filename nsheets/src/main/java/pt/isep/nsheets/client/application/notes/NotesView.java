@@ -8,9 +8,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.gwtplatform.mvp.client.ViewImpl;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.gwtplatform.mvp.client.ViewImpl;
 
 import gwt.material.design.addins.client.emptystate.MaterialEmptyState;
 import gwt.material.design.client.constants.ButtonType;
@@ -80,7 +80,6 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
         
         this.modal.open();
         
-        emptyState.setVisible(false);
     }
 
     @Override
@@ -88,8 +87,8 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
         int colCount = 1;
 
         MaterialRow row = null;
-
-        htmlPanel.clear();
+        
+        emptyState.setVisible(false);
 
         for (NoteDTO note : contents) {
             MaterialCard card = createCard(note);
@@ -139,7 +138,7 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
 
         MaterialCardTitle cardTitle = new MaterialCardTitle();
         cardTitle.setText(note.getTitleNote());
-
+        
         MaterialLabel label = new MaterialLabel();
         label.setText(note.getTextNote());
 
@@ -150,13 +149,13 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
         editBtn.setWaves(WavesType.LIGHT);
         editBtn.setBackgroundColor(Color.GREY);
         editBtn.setTooltip("Edit");
-//        editButton.addStyleName("margin-right: 10px");
+        editBtn.addStyleName("margin-right: 10px");
 
         MaterialButton removeBtn = new MaterialButton("Remove", IconType.REMOVE, ButtonType.FLOATING);
         removeBtn.setWaves(WavesType.LIGHT);
         removeBtn.setBackgroundColor(Color.GREY);
         removeBtn.setTooltip("Remove");
-//        removeButton.addStyleName("margin-right: 10px");
+        removeBtn.addStyleName("margin-right: 10px");
 
         cardContent.add(cardTitle);
         cardContent.add(label);
