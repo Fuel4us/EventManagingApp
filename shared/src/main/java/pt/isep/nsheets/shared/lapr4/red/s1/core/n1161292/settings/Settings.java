@@ -1,6 +1,8 @@
 package pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings;
 
 import pt.isep.nsheets.shared.core.Workbook;
+import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 /**
  *
@@ -9,20 +11,35 @@ import pt.isep.nsheets.shared.core.Workbook;
 public class Settings {
     
     private static String[][][] SPREADSHEET_DEFAULT = {{
-            {"10", "9", "8", "7", "a", "b", "c"}, {"8", "=1+7", "6", "5", "4", "3", "2"},
-            {"1", "2", "3", "4", "5", "6", "7"},}};
+                {"\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B"},
+                {"\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B"},
+                {"\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B"},
+                {"\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B"},
+                {"\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B"},
+                {"\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B"},
+            }};
     
-    private static Workbook WORKBOOK_BEING_USED = null;
+    private static Settings instance = null;
     
-    public static Workbook getInstance(){
-        if (WORKBOOK_BEING_USED == null){
-            return new Settings().WORKBOOK_BEING_USED;
+    public static Settings getInstance(){
+        if (instance == null){
+            return new Settings();
         }
         
-        return WORKBOOK_BEING_USED;
+        return instance;
     }
     
+    private Workbook workbook;
+    
     private Settings(){
-        WORKBOOK_BEING_USED = new Workbook("Title", "Tile", SPREADSHEET_DEFAULT);
+        workbook = new Workbook("Title", "Tile", SPREADSHEET_DEFAULT);
+    }
+    
+    public Workbook getWorkbook(){
+        return this.workbook;
+    }
+    
+    public void updateWorkbook(WorkbookDTO workbook) throws IllegalArgumentException, FormulaCompilationException {
+        this.workbook = Workbook.fromDTO(workbook);
     }
 }

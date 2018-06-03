@@ -7,6 +7,7 @@ package pt.isep.nsheets.shared.services;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,4 +18,5 @@ public interface MessagesService extends RemoteService{
     
     MessagesDTO addMessage(MessagesDTO mDTO) throws DataException;
     
+    ArrayList<MessagesDTO> getMessages();
 }

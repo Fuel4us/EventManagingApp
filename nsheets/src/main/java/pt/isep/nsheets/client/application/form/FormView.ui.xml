@@ -12,24 +12,39 @@ Uncomment this for XHTML entities
     <ui:import field="pt.isep.nsheets.client.place.NameTokens.home"/>   
     <ui:with field="res" type="pt.isep.nsheets.client.resources.AppResources"/>
     <ui:with field="tokens" type="pt.isep.nsheets.client.place.NameTokens"/> 
-
+    
     <g:HTMLPanel>
-          
+        
+        <!-- FORM WINDOW -->   
         <m:MaterialRow addStyleNames="code">
             <m:MaterialTitle title="Form Window" description="The window that shows the Form."/>
             <m:MaterialButton ui:field="btnOpenWindow" text="Open Form" textColor="WHITE" />
             <ma:window.MaterialWindow ui:field="window" width="50%" title="FORM">              
-                <m:MaterialPanel padding="32" textAlign="CENTER" height="300px">
+                <m:MaterialPanel padding="32" textAlign="CENTER" height="600px">
                     
-                    <!--  CODE OF FORM -->                 
-                                        
-                    <!--  <m:MaterialTextBox readOnly="true" text="Testing the static box!" label="Static Text Box" grid="s12"/> -->  
-                    <m:MaterialLabel text="Helps me escape from the reality I live in." fontSize="1.2em" />     
-                                                     
-                </m:MaterialPanel>                     
+                    <!--  CODE OF FORM -->
+                    <!--<m:MaterialRow addStyleNames="code">
+                        <m:MaterialColumn> 
+                            <m:MaterialButton text="Resolve" waves="DEFAULT" backgroundColor="BLACK" textColor="WHITE" />
+                        </m:MaterialColumn> 
+                        <m:MaterialColumn>
+                            <m:MaterialTextBox label="Writte here"/> 
+                        </m:MaterialColumn> 
+                    </m:MaterialRow>
+                    <m:MaterialRow addStyleNames="code">
+                        <m:MaterialColumn> 
+                            <m:MaterialButton text="Resolve" waves="DEFAULT" backgroundColor="BLACK" textColor="WHITE" />
+                        </m:MaterialColumn> 
+                        <m:MaterialColumn>
+                            <m:MaterialTextBox label="Writte here" /> 
+                        </m:MaterialColumn> 
+                    </m:MaterialRow> -->
+                    
+                </m:MaterialPanel>                
             </ma:window.MaterialWindow>       
         </m:MaterialRow>   
         
+        <!-- EDIT FORM WINDOW -->  
         <m:MaterialRow addStyleNames="code">
             <m:MaterialTitle title="Form Editor Window" description="The window that shows the Form Editor, where you can edit the Form, by adding rows, removing rows, editing rows and test the design of the Form!"/>
             <m:MaterialButton ui:field="btnOpenWindowEditor" text="Open Form Editor" textColor="WHITE"/>
@@ -50,17 +65,29 @@ Uncomment this for XHTML entities
                     </m:MaterialColumn>
                 </m:MaterialRow>
                 <m:MaterialPanel m:id="addRow"  padding="32"  height="300px" textAlign="CENTER" overflow="AUTO">
-                    <m:MaterialLabel text="adding rows." fontSize="1.2em" />
+                    
+                    <!-- ADD ROW CODE -->  
+                    <m:MaterialButton ui:field="btnAddRow" text="ADD ROW" waves="DEFAULT" backgroundColor="BLACK" textColor="WHITE"/> 
+                    <m:MaterialButton ui:field="btnPlayForm1" text="PLAY FORM" waves="DEFAULT" backgroundColor="YELLOW" textColor="BLACK"/> 
+                    
                 </m:MaterialPanel>
                 <m:MaterialPanel m:id="removeRow"  padding="32"  height="300px" textAlign="CENTER" overflow="AUTO">
-                    <m:MaterialLabel text="removing rows" fontSize="1.2em" />
+                    
+                    <!-- REMOVE ROW CODE -->  
+                    <m:MaterialTextBox ui:field="txtArea" label="Write the index of the row you wish to remove:"/> 
+                    <m:MaterialButton ui:field="btnRemoveRow" text="REMOVE ROW" waves="DEFAULT" backgroundColor="BLACK" textColor="WHITE"/> 
+                    <m:MaterialButton ui:field="btnPlayForm2" text="PLAY FORM" waves="DEFAULT" backgroundColor="YELLOW" textColor="BLACK"/> 
+                    
                 </m:MaterialPanel>
                 <m:MaterialPanel m:id="editRow"  padding="32"  height="300px" textAlign="CENTER" overflow="AUTO">
-                    <m:MaterialLabel text="editing rows" fontSize="1.2em" />
+                    
+                    <!-- EDIT ROW CODE -->  
+                    <m:MaterialButton ui:field="btnEditRow" text="EDIT ROW" waves="DEFAULT" backgroundColor="BLACK" textColor="WHITE"/> 
+                    <m:MaterialButton ui:field="btnPlayForm3" text="PLAY FORM" waves="DEFAULT" backgroundColor="YELLOW" textColor="BLACK"/> 
+                    
                 </m:MaterialPanel>
             </ma:window.MaterialWindow>
         </m:MaterialRow>
-        
         
     </g:HTMLPanel>
 </ui:UiBinder>

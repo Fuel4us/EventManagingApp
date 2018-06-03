@@ -149,7 +149,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     void initWorkbook() {
         // Test the initialization of an Workbook
 
-        Spreadsheet sh = Settings.getInstance().getSpreadsheet(0);
+        Spreadsheet sh = Settings.getInstance().getWorkbook().getSpreadsheet(0);
 
         int columnNumber = 0;
 

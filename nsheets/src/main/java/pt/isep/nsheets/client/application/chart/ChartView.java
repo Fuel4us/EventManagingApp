@@ -440,7 +440,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         else this.start_textbox.setText(firstCell.toString());
         if(lastCell ==null) this.end_textbox.setText("");
         else this.end_textbox.setText(lastCell.toString());
-        if(edit) this.save_btn.fireEvent(new ClickEvent(){});
+        if(!edit) this.save_btn.fireEvent(new ClickEvent(){});
         return this;
     }
 

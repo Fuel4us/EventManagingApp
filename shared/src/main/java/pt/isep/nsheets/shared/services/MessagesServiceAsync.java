@@ -6,6 +6,7 @@
 package pt.isep.nsheets.shared.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,4 +15,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface MessagesServiceAsync {
     
     void addMessage(MessagesDTO mDTO, AsyncCallback<MessagesDTO> callback);
+    
+    void getMessages(AsyncCallback<ArrayList<MessagesDTO>> callback);
 }
