@@ -13,11 +13,22 @@ import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 
 /**
- *
+ * The create chart controller.
  * @author pedromonteiro
  */
 public class CreateChartController implements Controller{
     
+    /**
+     * Creates a new chart based on the following parameters:
+     * @param graph_name Graph name
+     * @param ss SpreadSheet
+     * @param firstAddress First Cell Address
+     * @param lastAddress Last Cell Address
+     * @param isRow if is about row
+     * @param considerFirstField if consider first field
+     * @param type chart Type
+     * @return the created chart
+     */
     public Chart newChart(String graph_name, Spreadsheet ss,String firstAddress, String lastAddress, boolean isRow, boolean considerFirstField, ChartType type){
         
         Chart chart = null;

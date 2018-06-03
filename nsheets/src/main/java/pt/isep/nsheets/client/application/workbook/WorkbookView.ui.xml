@@ -182,28 +182,15 @@ governing permissions and limitations under the License. #L% -->
                 </m:MaterialLink>
             </ma:popupmenu.MaterialPopupMenu>
             
-            <ma:popupmenu.MaterialPopupMenu
-                ui:field="popChart">
-                <!--                <m:MaterialLink display="BLOCK" text="Chart" iconType="INSERT_CHART"
-                textColor="BLACK" />-->
-                <!--                <m:MaterialLink display="BLOCK" text="Paste"
-                iconType="CONTENT_PASTE" textColor="BLACK" />
-<m:MaterialLink display="BLOCK" text="Rename"
-                iconType="EDIT" textColor="BLACK" />-->
-
-                <!-- Second level -->
+           <ma:popupmenu.MaterialPopupMenu ui:field="popChart">
+                
+                    
                 <m:MaterialLink activates="view_chart" display="BLOCK"
                                 text="Charts" iconType="SHOW_CHART" textColor="BLACK">
-                    <m:MaterialDropDown ui:field="chart_dropdown" activator="view_chart" hover="true"
+                    <m:MaterialDropDown ui:field="chart_dropdown" activator="view_chart" hover="true" constrainWidth="true"
                                         belowOrigin="true">
-                        <!--                        <m:MaterialLink display="BLOCK" text="Private"
-                        iconType="CONTENT_COPY" textColor="BLACK" />
-        <m:MaterialLink display="BLOCK" text="Public"
-                        iconType="CONTENT_PASTE" textColor="BLACK" />
-        <m:MaterialLink display="BLOCK" text="Shared"
-                        iconType="EDIT" textColor="BLACK" />-->
-
                     </m:MaterialDropDown>
+                    
                 </m:MaterialLink>
             </ma:popupmenu.MaterialPopupMenu>
 
