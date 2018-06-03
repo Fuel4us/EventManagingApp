@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -26,7 +27,11 @@ import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialRow;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
 import pt.isep.nsheets.shared.services.WorkbooksService;
 import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
 
@@ -60,7 +65,7 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
             cardContent.setTextColor(Color.WHITE);
 
             MaterialCardTitle cardTitle=new MaterialCardTitle();
-            cardTitle.setText(wb.name);
+            cardTitle.add(new Anchor(wb.name, "#workbook"));
             cardTitle.setIconType(IconType.INSERT_DRIVE_FILE);
             cardTitle.setIconPosition(IconPosition.RIGHT);
 
@@ -82,7 +87,12 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
                         }
 
                         public void onSuccess(WorkbookDTO result) {
-                                MaterialToast.fireToast(result.name);
+                            MaterialToast.fireToast(result.name);
+                            try {
+                                Settings.getInstance().updateWorkbook(result);
+                            } catch (IllegalArgumentException | FormulaCompilationException ex) {
+                                Logger.getLogger(HomeView.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
                 };
                 
