@@ -54,7 +54,7 @@ public class AddNoteControllerTest {
 //
 //        final Note expected = new Note(titleNote, textNote);
 //
-//        AddNoteController ctrl = new AddNoteController();
+//        AddSpreadsheetController ctrl = new AddSpreadsheetController();
 //
 //        Note result = ctrl.addNote(expected.toDTO());
 //

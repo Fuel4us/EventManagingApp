@@ -1,5 +1,7 @@
 package pt.isep.nsheets.shared.services;
 
+import pt.isep.nsheets.shared.core.Address;
+
 /**
  *
  * @author TiagoRios(1161292)
@@ -13,8 +15,12 @@ public class AddressDTO {
 	private int column;
 	private int row;
         
-        public AddressDTO(int column, int row){
-            this.column = column;
-            this.row = row;
-        }
+    public AddressDTO(int column, int row){
+        this.column = column;
+        this.row = row;
+    }
+
+    public Address fromDTO(){
+        return new Address(this.column, this.row);
+    }
 }
