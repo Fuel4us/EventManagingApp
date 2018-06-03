@@ -32,8 +32,10 @@ import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
+import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
+import pt.isep.nsheets.client.place.ParameterTokens;
 
 public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, WorkbookPresenter.MyProxy> {
 
@@ -108,5 +110,15 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         super.onReveal();
 
         SetPageTitleEvent.fire("Workbook", "The current Workbook", "", "", this);
+    }
+    
+    protected void goToChartPage(){
+        
+        String token = placeManager
+                .getCurrentPlaceRequest()
+                .getParameter(ParameterTokens.REDIRECT, NameTokens.getChat());
+        PlaceRequest placeRequest = new PlaceRequest.Builder().nameToken(token).build();
+
+        placeManager.revealPlace(placeRequest);
     }
 }

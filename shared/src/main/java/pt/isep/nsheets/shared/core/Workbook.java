@@ -20,6 +20,10 @@
  */
 package pt.isep.nsheets.shared.core;
 
+import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
+import pt.isep.nsheets.shared.services.SpreadsheetDTO;
+import pt.isep.nsheets.shared.services.WorkbookDTO;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -72,6 +76,10 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 		for (int i = 0; i < sheets; i++)
 			spreadsheets.add(new SpreadsheetImpl(this,
 				getNextSpreadsheetTitle()));
+	}
+
+	public Workbook(List<Spreadsheet> spreadsheets) {
+		this.spreadsheets = spreadsheets;
 	}
 
 	/**
@@ -216,7 +224,20 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         this.id = id;
     }
 
-/*
+	public WorkbookDTO toDTO() {
+		List<SpreadsheetDTO> spreadsheetDTOS = new ArrayList<>();
+		for(Spreadsheet ss : this.spreadsheets)
+			spreadsheetDTOS.add(ss.toDTO());
+		return new WorkbookDTO(spreadsheetDTOS, this.createdSpreadsheets);
+	}
+
+	public static Workbook fromDTO(WorkbookDTO dto) throws IllegalArgumentException, FormulaCompilationException {
+		List<Spreadsheet> spreadsheet = new ArrayList<>();
+		for(SpreadsheetDTO ss : dto.getSpreadsheets())
+			spreadsheet.add(ss.fromDTO());
+		return new Workbook(spreadsheet);
+	}
+	/*
  * GENERAL
  */
 

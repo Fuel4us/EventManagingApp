@@ -40,6 +40,7 @@ import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.ext.SpreadsheetExtension;
+import pt.isep.nsheets.shared.services.SpreadsheetDTO;
 
 /**
  * The implementation of the <code>Spreadsheet</code> interface.
@@ -94,7 +95,7 @@ public class SpreadsheetImpl implements Spreadsheet {
 	 * @param workbook the workbook to which the spreadsheet belongs
 	 * @param title the title of the spreadsheet
 	 */
-	SpreadsheetImpl(Workbook workbook, String title) {
+	public SpreadsheetImpl(Workbook workbook, String title) {
 		this.workbook = workbook;
 		this.title = title;
 	}
@@ -122,6 +123,14 @@ public class SpreadsheetImpl implements Spreadsheet {
 				} catch (FormulaCompilationException e) {}
 			}
 		}
+		getExtensions();
+	}
+
+	public SpreadsheetImpl(Workbook workbook, String title, Map<Address, Cell> cells){
+		this(workbook, title);
+		this.cells = cells;
+
+		getExtensions();
 	}
 
 /*
@@ -286,6 +295,10 @@ public class SpreadsheetImpl implements Spreadsheet {
 		return extension;
 	}
 
+	public void getExtensions(){
+		getExtension("Value Colour Extension");
+	}
+
     public Long getId() {
         return id;
     }
@@ -293,6 +306,15 @@ public class SpreadsheetImpl implements Spreadsheet {
     public void setId(Long id) {
         this.id = id;
     }
+
+	public SpreadsheetDTO toDTO() {
+		return new SpreadsheetDTO(this.workbook.toDTO(), this.title);
+	}
+
+	public Spreadsheet fromDTO() {
+		return null;
+	}
+
 
 /*
  * GENERAL

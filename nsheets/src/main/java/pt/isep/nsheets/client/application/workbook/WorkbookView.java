@@ -19,7 +19,6 @@
  */
 package pt.isep.nsheets.client.application.workbook;
 
-import com.google.gwt.event.dom.client.ClickEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,17 +27,15 @@ import javax.inject.Inject;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.gwtplatform.mvp.client.ViewImpl;
 
 import com.google.gwt.user.client.ui.Panel;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
-import gwt.material.design.client.ui.*;
 import gwt.material.design.client.constants.IconType;
-import gwt.material.design.client.ui.MaterialButton;
-import gwt.material.design.client.ui.MaterialFAB;
+import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.table.MaterialDataTable;
@@ -46,8 +43,10 @@ import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
-import pt.isep.nsheets.client.application.chart.ChartView;
+import pt.isep.nsheets.shared.core.Address;
+import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
+import pt.isep.nsheets.shared.services.ChartDTO;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
 // public class WorkbookView extends NavigatedView implements WorkbookPresenter.MyView {
@@ -61,36 +60,36 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         return firstButton;
     }
 
-	@UiField
-	MaterialTextBox firstBox;
-	@UiField
-	MaterialIcon firstButton;
+    @UiField
+    MaterialTextBox firstBox;
+    @UiField
+    MaterialIcon firstButton;
 
-	/*
+    /*
 	Conditional UI Objects @1050475
-	 */
-	@UiField
-	MaterialTitle conditionalTitle;
+     */
     @UiField
-	MaterialIcon conditionalButton;
+    MaterialTitle conditionalTitle;
     @UiField
-	MaterialTextBox conditionalText2;
-	@UiField
-	MaterialIcon conditionalModalCloseButton;
-	@UiField
-	MaterialIcon conditionalModalDoneButton;
-	@UiField
-	MaterialModal conditionalModal;
-	@UiField
-	MaterialListBox lstConditions;
-	/* End of Conditional UI Objects */
-
-	@UiField
-	MaterialDataTable<SheetCell> customTable;
+    MaterialIcon conditionalButton;
+    @UiField
+    MaterialTextBox conditionalText2;
+    @UiField
+    MaterialIcon conditionalModalCloseButton;
+    @UiField
+    MaterialIcon conditionalModalDoneButton;
+    @UiField
+    MaterialModal conditionalModal;
+    @UiField
+    MaterialListBox lstConditions;
+    @UiField
+    MaterialDropDown chart_dropdown;
+    @UiField
+    MaterialPopupMenu popupMenu, popChart;
+    /* End of Conditional UI Objects */
 
     @UiField
-    MaterialPopupMenu popupMenu;
-
+    MaterialDataTable<SheetCell> customTable;
 
 
     interface Binder extends UiBinder<Widget, WorkbookView> {
@@ -126,6 +125,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         pt.isep.nsheets.shared.core.Cell getCell(int column) {
             return this.sheet.getCell(column, this.row);
         }
+
     }
 
     void initWorkbook() {
@@ -148,7 +148,14 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         // int rowIndex = 0;
         List<SheetCell> rows = new ArrayList<>();
         for (int k = 0; k < sh.getRowCount(); k++) {
-            rows.add(new SheetCell(sh, k));
+
+            SheetCell cell = new SheetCell(sh, k);
+
+            if (k == 1) {
+                cell.getCell(4).addChart(initChartTEST());
+            }
+
+            rows.add(cell);
         }
         customTable.setRowData(0, rows);
     }
@@ -188,38 +195,38 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         conditionalButton.addClickHandler(event -> {
             if (activeCell != null) {
-				conditionalModal.open();
-				conditionalTitle.setTitle("Conditional Formating of Cell "+activeCell.getAddress().toString());
+                conditionalModal.open();
+                conditionalTitle.setTitle("Conditional Formating of Cell " + activeCell.getAddress().toString());
             }
         });
 
-		conditionalModalDoneButton.addClickHandler(event ->{
-			MaterialToast t = new MaterialToast();
-			t.fireToast(lstConditions.getSelectedItemText());
-			/*
+        conditionalModalDoneButton.addClickHandler(event -> {
+            MaterialToast t = new MaterialToast();
+            t.fireToast(lstConditions.getSelectedItemText());
+            /*
 				FIREWORKS NEEDED
-			 */
-
-
+             */
 			conditionalModal.close();
 		});
 
-		lstConditions.addValueChangeHandler(event ->{
-			if(lstConditions.getSelectedIndex()==6){
-				conditionalText2.setVisibility(Style.Visibility.VISIBLE);
-			}else{
-				conditionalText2.setVisibility(Style.Visibility.HIDDEN);
-			}
-		});
 
-		conditionalModalCloseButton.addClickHandler(event -> {
-			conditionalModal.close();
-		});
 
-		// It is possible to create your own custom renderer per table
-		// When you use the BaseRenderer you can override certain draw
-		// methods to create elements the way you would like.
-		customTable.getView().setRenderer(new SheetRenderer<SheetCell>());
+        lstConditions.addValueChangeHandler(event -> {
+            if (lstConditions.getSelectedIndex() == 6) {
+                conditionalText2.setVisibility(Style.Visibility.VISIBLE);
+            } else {
+                conditionalText2.setVisibility(Style.Visibility.HIDDEN);
+            }
+        });
+
+        conditionalModalCloseButton.addClickHandler(event -> {
+            conditionalModal.close();
+        });
+
+        // It is possible to create your own custom renderer per table
+        // When you use the BaseRenderer you can override certain draw
+        // methods to create elements the way you would like.
+        customTable.getView().setRenderer(new SheetRenderer<SheetCell>());
 
         initWorkbook();
 
@@ -253,5 +260,34 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         super.onAttach();
 
         // table.getTableTitle().setText("The Future Worksheet!");
+    }
+    
+    
+
+    public ChartDTO initChartTEST() {
+        String[][] matrix = new String[][]{
+            {"a", " 2", "3"},
+            {"4", " 2", "3"},
+            {"6", " 2", "3"},
+            {"1", " 2", "3"},
+            {"1", " 4", "3"},
+            {"1", " 2", "3"},
+            {"1", " 2", "3"},
+            {"1", " 2", "3"},
+            {"1", " 2", "3"},
+            {"1", " 2", "40"}};
+
+        Workbook wb = new Workbook(matrix);
+        Spreadsheet ss = wb.getSpreadsheet(0);
+
+        ChartDTO dto = new ChartDTO(
+                "CHART TEST",
+                new Address(1, 1),
+                new Address(5, 5),
+                matrix,
+                true,
+                false);
+
+        return dto;
     }
 }

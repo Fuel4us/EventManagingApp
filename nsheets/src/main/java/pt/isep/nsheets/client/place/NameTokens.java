@@ -42,6 +42,8 @@ public class NameTokens {
     public static final String form = "form";
 
     public static final String code = "code";
+    
+    public static final String extensions = "extensions";
 
     public static String getWorkbook() {
         return workbook;
@@ -86,4 +88,7 @@ public class NameTokens {
     public static String getCode() {
         return code;
     }
+
+    public static String getExtensions(){ return extensions; }
+
 }

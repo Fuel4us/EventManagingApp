@@ -23,7 +23,9 @@ package pt.isep.nsheets.shared.core;
 import java.io.Serializable;
 import java.util.SortedSet;
 
+import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.ext.Extensible;
+import pt.isep.nsheets.shared.services.SpreadsheetDTO;
 
 /**
  * A spreadsheet which provides cell data and dependencies.
@@ -134,4 +136,8 @@ public interface Spreadsheet extends Iterable<Cell>, Extensible<Spreadsheet>,
 	 * @return the cell listeners that have been registered on the spreadsheet
 	 */
 	public CellListener[] getCellListeners();
+
+	public SpreadsheetDTO toDTO();
+
+	public Spreadsheet fromDTO() throws FormulaCompilationException;
 }

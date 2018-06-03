@@ -12,7 +12,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.gwt.charts.client.ChartLoader;
 import com.googlecode.gwt.charts.client.ChartPackage;
@@ -52,17 +51,17 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     private static final int ENTER_TIME = 700;
     private static final int EXIT_TIME = 500;
     private ColumnChart chart;
-    private String[][] matrix = new String[][]{
-        {"a", " 2", "3"},
-        {"4", " 2", "3"},
-        {"6", " 2", "3"},
-        {"1", " 2", "3"},
-        {"1", " 4", "3"},
-        {"1", " 2", "3"}, 
-        {"1", " 2", "3"}, 
-        {"1", " 2", "3"},
-        {"1", " 2", "3"}, 
-        {"1", " 2", "3"}};
+//    private String[][] matrix = new String[][]{
+//        {"a", " 2", "3"},
+//        {"4", " 2", "3"},
+//        {"6", " 2", "3"},
+//        {"1", " 2", "3"},
+//        {"1", " 4", "3"},
+//        {"1", " 2", "3"}, 
+//        {"1", " 2", "3"}, 
+//        {"1", " 2", "3"},
+//        {"1", " 2", "3"}, 
+//        {"1", " 2", "3"}};
     private static boolean edit = false;
     
 //    private CreateChartController create_controller = new CreateChartController();
@@ -292,10 +291,10 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
 
         // Draw the chart
         this.chart_name.setText(chart_name);
-        chart.draw(dataTable, getOptions(fieldName));
+        chart.draw(dataTable, getOptions(fieldName, matrix));
     }
 
-    private ColumnChartOptions getOptions(String HAxis_name) {
+    private ColumnChartOptions getOptions(String HAxis_name, String[][]matrix) {
         // Grid Lines
         Gridlines lines = Gridlines.create();
         lines.setColor("fff");
