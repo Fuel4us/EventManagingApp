@@ -151,6 +151,9 @@ governing permissions and limitations under the License. #L% -->
                                 iconType="CONTENT_PASTE" textColor="BLACK" />
                 <m:MaterialLink display="BLOCK" text="Rename"
                                 iconType="EDIT" textColor="BLACK" />
+                <m:MaterialLink display="BLOCK" text="Sort"
+                                iconType="EDIT" textColor="BLACK"
+                                ui:field="sortLink" />
 
                 <!-- Second level -->
                 <m:MaterialLink activates="moveTo" display="BLOCK"
