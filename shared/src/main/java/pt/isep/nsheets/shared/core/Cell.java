@@ -21,6 +21,8 @@
 package pt.isep.nsheets.shared.core;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 
 import pt.isep.nsheets.shared.core.formula.Formula;
@@ -151,4 +153,14 @@ public interface Cell extends Comparable<Cell>, Extensible<Cell>, Serializable {
 	 * @return the listeners that have been registered on the cell
 	 */
 	public CellListener[] getCellListeners();
+        
+ /*
+  * CHARTS
+  */       
+//        
+//        public boolean hasChart();
+//        
+//        public List<Chart> chartList();
+//        
+//        public boolean addChart(Chart chart);
 }

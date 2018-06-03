@@ -7,8 +7,9 @@ is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, either express or implied. See the License for the specific language 
 governing permissions and limitations under the License. #L% -->
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-             xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:m="urn:import:gwt.material.design.client.ui"
-             xmlns:ma="urn:import:gwt.material.design.addins.client">
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:m="urn:import:gwt.material.design.client.ui"
+	xmlns:ma="urn:import:gwt.material.design.addins.client"
+			 xmlns:m.html="urn:import:gwt.material.design.client.ui.html">
 
     <ui:with field="res" type="pt.isep.nsheets.client.resources.AppResources" />
     <ui:import field="pt.isep.nsheets.client.place.NameTokens.chart"/> 
@@ -47,20 +48,80 @@ governing permissions and limitations under the License. #L% -->
 
     <g:HTMLPanel>
 
+		<m:MaterialRow marginTop="60">
+			<m:MaterialTextBox
+				m:id="fBox" ui:field="firstBox" placeholder="Enter your formula for the active cell" label="Enter your formula for the active cell"
+				active="true" grid="s11" iconType="FUNCTIONS" />
+				
+			<m:MaterialIcon ui:field="firstButton" iconType="DONE" iconColor="BLUE" waves="DEFAULT" circle="true" grid="s1"/>
+            <m:MaterialModal ui:field="conditionalModal" type="FIXED_FOOTER" dismissible="true" inDuration="500" outDuration="500">
+                <m:MaterialModalContent>
+                    <m:MaterialRow>
+                        <m:MaterialTitle ui:field="conditionalTitle" title="" description="Style extension selection so that it can be used for the conditional formatting of cells based on the result of the execution of formulas" />
+                    </m:MaterialRow>
+                    <m:MaterialRow>
+						<!--m:MaterialTitle title="Condition" description="Select the condition"/-->
+						<m:MaterialListBox placeholder="Condition" grid="s5" ui:field="lstConditions">
+							<m.html:Option text="equal"/>
+							<m.html:Option text="greater than"/>
+							<m.html:Option text="less than"/>
+							<m.html:Option text="equal or greater than"/>
+							<m.html:Option text="equal or less than"/>
+							<m.html:Option text="different"/>
+							<m.html:Option text="between"/>
+						</m:MaterialListBox>
+
+						<m:MaterialTextBox ui:field="conditionalText" placeholder="Value" active="true" grid="s3"/>
+						<m:MaterialTextBox ui:field="conditionalText2" placeholder="Second Value" visibility="HIDDEN" grid="s3"/>
+					</m:MaterialRow>
+					<m:MaterialRow>
+						<m:MaterialTitle title="TRUE" description="Select option if condition is true"/>
+						<m:MaterialListBox placeholder="Background Color" grid="s3" ui:field="lstBackgroundColorTrue">
+							<m.html:Option text="White"/>
+							<m.html:Option text="Blue"/>
+							<m.html:Option text="Red"/>
+							<m.html:Option text="Green"/>
+							<m.html:Option text="Yellow"/>
+						</m:MaterialListBox>
+						<m:MaterialListBox placeholder="Text Color" grid="s3" ui:field="lstTextColorTrue">
+							<m.html:Option text="Black"/>
+							<m.html:Option text="Blue"/>
+							<m.html:Option text="Red"/>
+							<m.html:Option text="Green"/>
+							<m.html:Option text="Yellow"/>
+						</m:MaterialListBox>
+					</m:MaterialRow>
+					<m:MaterialRow>
+						<m:MaterialTitle title="FALSE" description="Select option if condition is false"/>
+						<m:MaterialListBox placeholder="Background Color" grid="s3" ui:field="lstBackgroundColorFalse">
+							<m.html:Option text="White"/>
+							<m.html:Option text="Blue"/>
+							<m.html:Option text="Red"/>
+							<m.html:Option text="Green"/>
+							<m.html:Option text="Yellow"/>
+						</m:MaterialListBox>
+						<m:MaterialListBox placeholder="Text Color" grid="s3" ui:field="lstTextColorFalse">
+							<m.html:Option text="Black"/>
+							<m.html:Option text="Blue"/>
+							<m.html:Option text="Red"/>
+							<m.html:Option text="Green"/>
+							<m.html:Option text="Yellow"/>
+						</m:MaterialListBox>
+					</m:MaterialRow>
+                </m:MaterialModalContent>
+                <m:MaterialModalFooter>
+                    <m:MaterialIcon ui:field="conditionalModalCloseButton" iconType="CLOSE" iconColor="RED" waves="DEFAULT" circle="true" grid="s1"/>
+                    <m:MaterialIcon ui:field="conditionalModalDoneButton" iconType="DONE" iconColor="GREEN" waves="DEFAULT" circle="true" grid="s1"/>
+                </m:MaterialModalFooter>
+            </m:MaterialModal>
+			<m:MaterialIcon ui:field="conditionalButton" iconType="SETTINGS" iconColor="RED" waves="DEFAULT" circle="true" grid="s1"/>
+		</m:MaterialRow>
         <m:MaterialRow marginTop="60">
             <m:MaterialLink  targetHistoryToken="{chart}" text="Create Chart" textColor="RED" iconType="INSERT_CHART" iconPosition="LEFT"/>
         </m:MaterialRow>
         
         <m:MaterialRow marginTop="60">
             <m:MaterialLink  targetHistoryToken="{form}" text="Forms" textColor="BLUE" iconType="POLYMER" iconPosition="LEFT"/>
-        </m:MaterialRow>
-        
-        <m:MaterialRow marginTop="60">
-            <m:MaterialTextBox 
-                m:id="fBox" ui:field="firstBox" placeholder="Enter your formula for the active cell" label="Enter your formula for the active cell"
-                active="true" grid="s11" iconType="FUNCTIONS" />
-				
-            <m:MaterialIcon ui:field="firstButton" iconType="DONE" iconColor="BLUE" waves="DEFAULT" circle="true" grid="s1"/>	
         </m:MaterialRow>
          
         <m:MaterialRow>

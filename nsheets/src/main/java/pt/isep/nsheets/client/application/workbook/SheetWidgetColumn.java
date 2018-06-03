@@ -3,9 +3,11 @@ package pt.isep.nsheets.client.application.workbook;
 import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.dom.client.Style;
 import gwt.material.design.client.constants.TextAlign;
+import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.table.cell.WidgetColumn;
 import pt.isep.nsheets.client.application.workbook.WorkbookView.SheetCell;
+import pt.isep.nsheets.shared.core.Cell;
 
 public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialLabel> {
 
@@ -60,14 +62,24 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialLabel> {
 	@Override
 	public MaterialLabel render(Context context, SheetCell object) {
 		MaterialLabel widget = getValue(object);
-
+                
 		// Add a click handler...
 		widget.addClickHandler(event -> {
+                    
+                    Cell cell = object.getCell(context.getColumn()-1);
 			if (context.getColumn()>0) {
-				this.view.setActiveCell(object.getCell(context.getColumn()-1));
+				this.view.setActiveCell(cell);
 //				this.view.getTable().getTableTitle().setText(object.getCell(context.getColumn()-1).toString()+": "+object.getCell(context.getColumn()-1).getContent().toString());
 //				this.view.getFirstBox().setText(object.getCell(context.getColumn()-1).getContent().toString());
+                               
 			}
+                        
+//                        if(cell.hasChart()){
+                            this.view.popupMenu.setPopupPosition(event.getClientX(), event.getClientY());
+                            this.view.popupMenu.open();
+//                        }
+                        
+                        
 		});
 
 		return widget;

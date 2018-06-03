@@ -42,7 +42,12 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     }
 
     @Override
-    public SpreadsheetRepository spreadsheets(){
+    public SpreadsheetRepository spreadsheets() {
+        return new JpaSpreadsheetRepository(this.settings);
+    }
+
+    @Override
+    public JpaSpreadsheetRepository charts() {
         return new JpaSpreadsheetRepository(this.settings);
     }
 }
