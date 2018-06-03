@@ -20,11 +20,8 @@
  */
 package pt.isep.nsheets.shared.core.formula.compiler;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 //import pt.isep.nsheets.shared.CleanSheets;
 import pt.isep.nsheets.shared.core.Cell;

@@ -28,7 +28,7 @@ public class LoginUserController {
     
     public UserDTO attemptLogin(String email, String password) {
         for(User u : users) {
-            if(u.getEmail().equals(email) && u.getPassword().equals(password))
+            if(u.getEmail().equals(email) && u.verifyPassword(password))
                 return u.toDTO();
         }
         return null;

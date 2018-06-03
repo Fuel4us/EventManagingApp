@@ -1,7 +1,6 @@
 package pt.isep.nsheets.client.application.notes;
 
 import java.util.ArrayList;
-
 import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
@@ -12,8 +11,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
-import gwt.material.design.addins.client.emptystate.MaterialEmptyState;
 
+import gwt.material.design.addins.client.emptystate.MaterialEmptyState;
 import gwt.material.design.client.constants.ButtonType;
 import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.constants.IconType;

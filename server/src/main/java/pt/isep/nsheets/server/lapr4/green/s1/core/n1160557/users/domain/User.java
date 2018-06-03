@@ -74,6 +74,10 @@ public class User implements AggregateRoot<Long>, Serializable {
     public boolean isSuperuser() {
         return this.superUser;
     }
+    
+    public boolean verifyPassword(String password) {
+        return this.password.equals(password);
+    }
 
     @Override
     public String toString() {
@@ -86,34 +90,27 @@ public class User implements AggregateRoot<Long>, Serializable {
 
     @Override
     public boolean sameAs(Object other) {
-        if (!(other instanceof User)) {
+        if (!(other instanceof User))
             return false;
-        }
 
         final User that = (User) other;
-        if (this == that) {
+        if (this == that)
             return true;
-        }
 
-        if (!this.email.equals(that.email)) {
+        if (!this.email.equals(that.email))
             return false;
-        }
 
-        if (!this.name.equals(that.name)) {
+        if (!this.name.equals(that.name))
             return false;
-        }
 
-        if (!this.nickname.equals(that.nickname)) {
+        if (!this.nickname.equals(that.nickname))
             return false;
-        }
 
-        if (!this.password.equals(that.password)) {
+        if (!this.password.equals(that.password))
             return false;
-        }
 
-        if (this.superUser != that.superUser) {
+        if (this.superUser != that.superUser)
             return false;
-        }
 
         return true;
     }

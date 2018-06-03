@@ -20,7 +20,6 @@
  */
 package pt.isep.nsheets.shared.core;
 
-import com.google.gwt.user.client.Window;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
