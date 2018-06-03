@@ -20,15 +20,12 @@
  */
 package pt.isep.nsheets.shared.core.formula;
 
-import java.io.IOException;
 //import java.io.ObjectInputStream;		// not supported in gwt
 //import java.io.ObjectOutputStream;		// not supported in gwt
 
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Value;
 import pt.isep.nsheets.shared.core.formula.compiler.IllegalFunctionCallException;
-import pt.isep.nsheets.shared.core.formula.lang.LanguageManager;
-import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
 import pt.isep.nsheets.shared.core.formula.util.ExpressionVisitor;
 
 /**

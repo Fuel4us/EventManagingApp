@@ -5,9 +5,6 @@
  */
 package pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.jpa;
 
-import eapli.framework.persistence.DataConcurrencyException;
-import eapli.framework.persistence.DataIntegrityViolationException;
-import java.util.Optional;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.Chart;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.persistence.ChartRepository;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;

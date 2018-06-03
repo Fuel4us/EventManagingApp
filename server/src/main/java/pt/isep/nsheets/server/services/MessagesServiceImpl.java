@@ -8,22 +8,13 @@ package pt.isep.nsheets.server.services;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
-import java.util.ArrayList;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.application.ListUserController;
-import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.application.LoginUserController;
-import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.domain.User;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160815.users.application.AddMessageController;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160815.users.domain.Message;
-import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.application.AddWorkbookDescriptionController;
-import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.domain.WorkbookDescription;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;
 import pt.isep.nsheets.shared.services.DataException;
 import pt.isep.nsheets.shared.services.MessagesDTO;
-import pt.isep.nsheets.shared.services.UserDTO;
 import pt.isep.nsheets.shared.services.MessagesService;
 
 /**

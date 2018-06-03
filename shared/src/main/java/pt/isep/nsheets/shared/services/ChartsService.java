@@ -5,7 +5,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import java.util.ArrayList;
 
 /**
- *
+ * The Chart Service interface
  * @author pedromonteiro
  */
 @RemoteServiceRelativePath("chartService")

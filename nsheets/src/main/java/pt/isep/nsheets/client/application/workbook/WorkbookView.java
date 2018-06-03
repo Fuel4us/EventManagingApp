@@ -32,9 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 
 import com.google.gwt.user.client.ui.Panel;
-import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
-import gwt.material.design.client.constants.IconType;
 import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
@@ -44,7 +42,6 @@ import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
 import pt.isep.nsheets.shared.core.Address;
-import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
@@ -277,7 +274,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             {"1", " 2", "3"},
             {"1", " 2", "40"}};
 
-        Workbook wb = new Workbook(matrix);
+        Workbook wb = new Workbook("Teste", "Teste", matrix);
         Spreadsheet ss = wb.getSpreadsheet(0);
 
         ChartDTO dto = new ChartDTO(

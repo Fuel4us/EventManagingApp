@@ -7,14 +7,17 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import pt.isep.nsheets.shared.services.WorkbooksService;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.application.AddWorkbookDescriptionController;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.application.ListWorkbookDescriptionController;
-import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.domain.WorkbookDescription;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;
+import pt.isep.nsheets.shared.core.Workbook;
+import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.DataException;
-import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
 
 public class WorkbooksServiceImpl extends RemoteServiceServlet implements WorkbooksService {
 
@@ -40,15 +43,15 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
 	}
 
 	@Override
-	public ArrayList<WorkbookDescriptionDTO> getWorkbooks() {
+	public ArrayList<WorkbookDTO> getWorkbooks() {
 		// Setup the persistence settings
 		PersistenceContext.setSettings(this.getPersistenceSettings());
 
-		ArrayList<WorkbookDescriptionDTO> workbooks = new ArrayList<WorkbookDescriptionDTO>();
+		ArrayList<WorkbookDTO> workbooks = new ArrayList<>();
 
 		ListWorkbookDescriptionController ctrl = new ListWorkbookDescriptionController();
 
-		Iterable<WorkbookDescription> wbs = ctrl.listWorkbookDescriptions();
+		Iterable<Workbook> wbs = ctrl.listWorkbookDescriptions();
 
 		wbs.forEach(wb -> workbooks.add(wb.toDTO()));
 
@@ -56,42 +59,39 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
 	}
 
 	@Override
-	public WorkbookDescriptionDTO addWorkbookDescription(WorkbookDescriptionDTO wdDto)
+	public WorkbookDTO addWorkbookDescription(WorkbookDTO wbDTO)
 			throws DataException {
 		// Setup the persistence settings
 		PersistenceContext.setSettings(this.getPersistenceSettings());
 
 		AddWorkbookDescriptionController ctrl = new AddWorkbookDescriptionController();
 
-		WorkbookDescription wd=null; 
+		Workbook workbook = null; 
 		
 		try {
-			wd = ctrl.addWorkbookDescription(wdDto);
+			workbook = ctrl.addWorkbook(wbDTO);
 		}
-		catch (DataConcurrencyException ex) { 
-			throw new DataException((Throwable)ex);
-		}
-		catch (DataIntegrityViolationException ex) {
+		catch (DataConcurrencyException | FormulaCompilationException | DataIntegrityViolationException ex) { 
 			throw new DataException((Throwable)ex);
 		}
 		
-		return wd.toDTO();
+		return workbook.toDTO();
 	}
         
         @Override
-        public WorkbookDescriptionDTO findByName(String name) throws DataException {
+        public WorkbookDTO findByName(String name) throws DataException {
             PersistenceContext.setSettings(this.getPersistenceSettings());
 
             AddWorkbookDescriptionController ctrl = new AddWorkbookDescriptionController();
 
-            WorkbookDescription wd=null; 
+            Workbook workbook = null;
 
             try {
-                wd = ctrl.findByName(name);
+                workbook = ctrl.findByName(name);
             } catch (DataConcurrencyException | DataIntegrityViolationException e) {
                 throw new DataException((Throwable) e);
             }
 
-            return wd.toDTO();
+            return workbook.toDTO();
         }
 }

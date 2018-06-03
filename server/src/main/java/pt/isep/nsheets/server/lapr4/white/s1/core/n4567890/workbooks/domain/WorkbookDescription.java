@@ -9,9 +9,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
 import eapli.framework.domain.AggregateRoot;
-import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
 
 /**
@@ -32,7 +30,6 @@ public class WorkbookDescription implements AggregateRoot<Long>, Serializable {
 
 	private String name;
 	private String description;
-        private Workbook workbook;
 
 	public WorkbookDescription(String name, String description) throws IllegalArgumentException {
 		if (name == null || description == null) {
@@ -40,7 +37,6 @@ public class WorkbookDescription implements AggregateRoot<Long>, Serializable {
 		}
 		this.name = name;
 		this.description = description;
-                this.workbook = new Workbook(NUMBER_OF_SHEETS_DEFAULT);
 	}
 
 	// It is mandatory to have a default constructor with no arguments to be
@@ -48,7 +44,6 @@ public class WorkbookDescription implements AggregateRoot<Long>, Serializable {
 	protected WorkbookDescription() {
 		this.name = "";
 		this.description = "";
-                this.workbook = new Workbook(NUMBER_OF_SHEETS_DEFAULT);
 	}
 
 	public String getName() {
