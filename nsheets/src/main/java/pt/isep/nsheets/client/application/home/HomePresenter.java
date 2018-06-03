@@ -18,16 +18,16 @@ import com.gwtplatform.mvp.client.annotations.NameToken;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
 import pt.isep.nsheets.shared.services.WorkbooksService;
-import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
 
 public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter.MyProxy> {
 
 	private MyView view;
         
 	interface MyView extends View {
-		void setContents(ArrayList<WorkbookDescriptionDTO> contents);
+		void setContents(ArrayList<WorkbookDTO> contents);
 		void addClickHandler(ClickHandler ch);
                 
                 void openModal();
@@ -57,19 +57,19 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                     WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
 
                     // Set up the callback object.
-                    AsyncCallback<WorkbookDescriptionDTO> callback = new AsyncCallback<WorkbookDescriptionDTO>() {
+                    AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
                             public void onFailure(Throwable caught) {
                                     MaterialToast.fireToast("Error! " + caught.getMessage());
                             }
 
-                            public void onSuccess(WorkbookDescriptionDTO result) {
+                            public void onSuccess(WorkbookDTO result) {
                                     MaterialToast.fireToast("New Workbook Created", "rounded");
 
                                     refreshView();
                             }
                     };
 
-                    WorkbookDescriptionDTO wdDto = new WorkbookDescriptionDTO(this.view.title(), this.view.description());
+                    WorkbookDTO wdDto = new WorkbookDTO(this.view.title(), this.view.description(), 1);
                     workbooksSvc.addWorkbookDescription(wdDto, callback);
 
                     this.view.closeModal();
@@ -80,12 +80,12 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 		WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
 
 		// Set up the callback object.
-		AsyncCallback<ArrayList<WorkbookDescriptionDTO>> callback = new AsyncCallback<ArrayList<WorkbookDescriptionDTO>>() {
+		AsyncCallback<ArrayList<WorkbookDTO>> callback = new AsyncCallback<ArrayList<WorkbookDTO>>() {
 			public void onFailure(Throwable caught) {
 				// TODO: Do something with errors.
 			}
 
-			public void onSuccess(ArrayList<WorkbookDescriptionDTO> result) {
+			public void onSuccess(ArrayList<WorkbookDTO> result) {
 				view.setContents(result);
 			}
 		};

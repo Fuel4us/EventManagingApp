@@ -79,7 +79,7 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
                     {"1", " 2", "40"}};
                 
                 
-                Workbook wb = new Workbook(matrix);
+                Workbook wb = new Workbook("Teste", "Teste", matrix);
                 Spreadsheet ss = wb.getSpreadsheet(0);
                 
                 ChartDTO dto = new ChartDTO(
@@ -128,7 +128,7 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
             {"1", " 2", "3"},
             {"1", " 2", "3"}};
 
-        Workbook wb = new Workbook(matrix);
+        Workbook wb = new Workbook("Teste", "Teste", matrix);
         Spreadsheet ss = wb.getSpreadsheet(0);
 
         return null;
