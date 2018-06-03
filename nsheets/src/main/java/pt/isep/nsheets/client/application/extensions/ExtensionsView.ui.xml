@@ -7,7 +7,29 @@
     <ui:with field='res' type='pt.isep.nsheets.client.resources.AppResources' />
 
     <g:HTMLPanel>
-        <m:MaterialTab ui:field="extensionTab"/>
-        <m:MaterialRow ui:field="extensionRow"/>
+
+        <m:MaterialCollapsible grid="s12 m6 l8" ui:field="collapsible">
+            <!-- Configuration UIs must be manually added to this Collapsible-->
+            <m:MaterialCollapsibleItem>
+                <m:MaterialCollapsibleHeader>
+                    <m:MaterialLink text="Example extension" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
+                </m:MaterialCollapsibleHeader>
+                <m:MaterialCollapsibleBody>
+                    <m:MaterialLabel text="Example Configuration!" fontSize="3em"/>
+                    <m:MaterialLabel text="When cell value is positive" fontSize="2em"/>
+                    <m:MaterialLabel text="Background Color"/>
+                    <m:MaterialInput type="COLOR" ui:field="BgColorPos"/>
+                    <m:MaterialLabel text="Font Color"/>
+                    <m:MaterialInput type="COLOR" ui:field="FgColorPos"/>
+                    <m:MaterialLabel text="When cell value is negative" fontSize="2em"/>
+                    <m:MaterialLabel text="Background Color"/>
+                    <m:MaterialInput type="COLOR" ui:field="BgColorNeg"/>
+                    <m:MaterialLabel text="Font Color"/>
+                    <m:MaterialInput type="COLOR" ui:field="FgColorNeg"/>
+                    <m:MaterialDivider marginTop="10"/>
+                    <m:MaterialButton waves="LIGHT" size="LARGE" iconType="DONE" backgroundColor="BLUE" iconColor="WHITE" ui:field="confirmButton" text="CONFIRM" marginTop="25"/>
+                </m:MaterialCollapsibleBody>
+            </m:MaterialCollapsibleItem>
+        </m:MaterialCollapsible>
     </g:HTMLPanel>
 </ui:UiBinder>
