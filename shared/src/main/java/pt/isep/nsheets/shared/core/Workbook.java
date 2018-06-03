@@ -20,6 +20,7 @@
  */
 package pt.isep.nsheets.shared.core;
 
+import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.services.SpreadsheetDTO;
 import pt.isep.nsheets.shared.services.WorkbookDTO;
 
@@ -230,13 +231,13 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 		return new WorkbookDTO(spreadsheetDTOS, this.createdSpreadsheets);
 	}
 
-	public static Workbook fromDTO(WorkbookDTO dto) throws IllegalArgumentException {
+	public static Workbook fromDTO(WorkbookDTO dto) throws IllegalArgumentException, FormulaCompilationException {
 		List<Spreadsheet> spreadsheet = new ArrayList<>();
 		for(SpreadsheetDTO ss : dto.getSpreadsheets())
 			spreadsheet.add(ss.fromDTO());
 		return new Workbook(spreadsheet);
 	}
-/*
+	/*
  * GENERAL
  */
 
