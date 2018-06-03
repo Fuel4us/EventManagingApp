@@ -5,38 +5,37 @@
              
              
     <m:MaterialPanel>
-    
-        <m:MaterialFAB>
-            <m:MaterialButton type="FLOATING" iconType="ADD" size="LARGE"/>
-            <m:MaterialFABList>
-                <m:MaterialButton ui:field="newWorkbookButton" type="FLOATING" waves="LIGHT" iconType="INSERT_DRIVE_FILE" tooltip="New Workbook" tooltipPosition="LEFT"/>
-            </m:MaterialFABList>
-        </m:MaterialFAB>
  	
-        <!-->Message Colection<!-->
-        <m:MaterialRow>
-            <m:MaterialCollection ui:field="MessageCollection">
-                <m:MaterialCollectionItem type="AVATAR">
-                    <m:MaterialImage url="https://cdn.pixabay.com/photo/2016/11/18/23/38/child-1837375_960_720.png" type="CIRCLE"/>
-                    <m:MaterialLabel text="User1" fontSize="1.2em"/>
-                    <m:MaterialLabel text="Hello there, How are you doing?"/>
-                    <m:MaterialLabel text="1/2/2016" fontSize="0.6em" float="RIGHT"/>
-                </m:MaterialCollectionItem>
-                <m:MaterialCollectionItem type="AVATAR">
-                    <m:MaterialImage url="https://cdn.pixabay.com/photo/2016/11/18/23/38/child-1837375_960_720.png" type="CIRCLE"/>
-                    <m:MaterialLabel text="User2" fontSize="1.2em"/>
-                    <m:MaterialLabel text="Hello"/>
-                    <m:MaterialLabel text="1/2/2016" fontSize="0.6em" float="RIGHT"/>
-                </m:MaterialCollectionItem>
-            </m:MaterialCollection>  
-            
-        </m:MaterialRow>
+        <m:MaterialCard ui:field="message_card">
+            <!-->Message Colection<!-->
+            <m:MaterialRow>
+                <m:MaterialCollection ui:field="MessageCollection">
+                    <m:MaterialCollectionItem type="AVATAR">
+                        <m:MaterialImage url="https://cdn.pixabay.com/photo/2016/11/18/23/38/child-1837375_960_720.png" type="CIRCLE"/>
+                        <m:MaterialLabel text="User1" fontSize="1.2em"/>
+                        <m:MaterialLabel text="Hello there, How are you doing?"/>
+                        <m:MaterialLabel text="1/2/2016" fontSize="0.6em" float="RIGHT"/>
+                    </m:MaterialCollectionItem>
+                    <m:MaterialCollectionItem type="AVATAR">
+                        <m:MaterialImage url="https://cdn.pixabay.com/photo/2016/11/18/23/38/child-1837375_960_720.png" type="CIRCLE"/>
+                        <m:MaterialLabel text="User2" fontSize="1.2em"/>
+                        <m:MaterialLabel text="Hello"/>
+                        <m:MaterialLabel text="1/2/2016" fontSize="0.6em" float="RIGHT"/>
+                    </m:MaterialCollectionItem>
+                </m:MaterialCollection>  
+            </m:MaterialRow>
+        </m:MaterialCard>
+        
         
         <g:HTMLPanel ui:field="htmlPanel">
- 	    <div align="bottom">
+            <div align="bottom">
                 <m:MaterialRow>
-                    <m:MaterialTextBox ui:field="txtMessage" label="Write a message!"/>
-                    <m:MaterialButton ui:field="sendButton" width="100%;" text="Send" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK"/>
+                    <m:MaterialRow grid="s6 m10">
+                        <m:MaterialTextBox ui:field="txtMessage" label="Write a message!"/>
+                    </m:MaterialRow>
+                    <m:MaterialRow grid="s6 m2">
+                        <m:MaterialButton ui:field="sendButton" width="100%;" text="Send" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK"/>
+                    </m:MaterialRow>
                 </m:MaterialRow>
             </div>  
         </g:HTMLPanel>
