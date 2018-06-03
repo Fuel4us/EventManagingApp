@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
@@ -57,9 +58,10 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 		= new ArrayList<WorkbookListener>();
 
 	/** The number of spreadsheets that have been created in the workbook */
-	private int createdSpreadsheets;
+	private int createdSpreadsheets = 0;
         
         @Id
+        @GeneratedValue
         private Long id;
 
 	/**

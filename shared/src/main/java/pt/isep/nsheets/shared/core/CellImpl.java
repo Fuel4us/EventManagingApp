@@ -91,7 +91,10 @@ public class CellImpl implements Cell {
         @Id
         @GeneratedValue
         private Long id;
-
+        
+        
+        protected CellImpl() {}
+        
 	/**
 	 * Creates a new cell at the given address in the given spreadsheet.
 	 * (not intended to be used directly).

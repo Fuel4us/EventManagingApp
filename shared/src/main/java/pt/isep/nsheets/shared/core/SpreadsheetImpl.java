@@ -89,7 +89,9 @@ public class SpreadsheetImpl implements Spreadsheet {
         @Id
         @GeneratedValue
         private Long id;
-
+        
+        public SpreadsheetImpl() {}
+        
 	/**
 	 * Creates a new spreadsheet.
 	 * @param workbook the workbook to which the spreadsheet belongs
