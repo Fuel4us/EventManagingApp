@@ -14,13 +14,16 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import gwt.material.design.client.ui.MaterialToast;
+import java.util.ArrayList;
 import java.util.Date;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
+import pt.isep.nsheets.client.security.CurrentUser;
 import pt.isep.nsheets.shared.services.MessagesDTO;
 import pt.isep.nsheets.shared.services.MessagesService;
 import pt.isep.nsheets.shared.services.MessagesServiceAsync;
+import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
 
 public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter.MyProxy> {
 
@@ -28,6 +31,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 
     interface MyView extends View {
 
+        void setContents (ArrayList<MessagesDTO> contents);
         void buttonClickHandler(ClickHandler ch);
         
         String text();
@@ -38,10 +42,13 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
     interface MyProxy extends ProxyPlace<ChatPresenter> {
     }
 
+    private CurrentUser user;
+    
     @Inject
-    ChatPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+    ChatPresenter(EventBus eventBus, MyView view, MyProxy proxy, CurrentUser currentUser) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
 
+        this.user = currentUser;
         this.view = view;
 
         this.view.buttonClickHandler(e -> {
@@ -58,19 +65,34 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
                 public void onSuccess(MessagesDTO result) {
                     MaterialToast.fireToast("New Message Created", "rounded");
                     
-                    Window.alert(result.toString());
-                    //refreshView();
+                    refreshMessages();
                 }
 
             };
-            
-            MessagesDTO mDTO = new MessagesDTO(view.text(), new Date(), "User12343");
+            MessagesDTO mDTO = new MessagesDTO(view.text(), new Date(), this.user.getUser().getNickname());
             messagesSvc.addMessage(mDTO, callback);
+            
+            refreshMessages();
         });
     }
 
-    private void refreshView() {
+    private void refreshMessages() {
         //update the message containers
+        
+        MessagesServiceAsync messagesSvc = GWT.create(MessagesService.class);
+
+		// Set up the callback object.
+		AsyncCallback<ArrayList<MessagesDTO>> callback = new AsyncCallback<ArrayList<MessagesDTO>>() {
+			public void onFailure(Throwable caught) {
+				// TODO: Do something with errors.
+			}
+
+			public void onSuccess(ArrayList<MessagesDTO> result) {
+				view.setContents(result);
+			}
+		};
+
+		messagesSvc.getMessages(callback);
     }
 
     @Override
@@ -79,6 +101,6 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 
         SetPageTitleEvent.fire("Chat", "Public Online Chat", "", "", this);
 
-        refreshView();
+        refreshMessages();
     }
 }
