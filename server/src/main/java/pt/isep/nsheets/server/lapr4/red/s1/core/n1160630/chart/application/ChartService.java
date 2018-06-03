@@ -5,7 +5,6 @@
  */
 package pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.application;
 
-import com.google.gwt.user.client.rpc.RemoteService;
 import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.BarChart;

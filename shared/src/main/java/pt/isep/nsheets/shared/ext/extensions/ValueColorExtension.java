@@ -1,6 +1,5 @@
 package pt.isep.nsheets.shared.ext.extensions;
 
-import com.google.gwt.dev.shell.BrowserChannel;
 import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.ext.Extension;
