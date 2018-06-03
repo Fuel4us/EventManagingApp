@@ -6,6 +6,7 @@
 package pt.isep.nsheets.client.application.chart;
 
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -16,10 +17,8 @@ import com.googlecode.gwt.charts.client.ChartLoader;
 import com.googlecode.gwt.charts.client.ChartPackage;
 import com.googlecode.gwt.charts.client.ColumnType;
 import com.googlecode.gwt.charts.client.DataTable;
-import com.googlecode.gwt.charts.client.corechart.BarChart;
-import com.googlecode.gwt.charts.client.corechart.BarChartOptions;
-import com.googlecode.gwt.charts.client.options.Animation;
-import com.googlecode.gwt.charts.client.options.AnimationEasing;
+import com.googlecode.gwt.charts.client.corechart.ColumnChart;
+import com.googlecode.gwt.charts.client.corechart.ColumnChartOptions;
 import com.googlecode.gwt.charts.client.options.Bar;
 import com.googlecode.gwt.charts.client.options.Gridlines;
 import com.googlecode.gwt.charts.client.options.HAxis;
@@ -35,7 +34,8 @@ import gwt.material.design.client.ui.MaterialAnchorButton;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialCard;
 import gwt.material.design.client.ui.MaterialCardContent;
-import gwt.material.design.client.ui.MaterialRadioButton;
+import gwt.material.design.client.ui.MaterialCardTitle;
+import gwt.material.design.client.ui.MaterialSwitch;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.animate.MaterialAnimation;
@@ -50,13 +50,53 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
 
     private static final int ENTER_TIME = 700;
     private static final int EXIT_TIME = 500;
-    private boolean isLoop;
-    private BarChart chart;
-    private final String[] countries = new String[]{"Austria", "Bulgaria", "Denmark", "Greece"};
-    private final int[] rows = new int[]{1, 2, 3};
-    private int[][] columns = new int[][]{{1538156, 1336060, 1576579}, {366849, 400361, 440514}, {1001582, 993360, 1119450}, {941795, 997974, 930593}};
-    private int[][] values = new int[][]{{1336060, 1538156, 1576579}, {400361, 366849, 440514}, {1001582, 1119450, 993360}, {997974, 941795, 930593}};
+    private ColumnChart chart;
+//    private String[][] matrix = new String[][]{
+//        {"a", " 2", "3"},
+//        {"4", " 2", "3"},
+//        {"6", " 2", "3"},
+//        {"1", " 2", "3"},
+//        {"1", " 4", "3"},
+//        {"1", " 2", "3"}, 
+//        {"1", " 2", "3"}, 
+//        {"1", " 2", "3"},
+//        {"1", " 2", "3"}, 
+//        {"1", " 2", "3"}};
     private static boolean edit = false;
+    
+//    private CreateChartController create_controller = new CreateChartController();
+
+    @Override
+    public String getFistCell() {
+        return start_textbox.getValue();
+    }
+
+    @Override
+    public String getLastCell() {
+        return end_textbox.getValue();
+    }
+
+    @Override
+    public String chartName() {
+        return name_textbox.getValue();
+    }
+
+    @Override
+    public boolean isConsiderFirstField() {
+        return switch_considerFist.getValue();
+    }
+
+    @Override
+    public boolean isRow() {
+        return switch_isRow.getValue();
+    }
+
+    @Override
+    public void saveDataHandler(ClickHandler click) {
+        save_btn.addClickHandler(click);
+    }
+
+    
 
     interface Binder extends UiBinder<Widget, ChartView> {
     }
@@ -64,10 +104,10 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     class CellValidator extends RegExValidator {
 
         public CellValidator() {
-            super("[a-zA-Z][0-9]*", "The cell pattern should be \"[a-zA-Z][0-9]*\", i.e: \"A3\"");
+            super("[a-zA-Z]{1}[0-9]*", "The cell pattern should be \"[a-zA-Z][0-9]*\", i.e: \"A3\"");
         }
     }
-    
+
     class RequiredValidator extends RegExValidator {
 
         public RequiredValidator() {
@@ -85,13 +125,16 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     MaterialAnchorButton chart_button, edit_button;
 
     @UiField
-    MaterialButton save_btn;
+    MaterialButton save_btn, save_chart_btn;
 
     @UiField
     MaterialTextBox name_textbox, start_textbox, end_textbox;
 
     @UiField
-    MaterialRadioButton row_r_btn, col_r_btn, accept_r_btn, refuse_r_btn;
+    MaterialSwitch switch_isRow, switch_considerFist;
+    
+    @UiField
+    MaterialCardTitle chart_name;
 
     @UiHandler("chart_button")
     void click_chart(ClickEvent e) {
@@ -108,18 +151,16 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
 
         enterEditCard(false);
     }
-    
+
     @UiHandler("start_textbox")
     void typingStart(KeyPressEvent e) {
         start_textbox.validate();
     }
-    
+
     @UiHandler("end_textbox")
     void typingEnd(KeyPressEvent e) {
         end_textbox.validate();
     }
-    
-    
 
     @UiHandler("save_btn")
     void click_save(ClickEvent e) {
@@ -149,6 +190,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
 
     private void initialize() {
         enterEditCard(true);
+        chart_button.setEnabled(false);
         chart_card.setVisible(false);
         edit_button.setVisible(false);
         addValidators();
@@ -157,75 +199,112 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
 
             @Override
             public void run() {
-                chart = new BarChart();
+                chart = new ColumnChart();
                 cardContent.add(chart);
-                setLoop();
+//                setLoop();
             }
         });
     }
-    
-    private void addValidators(){
+
+    private void addValidators() {
         name_textbox.addValidator(new RequiredValidator());
         start_textbox.addValidator(new CellValidator());
         end_textbox.addValidator(new CellValidator());
     }
-    
-    private boolean validateForm(){
+
+    private boolean validateForm() {
         return !(!name_textbox.validate() || !start_textbox.validate() || !end_textbox.validate());
     }
 
-    private void setLoop() {
 
-        Timer timer = new Timer() {
-
-            public void run() {
-                if (isLoop) {
-                    drawChart(values, rows);
-                    isLoop = false;
-                } else {
-                    drawChart(columns, rows);
-                    isLoop = true;
-                }
-
-            }
-        };
-        timer.scheduleRepeating(1000);
-    }
-
-    private void drawChart(int[][] columns, int[] rows) {
+    @Override
+    public void drawChart(String chart_name, String[][] matrix, boolean isRow, boolean considerFirstLine) {
 
         // Prepare the data
         DataTable dataTable = DataTable.create();
-//                dataTable.
         dataTable.addColumn(ColumnType.STRING, "Year");
-        for (int i = 0; i < countries.length; i++) {
-            dataTable.addColumn(ColumnType.NUMBER, countries[i]);
-        }
-        dataTable.addRows(rows.length);
-        for (int i = 0; i < rows.length; i++) {
-            dataTable.setValue(i, 0, String.valueOf(rows[i]));
-        }
+        String fieldName = "Row";
+        int start;
 
-        for (int col = 0; col < columns.length; col++) {
-            for (int row = 0; row < columns[col].length; row++) {
-                dataTable.setValue(row, col + 1, columns[col][row]);
+        if (isRow) {
+            
+            char letter = 'A';
+            for (int i = 1; i <= matrix[0].length; i++) {
+                dataTable.addColumn(ColumnType.NUMBER, String.valueOf(i));
             }
+
+            dataTable.addRows(matrix.length);
+
+            if (considerFirstLine) {
+                start = 1;
+                for (int i = 0; i < matrix.length; i++) {
+                    dataTable.setValue(i, 0, String.valueOf(matrix[i][0]));
+                }
+            } else {
+                start = 0;
+                for (int i = 0; i < matrix.length; i++) {
+                    dataTable.setValue(i, 0, String.valueOf(letter));
+                    letter++;
+                }
+            }
+
+            for (int row = 0; row < matrix.length; row++) {
+                for (int col = start; col < matrix[row].length; col++) {
+                    if(canAddColumn(matrix[row][col]))
+                    dataTable.setValue(row, col + 1, matrix[row][col]);
+                }
+            }
+
+        } else {
+            fieldName = "Column";
+             char letter = 'A';
+            matrix = transposeMatrix(matrix);
+            for (int i = 0; i < matrix[0].length; i++) {
+                dataTable.addColumn(ColumnType.NUMBER, String.valueOf(letter));
+                letter++;
+            }
+
+            dataTable.addRows(matrix.length);
+
+            if (considerFirstLine) {
+                start = 1;
+                for (int i = 0; i < matrix.length; i++) {
+                    dataTable.setValue(i, 0, String.valueOf(matrix[i][0]));
+                }
+                
+            } else {
+                start = 0;
+                for (int i = 0; i < matrix.length; i++) {
+                    dataTable.setValue(i, 0, String.valueOf(i + 1));
+                }
+            }
+
+            for (int row = 0; row < matrix.length; row++) {
+                for (int col = start; col < matrix[row].length; col++) {
+                    if(canAddColumn(matrix[row][col]))
+                    dataTable.setValue(row, col + 1, matrix[row][col]);
+                }
+            }
+            
+
         }
 
         // Draw the chart
-        chart.draw(dataTable, getOptions());
+        this.chart_name.setText(chart_name);
+        chart.draw(dataTable, getOptions(fieldName, matrix));
     }
 
-    private BarChartOptions getOptions() {
+    private ColumnChartOptions getOptions(String HAxis_name, String[][]matrix) {
         // Grid Lines
         Gridlines lines = Gridlines.create();
         lines.setColor("fff");
 
         // Text Positions X and Y Axis
-        HAxis hAxis = HAxis.create();
+        HAxis hAxis = HAxis.create(HAxis_name);
         hAxis.setTextPosition(TextPosition.OUT);
 
-        VAxis vAxis = VAxis.create();
+        VAxis vAxis = VAxis.create("Values");
+        vAxis.setMinValue(0);
         vAxis.setGridlines(lines);
         hAxis.setGridlines(lines);
 
@@ -235,19 +314,12 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         legend.setAligment(LegendAlignment.START);
 
         // Set options
-        BarChartOptions options = BarChartOptions.create();
-        options.setHAxis(HAxis.create("Cups"));
-        options.setVAxis(VAxis.create("Year"));
-//		options.setColors("#2196f3");
-//		options.setVAxis(vAxis);
+        ColumnChartOptions options = ColumnChartOptions.create();
+        options.setVAxis(vAxis);
         options.setHAxis(hAxis);
         options.setLegend(legend);
-
-        // Set Animation
-        Animation animation = Animation.create();
-        animation.setDuration(700);
-        animation.setEasing(AnimationEasing.OUT);
-        options.setAnimation(animation);
+        options.setWidth(matrix.length * matrix[0].length * 50);
+        options.setHeight(300);
 
         // Set Bar
         Bar bar = Bar.create();
@@ -257,21 +329,18 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     }
 
     private void enterEditCard(boolean firstTime) {
-        animate(chart_card, Transition.SLIDEOUTRIGHT, chart_button, false, firstTime, EXIT_TIME);
-
-        animate(edit_card, Transition.SLIDEINLEFT, chart_button, true, firstTime, ENTER_TIME);
+        animate(chart_card, Transition.SLIDEOUTRIGHT, chart_button, edit_button, false, firstTime, EXIT_TIME);
+        animate(edit_card, Transition.SLIDEINLEFT, chart_button, edit_button, true, firstTime, ENTER_TIME);
 
     }
 
     private void enterChartCard() {
-
-        animate(edit_card, Transition.SLIDEOUTLEFT, edit_button, false, false, EXIT_TIME);
-
-        animate(chart_card, Transition.SLIDEINRIGHT, edit_button, true, false, ENTER_TIME);
+        animate(edit_card, Transition.SLIDEOUTLEFT, edit_button, chart_button, false, false, EXIT_TIME);
+        animate(chart_card, Transition.SLIDEINRIGHT, edit_button, chart_button, true, false, ENTER_TIME);
 
     }
 
-    private void animate(MaterialCard card, Transition transition, MaterialAnchorButton btn, boolean setVisible, boolean firstTime, int time) {
+    private void animate(MaterialCard card, Transition transition, MaterialAnchorButton btnIn, MaterialAnchorButton btnOut, boolean setVisible, boolean firstTime, int time) {
 
         if (!firstTime) {
 
@@ -283,6 +352,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
 
             if (!setVisible) {
                 animation.animate(card);
+                animateButton(btnOut, false);
 
                 Timer timer = new Timer() {
 
@@ -292,33 +362,45 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
                 };
                 timer.schedule(time);
             } else {
-
                 animation.animate(card);
-
                 card.setVisible(true);
-
-                animateButton(btn);
+                animateButton(btnIn, true);
             }
         }
 
     }
 
-    private void animateButton(MaterialAnchorButton btn) {
-        btn.setVisible(false);
+    private void animateButton(MaterialAnchorButton btn, boolean setVisible) {
 
         MaterialAnimation animation = new MaterialAnimation();
-        animation.setTransition(Transition.ROTATEIN);
-        animation.setDuration(500);
+
+        animation.setDuration(700);
         animation.setInfinite(false);
 
-        Timer timer = new Timer() {
+        if (setVisible) {
+            btn.setVisible(false);
+            animation.setTransition(Transition.ROTATEIN);
+            Timer timer = new Timer() {
 
-            public void run() {
-                btn.setVisible(true);
-                animation.animate(btn);
-            }
-        };
-        timer.schedule(700);
+                public void run() {
+                    btn.setVisible(true);
+                    animation.animate(btn);
+                }
+            };
+            timer.schedule(200);
+        } else {
+            animation.setTransition(Transition.ROTATEOUT);
+            animation.animate(btn);
+            Timer timer = new Timer() {
+
+                public void run() {
+                    btn.setVisible(false);
+
+                }
+            };
+            timer.schedule(700);
+
+        }
 
     }
 
@@ -330,20 +412,42 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
             } else if (start_textbox.getValue().length() == 0) {
                 MaterialToast.fireToast("Invalid Start");
                 return false;
-            } else if (!accept_r_btn.getValue() && !refuse_r_btn.getValue()) {
-                MaterialToast.fireToast("Select Consider First Element!");
-                return false;
-
             }
         }
         name_textbox.setEnabled(enable);
         end_textbox.setEnabled(enable);
         start_textbox.setEnabled(enable);
-        refuse_r_btn.setEnabled(enable);
-        accept_r_btn.setEnabled(enable);
-        row_r_btn.setEnabled(enable);
-        col_r_btn.setEnabled(enable);
+        switch_considerFist.setEnabled(enable);
+        switch_isRow.setEnabled(enable);
+        chart_button.setEnabled(!enable);
+        
         return true;
     }
 
+    //FIX ME
+    private String[][] transposeMatrix(String[][] m) {
+
+        String[][] temp = new String[m[0].length][m.length];
+        for (int i = 0; i < m.length; i++) {
+            for (int j = 0; j < m[0].length; j++) {
+                temp[j][i] = m[i][j];
+            }
+        }
+        return temp;
+    }
+    
+    
+    private boolean canAddColumn(String value) {
+        Double number;
+        
+        try{
+            number = Double.valueOf(value);
+            return true;
+        }catch (NumberFormatException ex){
+            return false;
+        }
+    }
+
+
+    
 }

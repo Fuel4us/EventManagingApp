@@ -9,7 +9,7 @@ expression
 	;
 	
 comparisonGlobal
-	: ICHA comparison FCHA
+	: ICHA? comparison FCHA?
 	| FOR ICHA concatenationFor FCHA
 	;
 	
@@ -90,7 +90,7 @@ QUOT: '"'
 	;
 
 /* Numeric literals */
-NUMBER: DIGITNOTZERO ( DIGIT )+ FRACTIONALPART? 
+NUMBER: DIGITNOTZERO ( DIGIT )* FRACTIONALPART? 
 		| DIGIT FRACTIONALPART;
 		
 FRACTIONALPART: ( COMMA ( DIGIT )+ );

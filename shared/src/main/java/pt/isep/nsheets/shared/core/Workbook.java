@@ -20,12 +20,17 @@
  */
 package pt.isep.nsheets.shared.core;
 
+import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
+import pt.isep.nsheets.shared.services.SpreadsheetDTO;
+import pt.isep.nsheets.shared.services.WorkbookDTO;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
@@ -53,9 +58,10 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 		= new ArrayList<WorkbookListener>();
 
 	/** The number of spreadsheets that have been created in the workbook */
-	private int createdSpreadsheets;
+	private int createdSpreadsheets = 0;
         
         @Id
+        @GeneratedValue
         private Long id;
 
 	/**
@@ -72,6 +78,10 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 		for (int i = 0; i < sheets; i++)
 			spreadsheets.add(new SpreadsheetImpl(this,
 				getNextSpreadsheetTitle()));
+	}
+
+	public Workbook(List<Spreadsheet> spreadsheets) {
+		this.spreadsheets = spreadsheets;
 	}
 
 	/**
@@ -216,7 +226,20 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         this.id = id;
     }
 
-/*
+	public WorkbookDTO toDTO() {
+		List<SpreadsheetDTO> spreadsheetDTOS = new ArrayList<>();
+		for(Spreadsheet ss : this.spreadsheets)
+			spreadsheetDTOS.add(ss.toDTO());
+		return new WorkbookDTO(spreadsheetDTOS, this.createdSpreadsheets);
+	}
+
+	public static Workbook fromDTO(WorkbookDTO dto) throws IllegalArgumentException, FormulaCompilationException {
+		List<Spreadsheet> spreadsheet = new ArrayList<>();
+		for(SpreadsheetDTO ss : dto.getSpreadsheets())
+			spreadsheet.add(ss.fromDTO());
+		return new Workbook(spreadsheet);
+	}
+	/*
  * GENERAL
  */
 

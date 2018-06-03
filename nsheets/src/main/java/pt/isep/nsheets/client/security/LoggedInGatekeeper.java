@@ -20,9 +20,6 @@ import javax.inject.Inject;
 
 import com.gwtplatform.mvp.client.annotations.DefaultGatekeeper;
 import com.gwtplatform.mvp.client.proxy.Gatekeeper;
-import gwt.material.design.client.ui.MaterialToast;
-import java.util.logging.Logger;
-import pt.isep.nsheets.client.Application;
 
 @DefaultGatekeeper
 public class LoggedInGatekeeper implements Gatekeeper {
@@ -37,5 +34,5 @@ public class LoggedInGatekeeper implements Gatekeeper {
     @Override
     public boolean canReveal() {
         return currentUser.isLoggedIn() || currentUser.getUser().isSuperuser();
-    }
+    }       
 }
