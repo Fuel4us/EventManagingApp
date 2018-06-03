@@ -8,6 +8,9 @@ import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * @author Gonçalo Silva
+ */
 @Entity
 public class Calendar implements AggregateRoot<Long>, Serializable {
 
