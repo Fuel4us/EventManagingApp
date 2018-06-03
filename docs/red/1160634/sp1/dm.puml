@@ -8,7 +8,7 @@ skinparam shadowing false
 hide empty methods
 
 class TextNote << (E,yellow) >> {
-	String title
+	List<String> title
 	String textNote
 	Date date
 }
