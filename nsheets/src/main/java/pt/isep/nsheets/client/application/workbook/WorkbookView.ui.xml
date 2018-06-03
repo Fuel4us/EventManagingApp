@@ -13,7 +13,8 @@ governing permissions and limitations under the License. #L% -->
 
     <ui:with field="res" type="pt.isep.nsheets.client.resources.AppResources" />
     <ui:import field="pt.isep.nsheets.client.place.NameTokens.chart"/> 
-    <ui:import field="pt.isep.nsheets.client.place.NameTokens.form"/> 
+    <ui:import field="pt.isep.nsheets.client.place.NameTokens.form"/>
+    <ui:import field="pt.isep.nsheets.client.place.NameTokens.code"/>
 
     <ui:style>
 	
@@ -117,11 +118,15 @@ governing permissions and limitations under the License. #L% -->
 			<m:MaterialIcon ui:field="conditionalButton" iconType="SETTINGS" iconColor="RED" waves="DEFAULT" circle="true" grid="s1"/>
 		</m:MaterialRow>
         <m:MaterialRow marginTop="60">
-            <m:MaterialLink  targetHistoryToken="{chart}" text="Create Chart" textColor="RED" iconType="INSERT_CHART" iconPosition="LEFT"/>
-        </m:MaterialRow>
-        
-        <m:MaterialRow marginTop="60">
-            <m:MaterialLink  targetHistoryToken="{form}" text="Forms" textColor="BLUE" iconType="POLYMER" iconPosition="LEFT"/>
+            <m:MaterialColumn>
+                <m:MaterialLink  targetHistoryToken="{chart}" text="Create Chart" textColor="RED" iconType="INSERT_CHART" iconPosition="LEFT"/>
+            </m:MaterialColumn>
+            <m:MaterialColumn>
+                <m:MaterialLink  targetHistoryToken="{code}" text="Add Visual Basic" textColor="ORANGE" iconType="CODE" iconPosition="LEFT"/>
+            </m:MaterialColumn>
+            <m:MaterialColumn>
+                <m:MaterialLink  targetHistoryToken="{form}" text="Forms" textColor="BLUE" iconType="POLYMER" iconPosition="LEFT"/>
+            </m:MaterialColumn>
         </m:MaterialRow>
          
         <m:MaterialRow>

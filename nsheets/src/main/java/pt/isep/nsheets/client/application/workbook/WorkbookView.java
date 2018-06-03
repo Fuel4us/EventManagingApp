@@ -200,6 +200,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 				FIREWORKS NEEDED
 			 */
 
+
 			conditionalModal.close();
 		});
 
