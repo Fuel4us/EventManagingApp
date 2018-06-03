@@ -25,18 +25,16 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.gwtplatform.mvp.client.ViewImpl;
 
 import com.google.gwt.user.client.ui.Panel;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
-import gwt.material.design.client.constants.Color;
-import gwt.material.design.client.constants.IconType;
+import gwt.material.design.addins.client.window.MaterialWindow;
 import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
@@ -46,7 +44,6 @@ import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
 import pt.isep.nsheets.shared.core.Address;
-import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
@@ -93,6 +90,16 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     /* End of Conditional UI Objects */
 
     @UiField
+    MaterialLink sortLink;
+    @UiField
+    MaterialWindow window;
+    @UiField
+    MaterialButton sortButton;
+    @UiField
+    MaterialTextBox windowFirstBox;
+    @UiField
+    MaterialTextBox windowSecondBox;
+    @UiField
     MaterialDataTable<SheetCell> customTable;
 
     @Override
@@ -106,8 +113,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     }
 
     
-
-
     interface Binder extends UiBinder<Widget, WorkbookView> {
     }
 
@@ -271,6 +276,28 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         panel.clear();
         panel.setVisible(false);
 
+        sortLink.addClickHandler(event -> {
+            window.open();
+        });
+        sortButton.addClickHandler(event -> {
+            try {
+                System.out.println("AQUI");
+                //WorkbookSortService.sortCells(windowFirstBox.getText(), windowSecondBox.getText(), this.customTable.getRow(0).getData().sheet,  true);
+                } catch (Exception e) {
+                // TODO Auto-generated catch block
+                // e.printStackTrace();
+                Window.alert(e.getMessage());
+                System.out.println(e.getStackTrace());
+            } finally {
+                //resultLabel.setText(result);
+ 
+                // refresh the table...
+                customTable.getView().setRedraw(true);
+                customTable.getView().refresh();
+                window.close();
+            }
+        });
+        
         customTable.getTableTitle().setText("The Future Worksheet!");
     }
 
