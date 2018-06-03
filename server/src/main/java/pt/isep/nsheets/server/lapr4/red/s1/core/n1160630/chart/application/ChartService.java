@@ -48,7 +48,7 @@ public class ChartService{
             
             case BAR_CHART:
                 Workbook wb = new Workbook("Teste", "Teste", dto.getContent());
-                chart = new BarChart(dto.getGraph_name(), wb.getSpreadsheet(0), dto.getFirstAddress(), dto.getLastAddress(),dto.isConsiderFirstField(), dto.isIsRow());
+                chart = new BarChart(dto.getGraph_name(), wb.getSpreadsheet(0), dto.getFirstAddress(), dto.getLastAddress(),dto.isConsiderFirstField(), dto.isRow());
                 break;
                 
         }

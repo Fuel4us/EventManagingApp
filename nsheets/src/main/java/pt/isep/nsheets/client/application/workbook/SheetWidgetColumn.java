@@ -127,11 +127,6 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
             Cell cell = object.getCell(context.getColumn() - 1);
             if (context.getColumn() > 0) {
                 this.view.setActiveCell(cell);
-                if (cell.hasChart()) {
-                    updateCellCharts(cell);
-                    this.view.popChart.setPopupPosition(event.getClientX(), event.getClientY());
-                    this.view.popChart.open();
-                }
 //				this.view.getTable().getTableTitle().setText(object.getCell(context.getColumn()-1).toString()+": "+object.getCell(context.getColumn()-1).getContent().toString());
 //				this.view.getFirstBox().setText(object.getCell(context.getColumn()-1).getContent().toString());
 
@@ -141,19 +136,6 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
 
         return widget;
     }
-    
-protected void updateCellCharts(Cell cell){
-        view.chart_dropdown.clear();
-        for(ChartDTO chart: cell.chartList()){
-            MaterialLink link = new MaterialLink(chart.getGraph_name(),null,IconType.INSERT_CHART);
-//            link.setTargetHistoryToken(NameTokens.getChart());
-            link.setTextColor(Color.BLACK);
-//            
-            link.addClickHandler(event ->{
-            });
-            
-            view.chart_dropdown.add(link);
-            
-        }
-    }
 }
+    
+

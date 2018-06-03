@@ -7,12 +7,12 @@ skinparam shadowing false
 
 actor User
 
-User -> Browser : request view preview chart
-Browser -> Server : getCellInfo(cell)
+User -> Browser : save chart 
+Browser -> Server : saveChart(chart)
 database DataBase
-Server -> DataBase: fecth
+Server -> DataBase: save
 Server --> Browser : return
-Browser -> Browser : display
+Browser -> Browser : display message 
 
 
 @enduml
