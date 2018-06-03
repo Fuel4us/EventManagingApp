@@ -25,6 +25,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.AddressDTO;
 
 /**
  * An address in a spreadsheet that denotes to the location of a cell.
@@ -195,5 +196,12 @@ public class Address implements Comparable<Address>, Serializable {
         }
         return new String(string);
     }
-
+    
+    public AddressDTO toDTO(){
+        return new AddressDTO(this.column, this.row, this.string);
+    }
+    
+    public static Address fromDTO(AddressDTO dto){
+        return new Address(dto.column, dto.row);
+    }
 }
