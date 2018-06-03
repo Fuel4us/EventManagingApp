@@ -2,6 +2,7 @@ package pt.isep.nsheets.client.application.chart;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -18,6 +19,7 @@ import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.services.ChartDTO;
+import pt.isep.nsheets.shared.services.ChartType;
 import pt.isep.nsheets.shared.services.ChartsService;
 import pt.isep.nsheets.shared.services.ChartsServiceAsync;
 
@@ -33,6 +35,8 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
 
         void saveDataHandler(ClickHandler click);
 
+        void saveChart(ClickHandler click);
+
         String getFistCell();
 
         String getLastCell();
@@ -42,8 +46,8 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
         boolean isConsiderFirstField();
 
         boolean isRow();
-        
-        void drawChart(String chart_name, String[][] matrix, boolean permute, boolean considerFirstLine) ;
+
+        void drawChart(String chart_name, String[][] matrix, boolean permute, boolean considerFirstLine);
 
     }
 
@@ -56,56 +60,34 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
     ChartPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
         this.view = view;
-
+        
         this.view.saveDataHandler(event -> {
+            
+            ChartDTO dto = createDTOTest();
 
-//           
-//                Window.alert(view.chartName() + "\n"
-//                        + view.getFistCell() + "\n"
-//                        + view.getLastCell() + "\n"
-//                        + String.valueOf(view.isConsiderFirstField()) + "\n"
-//                        + String.valueOf(view.isRow()) + "\n");
+            this.view.drawChart(dto.getGraph_name(), dto.getContent(), dto.isIsRow(), dto.isConsiderFirstField());
 
-                String[][] matrix = new String[][]{
-                    {"a", " 2", "3"},
-                    {"4", " 2", "3"},
-                    {"6", " 2", "3"},
-                    {"1", " 2", "3"},
-                    {"1", " 4", "3"},
-                    {"1", " 2", "3"},
-                    {"1", " 2", "3"},
-                    {"1", " 2", "3"},
-                    {"1", " 2", "3"},
-                    {"1", " 2", "40"}};
-                
-                
-                Workbook wb = new Workbook(matrix);
-                Spreadsheet ss = wb.getSpreadsheet(0);
-                
-                ChartDTO dto = new ChartDTO(
-                        view.chartName(),
-                        new Address(view.getLastCell()),
-                        new Address(view.getLastCell()),
-                        matrix,
-                        view.isRow(),
-                        view.isConsiderFirstField());
-                
-                this.view.drawChart(dto.getGraph_name(), dto.getContent(), dto.isIsRow(), dto.isConsiderFirstField());
+        });
 
-                ChartsServiceAsync chartSrv = GWT.create(ChartsService.class);
-                AsyncCallback<ChartDTO> callback = new AsyncCallback<ChartDTO>() {
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        MaterialToast.fireToast("Error --> " + caught.getMessage());
-                    }
+        this.view.saveChart(event -> {
 
-                    @Override
-                    public void onSuccess(ChartDTO result) {
-//                        Window.alert(result.toString());
-                    }
+            ChartDTO dto = createDTOTest();
+            
+            ChartsServiceAsync chartSrv = GWT.create(ChartsService.class);
+            AsyncCallback<ChartDTO> callback = new AsyncCallback<ChartDTO>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error --> " + caught.getMessage());
+                }
 
-                };
-//                
+                @Override
+                public void onSuccess(ChartDTO result) {
+                    Window.alert(result.toString());
+                }
+
+            };
+            
+            chartSrv.addChart(dto, ChartType.BAR_CHART, callback);
 
         });
 
@@ -114,8 +96,7 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
     private void refreshView() {
     }
 
-    private ChartDTO createBarChart() {
-
+    private ChartDTO createDTOTest() {
         String[][] matrix = new String[][]{
             {"a", " 2", "3"},
             {"4", " 2", "3"},
@@ -126,12 +107,20 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
             {"1", " 2", "3"},
             {"1", " 2", "3"},
             {"1", " 2", "3"},
-            {"1", " 2", "3"}};
+            {"1", " 2", "40"}};
 
-        Workbook wb = new Workbook(matrix);
-        Spreadsheet ss = wb.getSpreadsheet(0);
+//        Workbook wb = new Workbook(matrix);
+//        Spreadsheet ss = wb.getSpreadsheet(0);
 
-        return null;
+        ChartDTO dto = new ChartDTO(
+                view.chartName(),
+                new Address(view.getLastCell()),
+                new Address(view.getLastCell()),
+                matrix,
+                view.isRow(),
+                view.isConsiderFirstField());
+
+        return dto;
     }
 
     @Override

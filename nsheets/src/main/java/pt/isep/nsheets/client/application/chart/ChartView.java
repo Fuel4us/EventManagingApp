@@ -41,6 +41,7 @@ import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.animate.MaterialAnimation;
 import gwt.material.design.client.ui.animate.Transition;
 import javax.inject.Inject;
+import pt.isep.nsheets.shared.core.Address;
 
 /**
  *
@@ -51,20 +52,8 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     private static final int ENTER_TIME = 700;
     private static final int EXIT_TIME = 500;
     private ColumnChart chart;
-//    private String[][] matrix = new String[][]{
-//        {"a", " 2", "3"},
-//        {"4", " 2", "3"},
-//        {"6", " 2", "3"},
-//        {"1", " 2", "3"},
-//        {"1", " 4", "3"},
-//        {"1", " 2", "3"}, 
-//        {"1", " 2", "3"}, 
-//        {"1", " 2", "3"},
-//        {"1", " 2", "3"}, 
-//        {"1", " 2", "3"}};
     private static boolean edit = false;
     
-//    private CreateChartController create_controller = new CreateChartController();
 
     @Override
     public String getFistCell() {
@@ -94,6 +83,11 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     @Override
     public void saveDataHandler(ClickHandler click) {
         save_btn.addClickHandler(click);
+    }
+
+    @Override
+    public void saveChart(ClickHandler click) {
+        save_chart_btn.addClickHandler(click);
     }
 
     
@@ -434,6 +428,15 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
             }
         }
         return temp;
+    }
+    
+    public ChartView fillChartInfo(String chart_name, Address firstCell, Address lastCell, boolean isConsideredFirst, boolean isRow ){
+        this.chart_name.setText(chart_name);
+        this.switch_isRow.setValue(isRow);
+        this.switch_considerFist.setValue(isConsideredFirst);
+        this.start_textbox.setText(firstCell.toString());
+        this.end_textbox.setText(lastCell.toString());
+        return this;
     }
     
     

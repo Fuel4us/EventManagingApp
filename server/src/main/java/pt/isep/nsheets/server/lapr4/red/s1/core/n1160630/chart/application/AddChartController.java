@@ -15,11 +15,17 @@ import pt.isep.nsheets.shared.services.ChartType;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
 /**
- *
+ * The Add Chart Controller
  * @author pedromonteiro
  */
 public class AddChartController implements Controller{
     
+    /**
+     * Add a chart to the persistence
+     * @param chartDto Chart DTO
+     * @param type Type of chart
+     * @return the added Chart
+     */
     public Chart addChart (ChartDTO chartDto, ChartType type){
         try {
             return new ChartService().addUChart(chartDto, type);
@@ -29,6 +35,10 @@ public class AddChartController implements Controller{
         }
     }
     
+    /**
+     * Returns all Charts in the persistence
+     * @return all charts
+     */
     public Iterable<Chart> listAllCharts() {
         return new ChartService().allCharts();
     }
