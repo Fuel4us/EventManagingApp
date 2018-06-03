@@ -195,6 +195,21 @@ governing permissions and limitations under the License. #L% -->
             </ma:popupmenu.MaterialPopupMenu>
 
         </m:MaterialRow>
+        <ma:window.MaterialWindow ui:field="window" width="70%" title="Define Sort Range">
+            <m:MaterialPanel padding="32" textAlign="CENTER" height="300px">
+                <m:MaterialRow grid="s6 m10">
+                    <m:MaterialTextBox
+                        m:id="fBox" ui:field="windowFirstBox" placeholder="Enter First Cell here" label="Enter First Cell Here"
+                        active="true" grid="s11" />
+                    <m:MaterialTextBox
+                        m:id="fBox" ui:field="windowSecondBox" placeholder="Enter Second Cell Here" label="Enter Second Cell Here"
+                        active="true" grid="s11"  />
+                </m:MaterialRow>
+                <m:MaterialRow grid="s6 m2">
+                    <m:MaterialButton ui:field="sortButton" width="100%;" text="Sort" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK"/>
+                </m:MaterialRow>
+            </m:MaterialPanel>
+        </ma:window.MaterialWindow>
     </g:HTMLPanel>
 
 </ui:UiBinder>
