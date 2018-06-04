@@ -1,4 +1,4 @@
-@startuml  analysis2.png
+@startuml  analysis2
 skinparam handwritten true
 skinparam monochrome true
 skinparam packageStyle rect
@@ -7,10 +7,10 @@ skinparam shadowing false
 
 actor User
 
-User -> Browser : save chart 
-Browser -> Server : saveChart(chart)
+User -> Browser : obtain charts 
+Browser -> Server : getCharts()
 database DataBase
-Server -> DataBase: save
+Server -> DataBase: fetch
 Server --> Browser : return
 Browser -> Browser : display message 
 

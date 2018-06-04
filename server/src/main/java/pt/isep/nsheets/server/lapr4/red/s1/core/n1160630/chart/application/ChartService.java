@@ -11,7 +11,6 @@ import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.BarChart;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.Chart;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.persistence.ChartRepository;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
-import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
 /**
@@ -32,12 +31,11 @@ public class ChartService{
     /**
      * Adds a Chart to the persistence
      * @param dto Chart DTO
-     * @param ss
      * @return the added Chart
      * @throws DataConcurrencyException
      * @throws DataIntegrityViolationException
      */
-    public Chart addUChart(ChartDTO dto, Spreadsheet ss) throws DataConcurrencyException, DataIntegrityViolationException {
+    public Chart addUChart(ChartDTO dto) throws DataConcurrencyException, DataIntegrityViolationException {
 
         final ChartRepository chartRepo = PersistenceContext.repositories().charts();
         
@@ -47,7 +45,7 @@ public class ChartService{
             
             case BAR_CHART:
                 
-                chart = new BarChart(dto, ss);
+                chart = new BarChart(dto);
                 break;
                 
         }

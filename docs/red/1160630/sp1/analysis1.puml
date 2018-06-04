@@ -1,4 +1,4 @@
-@startuml  analysis1.png
+@startuml  analysis1
 skinparam handwritten true
 skinparam monochrome true
 skinparam packageStyle rect

@@ -6,19 +6,12 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTMLTable;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.googlecode.gwt.charts.client.ColumnType;
-import com.googlecode.gwt.charts.client.DataTable;
 import com.gwtplatform.mvp.client.ViewImpl;
+import gwt.material.design.addins.client.combobox.MaterialComboBox;
 import gwt.material.design.addins.client.window.MaterialWindow;
-import gwt.material.design.client.constants.FlexAlignItems;
-import gwt.material.design.client.constants.TextAlign;
+import gwt.material.design.client.constants.HideOn;
 import gwt.material.design.client.ui.MaterialButton;
-import gwt.material.design.client.ui.MaterialPanel;
-import gwt.material.design.client.ui.MaterialRow;
-import gwt.material.design.client.ui.MaterialTextArea;
 import gwt.material.design.client.ui.MaterialTextBox;
 import javax.inject.Inject;
 
@@ -36,13 +29,16 @@ class FormView extends ViewImpl implements FormPresenter.MyView {
 
     @UiField
     MaterialButton btnAddRow, btnRemoveRow, btnEditRow, btnPlayForm1, btnPlayForm2, btnPlayForm3;
-    
+
     @UiField
-    MaterialTextBox txtArea;
+    MaterialTextBox txtAreaRemove, txtAreaEdit, txtAreaAdd;
+
+    @UiField
+    MaterialComboBox comboWidgets;
 
     FlexTable table;
     int i = 0;
-    
+
     @Inject
     FormView(Binder uiBinder) {
         table = new FlexTable();
@@ -64,30 +60,87 @@ class FormView extends ViewImpl implements FormPresenter.MyView {
     @UiHandler("btnAddRow")
     void addRowButton(ClickEvent e) {
         MaterialButton resolveButton = new MaterialButton("Resolve");
-        MaterialTextBox writeLabel = new MaterialTextBox();
-        writeLabel.setPlaceholder("Write here:");
-        writeLabel.setEnabled(false);
-        writeLabel.setGrid("s12");
+        MaterialTextBox writeLabel1 = new MaterialTextBox();
+        MaterialTextBox writeLabel2 = new MaterialTextBox();
         i++;
-        table.setWidget(i, 1, resolveButton);
-        table.setWidget(i, 2, writeLabel);
+        switch (comboWidgets.getSelectedIndex()) {
+            case 0:
+                writeLabel1.setEnabled(false);
+                table.setWidget(i, 1, writeLabel1);
+                break;
+            case 1:
+                table.setWidget(i, 1, resolveButton);
+                break;
+            case 2:
+                writeLabel1.setEnabled(false);
+                writeLabel1.setGrid("s12");
+                if (txtAreaAdd.getText().isEmpty()) {
+                    writeLabel1.setPlaceholder("Write here:");
+                } else {
+                    writeLabel1.setPlaceholder(txtAreaAdd.getText());
+                }
+                table.setWidget(i, 1, writeLabel1);
+                break;
+            case 3:
+                writeLabel1.setEnabled(false);
+                writeLabel1.setGrid("s12");
+                if (txtAreaAdd.getText().isEmpty()) {
+                    writeLabel1.setPlaceholder("Write here:");
+                } else {
+                    writeLabel1.setPlaceholder(txtAreaAdd.getText());
+                }
+                writeLabel2.setEnabled(false);
+                writeLabel2.setGrid("s12");
+                writeLabel2.setPlaceholder("Write here:");
+                table.setWidget(i, 1, writeLabel1);
+                table.setWidget(i, 2, writeLabel2);
+                break;
+            default:
+                break;
+        }
+
         window.add(table);
+
+    }
+
+    @UiHandler("comboWidgets")
+    void comboWidgets(ClickEvent e) {
+        comboWidgets.validate();
+    }
+
+    @UiHandler("txtAreaAdd")
+    void getTextAdd(KeyPressEvent e) {
+        txtAreaAdd.validate();
+    }
+
+    @UiHandler("txtAreaRemove")
+    void getTextRemove(KeyPressEvent e) {
+        txtAreaRemove.validate();
     }
 
     @UiHandler("btnRemoveRow")
     void removeRowButton(ClickEvent e) {
-        int index = Integer.parseInt(txtArea.getValue());
-        table.removeRow(index-1);
+        int index = Integer.parseInt(txtAreaRemove.getValue());
+        table.removeRow(index);
     }
-    
-    @UiHandler("txtArea")
-    void getText(KeyPressEvent e) {
-        txtArea.validate();
-    }
-    
+
     @UiHandler("btnEditRow")
     void editRowButton(ClickEvent e) {
-        window.open();
+        int index = Integer.parseInt(txtAreaEdit.getValue());
+        MaterialTextBox writeLabel = new MaterialTextBox();
+        writeLabel.setPlaceholder("Write here:");
+        writeLabel.setEnabled(true);
+        writeLabel.setGrid("s12");
+        if (index > table.getRowCount()) {
+            table.setWidget(table.getRowCount() - 1, 2, writeLabel);
+        } else {
+            table.setWidget(index, 2, writeLabel);
+        }
+    }
+
+    @UiHandler("txtAreaEdit")
+    void getTextEdit(KeyPressEvent e) {
+        txtAreaEdit.validate();
     }
 
     @UiHandler("btnPlayForm1")

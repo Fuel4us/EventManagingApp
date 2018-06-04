@@ -1,7 +1,7 @@
 package pt.isep.nsheets.client.application.export;
 
-import pt.isep.nsheets.shared.core.Workbook;
-import pt.isep.nsheets.shared.services.ExportDTO;
+import pt.isep.nsheets.client.application.Settings;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.ExportService;
 import pt.isep.nsheets.shared.services.ExportServiceAsync;
 import com.google.gwt.core.client.GWT;
@@ -39,36 +39,35 @@ public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPre
 
             ExportServiceAsync exportSrv = GWT.create(ExportService.class);
 
-            AsyncCallback<ExportDTO> callback = new AsyncCallback<ExportDTO>() {
+            AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
                 @Override
                 public void onFailure(Throwable caught) { MaterialToast.fireToast("Error:" + caught.getMessage(), "rounded"); }
 
                 @Override
-                public void onSuccess(ExportDTO result) {
+                public void onSuccess(WorkbookDTO result) {
                     MaterialToast.fireToast("Exporting file...", "rounded");
                 }
             };
-            ExportDTO exportDTO = new ExportDTO();
 
-            //exportSrv.exportWorkbook(exportDTO, callback);
+            WorkbookDTO workbookDTO = Settings.getInstance().getWorkbook().toDTO();
+
+            exportSrv.exportWorkbook(workbookDTO,"CSV", callback);
         });
 
         getView().pdfButtonClickHandler(e -> {
             ExportServiceAsync exportServiceAsync = GWT.create(ExportService.class);
 
-            AsyncCallback<ExportDTO> callback = new AsyncCallback<ExportDTO>() {
+            AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
                 @Override
                 public void onFailure(Throwable throwable) {
                     MaterialToast.fireToast("Error! " + throwable.getMessage(), "rounded");
                 }
                 @Override
-                public void onSuccess(ExportDTO exportDTO) {
+                public void onSuccess(WorkbookDTO exportDTO) {
                     MaterialToast.fireToast("Created PDF of workbook", "rounded");
                 }
             };
 
-            ExportDTO exportDTO = new ExportDTO();
-          //  exportServiceAsync.exportWorkbook(exportDTO, callback);
 
         });
     }

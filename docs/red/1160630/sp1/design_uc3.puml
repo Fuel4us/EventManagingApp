@@ -1,0 +1,42 @@
+@startuml  design3.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+boundary WorkbookView
+control WorkbookPresenter
+control ChartService
+control ListChartsController
+control ChartsService
+entity ChartRepository
+database Database
+
+box "NSheets Client"
+participant WorkbookView
+participant WorkbookPresenter
+end box
+
+box "Server"
+participant ChartService
+participant ListChartsController
+participant ChartsService
+participant ChartRepository
+end box
+
+box "Database"
+participant Database
+end box
+
+User -> WorkbookPresenter : onReveal() / navigate to page
+WorkbookPresenter -> ChartService : getCharts()
+ChartService -> ListChartsController : listCharts()
+ListChartsController --> ChartService : allCharts()
+ChartService -> ChartRepository : findAll()
+ChartRepository -> Database : fetch
+ChartService --> WorkbookPresenter : onSuccess()
+WorkbookPresenter --> WorkbookView : setContents()
+
+@enduml
