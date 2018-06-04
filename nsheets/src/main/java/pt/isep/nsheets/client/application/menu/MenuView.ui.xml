@@ -82,11 +82,7 @@
                 <m:MaterialLink targetHistoryToken="{tokens.getAbout}" iconPosition="LEFT" iconType="INFO_OUTLINE" text="About"/>
             </m.html:ListItem>
         </m:MaterialSideNavPush>
-        
 
-
- 	
-        
     </m:MaterialPanel>
         
 </ui:UiBinder>
