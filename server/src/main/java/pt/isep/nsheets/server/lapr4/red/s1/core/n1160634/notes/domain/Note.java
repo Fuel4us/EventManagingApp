@@ -1,13 +1,12 @@
 package pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.domain;
 
 import java.io.Serializable;
-//import java.util.Calendar;
-//import java.util.Date;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-//import javax.persistence.Temporal;
+import javax.persistence.Temporal;
 
 import eapli.framework.domain.AggregateRoot;
 import pt.isep.nsheets.shared.services.NoteDTO;
@@ -27,8 +26,8 @@ public class Note implements AggregateRoot<Long>, Serializable {
     private String titleNote;
     private String textNote;
 
-//    @Temporal(javax.persistence.TemporalType.DATE)
-//    private Date dateNote;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateNote;
 
     /**
      *
@@ -48,7 +47,7 @@ public class Note implements AggregateRoot<Long>, Serializable {
             this.textNote = textNote;
         }
 
-//        this.dateNote = Calendar.getInstance().getTime();
+        this.dateNote = new Date();
     }
 
     /**
@@ -56,9 +55,6 @@ public class Note implements AggregateRoot<Long>, Serializable {
      * serializable and for ORM!
      */
     protected Note() {
-        this.titleNote = "";
-        this.textNote = "";
-//        this.dateNote = new Date();
     }
 
     /**
@@ -77,13 +73,13 @@ public class Note implements AggregateRoot<Long>, Serializable {
         return this.textNote;
     }
 
-//    /**
-//     *
-//     * @return
-//     */
-//    public Date getDateNote() {
-//        return dateNote;
-//    }
+    /**
+     *
+     * @return
+     */
+    public Date getDateNote() {
+        return dateNote;
+    }
 
     /**
      * It updates the date of the Note automatically
@@ -92,7 +88,7 @@ public class Note implements AggregateRoot<Long>, Serializable {
      */
     public void changeTitleNote(String titleNote) {
         this.titleNote = titleNote;
-//        this.dateNote = Calendar.getInstance().getTime();
+        this.dateNote = new Date();
     }
 
     /**
@@ -102,13 +98,12 @@ public class Note implements AggregateRoot<Long>, Serializable {
      */
     public void changeTextNote(String textNote) {
         this.textNote = textNote;
-//        this.dateNote = Calendar.getInstance().getTime();
+        this.dateNote = new Date();
     }
 
     @Override
     public String toString() {
-//        return "Note{" + "titleNote=" + titleNote + ", textNote=" + textNote + ", dateNote=" + dateNote + '}';
-        return "Note{" + "titleNote=" + titleNote + ", textNote=" + textNote + '}';
+        return "Note{" + "titleNote=" + titleNote + ", textNote=" + textNote + ", dateNote=" + dateNote + '}';
     }
 
     @Override
@@ -129,8 +124,7 @@ public class Note implements AggregateRoot<Long>, Serializable {
             return false;
         }
 
-//        return this.dateNote.equals(that.dateNote);
-        return true;
+        return this.dateNote.equals(that.dateNote);
     }
 
     @Override
