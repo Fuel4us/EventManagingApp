@@ -44,10 +44,12 @@ At this point in the Project, due to GWT restrictions, and as extensions must in
 
 Applied Strategy pattern for each of the Extensions
 Applied Singleton pattern for ExtensionManager
+DTO pattern for persistence
 
 # 5. Implementation
 
 As most of the implementation used in CSheets is compatible with NSheets, the main work that had to be done was to restructure the ExtensionManager class to comply with GWT restrictions.
+Also, creation of a View for Extension configuration was necessary.
 
 # 6. Integration/Demonstration
 

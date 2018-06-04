@@ -14,7 +14,6 @@ import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
-import pt.isep.nsheets.server.lapr4.red.s1.core.n1160629.extensions.application.ConfigureValueColorExtensionController;
 import pt.isep.nsheets.shared.services.ConfigurationDTO;
 import pt.isep.nsheets.shared.services.ConfigurationService;
 import pt.isep.nsheets.shared.services.ConfigurationServiceAsync;
@@ -27,14 +26,14 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
 
         void addConfirmationHandler(ClickHandler ch);
 
-        String getBgColorPosValue();
-        String getFgColorPosValue();
-        String getBgColorNegValue();
-        String getFgColorNegValue();
-        void setBgColorPosValue(String bgColorPosValue);
-        void setFgColorPosValue(String fgColorPosValue);
-        void setBgColorNegValue(String bgColorNegValue);
-        void setFgColorNegValue(String fgColorNegValue);
+        int getBgColorPosValue();
+        int getFgColorPosValue();
+        int getBgColorNegValue();
+        int getFgColorNegValue();
+        void setBgColorPosValue(int index);
+        void setFgColorPosValue(int index);
+        void setBgColorNegValue(int index);
+        void setFgColorNegValue(int index);
     }
 
 
@@ -63,7 +62,7 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
                 }
             };
 
-            String[] values = new String[4];
+            int[] values = new int[4];
             values[0]=view.getBgColorPosValue();
             values[1]=view.getFgColorPosValue();
             values[2]=view.getBgColorNegValue();

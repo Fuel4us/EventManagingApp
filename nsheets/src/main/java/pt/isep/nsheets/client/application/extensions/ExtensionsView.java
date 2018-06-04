@@ -5,8 +5,9 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
+import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.ui.MaterialButton;
-import gwt.material.design.client.ui.MaterialInput;
+import gwt.material.design.client.ui.MaterialListValueBox;
 
 import javax.inject.Inject;
 
@@ -15,60 +16,61 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
     @UiField
     MaterialButton confirmButton;
     @UiField
-    MaterialInput bgColorPos;
+    MaterialListValueBox<Color> bgColorPos;
     @UiField
-    MaterialInput fgColorPos;
+    MaterialListValueBox<Color> fgColorPos;
     @UiField
-    MaterialInput bgColorNeg;
+    MaterialListValueBox<Color> bgColorNeg;
     @UiField
-    MaterialInput fgColorNeg;
+    MaterialListValueBox<Color> fgColorNeg;
 
 
     @Inject
     ExtensionsView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
 
+        populateColours();
 
     }
 
     @Override
-    public String getBgColorPosValue() {
-        return bgColorPos.getValue();
+    public int getBgColorPosValue() {
+        return bgColorPos.getSelectedIndex();
     }
 
     @Override
-    public String getFgColorPosValue() {
-        return fgColorPos.getValue();
+    public int getFgColorPosValue() {
+        return fgColorPos.getSelectedIndex();
     }
 
     @Override
-    public String getBgColorNegValue() {
-        return bgColorNeg.getValue();
+    public int getBgColorNegValue() {
+        return bgColorNeg.getSelectedIndex();
     }
 
     @Override
-    public String getFgColorNegValue() {
-        return fgColorNeg.getValue();
+    public int getFgColorNegValue() {
+        return fgColorNeg.getSelectedIndex();
     }
 
     @Override
-    public void setBgColorPosValue(String bgColorPosValue) {
-        this.bgColorPos.setValue(bgColorPosValue);
+    public void setBgColorPosValue(int index) {
+        bgColorPos.setItemSelected(index, true);
     }
 
     @Override
-    public void setFgColorPosValue(String fgColorPosValue) {
-        this.fgColorPos.setValue(fgColorPosValue);
+    public void setFgColorPosValue(int index) {
+        fgColorPos.setItemSelected(index, true);
     }
 
     @Override
-    public void setBgColorNegValue(String bgColorNegValue) {
-        this.bgColorNeg.setValue(bgColorNegValue);
+    public void setBgColorNegValue(int index) {
+        bgColorNeg.setItemSelected(index, true);
     }
 
     @Override
-    public void setFgColorNegValue(String fgColorNegValue) {
-        this.fgColorNeg.setValue(fgColorNegValue);
+    public void setFgColorNegValue(int index) {
+        fgColorNeg.setItemSelected(index, true);
     }
 
     @Override
@@ -76,6 +78,15 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
         confirmButton.addClickHandler(ch);
     }
 
+
+    private void populateColours(){
+        for (Color c : Color.values()){
+            bgColorPos.addItem(c);
+            fgColorPos.addItem(c);
+            bgColorNeg.addItem(c);
+            fgColorNeg.addItem(c);
+        }
+    }
 
     interface Binder extends UiBinder<Widget, ExtensionsView> {
     }

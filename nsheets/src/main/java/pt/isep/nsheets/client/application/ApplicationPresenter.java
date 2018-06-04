@@ -19,6 +19,8 @@
  */
 package pt.isep.nsheets.client.application;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.Presenter;
@@ -28,8 +30,13 @@ import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.Proxy;
 
+import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.menu.MenuPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
+import pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629.ValueColorExtension;
+import pt.isep.nsheets.shared.services.ConfigurationDTO;
+import pt.isep.nsheets.shared.services.ConfigurationService;
+import pt.isep.nsheets.shared.services.ConfigurationServiceAsync;
 
 public class ApplicationPresenter
         extends Presenter<ApplicationPresenter.MyView, ApplicationPresenter.MyProxy> 
@@ -54,7 +61,24 @@ public class ApplicationPresenter
             MyView view,
             MyProxy proxy, MenuPresenter menuPresenter) {
         super(eventBus, view, proxy, RevealType.Root);
-        
+
+        //load extension configuration before showing anything else
+        ConfigurationServiceAsync configurationSvc = GWT.create(ConfigurationService.class);
+
+        AsyncCallback<ConfigurationDTO> callback = new AsyncCallback<ConfigurationDTO>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                MaterialToast.fireToast("Error retrieving extension configuration! " + caught.getMessage());
+            }
+
+            @Override
+            public void onSuccess(ConfigurationDTO result) {
+                ValueColorExtension.setConfig(result.fromDTO());
+            }
+        };
+        configurationSvc.getConfiguration(callback);
+        //End of extension configuration loading
+
         this.menuPresenter = menuPresenter;
             
     }

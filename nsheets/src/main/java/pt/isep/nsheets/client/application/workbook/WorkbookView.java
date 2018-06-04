@@ -19,17 +19,20 @@
  */
 package pt.isep.nsheets.client.application.workbook;
 
+import com.google.gwt.core.client.GWT;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
+
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -37,20 +40,27 @@ import com.gwtplatform.mvp.client.ViewImpl;
 import com.google.gwt.user.client.ui.Panel;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
 import gwt.material.design.addins.client.window.MaterialWindow;
+
+import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.table.MaterialDataTable;
-import pt.isep.nsheets.shared.core.Spreadsheet;
-import pt.isep.nsheets.shared.core.Workbook;
+import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
+
+import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.Formula.BinaryOperationExtension;
+
 import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.application.SortSpreadsheetController;
 import pt.isep.nsheets.shared.core.Address;
-import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
-import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
+import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.shared.services.ChartDTO;
+import pt.isep.nsheets.shared.services.WorkbooksService;
+import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
 // public class WorkbookView extends NavigatedView implements WorkbookPresenter.MyView {
@@ -83,7 +93,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialIcon conditionalButton;
     @UiField
-    MaterialTextBox conditionalText2;
+    MaterialTextBox conditionalText;
+    //@UiField
+    //MaterialTextBox conditionalText2;
     @UiField
     MaterialIcon conditionalModalCloseButton;
     @UiField
@@ -93,10 +105,20 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialListBox lstConditions;
     @UiField
+    MaterialListValueBox backgroundColorTrue;
+    @UiField
+    MaterialListValueBox fontColorTrue;
+    @UiField
+    MaterialListValueBox backgroundColorFalse;
+    @UiField
+    MaterialListValueBox fontColorFalse;
+    /* End of Conditional UI Objects */
+
+    @UiField
     MaterialDropDown chart_dropdown;
     @UiField
     MaterialPopupMenu popupMenu, popChart;
-    /* End of Conditional UI Objects */
+
 
     @UiField
     MaterialLink sortLink;
@@ -191,6 +213,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
             SheetCell cell = new SheetCell(sh, k);
 
+
             if (k == 1) {
                 cell.getCell(4).addChart(initChartTEST());
             }
@@ -203,6 +226,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @Inject
     WorkbookView(Binder uiBinder) {
 
+        populateColourListBox();
+
         initWidget(uiBinder.createAndBindUi(this));
 
         firstButton.addClickHandler(event -> {
@@ -210,6 +235,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 String result = "";
                 try {
                     activeCell.setContent(firstBox.getText());
+//                    SpreadsheetImpl.fromDTO(Settings.getInstance().getWorkbook().spreadsheets.get(0).cells(activeCell.getAddress()).setContent(firstBox.getText());
                 } catch (FormulaCompilationException e) {
                     // TODO Auto-generated catch block
                     // e.printStackTrace();
@@ -241,21 +267,86 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         });
 
         conditionalModalDoneButton.addClickHandler(event -> {
-            MaterialToast t = new MaterialToast();
-            t.fireToast(lstConditions.getSelectedItemText());
-            /*
-				FIREWORKS NEEDED
-             */
-            conditionalModal.close();
-        });
+            if (conditionalText.getText().matches("[+-]?([0-9]*[.])?[0-9]+")) {
+                    String operator;
+                    switch (lstConditions.getSelectedIndex()) {
+                        case 0:
+                            operator = "=";
+                            break;
+                        case 1:
+                            operator = ">";
+                            break;
+                        case 2:
+                            operator = "<";
+                            break;
+                        case 3:
+                            operator = ">=";
+                            break;
+                        case 4:
+                            operator = "<=";
+                            break;
+                        case 5:
+                            operator = "<>";
+                            break;
+                        //case 6:  operator = "<<";
+                        //  break;
+                        default:
+                            operator = "Invalid";
+                            break;
+                    }
 
+                    boolean result;
+                    boolean flag;
+                    try {
+                        BinaryOperationExtension binaryOperation = null;
+                        try {
+                            binaryOperation = new BinaryOperationExtension(activeCell.getValue(), operator, Value.parseNumericValue(conditionalText.getText()));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        if (result = binaryOperation.evaluate().toBoolean()) {
+                            //fire styleTRUE
+                        } else {
+                            //fire styleFALSE
+                        }
+                        flag = true;
+                        MaterialToast m = new MaterialToast();
+                        m.toast("Flag =" + flag);
+                        m.toast("Result =" + result);
+                        m.toast("BackgroundColorTrue selected:"+backgroundColorTrue.getSelectedIndex());
+
+                    } catch (UnknownElementException e) {
+                        flag = false; //conditionalFormatting is off
+                    } catch (IllegalValueTypeException e) {
+                        flag = false;
+                    }
+                    conditionalModal.close();
+
+/*
+                    ConditionalCellFormattingController ccfController = new ConditionalCellFormattingController(activeCell, operator, conditionalText.getText());
+
+                    //TRUE
+                    ccfController.setBackgroundColorTrue(backgroundColorTrue.getText());
+                    ccfController.setFontColorTrue(fontColorTrue.getText());
+                    //FALSE
+                    ccfController.setBackgroundColorFalse(backgroundColorFalse.getText());
+                    ccfController.setFontColorFalse(fontColorFalse.getText());
+                    MaterialToast m = new MaterialToast();
+                    boolean flag = ccfController.ConditionalOperation();
+                    m.toast("result =" + flag);*/
+
+            }
+            conditionalModal.close();
+		});
+
+        /* BETWEEN OPTION CONDITIONAL
         lstConditions.addValueChangeHandler(event -> {
             if (lstConditions.getSelectedIndex() == 6) {
                 conditionalText2.setVisibility(Style.Visibility.VISIBLE);
             } else {
                 conditionalText2.setVisibility(Style.Visibility.HIDDEN);
             }
-        });
+        });*/
 
         conditionalModalCloseButton.addClickHandler(event -> {
             conditionalModal.close();
@@ -269,7 +360,20 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         initWorkbook();
         
         saveButton.addClickHandler(event -> {
-            MaterialToast.fireToast("Here");
+            WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
+
+            // Set up the callback object.
+            AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
+                public void onFailure(Throwable caught) {
+                    
+                }
+                
+                public void onSuccess(WorkbookDTO result) {
+                    MaterialToast.fireToast(result.name);
+                }
+            };
+            
+            workbooksSvc.addWorkbookDescription(Settings.getInstance().getWorkbook().toDTO(), callback);
         });
         
         // Set the visible range of the table for pager (later)
@@ -354,7 +458,14 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         return dto;
     }
-    
-    
+
+    private void populateColourListBox(){
+        for (Color c : Color.values()){
+            backgroundColorTrue.addItem(c);
+            fontColorTrue.addItem(c);
+            backgroundColorFalse.addItem(c);
+            fontColorFalse.addItem(c);
+        }
+    }
 
 }
