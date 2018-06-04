@@ -23,19 +23,19 @@ Forms should have an icon or button to close the form. When the form is closed t
 ```
 US01
 	As an user,
-	I want to see the form, with a button to edit it.
+	I want to see the form and the edit form windows.
 ```
 
 ```
 US02
 	As an user,
-	I want to see the window to edit a form.
+	I want to add an row to the form, by choosing the widgets that will appear on the form, and edit the properties of them.
 ```
 
 ```
 US03
 	As an user,
-	I want to add a row, edit a row or delete a row, "play" the form and close the edit form window.
+	I want to remove and edit an existing row on the form, and play the form to see the final design.
 ```
 
 # 3. Analysis
@@ -268,3 +268,4 @@ Some Questions/Issues identified during the work in this feature increment:
 * [Lang 05.1 - Creation of form package and its classes (FormModule, FormPresenter, FormView, FormView.ui (XML)). Some modifications.] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/9a876d02eddc867c8f003fc0f9651d2d177cba06)
 * [Lang 05.1 - Layout of Forms changed. Other changes.] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/4b359bb67c9a695d6d640bac266e1f8329eb8d01)
 * [Lang 05.1 - Changes on the form edit.] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/27ad41501217c27674512fd028b54b91a7b2b214)
+* [Lang 05.1 - Adding row and Removing row working. Layout Changed.] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/779bc7b834ad89b886b62f4b5892a9d22b68de55)

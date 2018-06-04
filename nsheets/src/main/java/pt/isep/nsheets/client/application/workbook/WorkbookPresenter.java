@@ -19,6 +19,9 @@
  */
 package pt.isep.nsheets.client.application.workbook;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
@@ -45,11 +48,16 @@ import gwt.material.design.client.ui.table.MaterialDataTable;
 import pt.isep.nsheets.client.application.workbook.WorkbookView.SheetCell;
 import pt.isep.nsheets.client.place.ParameterTokens;
 import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.ChartDTO;
+import pt.isep.nsheets.shared.services.WorkbooksService;
+import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
+
+import java.util.ArrayList;
 
 public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, WorkbookPresenter.MyProxy> {
 
-    
+    private MyView view;
 
     interface MyView extends View {
 
@@ -64,7 +72,11 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         public MaterialDropDown getChartDropDown();
 
         public MaterialPopupMenu getPopChart();
+
+        void setContents(WorkbookDTO contents);
     }
+
+    private WorkbookDTO wDTO;
 
     @ProxyStandard
     @NameToken(NameTokens.workbook)
@@ -75,6 +87,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
     WorkbookPresenter(EventBus eventBus, MyView view, MyProxy proxy, PlaceManager placeManager) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
 
+        this.view = view;
 		this.placeManager = placeManager;
 	}
 
@@ -141,6 +154,8 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         super.onReveal();
 
         SetPageTitleEvent.fire("Workbook", "The current Workbook", "", "", this);
+
+        this.timer();
     }
 
     private void redirectToChartPage() {
@@ -164,6 +179,38 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
             });
             getView().getChartDropDown().add(link);
         }
+    }
+
+    private void refreshWorkbooks() {
+        WorkbooksServiceAsync workbookSvc = GWT.create(WorkbooksService.class);
+
+        AsyncCallback<ArrayList<WorkbookDTO>> callback = new AsyncCallback<ArrayList<WorkbookDTO>>() {
+            public void onFailure(Throwable caught) {
+
+            }
+
+            public void onSuccess(ArrayList<WorkbookDTO> result) {
+                for(WorkbookDTO w : result)
+                    if(wDTO.equals(w))
+                        view.setContents(w);
+
+                //nunca deve chegar aqui
+                //alterar pagina atual para a home em vez disto
+                view.setContents(null);
+            }
+        };
+
+        workbookSvc.getWorkbooks(callback);
+    }
+
+    private void timer() {
+        Timer t = new Timer() {
+            @Override
+            public void run() {
+                refreshWorkbooks();
+            }
+        };
+        t.scheduleRepeating(1000);
     }
 
 }

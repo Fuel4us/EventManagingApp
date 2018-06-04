@@ -190,7 +190,7 @@ The main idea for the "workflow" of this feature increment.
 
 ![Domain Model](dm.png)
 
-- **Domain Model**. Since we found no specific requirements for the structure of Workbook Descriptions we follow the Structure of the existing DTO (WorkbookDescriptionDTO).
+- **Domain Model**. Since we found no specific requirements for the structure of Note we follow the Structure of the existing DTO (NoteDTO).
 
 **System Sequence Diagrams**
 
@@ -224,12 +224,13 @@ Regarding tests we try to follow an approach inspired by test driven development
 
 **Domain classes**
 
-For the Domain classes we will have a class that represents the entity **WorkbookDescription**. This entity will have attributes that, for the moment, will be based on the class **WorkbookDescriptionDTO**:
+For the Domain classes we will have a class that represents the entity **Note**. This entity will have attributes that, for the moment, will be based on the class **NoteDTO**:
 	
-	- name (string)
-	- description (string) 
+	- titleNote (string)
+	- textNote (string)
+        - dateNote (Date) 
 
-**Test:** We should ensure that a WorkbookDescription can be created when all the attributes are set.  
+**Test:** We should ensure that a Note can be created when all the attributes are set.  
 
 	@Test(expected = IllegalArgumentException.class)
 		public void ensureNullIsNotAllowed() {
@@ -311,8 +312,7 @@ Note: We will be using the annotation @FixMethodOrder(MethodSorters.NAME_ASCENDI
 **Test Coverage**  
 - The actual coverage for domain classes: 61%
 - The actual coverage for application(controller) classes: 100%
- 
-- TODO: Add more tests to increase the coverage of the domain class. 
+
 
 ## 4.2. Requirements Realization
 
@@ -414,7 +414,7 @@ Project **server**
 - pt.isep.nsheets.server.**lapr4.red.s1.core.n1160634**.notes.domain: contains the domain classes
 - pt.isep.nsheets.server.**lapr4.red.s1.core.n1160634**.notes.persistence: contains the persistence/JPA classes  
 - pt.isep.nsheets.server.**lapr4.white.s1.core.n4567890**.workbooks.persistence: contains the persistence/JPA classes 
-- Updated the existing class: **pt.isep.nsheets.server.NoteServiceImpl**
+- Created the class: **pt.isep.nsheets.server.NoteServiceImpl**
 
 Project **shared**  
 - Updated the classes: **pt.isep.nsheets.shared.services.NoteService** and **pt.isep.nsheets.shared.services.NoteServiceAsync**  
@@ -467,7 +467,9 @@ Commits:
 
 [Core07.1 UI, Server and Database fixes](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/64568258634d136f475582771ec79342dfb85da2)
 
-[Core07.1 US1 and 2 done]()
+[Core07.1 US1 and 2 done](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/9845442527aa2ed8c376e623e2b455c3c03ac234)
+
+[Core07.1 US1, 2 and 3 improvments]()
 
 
 

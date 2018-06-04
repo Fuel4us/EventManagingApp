@@ -7,7 +7,8 @@ Uncomment this for XHTML entities
              xmlns:m="urn:import:gwt.material.design.client.ui"
              xmlns:ma="urn:import:gwt.material.design.addins.client"
              xmlns:demo="urn:import:gwt.material.design.demo.client.ui"
-             xmlns:m.demo="urn:import:gwt.material.design.demo.client.ui">
+             xmlns:m.demo="urn:import:gwt.material.design.demo.client.ui"
+             xmlns:combobox="urn:import:gwt.material.design.addins.client.combobox">
     
     <ui:import field="pt.isep.nsheets.client.place.NameTokens.home"/>   
     <ui:with field="res" type="pt.isep.nsheets.client.resources.AppResources"/>
@@ -19,28 +20,7 @@ Uncomment this for XHTML entities
         <m:MaterialRow addStyleNames="code">
             <m:MaterialTitle title="Form Window" description="The window that shows the Form."/>
             <m:MaterialButton ui:field="btnOpenWindow" text="Open Form" textColor="WHITE" />
-            <ma:window.MaterialWindow ui:field="window" width="50%" title="FORM">              
-                <m:MaterialPanel padding="32" textAlign="CENTER" height="600px">
-                    
-                    <!--  CODE OF FORM -->
-                    <!--<m:MaterialRow addStyleNames="code">
-                        <m:MaterialColumn> 
-                            <m:MaterialButton text="Resolve" waves="DEFAULT" backgroundColor="BLACK" textColor="WHITE" />
-                        </m:MaterialColumn> 
-                        <m:MaterialColumn>
-                            <m:MaterialTextBox label="Writte here"/> 
-                        </m:MaterialColumn> 
-                    </m:MaterialRow>
-                    <m:MaterialRow addStyleNames="code">
-                        <m:MaterialColumn> 
-                            <m:MaterialButton text="Resolve" waves="DEFAULT" backgroundColor="BLACK" textColor="WHITE" />
-                        </m:MaterialColumn> 
-                        <m:MaterialColumn>
-                            <m:MaterialTextBox label="Writte here" /> 
-                        </m:MaterialColumn> 
-                    </m:MaterialRow> -->
-                    
-                </m:MaterialPanel>                
+            <ma:window.MaterialWindow ui:field="window" backgroundColor="GREY" toolbarColor="GREEN_DARKEN_1" width="70%" title="Form">       
             </ma:window.MaterialWindow>       
         </m:MaterialRow>   
         
@@ -67,6 +47,18 @@ Uncomment this for XHTML entities
                 <m:MaterialPanel m:id="addRow"  padding="32"  height="300px" textAlign="CENTER" overflow="AUTO">
                     
                     <!-- ADD ROW CODE -->  
+                    <m:MaterialRow>
+                        <m:MaterialTextBox label="Choose the widgets to add on the form." enabled="false"/>
+                        <m:MaterialColumn grid="l6 m6 s12">
+                            <combobox:MaterialComboBox ui:field="comboWidgets" width="100%" placeholder="Widgets">
+                                <m:html.Option value="1" text="Empty Row"/>
+                                <m:html.Option value="2" text="Button"/>
+                                <m:html.Option value="3" text="Static Text Box"/>
+                                <m:html.Option value="4" text="Static Text Box and Edit Box"/>
+                            </combobox:MaterialComboBox>
+                        </m:MaterialColumn>
+                    </m:MaterialRow>
+                    <m:MaterialTextBox ui:field="txtAreaAdd" label="In case you want to show data (on a static text box), write it here (optional):"/> 
                     <m:MaterialButton ui:field="btnAddRow" text="ADD ROW" waves="DEFAULT" backgroundColor="BLACK" textColor="WHITE"/> 
                     <m:MaterialButton ui:field="btnPlayForm1" text="PLAY FORM" waves="DEFAULT" backgroundColor="YELLOW" textColor="BLACK"/> 
                     
@@ -74,7 +66,7 @@ Uncomment this for XHTML entities
                 <m:MaterialPanel m:id="removeRow"  padding="32"  height="300px" textAlign="CENTER" overflow="AUTO">
                     
                     <!-- REMOVE ROW CODE -->  
-                    <m:MaterialTextBox ui:field="txtArea" label="Write the index of the row you wish to remove:"/> 
+                    <m:MaterialTextBox ui:field="txtAreaRemove" label="Write the index of the row you wish to remove:"/> 
                     <m:MaterialButton ui:field="btnRemoveRow" text="REMOVE ROW" waves="DEFAULT" backgroundColor="BLACK" textColor="WHITE"/> 
                     <m:MaterialButton ui:field="btnPlayForm2" text="PLAY FORM" waves="DEFAULT" backgroundColor="YELLOW" textColor="BLACK"/> 
                     
@@ -82,9 +74,9 @@ Uncomment this for XHTML entities
                 <m:MaterialPanel m:id="editRow"  padding="32"  height="300px" textAlign="CENTER" overflow="AUTO">
                     
                     <!-- EDIT ROW CODE -->  
+                    <m:MaterialTextBox ui:field="txtAreaEdit" label="Write the index of the row you wish to edit:"/> 
                     <m:MaterialButton ui:field="btnEditRow" text="EDIT ROW" waves="DEFAULT" backgroundColor="BLACK" textColor="WHITE"/> 
                     <m:MaterialButton ui:field="btnPlayForm3" text="PLAY FORM" waves="DEFAULT" backgroundColor="YELLOW" textColor="BLACK"/> 
-                    
                 </m:MaterialPanel>
             </ma:window.MaterialWindow>
         </m:MaterialRow>
