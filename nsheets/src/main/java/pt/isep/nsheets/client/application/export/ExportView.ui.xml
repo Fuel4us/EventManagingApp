@@ -7,11 +7,12 @@
 		<g:HTMLPanel ui:field="htmlPanel">
 			<br/>
 			Export the current workbook:
+			<br>
+			</br>
 			<br/>
 		</g:HTMLPanel>
-		<m:MaterialButton text="Export to CSV" waves="LIGHT" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT"/>
+		<m:MaterialButton ui:field="export_csv" text="Export to CSV" waves="LIGHT" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="3"/>
 		<m:MaterialButton text="Export to XML" waves="LIGHT" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT"/>
 		<m:MaterialButton text="Export to PDF" waves="LIGHT" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginLeft="0.5"/>
 	</m:MaterialPanel>
-
 </ui:UiBinder>

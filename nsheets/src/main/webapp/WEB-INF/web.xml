@@ -94,13 +94,25 @@
     </servlet>
 
     <servlet-mapping>
+        <servlet-name>pt.isep.nsheets.nsheets CalendarEventService</servlet-name>
+        <url-pattern>/nsheets/calendarEventsService</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>messagesServiceServlet</servlet-name>
         <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
         <url-pattern>/nsheets/messagesService</url-pattern>
     </servlet-mapping>
 
+    <!-- Servlets for the exports -->
+    <servlet>
+        <servlet-name>exportServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.ExportServiceImp</servlet-class>
+    </servlet>
+
     <servlet-mapping>
-        <servlet-name>pt.isep.nsheets.nsheets CalendarEventService</servlet-name>
-        <url-pattern>/nsheets/calendarEventsService</url-pattern>
+        <servlet-name>exportServiceServlet</servlet-name>
+        <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
+        <url-pattern>/nsheets/exportService</url-pattern>
     </servlet-mapping>
 </web-app>
