@@ -54,10 +54,12 @@ import pt.isep.nsheets.shared.services.ChartDTO;
 // public class WorkbookView extends NavigatedView implements WorkbookPresenter.MyView {
 public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
+    @Override
     public MaterialTextBox getFirstBox() {
         return firstBox;
     }
 
+    @Override
     public MaterialIcon getFirstButton() {
         return firstButton;
     }
@@ -66,7 +68,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox firstBox;
     @UiField
     MaterialIcon firstButton;
-
+    
+    @UiField
+    MaterialLink saveButton;
     /*
 	Conditional UI Objects @1050475
      */
@@ -105,6 +109,17 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialDataTable<SheetCell> customTable;
 
+    @Override
+    public MaterialDropDown getChartDropDown() {
+        return chart_dropdown;
+    }
+
+    @Override
+    public MaterialPopupMenu getPopChart() {
+        return popChart;
+    }
+
+    
     interface Binder extends UiBinder<Widget, WorkbookView> {
     }
 
@@ -117,10 +132,12 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         this.firstBox.setText(cell.getContent().toString());
     }
 
+    @Override
     public pt.isep.nsheets.shared.core.Cell getActiveCell() {
         return this.activeCell;
     }
 
+    @Override
     public MaterialDataTable<SheetCell> getTable() {
         return customTable;
     }
@@ -240,7 +257,11 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         customTable.getView().setRenderer(new SheetRenderer<SheetCell>());
 
         initWorkbook();
-
+        
+        saveButton.addClickHandler(event -> {
+            MaterialToast.fireToast("Here");
+        });
+        
         // Set the visible range of the table for pager (later)
         customTable.setVisibleRange(0, 2001);
 
@@ -254,9 +275,12 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             customTable.selectRow($(event.getRow()).asElement(), true);
             popupMenu.setSelected(event.getModel());
             // Get the PageX and getPageY
+
             popupMenu.setPopupPosition(event.getMouseEvent().getPageX(), event.getMouseEvent().getPageY());
             popupMenu.open();
         });
+        
+        
 
         // Added access to ToolPanel to add icon widget
         Panel panel = customTable.getScaffolding().getToolPanel();
@@ -320,4 +344,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         return dto;
     }
+    
+    
+
 }

@@ -119,6 +119,9 @@ governing permissions and limitations under the License. #L% -->
         </m:MaterialRow>
         <m:MaterialRow marginTop="60">
             <m:MaterialColumn>
+                <m:MaterialLink  ui:field="saveButton" text="Save" textColor="GREEN" iconType="SAVE" iconPosition="LEFT"/>
+            </m:MaterialColumn>
+            <m:MaterialColumn>
                 <m:MaterialLink  targetHistoryToken="{chart}" text="Create Chart" textColor="RED" iconType="INSERT_CHART" iconPosition="LEFT"/>
             </m:MaterialColumn>
             <m:MaterialColumn>

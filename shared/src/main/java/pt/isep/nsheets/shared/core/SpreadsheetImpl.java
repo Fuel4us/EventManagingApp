@@ -30,10 +30,14 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyJoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
@@ -58,11 +62,16 @@ public class SpreadsheetImpl implements Spreadsheet {
 	public static final String BASE_TITLE = "Sheet ";
 
 	/** The workbook to which the spreadsheet belongs */
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "workbookID")
 	private Workbook workbook;
 
 	/** The cells that have been instantiated */
-        @ManyToMany (targetEntity = CellImpl.class)
+        @OneToMany(targetEntity = CellImpl.class)
+        @JoinTable(name="spreadsheet_cell",
+                  joinColumns=@JoinColumn(name="SpreadsheetImpl"),
+                  inverseJoinColumns=@JoinColumn(name="CellImpl"))
+        @MapKeyJoinColumn(name="address")
 	private Map<Address, Cell> cells = new HashMap<Address, Cell>();
 
 	/** The title of the spreadsheet */

@@ -13,4 +13,6 @@ public interface WorkbooksService extends RemoteService {
 	WorkbookDTO addWorkbookDescription(WorkbookDTO wdDto) throws DataException;
         
         WorkbookDTO findByName(String name) throws DataException;
+        
+        void setName(String name, WorkbookDTO workbook)throws DataException;
 }
