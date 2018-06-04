@@ -19,12 +19,12 @@
  */
 package pt.isep.nsheets.client.application.workbook;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
@@ -32,19 +32,17 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 
 import com.google.gwt.user.client.ui.Panel;
-import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
-import gwt.material.design.client.constants.IconType;
 import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.table.MaterialDataTable;
-import pt.isep.nsheets.shared.core.Spreadsheet;
-import pt.isep.nsheets.shared.core.Workbook;
+import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
-import pt.isep.nsheets.shared.core.Address;
-import pt.isep.nsheets.shared.core.Cell;
+
+import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.Formula.BinaryOperationExtension;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
@@ -73,7 +71,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialIcon conditionalButton;
     @UiField
-    MaterialTextBox conditionalText2;
+    MaterialTextBox conditionalText;
+    //@UiField
+    //MaterialTextBox conditionalText2;
     @UiField
     MaterialIcon conditionalModalCloseButton;
     @UiField
@@ -83,10 +83,20 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialListBox lstConditions;
     @UiField
+    MaterialInput backgroundColorTrue;
+    @UiField
+    MaterialInput fontColorTrue;
+    @UiField
+    MaterialInput backgroundColorFalse;
+    @UiField
+    MaterialInput fontColorFalse;
+    /* End of Conditional UI Objects */
+
+    @UiField
     MaterialDropDown chart_dropdown;
     @UiField
     MaterialPopupMenu popupMenu, popChart;
-    /* End of Conditional UI Objects */
+
 
     @UiField
     MaterialDataTable<SheetCell> customTable;
@@ -201,23 +211,87 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         });
 
         conditionalModalDoneButton.addClickHandler(event -> {
-            MaterialToast t = new MaterialToast();
-            t.fireToast(lstConditions.getSelectedItemText());
-            /*
-				FIREWORKS NEEDED
-             */
-			conditionalModal.close();
+            if (conditionalText.getText().matches("[+-]?([0-9]*[.])?[0-9]+")) {
+                    String operator;
+                    switch (lstConditions.getSelectedIndex()) {
+                        case 0:
+                            operator = "=";
+                            break;
+                        case 1:
+                            operator = ">";
+                            break;
+                        case 2:
+                            operator = "<";
+                            break;
+                        case 3:
+                            operator = ">=";
+                            break;
+                        case 4:
+                            operator = "<=";
+                            break;
+                        case 5:
+                            operator = "<>";
+                            break;
+                        //case 6:  operator = "<<";
+                        //  break;
+                        default:
+                            operator = "Invalid";
+                            break;
+                    }
+
+                    boolean result;
+                    boolean flag;
+                    try {
+                        BinaryOperationExtension binaryOperation = null;
+                        try {
+                            binaryOperation = new BinaryOperationExtension(activeCell.getValue(), operator, Value.parseNumericValue(conditionalText.getText()));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        if (result = binaryOperation.evaluate().toBoolean()) {
+                            //fire styleTRUE
+                        } else {
+                            //fire styleFALSE
+                        }
+                        flag = true;
+                        MaterialToast m = new MaterialToast();
+                        m.toast("Flag =" + flag);
+                        m.toast("Result =" + result);
+                        m.toast(backgroundColorTrue.getText());
+
+                    } catch (UnknownElementException e) {
+                        flag = false; //conditionalFormatting is off
+                    } catch (IllegalValueTypeException e) {
+                        flag = false;
+                    }
+                    conditionalModal.close();
+
+/*
+                    ConditionalCellFormattingController ccfController = new ConditionalCellFormattingController(activeCell, operator, conditionalText.getText());
+
+                    //TRUE
+                    ccfController.setBackgroundColorTrue(backgroundColorTrue.getText());
+                    ccfController.setFontColorTrue(fontColorTrue.getText());
+                    //FALSE
+                    ccfController.setBackgroundColorFalse(backgroundColorFalse.getText());
+                    ccfController.setFontColorFalse(fontColorFalse.getText());
+                    MaterialToast m = new MaterialToast();
+                    boolean flag = ccfController.ConditionalOperation();
+                    m.toast("result =" + flag);*/
+
+            }
+            conditionalModal.close();
 		});
 
 
-
+        /* BETWEEN OPTION CONDITIONAL
         lstConditions.addValueChangeHandler(event -> {
             if (lstConditions.getSelectedIndex() == 6) {
                 conditionalText2.setVisibility(Style.Visibility.VISIBLE);
             } else {
                 conditionalText2.setVisibility(Style.Visibility.HIDDEN);
             }
-        });
+        });*/
 
         conditionalModalCloseButton.addClickHandler(event -> {
             conditionalModal.close();
