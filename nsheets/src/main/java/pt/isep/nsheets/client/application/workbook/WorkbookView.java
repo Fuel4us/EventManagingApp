@@ -23,7 +23,7 @@ import com.google.gwt.core.client.GWT;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-
+import gwt.material.design.client.constants.Color;
 import javax.inject.Inject;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -102,15 +102,14 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialModal conditionalModal;
     @UiField
     MaterialListBox lstConditions;
-    /*
     @UiField
-    MaterialInput backgroundColorTrue;
+    MaterialListValueBox<Color> backgroundColorTrue;
     @UiField
-    MaterialInput fontColorTrue;
+    MaterialListValueBox<Color> fontColorTrue;
     @UiField
-    MaterialInput backgroundColorFalse;
+    MaterialListValueBox<Color> backgroundColorFalse;
     @UiField
-    MaterialInput fontColorFalse;
+    MaterialListValueBox<Color> fontColorFalse;
     /* End of Conditional UI Objects */
 
     @UiField
@@ -224,9 +223,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @Inject
     WorkbookView(Binder uiBinder) {
 
-        //populateColourListBox();
         initWidget(uiBinder.createAndBindUi(this));
 
+        populateColourListBox();
+        
         firstButton.addClickHandler(event -> {
             if (activeCell != null) {
                 String result = "";
@@ -446,8 +446,25 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 //        Workbook wb = new Workbook("Teste", "Teste", matrix);
 //        Spreadsheet ss = wb.getSpreadsheet(0);
 //
+//        ChartDTO dto = new ChartDTO(
+//                "CHART TEST",
+//                new Address(1, 1),
+//                new Address(5, 5),
+//                matrix,
+//                true,
+//                false);
 //
-//        return new ChartDTO("chart test", new Address(1, 1), new Address(5, 5), true, true, ChartType.BAR_CHART, activeCell, matrix);
+//        return dto;
 //    }
-    
+
+    private void populateColourListBox(){
+        for (Color c : Color.values()){
+            backgroundColorTrue.addItem(c);
+            fontColorTrue.addItem(c);
+            backgroundColorFalse.addItem(c);
+            fontColorFalse.addItem(c);
+        }
+    }
+
+
 }
