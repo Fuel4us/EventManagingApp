@@ -13,4 +13,6 @@ public interface WorkbooksServiceAsync {
     void findByName(String name, AsyncCallback<WorkbookDTO> callback);
     
     void setName(String name, AsyncCallback<WorkbookDTO> callback);
+    
+    void saveWorkbook(WorkbookDTO wb, AsyncCallback<WorkbookDTO> callback);
 }

@@ -31,4 +31,10 @@ public class WorkbookDescriptionService {
         
         return workbookRepository.findByName(name);
     }
+    
+    public Workbook saveWorkbook(WorkbookDTO wb) throws DataConcurrencyException, DataIntegrityViolationException, IllegalArgumentException, FormulaCompilationException {
+        final WorkbookRepository workbookRepository = PersistenceContext.repositories().workbooks();
+        
+        return workbookRepository.save(Workbook.fromDTO(wb));
+    }
 }

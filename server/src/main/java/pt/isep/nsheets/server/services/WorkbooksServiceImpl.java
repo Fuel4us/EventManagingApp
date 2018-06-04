@@ -1,10 +1,9 @@
 package pt.isep.nsheets.server.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import java.util.ArrayList;
 import java.util.Properties;
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-
 import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
 import java.util.logging.Level;
@@ -94,4 +93,31 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
 
             return workbook.toDTO();
         }
+
+    @Override
+    public WorkbookDTO setName(String name) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public WorkbookDTO saveWorkbook(WorkbookDTO wb) {
+            PersistenceContext.setSettings(this.getPersistenceSettings());
+
+            AddWorkbookDescriptionController ctrl = new AddWorkbookDescriptionController();
+
+            Workbook workbook = null;
+
+            try {
+                workbook = ctrl.saveWorkbook(wb);
+            } catch (DataConcurrencyException | DataIntegrityViolationException | IllegalArgumentException | FormulaCompilationException e) {
+                try {
+                    throw new DataException((Throwable) e);
+                } catch (DataException ex) {
+                    Logger.getLogger(WorkbooksServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            return workbook.toDTO();
+        
+    }
 }
