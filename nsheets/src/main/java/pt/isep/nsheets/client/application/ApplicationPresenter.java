@@ -68,7 +68,7 @@ public class ApplicationPresenter
         AsyncCallback<ConfigurationDTO> callback = new AsyncCallback<ConfigurationDTO>() {
             @Override
             public void onFailure(Throwable caught) {
-                MaterialToast.fireToast("Error retrieving configuration! " + caught.getMessage());
+                MaterialToast.fireToast("Error retrieving extension configuration! " + caught.getMessage());
             }
 
             @Override
@@ -77,6 +77,7 @@ public class ApplicationPresenter
             }
         };
         configurationSvc.getConfiguration(callback);
+        //End of extension configuration loading
 
         this.menuPresenter = menuPresenter;
             
