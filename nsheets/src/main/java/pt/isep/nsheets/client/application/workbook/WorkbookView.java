@@ -65,7 +65,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox firstBox;
     @UiField
     MaterialIcon firstButton;
-
+    
+    @UiField
+    MaterialLink saveButton;
     /*
 	Conditional UI Objects @1050475
      */
@@ -250,7 +252,11 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         customTable.getView().setRenderer(new SheetRenderer<SheetCell>());
 
         initWorkbook();
-
+        
+        saveButton.addClickHandler(event -> {
+            MaterialToast.fireToast("Here");
+        });
+        
         // Set the visible range of the table for pager (later)
         customTable.setVisibleRange(0, 2001);
 
