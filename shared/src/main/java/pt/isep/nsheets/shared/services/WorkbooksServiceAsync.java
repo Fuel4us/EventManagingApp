@@ -12,7 +12,7 @@ public interface WorkbooksServiceAsync {
 
     void findByName(String name, AsyncCallback<WorkbookDTO> callback);
 
-    void setName(String name, WorkbookDTO workbookDTO, AsyncCallback<WorkbookDTO> callback);
+    void renameWorkbook(String name, WorkbookDTO workbookDTO, AsyncCallback<WorkbookDTO> callback);
 
     void deleteWorkbook(WorkbookDTO workbook, AsyncCallback<WorkbookDTO> callback);
 }

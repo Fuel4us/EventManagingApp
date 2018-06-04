@@ -119,7 +119,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                     }
                 }
             };
-            workbooksSvc.setName(rename, wdto, callback);
+            workbooksSvc.renameWorkbook(rename, wdto, callback);
             this.view.closeOptionModal();
         });
 
@@ -147,6 +147,9 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
             this.view.closeOptionModal();
         });
          
+        this.view.cancelClickHandler(e -> {
+            this.view.closeOptionModal();
+        });
     }
 
     private void refreshView() {

@@ -23,7 +23,7 @@ public class RenameWorkbookController implements Controller {
 
     WorkbookRepository repo = PersistenceContext.repositories().workbooks();
 
-    public void setName(String name, WorkbookDTO workbookDTO) {
+    public void renameWorkbook(String name, WorkbookDTO workbookDTO) {
         Workbook workbook = repo.findByName(workbookDTO.name);
         workbook.setName(name);
         try {

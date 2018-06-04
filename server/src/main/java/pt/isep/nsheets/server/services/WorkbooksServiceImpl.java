@@ -94,11 +94,11 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
         return workbook.toDTO();
     }
 
-    public void setName(String name, WorkbookDTO wdto) throws DataException {
+    public void renameWorkbook(String name, WorkbookDTO wdto) throws DataException {
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
         RenameWorkbookController ctrl = new RenameWorkbookController();
-        ctrl.setName(name, wdto);
+        ctrl.renameWorkbook(name, wdto);
     }
 
     @Override
