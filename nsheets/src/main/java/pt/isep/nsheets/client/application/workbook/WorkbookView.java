@@ -25,8 +25,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -43,7 +45,10 @@ import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
+import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.application.SortSpreadsheetController;
 import pt.isep.nsheets.shared.core.Address;
+import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
@@ -51,6 +56,8 @@ import pt.isep.nsheets.shared.services.ChartDTO;
 // public class WorkbookView extends NavigatedView implements WorkbookPresenter.MyView {
 public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
+    public static ChartDTO selectedChart;
+    
     @Override
     public MaterialTextBox getFirstBox() {
         return firstBox;
@@ -67,7 +74,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialIcon firstButton;
     
     @UiField
-    MaterialLink saveButton;
+    MaterialLink saveButton, click_chart;
     /*
 	Conditional UI Objects @1050475
      */
@@ -102,7 +109,15 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialTextBox windowSecondBox;
     @UiField
+    MaterialListBox sortListBox;
+    @UiField
     MaterialDataTable<SheetCell> customTable;
+    
+    @UiHandler("click_chart")
+    void onclick(ClickEvent e){
+        this.activeCell = null;
+        selectedChart = null;
+    }
 
     @Override
     public MaterialDropDown getChartDropDown() {
@@ -287,23 +302,22 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         });
         sortButton.addClickHandler(event -> {
             try {
-                System.out.println("AQUI");
-                //WorkbookSortService.sortCells(windowFirstBox.getText(), windowSecondBox.getText(), this.customTable.getRow(0).getData().sheet,  true);
-                } catch (Exception e) {
+                boolean ascending = (sortListBox.getSelectedIndex() == 0)?true:false;
+                SortSpreadsheetController.sortCells(windowFirstBox.getText(), windowSecondBox.getText(), this.customTable.getRow(0).getData().sheet, ascending);
+            } catch (Exception e) {
                 // TODO Auto-generated catch block
-                // e.printStackTrace();
+                e.printStackTrace();
                 Window.alert(e.getMessage());
-                System.out.println(e.getStackTrace());
             } finally {
                 //resultLabel.setText(result);
- 
+
                 // refresh the table...
                 customTable.getView().setRedraw(true);
                 customTable.getView().refresh();
                 window.close();
             }
         });
-        
+
         customTable.getTableTitle().setText("The Future Worksheet!");
     }
 

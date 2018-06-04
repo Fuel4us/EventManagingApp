@@ -19,4 +19,11 @@ public class JpaWorkbookRepository extends NSheetsJpaRepositoryBase<Workbook, Lo
         
         return matchOne("e.name=:name", params);
     }
+
+    @Override
+    public void setName(String name) {
+        
+    }
+    
+    
 }

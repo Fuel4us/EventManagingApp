@@ -3,24 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.Services;
+package pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.application;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.SortedSet;
 import pt.isep.nsheets.shared.core.Address;
-import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Spreadsheet;
-import pt.isep.nsheets.shared.core.Value;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 
 /**
  *
- * @author joao reis
+ * @author jreis22
  */
-public class WorkbookSortService {
-
+public class SortSpreadsheetController {
     public static void sortCells(String stringCell1, String stringCell2, Spreadsheet spreadSheet, boolean ascendant) throws IllegalValueTypeException, FormulaCompilationException {
         stringCell2 = stringCell2.trim();
         stringCell1 = stringCell1.trim();
@@ -38,17 +32,18 @@ public class WorkbookSortService {
         int endColumn = column1 <= column2 ? column2 : column1;
         int startRow = row1 <= row2 ? row1 : row2;
         int endRow = row1 <= row2 ? row2 : row1;
+        if (endRow >= spreadSheet.getRowCount() || endColumn >= spreadSheet.getColumnCount()) {
+            throw new IndexOutOfBoundsException("Sheet doesn't have those many cells");
+        }
+
         String auxValue;
-        for (int i = startColumn; i < endColumn; i++) {
-            Cell[] aux = spreadSheet.getColumn(i);
-            for (int j = startRow; j < endRow; j++) {
-                for (int k = j - 1; k >= startRow; k++) {
-                    System.out.println(aux[i].getContent());
-                    if ((aux[j].getValue().compareTo(aux[k].getValue()) > 0) == ascendant) {
-                        System.out.println("");
-                        auxValue = aux[j].getContent();
-                        aux[j].setContent(aux[k].getContent());
-                        aux[k].setContent(auxValue);
+        for (int i = startColumn; i <= endColumn; i++) {
+            for (int j = startRow; j <= endRow-1; j++) {
+                for (int k = j +1; k <=endRow; k++) {
+                    if ((spreadSheet.getCell(i, j).getValue().compareTo(spreadSheet.getCell(i, k).getValue()) > 0) == ascendant) {
+                        auxValue = spreadSheet.getCell(i, j).getContent();
+                        spreadSheet.getCell(i, j).setContent(spreadSheet.getCell(i, k).getContent());
+                        spreadSheet.getCell(i, k).setContent(auxValue);
                     }
                 }
             }
