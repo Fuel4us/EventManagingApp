@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pt.isep.nsheets.shared.domain;
+package pt.isep.nsheets.shared.lapr4.blue.n1150455.s1.temporaryVariables;
 
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Spreadsheet;
