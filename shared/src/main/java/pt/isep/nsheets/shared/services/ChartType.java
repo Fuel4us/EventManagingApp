@@ -6,7 +6,7 @@
 package pt.isep.nsheets.shared.services;
 
 /**
- *
+ * The possible types of charts
  * @author pedromonteiro
  */
 public enum ChartType {

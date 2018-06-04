@@ -50,13 +50,13 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         
 	/** The spreadsheets of which the workbook consists */
         @OneToMany(
+                mappedBy = "workbook",
                 cascade = CascadeType.ALL,
                 targetEntity = SpreadsheetImpl.class
         )
 	private List<Spreadsheet> spreadsheets = new ArrayList<Spreadsheet>();
 
 	/** The cell listeners that have been registered on the cell */
-        @Transient
 	private transient List<WorkbookListener> listeners
 		= new ArrayList<WorkbookListener>();
 
@@ -115,6 +115,13 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 		spreadsheets.add(spreadsheet);
 		fireSpreadsheetInserted(spreadsheet, spreadsheets.size() - 1);
 	}
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
 	/**
 	 * Adds a new spreadsheet to the workbook, in which cells are initialized

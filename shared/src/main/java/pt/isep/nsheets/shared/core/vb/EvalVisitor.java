@@ -1,7 +1,5 @@
 package pt.isep.nsheets.shared.core.vb;
 
-
-
 import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.HashMap;
@@ -15,6 +13,7 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
 
     private Map<String, Value> memory = new HashMap<>();
     private Map<String, Value> cells = new HashMap<>();
+    private String output = "";
 
     //receives current sheet cells
     public EvalVisitor(Map<String, Value> cells) {
@@ -213,7 +212,7 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     @Override
     public Value visitLog(VbParser.LogContext ctx) {
         Value value = this.visit(ctx.expr());
-        System.out.println(value);
+        this.output += value.toString() + "\n";
         return value;
     }
 
@@ -261,5 +260,9 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
         }
 
         return Value.VOID;
+    }
+
+    public String getOutput() {
+        return output;
     }
 }

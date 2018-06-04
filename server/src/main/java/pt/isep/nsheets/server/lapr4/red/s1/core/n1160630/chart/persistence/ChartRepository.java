@@ -9,7 +9,7 @@ import eapli.framework.persistence.repositories.Repository;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.Chart;
 
 /**
- *
+ * The Chart Repsoitory Interface
  * @author pedromonteiro
  */
 public interface ChartRepository extends Repository<Chart, Long>{

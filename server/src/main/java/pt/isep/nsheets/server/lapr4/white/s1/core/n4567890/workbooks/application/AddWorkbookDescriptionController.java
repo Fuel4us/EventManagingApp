@@ -16,4 +16,8 @@ public class AddWorkbookDescriptionController implements Controller {
     public Workbook findByName(String name) throws DataConcurrencyException, DataIntegrityViolationException {
         return new WorkbookDescriptionService().findByName(name);
     }
+    
+    public Workbook saveWorkbook(WorkbookDTO wb) throws DataConcurrencyException, DataIntegrityViolationException, IllegalArgumentException, FormulaCompilationException {
+        return new WorkbookDescriptionService().saveWorkbook(wb);
+    }
 }

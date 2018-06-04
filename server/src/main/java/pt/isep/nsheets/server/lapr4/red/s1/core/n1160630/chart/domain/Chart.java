@@ -10,7 +10,7 @@ import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
 /**
- *
+ * The Chart Interface.
  * @author pedromonteiro
  */
 public interface Chart extends Serializable{
