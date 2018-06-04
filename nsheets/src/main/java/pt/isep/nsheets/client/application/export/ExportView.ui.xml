@@ -10,6 +10,7 @@
 			<br/>
 		</g:HTMLPanel>
 		<m:MaterialButton text="Export to CSV" waves="LIGHT" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT"/>
+                <m:MaterialButton text="Export to XML" waves="LIGHT" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT"/>
 
 	</m:MaterialPanel>
 
