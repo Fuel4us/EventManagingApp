@@ -1,5 +1,6 @@
-package pt.isep.nsheets.client.application;
+package pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings;
 
+import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 /**
@@ -27,15 +28,15 @@ public class Settings {
         return instance;
     }
     
-    private WorkbookDTO workbook;
+    private Workbook workbook;
     
     private Settings(){}
     
-    public WorkbookDTO getWorkbook(){
+    public Workbook getWorkbook(){
         return this.workbook;
     }
     
     public void updateWorkbook(WorkbookDTO workbook) {
-        this.workbook = workbook;
+        this.workbook = Workbook.fromDTO(workbook);
     }
 }
