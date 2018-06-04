@@ -51,7 +51,9 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         void buttonClickHandler(ClickHandler ch);
 
         WorkbookDTO focusedWorkbookDTO();
-
+        
+        String search();
+        
         String rename();
 
         String title();

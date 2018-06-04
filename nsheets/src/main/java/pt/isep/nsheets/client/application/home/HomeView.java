@@ -22,6 +22,7 @@ import gwt.material.design.client.ui.MaterialCard;
 import gwt.material.design.client.ui.MaterialCardContent;
 import gwt.material.design.client.ui.MaterialCardTitle;
 import gwt.material.design.client.ui.MaterialColumn;
+import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialRow;
@@ -43,13 +44,13 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
     HTMLPanel htmlPanel;
     
     @UiField
-    MaterialButton newWorkbookButton, saveButton, deleteButton, renameButton, cancelButton;
+    MaterialButton newWorkbookButton, saveButton, deleteButton, renameButton, cancelButton, searchButton;
     
     @UiField
     MaterialModal modal, optionModal;
     
     @UiField
-    MaterialTextBox name, description, renameTxt;
+    MaterialTextBox name, description, renameTxt, searchTxt;
     
     @Inject
     HomeView(Binder uiBinder) {
@@ -196,5 +197,10 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
     @Override
     public String description() {
         return this.description.getValue();
+    }
+    
+    @Override
+    public String search() {
+        return this.searchTxt.getText();
     }
 }
