@@ -3,7 +3,8 @@
 
 # 1. General Notes
 
-Nothing to report.
+[Had a prblem on this regard](https://moodle.isep.ipp.pt/mod/forum/discuss.php?d=16911)
+
 
 # 2. Requirements
 
@@ -17,6 +18,7 @@ US3 - As a User of the Application I want to enter a text note that must be a mu
 
 US4 - As a User of the Application I want to see the history of modifications for each text note. When a text note is selected, the application should display it's history. For each version, the application should display the time stamp and the first line (i.e., the title).
 
+
 # 3. Analysis
 
 *In this section you should describe the study/analysis/research you developed in order to design a solution.*
@@ -28,6 +30,7 @@ For this feature increment, since it is the first one to be developed in a new p
 - Understand how the Home Page is implemented (for instance, how the UI gets the Workbook Descriptions that are displayed)  
 
 - Understand how to integrate a relational database into the project (Will be assuming JPA since it is studied in EAPLI)   
+
 
 ## 3.1 GWT and Project Structure
 
@@ -59,7 +62,8 @@ Therefore:
    The shared package is where shared code between server and client should reside. See [GWT - What to put in the shared folder?](https://stackoverflow.com/questions/5664601/gwt-what-to-put-in-the-shared-folder?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa) and also [using GWT RPC](http://www.gwtproject.org/doc/latest/tutorial/RPC.html).
    
    In this project the shared, server and client (i.e, nsheets) code are separated also in Maven modules (but they could all be in the same project/maven module). 
-   
+
+
 ## 3.2 Application Startup and GWTP
 
 As described before the entry point for the application is the class **pt.isep.nsheets.client.gin.ClientModule**.
@@ -110,6 +114,7 @@ Then we can use this instances to access the widgets link in:
         new MaterialAnimation().transition(Transition.BOUNCEINLEFT).animate(this.title);
         new MaterialAnimation().transition(Transition.BOUNCEINLEFT).animate(this.description);
     }    
+
 
 ## 3.3 Server and RPC
 
@@ -319,14 +324,6 @@ Following the guidelines for JPA from EAPLI we envision a scenario like the foll
 
 ![SD US1](design1.png)
 
-Notes:  
-- The diagram only depicts the less technical details of the scenario;  
-- For clarity reasons details such as the PersistenceContext or the RepositoryFactory are not depicted in this diagram.   
-- **WorkbookServices** realizes the GWT RPC mechanism;  
-- **ListWorkbookDescriptionController** is the *use case controller*;  
-- **ListWorkbookDescriptionServices** is to group together all the services related to WorkbookDescription. 
-
-**For US2**
 **For US2**
 
 ![SD US2](design2.png)
@@ -338,6 +335,18 @@ Notes:
 **For US4**
 
 ![SD US4](design4.png)
+
+Notes:
+- For US1, it is intended that a user can have one or moore Notes
+- For US3, the modal has a MaterialTextBox for the Title of the Note and a MaterialTextArea for the Text of the Note, for the porpuse of clarity in the UI.
+- The diagrams only depicts the less technical details of the scenario;  
+- For clarity reasons details such as the PersistenceContext or the RepositoryFactory are not depicted in this diagram.   
+- **NoteServices** realizes the GWT RPC mechanism;
+- **AddNoteController** is one *use case controller*;   
+- **ListNoteController** is one *use case controller*;
+- **AddNoteServices** is to add a Note to the noteRepository;
+- **ListNoteServices** is to group together all the services related to Note.
+
 
 ## 4.3. Classes
 
@@ -354,6 +363,7 @@ By memory we apply/use:
 - MVP  
 
 **TODO:** Exemplify the realization of these patterns using class diagrams and/or SD with roles marked as stereotypes. 
+
 
 # 5. Implementation
 
@@ -387,31 +397,38 @@ Since Presenters should only depend on a View interface we added a new method to
 
 Then, we implemented the *addClickHandler* in the HomeView class and call this method in the constructor of the HomePresenter. In the constructor our handler class the server method that adds a new workbook description.   
 
+**For US3**
+
+**For US4**
+
+
 **Code Organization**  
 
 We followed the recommended organization for packages:  
 - Code should be added (when possible) inside packages that identify the group, sprint, functional area and author;
-- For instance, we used **lapr4.white.s1.core.n4567890**
+- For instance, I used **lapr4.red.s1.core.n1160634**
 
 The code for this sprint:  
 Project **server**    
-- pt.isep.nsheets.server.**lapr4.white.s1.core.n4567890**.workbooks.application: contains the controllers  
-- pt.isep.nsheets.server.**lapr4.white.s1.core.n4567890**.workbooks.domain: contains the domain classes  
+- pt.isep.nsheets.server.**lapr4.red.s1.core.n1160634**.notes.application: contains the controllers  
+- pt.isep.nsheets.server.**lapr4.red.s1.core.n1160634**.notes.domain: contains the domain classes
+- pt.isep.nsheets.server.**lapr4.red.s1.core.n1160634**.notes.persistence: contains the persistence/JPA classes  
 - pt.isep.nsheets.server.**lapr4.white.s1.core.n4567890**.workbooks.persistence: contains the persistence/JPA classes 
-- Updated the existing class: **pt.isep.nsheets.server.WorkbookServiceImpl**
+- Updated the existing class: **pt.isep.nsheets.server.NoteServiceImpl**
 
 Project **shared**  
-- Added the class: **pt.isep.nsheets.shared.services.DataException**: This class is new and is used to return database exceptions from the server  
-- Updated the classes: **pt.isep.nsheets.shared.services.WorkbookService** and **pt.isep.nsheets.shared.services.WorkbookServiceAsync**  
+- Updated the classes: **pt.isep.nsheets.shared.services.NoteService** and **pt.isep.nsheets.shared.services.NoteServiceAsync**  
 
 Project **NShests** 
 - Updated the classes: **pt.isep.nsheets.client.aaplication.home.HomeView** and **pt.isep.nsheets.client.aaplication.home.HomePresenter**  
 - Updated the file: **pt.isep.nsheets.client.aaplication.home.HomeView.ui.xml**  
+- Created the package (and the classes of that package): **pt.isep.nsheets.client.aaplication.notes** 
 
 
 # 6. Integration/Demonstration
 
 *In this section document your contribution and efforts to the integration of your work with the work of the other elements of the team and also your work regarding the demonstration (i.e., tests, updating of scripts, etc.)*
+
 
 # 7. Final Remarks 
 
@@ -419,7 +436,8 @@ Project **NShests**
 
 Some Questions/Issues identified during the work in this feature increment:
 
-1. The method getWorkbooks in the WorkbooksService returns an ArrayList. Maybe we should not bind the result to a specific collection implementation.
+Nothing to report.
+
 
 # 8. Work Log
 
@@ -430,4 +448,26 @@ Commits:
 [Started new example documentation for Pedro Vieira Core07.1](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/3cb1ed5e49861986f0eff43531d37a13df259959)
 
 [Core07.1 Added all US Analysis SD, us and dm](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/3b1c2f95dcea4f67814f5fc7fd0efcf663f9b979)
+
+[Core07.1 Beggining of UI](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/854ec17d61203923b9682e875fd3292d6dfe1d21)
+
+[Core07.1 Beggining of Server and Database of US1, 2 and 3](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/2247e70ba43932a5e174ae8b58be4958221048eb)
+
+[Core07.1 Fix package problem, added class needed to both persistance.xml and beggining of javaDoc](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/7476a0ed3036b836cb709bd3d7f9fb0f0ad02904)
+
+[Core07.1 Database, beggining of units testing of database / persistance and beggining of javaDoc](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/041c34f94ab5f2297e918f76715ca0d2383cc1ab)
+
+[Core07.1 dm](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/0f7d0fbbd462fbef5ce077746d40e5ceebe264f4)
+
+[Core07.1 UI](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/fe2f4de0f98bc5cc2bf30cca72fa1a21a5ebeaf7)
+
+[Core07.1 server / database](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/09a93f41016e31faf57e06ad018034ac789a7397)
+
+[Core07.1 Doc: dm and design 1 to 4](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/a22806ab324df69894a8b18a5fe2f2f1a2aca930)
+
+[Core07.1 UI, Server and Database fixes](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/64568258634d136f475582771ec79342dfb85da2)
+
+[Core07.1 US1 and 2 done]()
+
+
 

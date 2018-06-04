@@ -29,6 +29,7 @@ import com.gwtplatform.mvp.client.annotations.ErrorPlace;
 import com.gwtplatform.mvp.client.annotations.UnauthorizedPlace;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 import com.gwtplatform.mvp.client.gin.DefaultModule;
+import pt.isep.nsheets.client.security.SecurityModule;
 
 public class ClientModule extends AbstractPresenterModule {
     @Override
@@ -44,12 +45,13 @@ public class ClientModule extends AbstractPresenterModule {
         
         install(new RpcDispatchAsyncModule.Builder().build());
         install(new ApplicationModule());
+        install(new SecurityModule());
 
         bind(ResourceLoader.class).asEagerSingleton();
 
         // DefaultPlaceManager Places
-        bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.home);
-        bindConstant().annotatedWith(ErrorPlace.class).to(NameTokens.home);
+        bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.login);
+        bindConstant().annotatedWith(ErrorPlace.class).to(NameTokens.login);
         bindConstant().annotatedWith(UnauthorizedPlace.class).to(NameTokens.login);
     }
 }

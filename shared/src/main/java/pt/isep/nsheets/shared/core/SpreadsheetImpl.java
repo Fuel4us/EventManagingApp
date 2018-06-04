@@ -20,7 +20,6 @@
  */
 package pt.isep.nsheets.shared.core;
 
-import java.io.IOException;
 // import java.io.ObjectInputStream;		// not supported in GWT
 // import java.io.ObjectOutputStream;	// not supported in GWT
 import java.util.ArrayList;
@@ -30,16 +29,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyJoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.ext.SpreadsheetExtension;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.AddressDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.CellDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
 
 /**
  * The implementation of the <code>Spreadsheet</code> interface.
  * @author Einar Pehrson
  */
+@Entity
 public class SpreadsheetImpl implements Spreadsheet {
 
 	/** The unique version identifier used for serialization */
@@ -49,9 +62,16 @@ public class SpreadsheetImpl implements Spreadsheet {
 	public static final String BASE_TITLE = "Sheet ";
 
 	/** The workbook to which the spreadsheet belongs */
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "workbookID")
 	private Workbook workbook;
 
 	/** The cells that have been instantiated */
+        @OneToMany(targetEntity = CellImpl.class)
+        @JoinTable(name="spreadsheet_cell",
+                  joinColumns=@JoinColumn(name="SpreadsheetImpl"),
+                  inverseJoinColumns=@JoinColumn(name="CellImpl"))
+        @MapKeyJoinColumn(name="address")
 	private Map<Address, Cell> cells = new HashMap<Address, Cell>();
 
 	/** The title of the spreadsheet */
@@ -64,25 +84,39 @@ public class SpreadsheetImpl implements Spreadsheet {
 	private int rows = 0;
 
 	/** The cell listeners that have been registered on the cell */
+        @Transient
 	private transient List<CellListener> cellListeners
 		= new ArrayList<CellListener>();
 
 	/** The cell listener that forwards events from all cells */
+        @Transient
 	private transient CellListener eventForwarder = new EventForwarder();
 
 	/** The spreadsheet extensions that have been instantiated */
+        @Transient
 	private transient Map<String, SpreadsheetExtension> extensions = 
 		new HashMap<String, SpreadsheetExtension>();
-
+        
+        @Id
+        @GeneratedValue
+        private Long id;
+        
+        public SpreadsheetImpl() {}
+        
 	/**
 	 * Creates a new spreadsheet.
 	 * @param workbook the workbook to which the spreadsheet belongs
 	 * @param title the title of the spreadsheet
 	 */
-	SpreadsheetImpl(Workbook workbook, String title) {
+	public SpreadsheetImpl(Workbook workbook, String title) {
 		this.workbook = workbook;
 		this.title = title;
 	}
+        
+        public SpreadsheetImpl(String title, Map<Address, Cell> cells){
+            this.title = title;
+            this.cells = cells;
+        }
 
 	/**
 	 * Creates a new spreadsheet, in which cells are initialized with data from
@@ -107,6 +141,12 @@ public class SpreadsheetImpl implements Spreadsheet {
 				} catch (FormulaCompilationException e) {}
 			}
 		}
+	}
+
+	public SpreadsheetImpl(Workbook workbook, String title, Map<Address, Cell> cells){
+		this(workbook, title);
+		this.cells = cells;
+
 	}
 
 /*
@@ -270,6 +310,40 @@ public class SpreadsheetImpl implements Spreadsheet {
 		}
 		return extension;
 	}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public SpreadsheetDTO toDTO() {
+        Map<AddressDTO, CellDTO> cells = new HashMap<>();
+        
+        for(Address a : this.cells.keySet()){
+            AddressDTO addressDTO = a.toDTO();
+            CellDTO cellDTO = this.cells.get(a).toDTO();
+            
+            cells.put(addressDTO, cellDTO);
+        }
+        
+        return new SpreadsheetDTO(cells, this.title, this.columns, this.rows);
+    }
+
+    public static Spreadsheet fromDTO(SpreadsheetDTO dto){
+        Map<Address, Cell> cells = new HashMap<>();
+        
+        for(AddressDTO a : dto.cells.keySet()){
+            Address address = Address.fromDTO(a);
+            Cell cellDTO = CellImpl.fromDTO(dto.cells.get(a));
+            
+            cells.put(address, cellDTO);
+        }
+        
+        return new SpreadsheetImpl(dto.title, cells);
+    }
 
 /*
  * GENERAL

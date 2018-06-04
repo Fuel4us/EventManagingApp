@@ -13,6 +13,7 @@ import gwt.material.design.client.ui.MaterialSideNavPush;
 class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements MenuPresenter.MyView {
 
 	interface Binder extends UiBinder<Widget, MenuView> {
+            
 	}
 
 	@UiField

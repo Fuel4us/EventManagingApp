@@ -16,7 +16,7 @@ public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPre
     interface MyView extends View  {
     }
     
-    @NameToken(NameTokens.about)
+    @NameToken(NameTokens.export)
     @ProxyStandard
     interface MyProxy extends ProxyPlace<ExportPresenter> {
     }
@@ -30,7 +30,7 @@ public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPre
     protected void onReveal() {
         super.onReveal();
 
-        SetPageTitleEvent.fire("Export", "A description of NSheets", "", "", this);
+        SetPageTitleEvent.fire("Export", "Export to PDF, CSV or XML", "", "", this);
     }
         
 }

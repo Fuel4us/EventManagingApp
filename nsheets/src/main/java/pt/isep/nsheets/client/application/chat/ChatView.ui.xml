@@ -1,0 +1,31 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:m="urn:import:gwt.material.design.client.ui">
+             
+             
+    <m:MaterialPanel>
+ 	
+        <m:MaterialCard ui:field="messageCard">
+            <!-->Message Colection<!-->
+            <m:MaterialCollection ui:field="messageCollection">
+            </m:MaterialCollection>  
+        </m:MaterialCard>
+        
+        
+        <g:HTMLPanel ui:field="htmlPanel">
+            <div align="bottom">
+                <m:MaterialRow>
+                    <m:MaterialRow grid="s6 m10">
+                        <m:MaterialTextBox ui:field="txtMessage" label="Write a message!"/>
+                    </m:MaterialRow>
+                    <m:MaterialRow grid="s6 m2">
+                        <m:MaterialButton ui:field="sendButton" width="100%;" text="Send" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK"/>
+                    </m:MaterialRow>
+                </m:MaterialRow>
+            </div>  
+        </g:HTMLPanel>
+        
+    </m:MaterialPanel> 
+ 	
+</ui:UiBinder>

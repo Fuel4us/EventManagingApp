@@ -24,7 +24,11 @@ import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 import pt.isep.nsheets.client.application.about.AboutModule;
 import pt.isep.nsheets.client.application.calendar.CalendarModule;
 import pt.isep.nsheets.client.application.chart.ChartModule;
+import pt.isep.nsheets.client.application.chat.ChatModule;
+import pt.isep.nsheets.client.application.code.CodeModule;
 import pt.isep.nsheets.client.application.export.ExportModule;
+import pt.isep.nsheets.client.application.extensions.ExtensionsModule;
+import pt.isep.nsheets.client.application.form.FormModule;
 import pt.isep.nsheets.client.application.home.HomeModule;
 import pt.isep.nsheets.client.application.login.LoginModule;
 import pt.isep.nsheets.client.application.menu.MenuModule;
@@ -32,10 +36,11 @@ import pt.isep.nsheets.client.application.workbook.WorkbookModule;
 import pt.isep.nsheets.client.application.notes.NotesModule;
 
 public class ApplicationModule extends AbstractPresenterModule {
+
     @Override
     protected void configure() {
 
-    	install(new HomeModule());
+        install(new HomeModule());
         install(new MenuModule());
         install(new CalendarModule());
         install(new AboutModule());
@@ -44,7 +49,10 @@ public class ApplicationModule extends AbstractPresenterModule {
         install(new LoginModule());
         install(new ChartModule());
         install(new ExportModule());
-
+        install(new ChatModule());
+        install(new FormModule());
+        install(new CodeModule());
+        install(new ExtensionsModule());
 
         bindPresenter(ApplicationPresenter.class, ApplicationPresenter.MyView.class, ApplicationView.class, ApplicationPresenter.MyProxy.class);
     }

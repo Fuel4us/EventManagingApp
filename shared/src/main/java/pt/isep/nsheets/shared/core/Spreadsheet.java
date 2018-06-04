@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.SortedSet;
 
 import pt.isep.nsheets.shared.ext.Extensible;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
 
 /**
  * A spreadsheet which provides cell data and dependencies.
@@ -134,4 +135,6 @@ public interface Spreadsheet extends Iterable<Cell>, Extensible<Spreadsheet>,
 	 * @return the cell listeners that have been registered on the spreadsheet
 	 */
 	public CellListener[] getCellListeners();
+
+	public SpreadsheetDTO toDTO();
 }

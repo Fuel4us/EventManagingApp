@@ -1,0 +1,23 @@
+@startuml  analysis.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+User -> Browser : create a new workbook
+Browser -->> User : asks for name and description
+User -> Browser : insert asked data
+
+Browser ->> Server : createWorkbookDescription(name, description)
+database Database 
+
+Server -> Database : fetch
+
+Server -->> Browser : return
+
+Browser -> Browser : display
+
+@enduml

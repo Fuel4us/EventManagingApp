@@ -32,40 +32,66 @@ import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
+import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
+import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
+import gwt.material.design.client.constants.Color;
+import gwt.material.design.client.constants.IconType;
+import gwt.material.design.client.ui.MaterialDropDown;
 import gwt.material.design.client.ui.MaterialIcon;
+import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialTextBox;
+import gwt.material.design.client.ui.MaterialToast;
+import gwt.material.design.client.ui.table.MaterialDataTable;
+import pt.isep.nsheets.client.application.workbook.WorkbookView.SheetCell;
+import pt.isep.nsheets.client.place.ParameterTokens;
+import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.services.ChartDTO;
 
 public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, WorkbookPresenter.MyProxy> {
 
-	interface MyView extends View {
-		public MaterialTextBox getFirstBox();
+    
 
-		public MaterialIcon getFirstButton();
-	}
+    interface MyView extends View {
 
-	@ProxyStandard
-	@NameToken(NameTokens.workbook)
-	interface MyProxy extends ProxyPlace<WorkbookPresenter> {
-	}
+        public MaterialTextBox getFirstBox();
 
-	@Inject
-	WorkbookPresenter(EventBus eventBus, MyView view, MyProxy proxy, PlaceManager placeManager) {
-		super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
+        public MaterialIcon getFirstButton();
+
+        public MaterialDataTable<SheetCell> getTable();
+
+        public Cell getActiveCell();
+
+        public MaterialDropDown getChartDropDown();
+
+        public MaterialPopupMenu getPopChart();
+    }
+
+    @ProxyStandard
+    @NameToken(NameTokens.workbook)
+    interface MyProxy extends ProxyPlace<WorkbookPresenter> {
+    }
+
+    @Inject
+    WorkbookPresenter(EventBus eventBus, MyView view, MyProxy proxy, PlaceManager placeManager) {
+        super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
+
+
+
 
 		this.placeManager = placeManager;
 	}
 
-	PlaceManager placeManager;
+    PlaceManager placeManager;
 
-	@Override
-	protected void onReset() {
-		super.onReset();
+    @Override
+    protected void onReset() {
+        super.onReset();
 
-		getView().getFirstButton().addClickHandler(new ClickHandler() {
+        getView().getFirstButton().addClickHandler(new ClickHandler() {
 
-			@Override
-			public void onClick(ClickEvent event) {
-				// Let's test formulas...
+            @Override
+            public void onClick(ClickEvent event) {
+                // Let's test formulas...
 //				String source=getView().getFirstBox().getText();
 //				
 //				// Fetches a cell
@@ -93,20 +119,54 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 //					getView().getResultLabel().setText(result);
 //				}
 
-				// Example on how to jump to another place
+                // Example on how to jump to another place
 //				PlaceRequest request = new PlaceRequest.Builder().nameToken(NameTokens.about)
 //						.with("name", result).build();
 //
 //				placeManager.revealPlace(request);
-			}
+            }
+        });
 
-		});
-	}
-	
+        getView().getTable().addClickHandler(handler -> {
+            if (getView().getActiveCell().hasChart()) {
+                updateCellCharts(getView().getActiveCell());
+                getView().getPopChart().setPopupPosition(handler.getClientX(), handler.getClientY());
+                getView().getPopChart().open();
+            }else{
+                WorkbookView.selectedChart = null;
+            }
+        });
+
+    }
+
     @Override
     protected void onReveal() {
         super.onReveal();
 
         SetPageTitleEvent.fire("Workbook", "The current Workbook", "", "", this);
     }
+
+    private void redirectToChartPage() {
+        String token = placeManager
+                .getCurrentPlaceRequest()
+                .getParameter(ParameterTokens.REDIRECT, NameTokens.getChart());
+        PlaceRequest placeRequest = new PlaceRequest.Builder().nameToken(token).build();
+
+        placeManager.revealPlace(placeRequest);
+    }
+
+    protected void updateCellCharts(Cell cell) {
+        getView().getChartDropDown().clear();
+        for (ChartDTO chart : cell.chartList()) {
+            MaterialLink link = new MaterialLink(chart.getGraph_name(), null, IconType.INSERT_CHART);
+            link.setTextColor(Color.BLACK);
+            link.addClickHandler(handler ->{
+                WorkbookView.selectedChart = chart;
+                MaterialToast.fireToast(WorkbookView.selectedChart.getGraph_name());
+                redirectToChartPage();
+            });
+            getView().getChartDropDown().add(link);
+        }
+    }
+
 }

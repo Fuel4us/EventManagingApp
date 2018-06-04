@@ -27,9 +27,9 @@ package pt.isep.nsheets.shared.ext;
 public interface Extensible<T> {
 
 	/**
-	 * Returns the extension with the given key.
-	 * @param name the name of the extension (case-insensitive)
-	 * @return the appropriate extension, or null if no extension with the given name was found
+	 * Returns the extensions with the given key.
+	 * @param name the name of the extensions (case-insensitive)
+	 * @return the appropriate extensions, or null if no extensions with the given name was found
 	 */
 	public T getExtension(String name);
 }

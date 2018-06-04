@@ -1,0 +1,22 @@
+@startuml analysis3.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+User -> Browser : working on a workbook
+User -> Browser : save his state
+
+Browser -> Server : saveWorkbook()
+
+database Database 
+
+Server -> Database : save
+
+Server -->> Browser : return
+
+Browser -> Browser : display
+@enduml

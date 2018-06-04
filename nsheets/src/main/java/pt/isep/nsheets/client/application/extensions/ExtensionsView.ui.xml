@@ -1,0 +1,35 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:m="urn:import:gwt.material.design.client.ui">
+
+    <ui:import field="pt.isep.nsheets.client.place.NameTokens.home"/>
+    <ui:with field='res' type='pt.isep.nsheets.client.resources.AppResources' />
+
+    <g:HTMLPanel>
+
+        <m:MaterialCollapsible grid="s12 m6 l8" ui:field="collapsible">
+            <!-- Configuration UIs must be manually added to this Collapsible-->
+            <m:MaterialCollapsibleItem>
+                <m:MaterialCollapsibleHeader>
+                    <m:MaterialLink text="Value Colour Extension" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
+                </m:MaterialCollapsibleHeader>
+                <m:MaterialCollapsibleBody>
+                    <m:MaterialLabel text="Colour Configuration" fontSize="3em"/>
+                    <m:MaterialLabel text="When cell value is positive" fontSize="2em"/>
+                    <m:MaterialLabel text="Background Color"/>
+                    <m:MaterialListValueBox ui:field="bgColorPos" grid="s12"/>
+                    <m:MaterialLabel text="Font Color"/>
+                    <m:MaterialListValueBox ui:field="fgColorPos" grid="s12"/>
+                    <m:MaterialLabel text="When cell value is negative" fontSize="2em"/>
+                    <m:MaterialLabel text="Background Color"/>
+                    <m:MaterialListValueBox ui:field="bgColorNeg" grid="s12"/>
+                    <m:MaterialLabel text="Font Color"/>
+                    <m:MaterialListValueBox ui:field="fgColorNeg" grid="s12"/>
+                    <m:MaterialDivider marginTop="10"/>
+                    <m:MaterialButton waves="LIGHT" size="LARGE" iconType="DONE" backgroundColor="BLUE" iconColor="WHITE" ui:field="confirmButton" text="CONFIRM" marginTop="25"/>
+                </m:MaterialCollapsibleBody>
+            </m:MaterialCollapsibleItem>
+        </m:MaterialCollapsible>
+    </g:HTMLPanel>
+</ui:UiBinder>

@@ -6,14 +6,9 @@ package pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.domain;
 */
 
 import java.io.Serializable;
-import java.util.Objects;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-
 import eapli.framework.domain.AggregateRoot;
 import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
 
@@ -25,7 +20,9 @@ import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
  */
 @Entity
 public class WorkbookDescription implements AggregateRoot<Long>, Serializable {
-
+        
+        private static Integer NUMBER_OF_SHEETS_DEFAULT = 1;
+        
 	// ORM primary key
 	@Id
 	@GeneratedValue

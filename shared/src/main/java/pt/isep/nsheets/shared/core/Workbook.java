@@ -20,23 +20,40 @@
  */
 package pt.isep.nsheets.shared.core;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 /**
  * A workbook which can contain several spreadsheets.
  * @author Einar Pehrson
  */
+@Entity
 public class Workbook implements Iterable<Spreadsheet>, Serializable {
 
 	/** The unique version identifier used for serialization */
 	private static final long serialVersionUID = -6324252462576447242L;
-
+        
+        private String name;
+        private String description;
+        
 	/** The spreadsheets of which the workbook consists */
+        @OneToMany(
+                mappedBy = "workbook",
+                cascade = CascadeType.ALL,
+                targetEntity = SpreadsheetImpl.class
+        )
 	private List<Spreadsheet> spreadsheets = new ArrayList<Spreadsheet>();
 
 	/** The cell listeners that have been registered on the cell */
@@ -44,7 +61,11 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 		= new ArrayList<WorkbookListener>();
 
 	/** The number of spreadsheets that have been created in the workbook */
-	private int createdSpreadsheets;
+	private int createdSpreadsheets = 0;
+        
+        @Id
+        @GeneratedValue
+        private Long id;
 
 	/**
 	 * Creates a new empty workbook.
@@ -56,10 +77,19 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 	 * of blank spreadsheets.
 	 * @param sheets the number of sheets to create initially
 	 */
-	public Workbook(int sheets) {
-		for (int i = 0; i < sheets; i++)
-			spreadsheets.add(new SpreadsheetImpl(this,
-				getNextSpreadsheetTitle()));
+	public Workbook(String name, String description, int sheets) {
+            this.name = name;
+            this.description = description;
+            
+            for (int i = 0; i < sheets; i++)
+                    spreadsheets.add(new SpreadsheetImpl(this,
+                            getNextSpreadsheetTitle()));
+	}
+
+	public Workbook(String name, String description, List<Spreadsheet> spreadsheets) {
+            this.name = name;
+            this.description = description;
+            this.spreadsheets = spreadsheets;
 	}
 
 	/**
@@ -67,10 +97,13 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 	 * spreadsheets initially.
 	 * @param contents the content matrices to use when creating spreadsheets
 	 */
-	public Workbook(String[][]... contents) {
-		for (String[][] content : contents)
-			spreadsheets.add(new SpreadsheetImpl(this,
-				getNextSpreadsheetTitle(), content));
+	public Workbook(String name, String description, String[][]... contents) {
+            this.name = name;
+            this.description = description;
+            
+            for (String[][] content : contents)
+                    spreadsheets.add(new SpreadsheetImpl(this,
+                            getNextSpreadsheetTitle(), content));
 	}
 
 	/**
@@ -82,6 +115,13 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 		spreadsheets.add(spreadsheet);
 		fireSpreadsheetInserted(spreadsheet, spreadsheets.size() - 1);
 	}
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
 	/**
 	 * Adds a new spreadsheet to the workbook, in which cells are initialized
@@ -139,6 +179,14 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 		return spreadsheets.iterator();
 	}
 
+        public String name() {
+            return name;
+        }
+
+        public String description() {
+            return description;
+        }
+        
 /*
  * EVENT HANDLING
  */
@@ -196,7 +244,34 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 			listener.spreadsheetRenamed(spreadsheet);
 	}
 
-/*
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public WorkbookDTO toDTO() {
+            List<SpreadsheetDTO> spreadsheetDTOS = new ArrayList<>();
+            for(Spreadsheet ss : this.spreadsheets)
+                    spreadsheetDTOS.add(ss.toDTO());
+            return new WorkbookDTO(this.name, this.description, spreadsheetDTOS);
+    }
+
+    public static Workbook fromDTO(WorkbookDTO dto){
+            if(dto.spreadsheets.isEmpty())
+                return new Workbook(dto.name, dto.description, dto.createdSpreadsheets);
+            else {
+                List<Spreadsheet> spreadsheet = new ArrayList<>();
+
+                for(SpreadsheetDTO ss : dto.spreadsheets)
+                        spreadsheet.add(SpreadsheetImpl.fromDTO(ss));
+
+                return new Workbook(dto.name, dto.description, spreadsheet);
+            }
+    }
+	/*
  * GENERAL
  */
 

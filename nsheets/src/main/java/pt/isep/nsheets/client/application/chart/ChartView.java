@@ -5,18 +5,21 @@
  */
 package pt.isep.nsheets.client.application.chart;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.gwt.charts.client.ChartLoader;
 import com.googlecode.gwt.charts.client.ChartPackage;
 import com.googlecode.gwt.charts.client.ColumnType;
 import com.googlecode.gwt.charts.client.DataTable;
-import com.googlecode.gwt.charts.client.corechart.BarChart;
-import com.googlecode.gwt.charts.client.corechart.BarChartOptions;
-import com.googlecode.gwt.charts.client.options.Animation;
-import com.googlecode.gwt.charts.client.options.AnimationEasing;
+import com.googlecode.gwt.charts.client.corechart.ColumnChart;
+import com.googlecode.gwt.charts.client.corechart.ColumnChartOptions;
 import com.googlecode.gwt.charts.client.options.Bar;
 import com.googlecode.gwt.charts.client.options.Gridlines;
 import com.googlecode.gwt.charts.client.options.HAxis;
@@ -26,131 +29,430 @@ import com.googlecode.gwt.charts.client.options.LegendPosition;
 import com.googlecode.gwt.charts.client.options.TextPosition;
 import com.googlecode.gwt.charts.client.options.VAxis;
 import com.gwtplatform.mvp.client.ViewImpl;
+import gwt.material.design.client.base.validator.RegExValidator;
+import gwt.material.design.client.constants.IconType;
+import gwt.material.design.client.ui.MaterialAnchorButton;
+import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialCard;
 import gwt.material.design.client.ui.MaterialCardContent;
+import gwt.material.design.client.ui.MaterialCardTitle;
+import gwt.material.design.client.ui.MaterialSwitch;
+import gwt.material.design.client.ui.MaterialTextBox;
+import gwt.material.design.client.ui.MaterialToast;
+import gwt.material.design.client.ui.animate.MaterialAnimation;
+import gwt.material.design.client.ui.animate.Transition;
 import javax.inject.Inject;
+import pt.isep.nsheets.shared.core.Address;
 
 /**
+ * The Chart View Class.
  *
  * @author pedromonteiro
  */
-public class ChartView extends ViewImpl implements ChartPresenter.MyView{
-    
-    
-        private  boolean isLoop;
-	private  BarChart chart;
-	private final String[] countries = new String[] { "Austria", "Bulgaria", "Denmark", "Greece" };
-	private final int[] years = new int[] { 2003, 2004, 2005 };
-	private final int[][] values = new int[][] { { 1336060, 1538156, 1576579 }, { 400361, 366849, 440514 }, { 1001582, 1119450, 993360 }, { 997974, 941795, 930593 } };
-	private final int[][] valuesInitial = new int[][] { { 1538156, 1336060, 1576579 }, { 366849, 400361, 440514}, { 1001582, 993360, 1119450 }, { 941795, 997974, 930593 } };
+public class ChartView extends ViewImpl implements ChartPresenter.MyView {
+
+    private static final int ENTER_TIME = 700;
+    private static final int EXIT_TIME = 500;
+    private ColumnChart chart;
+    private static boolean edit = false;
+
+    @Override
+    public String getFistCell() {
+        return start_textbox.getValue();
+    }
+
+    @Override
+    public String getLastCell() {
+        return end_textbox.getValue();
+    }
+
+    @Override
+    public String chartName() {
+        return name_textbox.getValue();
+    }
+
+    @Override
+    public boolean isConsiderFirstField() {
+        return switch_considerFist.getValue();
+    }
+
+    @Override
+    public boolean isRow() {
+        return switch_isRow.getValue();
+    }
+
+    @Override
+    public void saveDataHandler(ClickHandler click) {
+        save_btn.addClickHandler(click);
+    }
+
+    @Override
+    public void saveChart(ClickHandler click) {
+        save_chart_btn.addClickHandler(click);
+    }
 
     interface Binder extends UiBinder<Widget, ChartView> {
-	}
+    }
+
+    class CellValidator extends RegExValidator {
+
+        public CellValidator() {
+            super("[a-zA-Z]{1}[0-9]*", "The cell pattern should be \"[a-zA-Z][0-9]*\", i.e: \"A3\"");
+        }
+    }
+
+    class RequiredValidator extends RegExValidator {
+
+        public RequiredValidator() {
+            super(".+", "Required");
+        }
+    }
 
     @UiField
-	MaterialCardContent cardContent;
-    
-	@Inject
-	ChartView(Binder uiBinder) {
-		initWidget(uiBinder.createAndBindUi(this));
-                initialize();
-                
-	}
-        
-        private void initialize() {
-		ChartLoader chartLoader = new ChartLoader(ChartPackage.CORECHART);
-		chartLoader.loadApi(new Runnable() {
+    MaterialCardContent cardContent;
 
-			@Override
-			public void run() {
-//				 Create and attach the chart
-				chart = new BarChart();
-				cardContent.add(chart);
-//				
-//				// Prepare the data with loop inside to populate the initial data
-				setLoop();
-			}
-		});
-	}
+    @UiField
+    MaterialCard chart_card, edit_card;
 
-	private void setLoop() {
+    @UiField
+    MaterialAnchorButton chart_button, edit_button;
 
-		Timer timer = new Timer() {
+    @UiField
+    MaterialButton save_btn, save_chart_btn;
 
-			public void run() {
-				if (isLoop) {
-					drawChart(values);
-					isLoop = false;
-				}
-				else {
-					drawChart(valuesInitial);
-					isLoop = true;
-				}
+    @UiField
+    MaterialTextBox name_textbox, start_textbox, end_textbox;
 
-			}
-		};
-		timer.scheduleRepeating(1000);
-	}
+    @UiField
+    MaterialSwitch switch_isRow, switch_considerFist;
 
-	private void drawChart(int[][] values) {
+    @UiField
+    MaterialCardTitle chart_name;
 
-		// Prepare the data
-		DataTable dataTable = DataTable.create();
-		dataTable.addColumn(ColumnType.STRING, "Year");
-		for (int i = 0; i < countries.length; i++) {
-			dataTable.addColumn(ColumnType.NUMBER, countries[i]);
-		}
-		dataTable.addRows(years.length);
-		for (int i = 0; i < years.length; i++) {
-			dataTable.setValue(i, 0, String.valueOf(years[i]));
-		}
-		for (int col = 0; col < values.length; col++) {
-			for (int row = 0; row < values[col].length; row++) {
-				dataTable.setValue(row, col + 1, values[col][row]);
-			}
-		}
+    @UiHandler("chart_button")
+    void click_chart(ClickEvent e) {
+        chart_card.setVisible(false);
+        edit_card.setVisible(true);
 
-		// Draw the chart
-//		chart.draw(dataTable, getOptions());
-	}
+        enterChartCard();
+    }
 
-	private BarChartOptions getOptions() {
-		// Grid Lines
-		Gridlines lines = Gridlines.create();
-		lines.setColor("fff");
+    @UiHandler("edit_button")
+    void click_edit(ClickEvent e) {
+        edit_card.setVisible(false);
+        chart_card.setVisible(true);
 
-		// Text Positions X and Y Axis
-		HAxis hAxis = HAxis.create();
-		hAxis.setTextPosition(TextPosition.NONE);
+        enterEditCard(false);
+    }
 
-		VAxis vAxis = VAxis.create();
-		vAxis.setGridlines(lines);
-		hAxis.setGridlines(lines);
+    @UiHandler("start_textbox")
+    void typingStart(KeyPressEvent e) {
+        start_textbox.validate();
+    }
 
-		// Legend
-		Legend legend = Legend.create();
-		legend.setPosition(LegendPosition.NONE);
-		legend.setAligment(LegendAlignment.START);
+    @UiHandler("end_textbox")
+    void typingEnd(KeyPressEvent e) {
+        end_textbox.validate();
+    }
 
-		// Set options
-		BarChartOptions options = BarChartOptions.create();
-		options.setHAxis(HAxis.create("Cups"));
-		options.setVAxis(VAxis.create("Year"));
-		options.setColors("#2196f3", "#42a5f5", "#64b5f6", "#90caf9");
-		options.setVAxis(vAxis);
-		options.setHAxis(hAxis);
-		options.setLegend(legend);
-		
-		// Set Animation
-		Animation animation = Animation.create();
-		animation.setDuration(500);
-		animation.setEasing(AnimationEasing.OUT);
-		options.setAnimation(animation);
-		
-		// Set Bar
-		Bar bar = Bar.create();
-		bar.setGroupWidth("50%");
-		
-		return options;
-	}
+    @UiHandler("save_btn")
+    void click_save(ClickEvent e) {
+        if (!edit) {
+            if (enableElements(false)) {
+                edit = true;
+//                drawChart(chartName(), , isRow(), isConsiderFirstField());
+            }
+
+        } else {
+            if (enableElements(true)) {
+                edit = false;
+            }
+        }
+    }
+
+    @Inject
+    ChartView(Binder uiBinder) {
+        initWidget(uiBinder.createAndBindUi(this));
+        initialize();
+    }
+
+    private void initialize() {
+        enterEditCard(true);
+        chart_button.setEnabled(false);
+        chart_card.setVisible(false);
+        edit_button.setVisible(false);
+        addValidators();
+        ChartLoader chartLoader = new ChartLoader(ChartPackage.CORECHART);
+        chartLoader.loadApi(new Runnable() {
+
+            @Override
+            public void run() {
+                chart = new ColumnChart();
+                cardContent.add(chart);
+//                setLoop();
+            }
+        });
+    }
+
+    private void addValidators() {
+        name_textbox.addValidator(new RequiredValidator());
+        start_textbox.addValidator(new CellValidator());
+        end_textbox.addValidator(new CellValidator());
+    }
+
+    private boolean validateForm() {
+        return !(!name_textbox.validate() || !start_textbox.validate() || !end_textbox.validate());
+    }
+
+    @Override
+    public void drawChart(String chart_name, String[][] matrix, boolean isRow, boolean considerFirstLine) {
+
+        // Prepare the data
+        DataTable dataTable = DataTable.create();
+        dataTable.addColumn(ColumnType.STRING, "Year");
+        String fieldName = "Row";
+        int start;
+
+        if (isRow) {
+
+            char letter = 'A';
+            for (int i = 1; i <= matrix[0].length; i++) {
+                dataTable.addColumn(ColumnType.NUMBER, String.valueOf(i));
+            }
+
+            dataTable.addRows(matrix.length);
+
+            if (considerFirstLine) {
+                start = 1;
+                for (int i = 0; i < matrix.length; i++) {
+                    dataTable.setValue(i, 0, String.valueOf(matrix[i][0]));
+                }
+            } else {
+                start = 0;
+                for (int i = 0; i < matrix.length; i++) {
+                    dataTable.setValue(i, 0, String.valueOf(letter));
+                    letter++;
+                }
+            }
+
+            for (int row = 0; row < matrix.length; row++) {
+                for (int col = start; col < matrix[row].length; col++) {
+                    if (canAddColumn(matrix[row][col])) {
+                        dataTable.setValue(row, col + 1, matrix[row][col]);
+                    }
+                }
+            }
+
+        } else {
+            fieldName = "Column";
+            char letter = 'A';
+            matrix = transposeMatrix(matrix);
+            for (int i = 0; i < matrix[0].length; i++) {
+                dataTable.addColumn(ColumnType.NUMBER, String.valueOf(letter));
+                letter++;
+            }
+
+            dataTable.addRows(matrix.length);
+
+            if (considerFirstLine) {
+                start = 1;
+                for (int i = 0; i < matrix.length; i++) {
+                    dataTable.setValue(i, 0, String.valueOf(matrix[i][0]));
+                }
+
+            } else {
+                start = 0;
+                for (int i = 0; i < matrix.length; i++) {
+                    dataTable.setValue(i, 0, String.valueOf(i + 1));
+                }
+            }
+
+            for (int row = 0; row < matrix.length; row++) {
+                for (int col = start; col < matrix[row].length; col++) {
+                    if (canAddColumn(matrix[row][col])) {
+                        dataTable.setValue(row, col + 1, matrix[row][col]);
+                    }
+                }
+            }
+
+        }
+
+        // Draw the chart
+        this.chart_name.setText(chart_name);
+        chart.draw(dataTable, getOptions(fieldName, matrix));
+    }
+
+    private ColumnChartOptions getOptions(String HAxis_name, String[][] matrix) {
+        // Grid Lines
+        Gridlines lines = Gridlines.create();
+        lines.setColor("fff");
+
+        // Text Positions X and Y Axis
+        HAxis hAxis = HAxis.create(HAxis_name);
+        hAxis.setTextPosition(TextPosition.OUT);
+
+        VAxis vAxis = VAxis.create("Values");
+        vAxis.setMinValue(0);
+        vAxis.setGridlines(lines);
+        hAxis.setGridlines(lines);
+
+        // Legend
+        Legend legend = Legend.create();
+        legend.setPosition(LegendPosition.NONE);
+        legend.setAligment(LegendAlignment.START);
+
+        // Set options
+        ColumnChartOptions options = ColumnChartOptions.create();
+        options.setVAxis(vAxis);
+        options.setHAxis(hAxis);
+        options.setLegend(legend);
+        options.setWidth(matrix.length * matrix[0].length * 50);
+        options.setHeight(300);
+
+        // Set Bar
+        Bar bar = Bar.create();
+        bar.setGroupWidth("20%");
+
+        return options;
+    }
+
+    private void enterEditCard(boolean firstTime) {
+        animate(chart_card, Transition.SLIDEOUTRIGHT, chart_button, edit_button, false, firstTime, EXIT_TIME);
+        animate(edit_card, Transition.SLIDEINLEFT, chart_button, edit_button, true, firstTime, ENTER_TIME);
+
+    }
+
+    private void enterChartCard() {
+        animate(edit_card, Transition.SLIDEOUTLEFT, edit_button, chart_button, false, false, EXIT_TIME);
+        animate(chart_card, Transition.SLIDEINRIGHT, edit_button, chart_button, true, false, ENTER_TIME);
+
+    }
+
+    private void animate(MaterialCard card, Transition transition, MaterialAnchorButton btnIn, MaterialAnchorButton btnOut, boolean setVisible, boolean firstTime, int time) {
+
+        if (!firstTime) {
+
+            MaterialAnimation animation = new MaterialAnimation();
+            animation.setTransition(transition);
+            animation.setDelay(0);
+            animation.setDuration(time);
+            animation.setInfinite(false);
+
+            if (!setVisible) {
+                animation.animate(card);
+                animateButton(btnOut, false);
+
+                Timer timer = new Timer() {
+
+                    public void run() {
+                        card.setVisible(false);
+                    }
+                };
+                timer.schedule(time);
+            } else {
+                animation.animate(card);
+                card.setVisible(true);
+                animateButton(btnIn, true);
+            }
+        }
+
+    }
+
+    private void animateButton(MaterialAnchorButton btn, boolean setVisible) {
+
+        MaterialAnimation animation = new MaterialAnimation();
+
+        animation.setDuration(700);
+        animation.setInfinite(false);
+
+        if (setVisible) {
+            btn.setVisible(false);
+            animation.setTransition(Transition.ROTATEIN);
+            Timer timer = new Timer() {
+
+                public void run() {
+                    btn.setVisible(true);
+                    animation.animate(btn);
+                }
+            };
+            timer.schedule(200);
+        } else {
+            animation.setTransition(Transition.ROTATEOUT);
+            animation.animate(btn);
+            Timer timer = new Timer() {
+
+                public void run() {
+                    btn.setVisible(false);
+
+                }
+            };
+            timer.schedule(700);
+
+        }
+
+    }
+
+    private boolean enableElements(boolean enable) {
+
+        if (!enable) {
+            if (!validateForm()) {
+                return false;
+            } else if (start_textbox.getValue().length() == 0) {
+                MaterialToast.fireToast("Invalid Start");
+                return false;
+            }
+
+            save_btn.setText("Edit");
+            save_btn.setIconType(IconType.CREATE);
+        } else {
+            save_btn.setText("Save");
+            save_btn.setIconType(IconType.SAVE);
+        }
+
+        name_textbox.setEnabled(enable);
+        end_textbox.setEnabled(enable);
+        start_textbox.setEnabled(enable);
+        switch_considerFist.setEnabled(enable);
+        switch_isRow.setEnabled(enable);
+        chart_button.setEnabled(!enable);
+
+        return true;
+    }
+
+    //FIX ME
+    private String[][] transposeMatrix(String[][] m) {
+
+        String[][] temp = new String[m[0].length][m.length];
+        for (int i = 0; i < m.length; i++) {
+            for (int j = 0; j < m[0].length; j++) {
+                temp[j][i] = m[i][j];
+            }
+        }
+        return temp;
+    }
+
+    @Override
+    public ChartView fillChartInfo(String chart_name, Address firstCell, Address lastCell, boolean isConsideredFirst, boolean isRow) {
+        this.name_textbox.setText(chart_name);
+        this.switch_isRow.setValue(isRow);
+        this.switch_considerFist.setValue(isConsideredFirst);
+        if(firstCell == null) this.start_textbox.setText("");
+        else this.start_textbox.setText(firstCell.toString());
+        if(lastCell ==null) this.end_textbox.setText("");
+        else this.end_textbox.setText(lastCell.toString());
+        if(!edit) this.save_btn.fireEvent(new ClickEvent(){});
+        return this;
+    }
+
+    private boolean canAddColumn(String value) {
+        Double number;
+
+        try {
+            number = Double.valueOf(value);
+            return true;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+    }
 
 }

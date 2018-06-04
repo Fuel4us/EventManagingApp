@@ -20,15 +20,22 @@
  */
 package pt.isep.nsheets.shared.core;
 
-import java.io.IOException;
 //import java.io.ObjectInputStream;		// not supported in GWT
 //import java.io.ObjectOutputStream;		// not supported in GWT
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import pt.isep.nsheets.shared.core.formula.Formula;
 import pt.isep.nsheets.shared.core.formula.Reference;
@@ -38,36 +45,45 @@ import pt.isep.nsheets.shared.core.formula.util.ReferenceTransposer;
 import pt.isep.nsheets.shared.ext.CellExtension;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.CellDTO;
+import pt.isep.nsheets.shared.services.ChartDTO;
 
 /**
  * The implementation of the <code>Cell</code> interface.
  * @author Einar Pehrson
  */
+@Entity
 public class CellImpl implements Cell {
 
 	/** The unique version identifier used for serialization */
 	private static final long serialVersionUID = 926673794084390673L;
 
 	/** The spreadsheet to which the cell belongs */
+        @Transient
 	private Spreadsheet spreadsheet;
 
 	/** The address of the cell */
+        @OneToOne
 	private Address address;
 
 	/** The value of the cell */
+        @Embedded
 	private Value value = new Value();
 
 	/** The content of the cell */
 	private String content = "";
 
 	/** The cell's formula */
+        @Transient
 	private Formula formula;
 
 	/** The cell's precedents */
-	private SortedSet<Cell> precedents = new TreeSet<Cell>();
+        @ManyToMany (targetEntity = CellImpl.class)
+	private Set<Cell> precedents = new TreeSet<Cell>();
 
 	/** The cell's dependents */
-	private SortedSet<Cell> dependents = new TreeSet<Cell>();
+        @ManyToMany (targetEntity = CellImpl.class)
+	private Set<Cell> dependents = new TreeSet<Cell>();
 
 	/** The cell listeners that have been registered on the cell */
 	private transient List<CellListener> listeners
@@ -76,7 +92,16 @@ public class CellImpl implements Cell {
 	/** The cell extensions that have been instantiated */
 	private transient Map<String, CellExtension> extensions = 
 		new HashMap<String, CellExtension>();
-
+        
+        private List<ChartDTO> chartList = new ArrayList<>();
+        
+        @Id
+        @GeneratedValue
+        private Long id;
+        
+        
+        protected CellImpl() {}
+        
 	/**
 	 * Creates a new cell at the given address in the given spreadsheet.
 	 * (not intended to be used directly).
@@ -98,11 +123,18 @@ public class CellImpl implements Cell {
 	 * @param content the content of the cell
 	 * @throws FormulaCompilationException if an incorrectly formatted formula was entered
 	 */
-	CellImpl(Spreadsheet spreadsheet, Address address, String content) throws FormulaCompilationException {
+	public CellImpl(Spreadsheet spreadsheet, Address address, String content) throws FormulaCompilationException {
 		this(spreadsheet, address);
 		storeContent(content);
 		reevaluate();
 	}
+        
+        public CellImpl(Address address, String content, SortedSet<Cell> precedents, SortedSet<Cell> dependents){
+            this.address = address;
+            this.content = content;
+            this.precedents = precedents;
+            this.dependents = dependents;
+        }
 
 /*
  * LOCATION
@@ -394,6 +426,74 @@ public class CellImpl implements Cell {
 	public String toString() {
 		return address.toString();
 	}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    @Override
+    public boolean hasChart() {
+        return this.chartList.size() > 0;
+    }
+
+    @Override
+    public List<ChartDTO> chartList() {
+        return this.chartList;
+    }
+
+    @Override
+    public boolean addChart(ChartDTO chart) {
+        return this.chartList.add(chart);
+    }
+    
+    public CellDTO toDTO(){
+        SortedSet<CellDTO> precedentsDTO = new TreeSet<>();
+        SortedSet<CellDTO> dependentsDTO = new TreeSet<>();
+        
+        for(Cell p : this.precedents){
+            precedentsDTO.add(p.toDTO());
+        }
+        
+        for(Cell d : this.dependents){
+            dependentsDTO.add(d.toDTO());
+        }
+        
+        return new CellDTO(address.toDTO(), content, precedentsDTO, dependentsDTO);
+    }
+    
+    public static Cell fromDTO(CellDTO dto){
+        SortedSet<Cell> precedentsCell = new TreeSet<>();
+        SortedSet<Cell> dependentsCell = new TreeSet<>();
+        
+        for(CellDTO p : dto.precedents){
+            precedentsCell.add(CellImpl.fromDTO(p));
+        }
+        
+        for(CellDTO d : dto.dependents){
+            dependentsCell.add(CellImpl.fromDTO(d));
+        }
+        
+        return new CellImpl(Address.fromDTO(dto.address), dto.content, precedentsCell, dependentsCell);
+    }
+    
+//    @Override
+//    public boolean hasChart() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public List<Chart> chartList() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public boolean addChart(Chart chart) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
 	/**
 	 * Customizes deserialization by recreating the listener list and by catching
