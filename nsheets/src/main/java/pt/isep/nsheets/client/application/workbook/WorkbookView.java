@@ -51,6 +51,7 @@ import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
 import pt.isep.nsheets.shared.services.ChartDTO;
+import pt.isep.nsheets.shared.services.ChartType;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
 // public class WorkbookView extends NavigatedView implements WorkbookPresenter.MyView {
@@ -191,9 +192,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
             SheetCell cell = new SheetCell(sh, k);
 
-            if (k == 1) {
-                cell.getCell(4).addChart(initChartTEST());
-            }
+            
 
             rows.add(cell);
         }
@@ -328,32 +327,25 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         // table.getTableTitle().setText("The Future Worksheet!");
     }
 
-    public ChartDTO initChartTEST() {
-        String[][] matrix = new String[][]{
-            {"a", " 2", "3"},
-            {"4", " 2", "3"},
-            {"6", " 2", "3"},
-            {"1", " 2", "3"},
-            {"1", " 4", "3"},
-            {"1", " 2", "3"},
-            {"1", " 2", "3"},
-            {"1", " 2", "3"},
-            {"1", " 2", "3"},
-            {"1", " 2", "40"}};
-
-        Workbook wb = new Workbook("Teste", "Teste", matrix);
-        Spreadsheet ss = wb.getSpreadsheet(0);
-
-        ChartDTO dto = new ChartDTO(
-                "CHART TEST",
-                new Address(1, 1),
-                new Address(5, 5),
-                matrix,
-                true,
-                false);
-
-        return dto;
-    }
+//    public ChartDTO initChartTEST() {
+//        String[][] matrix = new String[][]{
+//            {"a", " 2", "3"},
+//            {"4", " 2", "3"},
+//            {"6", " 2", "3"},
+//            {"1", " 2", "3"},
+//            {"1", " 4", "3"},
+//            {"1", " 2", "3"},
+//            {"1", " 2", "3"},
+//            {"1", " 2", "3"},
+//            {"1", " 2", "3"},
+//            {"1", " 2", "40"}};
+//
+//        Workbook wb = new Workbook("Teste", "Teste", matrix);
+//        Spreadsheet ss = wb.getSpreadsheet(0);
+//
+//
+//        return new ChartDTO("chart test", new Address(1, 1), new Address(5, 5), true, true, ChartType.BAR_CHART, activeCell, matrix);
+//    }
     
     
 

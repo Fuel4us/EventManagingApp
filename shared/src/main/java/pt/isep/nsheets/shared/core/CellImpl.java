@@ -90,7 +90,7 @@ public class CellImpl implements Cell {
 	/** The cell extensions that have been instantiated */
 	private transient Map<String, CellExtension> extensions = 
 		new HashMap<String, CellExtension>();
-        
+        @Transient
         private List<ChartDTO> chartList = new ArrayList<>();
         
         @Id
@@ -478,20 +478,20 @@ public class CellImpl implements Cell {
         return new CellImpl(Address.fromDTO(dto.address), dto.content, precedentsCell, dependentsCell);
     }
     
-//    @Override
-//    public boolean hasChart() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
-//
-//    @Override
-//    public List<Chart> chartList() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
-//
-//    @Override
-//    public boolean addChart(Chart chart) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
+    @Override
+    public boolean hasChart() {
+        return chartList.size() >0;
+    }
+
+    @Override
+    public List<ChartDTO> chartList() {
+        return chartList;
+    }
+
+    @Override
+    public boolean addChart(ChartDTO chart) {
+        return chartList.add(chart);
+    }
 
 	/**
 	 * Customizes deserialization by recreating the listener list and by catching
