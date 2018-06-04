@@ -56,7 +56,7 @@ import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.application.SortSpreads
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
-import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
+import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.shared.services.ChartDTO;
 import pt.isep.nsheets.shared.services.WorkbooksService;
 import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
@@ -232,7 +232,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 String result = "";
                 try {
                     activeCell.setContent(firstBox.getText());
-                    Settings.getInstance().getWorkbook().getSpreadsheet(0).getCell(activeCell.getAddress()).setContent(firstBox.getText());
+//                    SpreadsheetImpl.fromDTO(Settings.getInstance().getWorkbook().spreadsheets.get(0).cells(activeCell.getAddress()).setContent(firstBox.getText());
                 } catch (FormulaCompilationException e) {
                     // TODO Auto-generated catch block
                     // e.printStackTrace();

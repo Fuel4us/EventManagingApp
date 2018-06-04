@@ -1,4 +1,4 @@
-package pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings;
+package pt.isep.nsheets.client.application;
 
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
@@ -30,7 +30,9 @@ public class Settings {
     
     private Workbook workbook;
     
-    private Settings(){}
+    private Settings(){
+        workbook = new Workbook("Title", "Tile", SPREADSHEET_DEFAULT);
+    }
     
     public Workbook getWorkbook(){
         return this.workbook;

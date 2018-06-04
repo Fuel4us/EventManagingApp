@@ -20,7 +20,9 @@ import java.util.logging.Logger;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
+import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
+import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
 import pt.isep.nsheets.shared.services.WorkbooksService;
 
@@ -92,7 +94,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                 }
             };
 
-            WorkbookDTO wdDto = new WorkbookDTO(this.view.title(), this.view.description(), 1);
+            WorkbookDTO wdDto = new Workbook(this.view.title(), this.view.description(), Settings.SPREADSHEET_DEFAULT).toDTO();
             workbooksSvc.addWorkbookDescription(wdDto, callback);
 
             this.view.closeModal();
