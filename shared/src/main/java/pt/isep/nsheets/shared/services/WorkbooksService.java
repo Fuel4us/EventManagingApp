@@ -17,4 +17,6 @@ public interface WorkbooksService extends RemoteService {
         void renameWorkbook(String name, WorkbookDTO wdto);
         
         void deleteWorkbook(WorkbookDTO wdto);
+        
+        ArrayList<WorkbookDTO> searchWorkbooks(String name);
 }

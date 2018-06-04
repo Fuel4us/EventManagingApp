@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1140572.workbooks.application.DeleteWorkbookController;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1140572.workbooks.application.RenameWorkbookController;
+import pt.isep.nsheets.server.lapr4.green.s1.core.n1140572.workbooks.application.SearchWorkbooksController;
 import pt.isep.nsheets.shared.services.WorkbooksService;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.application.AddWorkbookDescriptionController;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.application.ListWorkbookDescriptionController;
@@ -96,7 +97,7 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
     }
 
     @Override
-    public void renameWorkbook(String name, WorkbookDTO wdto){
+    public void renameWorkbook(String name, WorkbookDTO wdto) {
         PersistenceContext.setSettings(this.getPersistenceSettings());
         RenameWorkbookController ctrl = new RenameWorkbookController();
         ctrl.renameWorkbook(name, wdto);
@@ -108,6 +109,19 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
 
         DeleteWorkbookController ctrl = new DeleteWorkbookController();
         ctrl.deleteWorkbook(wdto);
+    }
+
+    @Override
+    public ArrayList<WorkbookDTO> searchWorkbooks(String name) {
+        PersistenceContext.setSettings(this.getPersistenceSettings());
+
+        SearchWorkbooksController ctrl = new SearchWorkbooksController();
+        ArrayList<WorkbookDTO> wbs = new ArrayList<>();
+        ArrayList<Workbook> workbooksSearched = ctrl.searchWorkbooks(name);
+
+        workbooksSearched.forEach(wb -> wbs.add(wb.toDTO()));
+
+        return wbs;
     }
 
 }
