@@ -19,6 +19,7 @@
  */
 package pt.isep.nsheets.client.application.workbook;
 
+import com.google.gwt.core.client.GWT;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -53,8 +55,11 @@ import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.Formula.BinaryOperationExte
 import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.application.SortSpreadsheetController;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
 import pt.isep.nsheets.shared.services.ChartDTO;
+import pt.isep.nsheets.shared.services.WorkbooksService;
+import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
 // public class WorkbookView extends NavigatedView implements WorkbookPresenter.MyView {
@@ -227,6 +232,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 String result = "";
                 try {
                     activeCell.setContent(firstBox.getText());
+                    Settings.getInstance().getWorkbook().getSpreadsheet(0).getCell(activeCell.getAddress()).setContent(firstBox.getText());
                 } catch (FormulaCompilationException e) {
                     // TODO Auto-generated catch block
                     // e.printStackTrace();
@@ -351,7 +357,20 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         initWorkbook();
         
         saveButton.addClickHandler(event -> {
-            MaterialToast.fireToast("Here");
+            WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
+
+            // Set up the callback object.
+            AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
+                public void onFailure(Throwable caught) {
+                    
+                }
+                
+                public void onSuccess(WorkbookDTO result) {
+                    MaterialToast.fireToast(result.name);
+                }
+            };
+            
+            workbooksSvc.addWorkbookDescription(Settings.getInstance().getWorkbook().toDTO(), callback);
         });
         
         // Set the visible range of the table for pager (later)

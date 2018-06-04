@@ -39,7 +39,7 @@ public class Settings {
         return this.workbook;
     }
     
-    public void updateWorkbook(WorkbookDTO workbook) throws IllegalArgumentException, FormulaCompilationException {
+    public void updateWorkbook(WorkbookDTO workbook) {
         this.workbook = Workbook.fromDTO(workbook);
     }
 }

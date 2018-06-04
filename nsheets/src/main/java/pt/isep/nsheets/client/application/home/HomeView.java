@@ -91,13 +91,7 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
                 public void onSuccess(WorkbookDTO result) {
                     MaterialToast.fireToast(result.name);
                     wdto = result;
-                    openOptionModal();
-                    
-                    
-                    try {
-                    } catch (IllegalArgumentException ex) {
-                        Logger.getLogger(HomeView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    Settings.getInstance().updateWorkbook(wb);
                 }
             };
             
