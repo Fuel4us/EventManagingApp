@@ -27,12 +27,12 @@ public class CalendarEventService {
     public void updateCalendarEvent(CalendarEventDTO dto) {
         final CalendarEventRepository calendarEventRepository = PersistenceContext.repositories().calendarEvents();
 
-
+        //calendarEventRepository.update(dto);
     }
 
     public void deleteCalendarEvent(CalendarEventDTO dto) {
         final CalendarEventRepository calendarEventRepository = PersistenceContext.repositories().calendarEvents();
 
-
+        //calendarEventRepository.remove(dto);
     }
 }
