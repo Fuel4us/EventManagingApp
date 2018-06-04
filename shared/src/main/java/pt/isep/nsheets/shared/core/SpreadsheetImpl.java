@@ -338,7 +338,7 @@ public class SpreadsheetImpl implements Spreadsheet {
         return new SpreadsheetDTO(cells, this.title, this.columns, this.rows);
     }
 
-    public static Spreadsheet fromDTO(SpreadsheetDTO dto) throws FormulaCompilationException {
+    public static Spreadsheet fromDTO(SpreadsheetDTO dto){
         Map<Address, Cell> cells = new HashMap<>();
         
         for(AddressDTO a : dto.cells.keySet()){

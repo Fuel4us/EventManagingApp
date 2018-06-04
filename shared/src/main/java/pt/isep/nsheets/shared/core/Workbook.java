@@ -259,7 +259,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
             return new WorkbookDTO(this.name, this.description, spreadsheetDTOS);
     }
 
-    public static Workbook fromDTO(WorkbookDTO dto) throws IllegalArgumentException, FormulaCompilationException {
+    public static Workbook fromDTO(WorkbookDTO dto){
             if(dto.spreadsheets.isEmpty())
                 return new Workbook(dto.name, dto.description, dto.createdSpreadsheets);
             else {
