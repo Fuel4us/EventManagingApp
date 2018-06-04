@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.persistence.Embedded;
@@ -58,6 +59,7 @@ public class CellImpl implements Cell {
 	private static final long serialVersionUID = 926673794084390673L;
 
 	/** The spreadsheet to which the cell belongs */
+        @Transient
 	private Spreadsheet spreadsheet;
 
 	/** The address of the cell */
@@ -77,11 +79,11 @@ public class CellImpl implements Cell {
 
 	/** The cell's precedents */
         @ManyToMany (targetEntity = CellImpl.class)
-	private SortedSet<Cell> precedents = new TreeSet<Cell>();
+	private Set<Cell> precedents = new TreeSet<Cell>();
 
 	/** The cell's dependents */
         @ManyToMany (targetEntity = CellImpl.class)
-	private SortedSet<Cell> dependents = new TreeSet<Cell>();
+	private Set<Cell> dependents = new TreeSet<Cell>();
 
 	/** The cell listeners that have been registered on the cell */
 	private transient List<CellListener> listeners
@@ -478,20 +480,20 @@ public class CellImpl implements Cell {
         return new CellImpl(Address.fromDTO(dto.address), dto.content, precedentsCell, dependentsCell);
     }
     
-    @Override
-    public boolean hasChart() {
-        return chartList.size() >0;
-    }
-
-    @Override
-    public List<ChartDTO> chartList() {
-        return chartList;
-    }
-
-    @Override
-    public boolean addChart(ChartDTO chart) {
-        return chartList.add(chart);
-    }
+//    @Override
+//    public boolean hasChart() {
+//        return chartList.size() >0;
+//    }
+//
+//    @Override
+//    public List<ChartDTO> chartList() {
+//        return chartList;
+//    }
+//
+//    @Override
+//    public boolean addChart(ChartDTO chart) {
+//        return chartList.add(chart);
+//    }
 
 	/**
 	 * Customizes deserialization by recreating the listener list and by catching

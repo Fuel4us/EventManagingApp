@@ -14,6 +14,11 @@ import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.table.cell.WidgetColumn;
 import pt.isep.nsheets.client.application.workbook.WorkbookView.SheetCell;
 import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.core.IllegalValueTypeException;
+import pt.isep.nsheets.shared.core.Value;
+import pt.isep.nsheets.shared.ext.Extension;
+import pt.isep.nsheets.shared.ext.ExtensionManager;
+import pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629.ValueColorExtension;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
 public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
@@ -58,7 +63,7 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
     }
 
         @Override
-    public MaterialButton getValue(SheetCell object) {
+        public MaterialButton getValue(SheetCell object) {
         MaterialButton btn = new MaterialButton();
         if (this.colNumber == -1) {
             btn.setText("" + (object.getCell(0).getAddress().getRow() + 1));
@@ -70,14 +75,19 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
                 btn.setIconPosition(IconPosition.LEFT);
             }
             btn.setText(value);
-            
         }
         
             btn.setTextColor(Color.BLACK);
             btn.setType(ButtonType.FLAT);
 
+            Extension extension = ExtensionManager.getInstance().getExtension("Value Colour Extension");
+            if(extension!=null){
+                extension.getUIExtension(btn).decorate(object.getCell(this.colNumber));
+            }
+
         return btn;
     }
+
 //    @Override
 //    public MaterialLabel getValue(SheetCell object) {
 //        MaterialLabel badge = new MaterialLabel();

@@ -22,20 +22,19 @@ import gwt.material.design.client.ui.MaterialCard;
 import gwt.material.design.client.ui.MaterialCardContent;
 import gwt.material.design.client.ui.MaterialCardTitle;
 import gwt.material.design.client.ui.MaterialColumn;
+import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialRow;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
-import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
+import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.shared.services.WorkbooksService;
 import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
 
 class HomeView extends ViewImpl implements HomePresenter.MyView {
+
 
     interface Binder extends UiBinder<Widget, HomeView> {
     }
@@ -46,13 +45,13 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
     HTMLPanel htmlPanel;
     
     @UiField
-    MaterialButton newWorkbookButton, saveButton, deleteButton, renameButton, cancelButton;
+    MaterialButton newWorkbookButton, saveButton, deleteButton, renameButton, cancelButton, searchButton;
     
     @UiField
     MaterialModal modal, optionModal;
     
     @UiField
-    MaterialTextBox name, description, renameTxt;
+    MaterialTextBox name, description, renameTxt, searchTxt;
     
     @Inject
     HomeView(Binder uiBinder) {
@@ -91,13 +90,7 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
                 public void onSuccess(WorkbookDTO result) {
                     MaterialToast.fireToast(result.name);
                     wdto = result;
-                    openOptionModal();
-                    
-                    
-                    try {
-                    } catch (IllegalArgumentException ex) {
-                        Logger.getLogger(HomeView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    Settings.getInstance().updateWorkbook(result);
                 }
             };
             
@@ -166,6 +159,11 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
         cancelButton.addClickHandler(ch);
     }
     
+    @Override
+    public void searchClickHandler(ClickHandler ch) {
+        searchButton.addClickHandler(ch);
+    }
+    
        @Override
     public WorkbookDTO focusedWorkbookDTO() {
         return wdto;
@@ -205,5 +203,10 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
     @Override
     public String description() {
         return this.description.getValue();
+    }
+    
+    @Override
+    public String search() {
+        return this.searchTxt.getText();
     }
 }

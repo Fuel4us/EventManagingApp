@@ -16,13 +16,8 @@ import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.application.workbook.WorkbookView;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
-import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.BarChart;
 import pt.isep.nsheets.shared.core.Address;
-import pt.isep.nsheets.shared.core.Spreadsheet;
-import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
-import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
 import pt.isep.nsheets.shared.services.ChartDTO;
-import pt.isep.nsheets.shared.services.ChartType;
 import pt.isep.nsheets.shared.services.ChartsService;
 import pt.isep.nsheets.shared.services.ChartsServiceAsync;
 

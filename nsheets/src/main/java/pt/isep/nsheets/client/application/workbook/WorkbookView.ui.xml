@@ -69,46 +69,43 @@ governing permissions and limitations under the License. #L% -->
                             <m.html:Option text="equal or greater than"/>
                             <m.html:Option text="equal or less than"/>
                             <m.html:Option text="different"/>
-                            <m.html:Option text="between"/>
+                            <!--m.html:Option text="between"/-->
                         </m:MaterialListBox>
 
                         <m:MaterialTextBox ui:field="conditionalText" placeholder="Value" active="true" grid="s3"/>
                         <m:MaterialTextBox ui:field="conditionalText2" placeholder="Second Value" visibility="HIDDEN" grid="s3"/>
                     </m:MaterialRow>
-                    <m:MaterialRow>
-                        <m:MaterialTitle title="TRUE" description="Select option if condition is true"/>
-                        <m:MaterialListBox placeholder="Background Color" grid="s3" ui:field="lstBackgroundColorTrue">
-                            <m.html:Option text="White"/>
-                            <m.html:Option text="Blue"/>
-                            <m.html:Option text="Red"/>
-                            <m.html:Option text="Green"/>
-                            <m.html:Option text="Yellow"/>
-                        </m:MaterialListBox>
-                        <m:MaterialListBox placeholder="Text Color" grid="s3" ui:field="lstTextColorTrue">
-                            <m.html:Option text="Black"/>
-                            <m.html:Option text="Blue"/>
-                            <m.html:Option text="Red"/>
-                            <m.html:Option text="Green"/>
-                            <m.html:Option text="Yellow"/>
-                        </m:MaterialListBox>
-                    </m:MaterialRow>
-                    <m:MaterialRow>
-                        <m:MaterialTitle title="FALSE" description="Select option if condition is false"/>
-                        <m:MaterialListBox placeholder="Background Color" grid="s3" ui:field="lstBackgroundColorFalse">
-                            <m.html:Option text="White"/>
-                            <m.html:Option text="Blue"/>
-                            <m.html:Option text="Red"/>
-                            <m.html:Option text="Green"/>
-                            <m.html:Option text="Yellow"/>
-                        </m:MaterialListBox>
-                        <m:MaterialListBox placeholder="Text Color" grid="s3" ui:field="lstTextColorFalse">
-                            <m.html:Option text="Black"/>
-                            <m.html:Option text="Blue"/>
-                            <m.html:Option text="Red"/>
-                            <m.html:Option text="Green"/>
-                            <m.html:Option text="Yellow"/>
-                        </m:MaterialListBox>
-                    </m:MaterialRow>
+                    <!--m:MaterialRow>
+                        <m:MaterialColumn grid="s6">
+                            <m:MaterialLabel text="When Condition is True" fontSize="2em"/>
+                            <m:MaterialLabel text="Background Color"/>
+                            <m:MaterialInput type="COLOR" ui:field="backgroundColorTrue" value="#ffffff"/>
+                            <m:MaterialLabel text="Font Color"/>
+                            <m:MaterialInput type="COLOR" ui:field="fontColorTrue"/>
+                        </m:MaterialColumn>
+                        <m:MaterialColumn grid="s6">
+                            <m:MaterialLabel text="When Condition is False" fontSize="2em"/>
+                            <m:MaterialLabel text="Background Color"/>
+                            <m:MaterialInput type="COLOR" ui:field="backgroundColorFalse" value="#ffffff"/>
+                            <m:MaterialLabel text="Font Color"/>
+                            <m:MaterialInput type="COLOR" ui:field="fontColorFalse"/>
+                        </m:MaterialColumn-->
+                        <!--m:MaterialColumn grid="s6">
+                            <m:MaterialLabel text="When cell value is True" fontSize="2em"/>
+                            <m:MaterialLabel text="Background Color"/>
+                            <m:MaterialListValueBox ui:field="backgroundColorTrue" grid="s12"/>
+                            <m:MaterialLabel text="Font Color"/>
+                            <m:MaterialListValueBox ui:field="fontColorTrue" grid="s12"/>
+
+                        </m:MaterialColumn>
+                        <m:MaterialColumn grid="s6">
+                            <m:MaterialLabel text="When cell value is False" fontSize="2em"/>
+                            <m:MaterialLabel text="Background Color"/>
+                            <m:MaterialListValueBox ui:field="backgroundColorFalse" grid="s12"/>
+                            <m:MaterialLabel text="Font Color"/>
+                            <m:MaterialListValueBox ui:field="fontColorFalse" grid="s12"/>
+                        </m:MaterialColumn>
+                    </m:MaterialRow-->
                 </m:MaterialModalContent>
                 <m:MaterialModalFooter>
                     <m:MaterialIcon ui:field="conditionalModalCloseButton" iconType="CLOSE" iconColor="RED" waves="DEFAULT" circle="true" grid="s1"/>

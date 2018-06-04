@@ -59,8 +59,8 @@ public class ListNoteControllerTest {
 
     @Test
     public void testBtestDatabaseInsertion() throws Exception {
-//        System.out.println("testBtestDatabaseInsertion");
-//
+        System.out.println("testBtestDatabaseInsertion");
+
 //        final String titleNote = "Title";
 //        final String textNote = "Text";
 //

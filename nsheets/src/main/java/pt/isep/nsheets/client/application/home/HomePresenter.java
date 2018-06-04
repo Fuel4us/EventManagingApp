@@ -17,10 +17,13 @@ import gwt.material.design.client.ui.MaterialToast;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jdk.nashorn.internal.objects.NativeString;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
+import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
+import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
 import pt.isep.nsheets.shared.services.WorkbooksService;
 
@@ -31,6 +34,8 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     interface MyView extends View {
 
         void setContents(ArrayList<WorkbookDTO> contents);
+
+        void searchClickHandler(ClickHandler ch);
 
         void addClickHandler(ClickHandler ch);
 
@@ -51,6 +56,8 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         void buttonClickHandler(ClickHandler ch);
 
         WorkbookDTO focusedWorkbookDTO();
+
+        String search();
 
         String rename();
 
@@ -92,18 +99,42 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                 }
             };
 
-            WorkbookDTO wdDto = new WorkbookDTO(this.view.title(), this.view.description(), 1);
+            WorkbookDTO wdDto = new Workbook(this.view.title(), this.view.description(), Settings.SPREADSHEET_DEFAULT).toDTO();
             workbooksSvc.addWorkbookDescription(wdDto, callback);
 
             this.view.closeModal();
         });
 
+        this.view.searchClickHandler(e -> {
+            WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
+            String workbookName = this.view.search();
+
+            // Set up the callback object.
+            AsyncCallback<ArrayList<WorkbookDTO>> callback = new AsyncCallback<ArrayList<WorkbookDTO>>() {
+                String workbookName = view.search();
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Workbooks with that name not found!");
+                }
+
+                @Override
+                public void onSuccess(ArrayList<WorkbookDTO> result) {
+                    try {
+                        MaterialToast.fireToast("Workbooks filtered by name!");
+                        refreshViewAfterSearch(workbookName);
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(HomeView.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            };
+            workbooksSvc.searchWorkbooks(workbookName, callback);
+        });
+
         this.view.renameClickHandler(e -> {
             WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
             String rename = this.view.rename();
-            MaterialToast.fireToast("Rename: " + rename);
             WorkbookDTO wdto = this.view.focusedWorkbookDTO();
-            MaterialToast.fireToast("WDTO Name:" + wdto.name);
             // Set up the callback object.
             AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
                 @Override
@@ -114,7 +145,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                 @Override
                 public void onSuccess(WorkbookDTO result) {
                     try {
-                        MaterialToast.fireToast("Entrou no Success!");
                         MaterialToast.fireToast("Workbook renamed successfully!");
                         refreshView();
                     } catch (IllegalArgumentException ex) {
@@ -122,32 +152,37 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                     }
                 }
             };
-            workbooksSvc.setName(rename, wdto, callback);
+            workbooksSvc.renameWorkbook(rename, wdto, callback);
             this.view.closeOptionModal();
         });
 
-        /*
         this.view.deleteClickHandler(e -> {
             WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
-
+            WorkbookDTO wdto = this.view.focusedWorkbookDTO();
             // Set up the callback object.
             AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
                 @Override
                 public void onFailure(Throwable caught) {
+
                 }
 
                 @Override
                 public void onSuccess(WorkbookDTO result) {
                     try {
-                        //workbooksSvc.deleteWorkbook(name, this);
                         MaterialToast.fireToast("Workbook deleted successfully!");
                     } catch (IllegalArgumentException ex) {
                         Logger.getLogger(HomeView.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             };
+            workbooksSvc.deleteWorkbook(wdto, callback);
+            this.view.closeOptionModal();
         });
-         */
+
+        this.view.cancelClickHandler(e -> {
+            this.view.closeOptionModal();
+        });
+
     }
 
     private void refreshView() {
@@ -167,6 +202,25 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         };
 
         workbooksSvc.getWorkbooks(callback);
+    }
+
+    public void refreshViewAfterSearch(String workbookName) {
+        WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
+
+        // Set up the callback object.
+        AsyncCallback<ArrayList<WorkbookDTO>> callback = new AsyncCallback<ArrayList<WorkbookDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                // TODO: Do something with errors.
+            }
+
+            @Override
+            public void onSuccess(ArrayList<WorkbookDTO> result) {
+                view.setContents(result);
+            }
+        };
+
+        workbooksSvc.searchWorkbooks(workbookName, callback);
     }
 
     @Override

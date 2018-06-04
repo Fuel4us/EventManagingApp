@@ -163,18 +163,18 @@ public abstract class CellExtension implements Cell, CellListener {
 
 	public void cellCopied(Cell cell, Cell source) {}
         
-//        @Override
-//        public boolean hasChart(){
-//            return delegate.hasChart();
-//        }
-//        
-//        @Override
-//        public List<ChartDTO> chartList(){
-//            return delegate.chartList();
-//        }
-//        
-//        @Override
-//        public boolean addChart(ChartDTO chart){
-//            return delegate.addChart(chart);
-//        }
+        @Override
+        public boolean hasChart(){
+            return delegate.hasChart();
+        }
+        
+        @Override
+        public List<ChartDTO> chartList(){
+            return delegate.chartList();
+        }
+        
+        @Override
+        public boolean addChart(ChartDTO chart){
+            return delegate.addChart(chart);
+        }
 }

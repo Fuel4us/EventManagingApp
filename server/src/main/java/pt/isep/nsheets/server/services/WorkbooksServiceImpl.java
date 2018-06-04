@@ -9,7 +9,9 @@ import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import pt.isep.nsheets.server.lapr4.green.s1.core.n1140572.workbooks.application.DeleteWorkbookController;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1140572.workbooks.application.RenameWorkbookController;
+import pt.isep.nsheets.server.lapr4.green.s1.core.n1140572.workbooks.application.SearchWorkbooksController;
 import pt.isep.nsheets.shared.services.WorkbooksService;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.application.AddWorkbookDescriptionController;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.application.ListWorkbookDescriptionController;
@@ -77,6 +79,7 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
         return workbook.toDTO();
     }
 
+    @Override
     public WorkbookDTO findByName(String name) throws DataException {
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
@@ -93,11 +96,32 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
         return workbook.toDTO();
     }
 
-    public void setName(String name, WorkbookDTO workbook) throws DataException {
+    @Override
+    public void renameWorkbook(String name, WorkbookDTO wdto) {
+        PersistenceContext.setSettings(this.getPersistenceSettings());
+        RenameWorkbookController ctrl = new RenameWorkbookController();
+        ctrl.renameWorkbook(name, wdto);
+    }
+
+    @Override
+    public void deleteWorkbook(WorkbookDTO wdto) {
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
-        RenameWorkbookController ctrl = new RenameWorkbookController();
-        ctrl.setName(name, workbook);
+        DeleteWorkbookController ctrl = new DeleteWorkbookController();
+        ctrl.deleteWorkbook(wdto);
+    }
+
+    @Override
+    public ArrayList<WorkbookDTO> searchWorkbooks(String name) {
+        PersistenceContext.setSettings(this.getPersistenceSettings());
+
+        SearchWorkbooksController ctrl = new SearchWorkbooksController();
+        ArrayList<WorkbookDTO> wbs = new ArrayList<>();
+        ArrayList<Workbook> workbooksSearched = ctrl.searchWorkbooks(name);
+
+        workbooksSearched.forEach(wb -> wbs.add(wb.toDTO()));
+
+        return wbs;
     }
 
 }

@@ -50,7 +50,7 @@ import pt.isep.nsheets.shared.services.ChartDTO;
 public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, WorkbookPresenter.MyProxy> {
 
     
-    
+
     interface MyView extends View {
 
         public MaterialTextBox getFirstBox();
@@ -58,25 +58,6 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         public MaterialIcon getFirstButton();
 
         public MaterialDataTable<SheetCell> getTable();
-        //load extension configuration before showing any spreadsheet
-//		ConfigurationServiceAsync configurationSvc = GWT.create(ConfigurationService.class);
-//
-//		AsyncCallback<ConfigurationDTO> callback = new AsyncCallback<ConfigurationDTO>() {
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				MaterialToast.fireToast("Error retrieving configuration! " + caught.getMessage());
-//			}
-//
-//			@Override
-//			public void onSuccess(ConfigurationDTO result) {
-//				ValueColorExtension.setConfig(result.fromDTO());
-//			}
-//		};
-//		configurationSvc.getConfiguration(callback);
-//
-//
-//		this.placeManager = placeManager;
-//	}
 
         public Cell getActiveCell();
 
@@ -94,8 +75,11 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
     WorkbookPresenter(EventBus eventBus, MyView view, MyProxy proxy, PlaceManager placeManager) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
 
-        this.placeManager = placeManager;
-    }
+
+
+
+		this.placeManager = placeManager;
+	}
 
     PlaceManager placeManager;
 
