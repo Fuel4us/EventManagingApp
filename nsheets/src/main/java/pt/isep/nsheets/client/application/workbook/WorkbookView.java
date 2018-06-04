@@ -148,6 +148,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
             SheetCell cell = new SheetCell(sh, k);
 
+
             if (k == 1) {
                 cell.getCell(4).addChart(initChartTEST());
             }

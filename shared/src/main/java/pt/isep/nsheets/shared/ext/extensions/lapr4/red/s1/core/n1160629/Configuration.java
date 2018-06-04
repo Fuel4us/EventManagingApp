@@ -1,5 +1,6 @@
 package pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629;
 
+import gwt.material.design.client.constants.Color;
 import pt.isep.nsheets.shared.services.ConfigurationDTO;
 
 import javax.persistence.Entity;
@@ -14,19 +15,19 @@ public class Configuration {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pk;
 
-    private String bgColorPos;
-    private String fgColorPos;
-    private String bgColorNeg;
-    private String fgColorNeg;
+    private int bgColorPos;
+    private int fgColorPos;
+    private int bgColorNeg;
+    private int fgColorNeg;
 
     public Configuration() {
-        bgColorPos = "#ffffff";
-        fgColorPos = "#000000";
-        bgColorNeg = "#ffffff";
-        fgColorNeg = "#000000";
+        bgColorPos = Color.WHITE.ordinal();
+        fgColorPos = Color.BLACK.ordinal();
+        bgColorNeg = Color.WHITE.ordinal();
+        fgColorNeg = Color.BLACK.ordinal();
     }
 
-    public Configuration(String[] values){
+    public Configuration(int[] values){
         try{
             bgColorPos=values[0];
             fgColorPos=values[1];
@@ -39,40 +40,40 @@ public class Configuration {
 
 
 
-    public String getBgColorPos() {
+    public int getBgColorPos() {
         return bgColorPos;
     }
 
-    public void setBgColorPos(String bgColorPos) {
+    public void setBgColorPos(int bgColorPos) {
         this.bgColorPos = bgColorPos;
     }
 
-    public String getFgColorPos() {
+    public int getFgColorPos() {
         return fgColorPos;
     }
 
-    public void setFgColorPos(String fgColorPos) {
+    public void setFgColorPos(int fgColorPos) {
         this.fgColorPos = fgColorPos;
     }
 
-    public String getBgColorNeg() {
+    public int getBgColorNeg() {
         return bgColorNeg;
     }
 
-    public void setBgColorNeg(String nesBgColor) {
+    public void setBgColorNeg(int nesBgColor) {
         this.bgColorNeg = nesBgColor;
     }
 
-    public String getFgColorNeg() {
+    public int getFgColorNeg() {
         return fgColorNeg;
     }
 
-    public void setFgColorNeg(String fgColorNeg) {
+    public void setFgColorNeg(int fgColorNeg) {
         this.fgColorNeg = fgColorNeg;
     }
 
     public ConfigurationDTO toDTO(){
-        String[] values =new String[4];
+        int[] values =new int[4];
         values[0]=bgColorPos;
         values[1]=fgColorPos;
         values[2]=bgColorNeg;

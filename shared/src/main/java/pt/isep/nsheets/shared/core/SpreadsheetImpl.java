@@ -132,14 +132,12 @@ public class SpreadsheetImpl implements Spreadsheet {
 				} catch (FormulaCompilationException e) {}
 			}
 		}
-		getExtensions();
 	}
 
 	public SpreadsheetImpl(Workbook workbook, String title, Map<Address, Cell> cells){
 		this(workbook, title);
 		this.cells = cells;
 
-		getExtensions();
 	}
 
 /*
@@ -302,10 +300,6 @@ public class SpreadsheetImpl implements Spreadsheet {
 			}
 		}
 		return extension;
-	}
-
-	public void getExtensions(){
-		getExtension("Value Colour Extension");
 	}
 
     public Long getId() {

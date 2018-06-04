@@ -14,7 +14,7 @@ import java.util.Iterator;
 public class ConfigureValueColorExtensionController {
     Configuration config = ValueColorExtension.config;
 
-    public Configuration configureExtension(String bgColorPos, String fgColorPos, String bgColorNeg, String fgColorNeg){
+    public Configuration configureExtension(int bgColorPos, int fgColorPos, int bgColorNeg, int fgColorNeg){
         config.setBgColorPos(bgColorPos);
         config.setFgColorPos(fgColorPos);
         config.setBgColorNeg(bgColorNeg);
@@ -32,8 +32,8 @@ public class ConfigureValueColorExtensionController {
         return ret;
     }
 
-    public String[] loadValuesFromDatabase(){
-        String ret[] = new String[4];
+    public int[] loadValuesFromDatabase(){
+        int ret[] = new int[4];
 
         Configuration configuration = loadConfigurationFromDatabase();
 

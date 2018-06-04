@@ -1,10 +1,10 @@
 package pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629;
 
+import gwt.material.design.client.base.MaterialWidget;
+import gwt.material.design.client.constants.Color;
 import pt.isep.nsheets.shared.core.*;
-import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.ext.Extension;
-import pt.isep.nsheets.shared.ext.SpreadsheetExtension;
-import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
+import pt.isep.nsheets.shared.ext.UIExtension;
 
 public class ValueColorExtension extends Extension {
 
@@ -29,68 +29,34 @@ public class ValueColorExtension extends Extension {
     public static Configuration config = new Configuration();
 
     @Override
-    public SpreadsheetExtension extend(Spreadsheet spreadsheet) {
-        return new ValueColorSpreadsheetExtension(spreadsheet, getName());
+    public UIExtension getUIExtension(MaterialWidget element) {
+        return new CellDecorator(element);
     }
 
-    class ValueColorSpreadsheetExtension extends SpreadsheetExtension{
+    class CellDecorator extends UIExtension{
+        MaterialWidget element;
 
-        /**
-         * Creates a new spreadsheet extensions.
-         *
-         * @param delegate the delegate of the extensions
-         * @param name     the name of the extensions to which the spreadsheet extensions belongs
-         */
-        public ValueColorSpreadsheetExtension(Spreadsheet delegate, String name) {
-            super(delegate, name);
-            addCellListener(new ValueColorListener());
+        CellDecorator(MaterialWidget element){
+            this.element=element;
         }
 
         @Override
-        public SpreadsheetDTO toDTO() {
-            return null;
-        }
+        public void decorate(Object o) {
+            Cell cell = (Cell) o;
 
-//        @Override
-//        public Spreadsheet fromDTO() throws FormulaCompilationException {
-//            return null;
-//        }
-
-        class ValueColorListener implements CellListener{
-
-            @Override
-            public void valueChanged(Cell cell) {
-                if(cell.getValue().getType()== Value.Type.NUMERIC){
-                    try {
-                        if(cell.getValue().toDouble()>=0){
-                            //set colors
-                        }
-                        else {
-                            //set colors
-                        }
-                    } catch (IllegalValueTypeException e) {
-                        e.printStackTrace();
+            if(cell.getValue().isOfType(Value.Type.NUMERIC)){
+                try {
+                    Number number = cell.getValue().toNumber();
+                    if(number.intValue()>=0){
+                        element.setBackgroundColor(Color.values()[config.getBgColorPos()]);
+                        element.setTextColor(Color.values()[config.getFgColorPos()]);
+                    } else {
+                        element.setBackgroundColor(Color.values()[config.getBgColorNeg()]);
+                        element.setTextColor(Color.values()[config.getFgColorNeg()]);
                     }
+                } catch (IllegalValueTypeException e) {
                 }
-            }
-
-            @Override
-            public void contentChanged(Cell cell) {
-            }
-
-            @Override
-            public void dependentsChanged(Cell cell) {
-            }
-
-            @Override
-            public void cellCleared(Cell cell) {
-            }
-
-            @Override
-            public void cellCopied(Cell cell, Cell source) {
             }
         }
     }
-
-
 }

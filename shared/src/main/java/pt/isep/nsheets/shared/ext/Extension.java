@@ -20,6 +20,7 @@
  */
 package pt.isep.nsheets.shared.ext;
 
+import gwt.material.design.client.base.MaterialWidget;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 
@@ -96,10 +97,10 @@ public abstract class Extension implements Comparable<Extension> {
 
 	/**
 	 * Returns the user interface extensions of this extensions.
-	 * @param uiController the user interface controller
+	 * @param MaterialWidget a widget
 	 * @return a user interface extensions, or null if none is provided
 	 */
-//	public UIExtension getUIExtension(UIController uiController) {
-//		return null;
-//	}
+	public UIExtension getUIExtension(MaterialWidget object) {
+		return null;
+	}
 }

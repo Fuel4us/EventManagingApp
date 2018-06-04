@@ -6,12 +6,12 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class ConfigurationDTO implements Serializable{
-    private String bgColorPos;
-    private String fgColorPos;
-    private String bgColorNeg;
-    private String fgColorNeg;
+    private int bgColorPos;
+    private int fgColorPos;
+    private int bgColorNeg;
+    private int fgColorNeg;
 
-    public ConfigurationDTO(String[] values){
+    public ConfigurationDTO(int[] values){
         try{
             bgColorPos=values[0];
             fgColorPos=values[1];
@@ -30,7 +30,7 @@ public class ConfigurationDTO implements Serializable{
     }
 
     public Configuration fromDTO(){
-        String[] values = new String[4];
+        int[] values = new int[4];
         values[0]=bgColorPos;
         values[1]=fgColorPos;
         values[2]=bgColorNeg;
@@ -38,19 +38,19 @@ public class ConfigurationDTO implements Serializable{
         return new Configuration(values);
     }
 
-    public String getBgColorPos() {
+    public int getBgColorPos() {
         return bgColorPos;
     }
 
-    public String getFgColorPos() {
+    public int getFgColorPos() {
         return fgColorPos;
     }
 
-    public String getBgColorNeg() {
+    public int getBgColorNeg() {
         return bgColorNeg;
     }
 
-    public String getFgColorNeg() {
+    public int getFgColorNeg() {
         return fgColorNeg;
     }
 }
