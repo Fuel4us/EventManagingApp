@@ -64,7 +64,7 @@ public class Message implements AggregateRoot<Long>, Serializable {
 
     
     public MessagesDTO toDTO() {
-        return new MessagesDTO(this.text, this.currentDate, "user1234321");
+        return new MessagesDTO(this.text, this.currentDate, this.user);
     }
 
     public static Message fromDTO(MessagesDTO dto) throws IllegalArgumentException {
