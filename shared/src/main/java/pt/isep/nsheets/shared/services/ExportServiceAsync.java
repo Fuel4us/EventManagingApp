@@ -12,9 +12,7 @@ import java.util.List;
  */
 public interface ExportServiceAsync {
 
-   // void exportWorkbook(ExportDTO exportDTO, AsyncCallback<ExportDTO> async);
-
-    void exportWorkbook(ExportDTO exportDTO, AsyncCallback<Void> async);
+    void exportWorkbook(ExportDTO exportDTO, AsyncCallback<ExportDTO> async);
 
 //    void exportSpreadsheet(Spreadsheet spreadsheet);
 //

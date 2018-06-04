@@ -8,6 +8,7 @@ import java.io.Serializable;
  *
  * @author Rúben (1160998)
  */
+@SuppressWarnings("serial")
 public class ExportDTO implements Serializable {
 
     private Workbook workbook;
