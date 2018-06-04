@@ -1,0 +1,41 @@
+@startuml  design1.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+boundary ChartView
+control ChartPresenter
+control ChartService
+control CreateChartController
+' control ChartsService
+' entity ChartRepository
+' database Database 
+
+box "NSheets Client"
+participant HomeView
+participant HomePresenter 
+end box
+
+box "Server"
+participant ChartService
+participant CreateChartController
+' participant ChartsService
+' participant ChartRepository
+end box
+
+' box "Database"
+' participant Database
+' end box
+
+
+User -> ChartView : click new workbook
+ChartView -> ChartPresenter : onClick()
+ChartPresenter --> ChartView: drawChart(chartname, dto, firstcell, lastcell, considerfirst, isrow)
+ChartView -> ChartService: getChartContent(dto, spreadsheet, callback)
+ChartService -> CreateChartController: generateValues(dto): String[][]
+CreateChartController --> ChartView: drawChart(chartname, matrix, row, considerfirstline)
+ChartView --> User: Show chart
+@enduml

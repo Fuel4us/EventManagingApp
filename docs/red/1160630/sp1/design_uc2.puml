@@ -1,0 +1,48 @@
+@startuml  design2.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+boundary ChartView
+control ChartPresenter
+control ChartService
+control AddChartController
+control ChartsService
+entity ChartRepository
+entity Chart
+database Database 
+
+box "NSheets Client"
+participant ChartView
+participant ChartPresenter 
+end box
+ 
+box "Server"
+participant ChartService
+participant AddChartController
+participant ChartsService
+participant Chart
+participant ChartRepository
+end box
+
+box "Database"
+participant Database
+end box
+
+
+User -> ChartView : click save chart
+ChartView -> ChartPresenter: onclick()
+ChartPresenter -> ChartService: addChart(dto, callback)
+ChartService -> AddChartController: addChart(dto)
+AddChartController --> ChartService: addChart(dto)
+create Chart
+ChartService -> Chart : chart = new
+ChartService -> ChartRepository: save(chart)
+ChartRepository -> Database: write
+ChartService --> ChartPresenter: onsucess(dto)
+ChartPresenter --> ChartView: setContent()
+
+@enduml

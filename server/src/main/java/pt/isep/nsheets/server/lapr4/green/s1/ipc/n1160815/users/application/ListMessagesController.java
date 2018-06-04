@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pt.isep.nsheets.server.lapr4.green.s1.core.n1160815.users.application;
+package pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.application;
 
 import eapli.framework.application.Controller;
-import pt.isep.nsheets.server.lapr4.green.s1.core.n1160815.users.domain.Message;
+import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.domain.Message;
 
 /**
  *

@@ -149,6 +149,12 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         return popChart;
     }
 
+    @Override
+    public void setContents(WorkbookDTO contents) {
+        customTable.clear();
+        Settings.getInstance().updateWorkbook(contents);
+        initWorkbook();
+    }
     
     interface Binder extends UiBinder<Widget, WorkbookView> {
     }
