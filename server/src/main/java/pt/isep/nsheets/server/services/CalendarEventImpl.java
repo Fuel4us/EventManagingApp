@@ -15,7 +15,6 @@ import pt.isep.nsheets.shared.services.CalendarEventService;
 import pt.isep.nsheets.shared.services.DataException;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -34,7 +33,7 @@ public class CalendarEventImpl extends RemoteServiceServlet implements CalendarE
     }
 
     @Override
-    public List<CalendarEventDTO> getCalendarEvents() {
+    public ArrayList<CalendarEventDTO> getCalendarEvents() {
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
         ViewCalendarEventsController controller = new ViewCalendarEventsController();
@@ -49,7 +48,7 @@ public class CalendarEventImpl extends RemoteServiceServlet implements CalendarE
     }
 
     @Override
-    public void createCalendarEvent(CalendarEventDTO dto) throws DataException {
+    public CalendarEventDTO createCalendarEvent(CalendarEventDTO dto) throws DataException {
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
         CreateCalendarEventController controller = new CreateCalendarEventController();
@@ -57,27 +56,33 @@ public class CalendarEventImpl extends RemoteServiceServlet implements CalendarE
         try {
             controller.createCalendarEvent(dto);
         } catch (DataConcurrencyException ex) {
-            throw new DataException((Throwable) ex);
+            throw new DataException(ex);
         } catch (DataIntegrityViolationException ex) {
-            throw new DataException((Throwable) ex);
+            throw new DataException(ex);
         }
+
+        return null;
     }
 
     @Override
-    public void editCalendarEvent(CalendarEventDTO dto) {
+    public CalendarEventDTO editCalendarEvent(CalendarEventDTO dto) {
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
         EditCalendarEventController controller = new EditCalendarEventController();
 
         controller.editCalendarEvent(dto);
+
+        return null;
     }
 
     @Override
-    public void deleteCalendarEvent(CalendarEventDTO dto) {
+    public CalendarEventDTO deleteCalendarEvent(CalendarEventDTO dto) {
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
         DeleteCalendarEventController controller = new DeleteCalendarEventController();
 
         controller.deleteCalendarEvent(dto);
+
+        return null;
     }
 }
