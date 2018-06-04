@@ -50,13 +50,13 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         
 	/** The spreadsheets of which the workbook consists */
         @OneToMany(
+                mappedBy = "workbook",
                 cascade = CascadeType.ALL,
                 targetEntity = SpreadsheetImpl.class
         )
 	private List<Spreadsheet> spreadsheets = new ArrayList<Spreadsheet>();
 
 	/** The cell listeners that have been registered on the cell */
-        @Transient
 	private transient List<WorkbookListener> listeners
 		= new ArrayList<WorkbookListener>();
 
