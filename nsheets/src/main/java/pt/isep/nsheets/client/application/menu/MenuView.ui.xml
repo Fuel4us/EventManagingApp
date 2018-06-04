@@ -56,7 +56,7 @@
             </m:MaterialNavBar>
         </m:MaterialHeader>
         
-        <m:MaterialSideNavPush ui:field="sideNav" m:id="sideBar" width="280" allowBodyScroll="true" showOnAttach="true">
+        <m:MaterialSideNavPush ui:field="sideNav" id="sideBar" width="280" allowBodyScroll="true" showOnAttach="true">
             <m.html:ListItem waves="DEFAULT" paddingBottom="22">
                 <m:MaterialImage width="100%" resource="{res.nsheets_logo}" addStyleNames="{style.logo}"/>
             </m.html:ListItem>
@@ -88,11 +88,7 @@
                 <m:MaterialLink targetHistoryToken="{tokens.getAbout}" iconPosition="LEFT" iconType="INFO_OUTLINE" text="About"/>
             </m.html:ListItem>
         </m:MaterialSideNavPush>
-        
 
-
- 	
-        
     </m:MaterialPanel>
         
 </ui:UiBinder>

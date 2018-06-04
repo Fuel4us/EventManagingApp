@@ -101,9 +101,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         this.view.renameClickHandler(e -> {
             WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
             String rename = this.view.rename();
-            MaterialToast.fireToast("Rename: " + rename);
             WorkbookDTO wdto = this.view.focusedWorkbookDTO();
-            MaterialToast.fireToast("WDTO Name:" + wdto.name);
             // Set up the callback object.
             AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
                 @Override
@@ -114,7 +112,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                 @Override
                 public void onSuccess(WorkbookDTO result) {
                     try {
-                        MaterialToast.fireToast("Entrou no Success!");
                         MaterialToast.fireToast("Workbook renamed successfully!");
                         refreshView();
                     } catch (IllegalArgumentException ex) {
@@ -122,32 +119,37 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                     }
                 }
             };
-            workbooksSvc.setName(rename, wdto, callback);
+            workbooksSvc.renameWorkbook(rename, wdto, callback);
             this.view.closeOptionModal();
         });
 
-        /*
+        
         this.view.deleteClickHandler(e -> {
             WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
-
+            WorkbookDTO wdto = this.view.focusedWorkbookDTO();
             // Set up the callback object.
             AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
                 @Override
                 public void onFailure(Throwable caught) {
+                    
                 }
 
                 @Override
                 public void onSuccess(WorkbookDTO result) {
                     try {
-                        //workbooksSvc.deleteWorkbook(name, this);
                         MaterialToast.fireToast("Workbook deleted successfully!");
                     } catch (IllegalArgumentException ex) {
                         Logger.getLogger(HomeView.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             };
+            workbooksSvc.deleteWorkbook(wdto, callback);
+            this.view.closeOptionModal();
         });
-         */
+         
+        this.view.cancelClickHandler(e -> {
+            this.view.closeOptionModal();
+        });
     }
 
     private void refreshView() {
