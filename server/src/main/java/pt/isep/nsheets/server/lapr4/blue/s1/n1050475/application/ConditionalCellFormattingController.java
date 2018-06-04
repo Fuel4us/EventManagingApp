@@ -3,6 +3,8 @@ package pt.isep.nsheets.server.lapr4.blue.s1.n1050475.application;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Value;
+import pt.isep.nsheets.shared.ext.CellExtension;
+import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.Formula.BinaryOperationExtension;
 import pt.isep.nsheets.shared.core.formula.lang.*;
 
@@ -11,6 +13,8 @@ import java.text.ParseException;
 
 public class ConditionalCellFormattingController {
     private Cell cell;
+    private CellExtension cellExt;
+    private final String EXTENSIONNAME = "Conditional Formatting Extension";
     private String operator;
     private Value conditionValue;
     private String backgroundColorTrue;
@@ -20,6 +24,7 @@ public class ConditionalCellFormattingController {
 
     public ConditionalCellFormattingController(Cell cell, String operator, String conditionValue){
         this.cell = cell;
+        this.cellExt = (CellExtension)cell.getExtension(EXTENSIONNAME);
         this.operator = operator;
         try {
             this.conditionValue = Value.parseNumericValue(conditionValue);
