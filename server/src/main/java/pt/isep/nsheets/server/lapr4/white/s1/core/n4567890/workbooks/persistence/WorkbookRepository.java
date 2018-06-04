@@ -7,5 +7,5 @@ public interface WorkbookRepository extends Repository<Workbook, Long> {
     
     Workbook findByName(String name);
     
-    void deleteWorkbook(String workbookName);
+    void deleteWorkbook(Workbook workbook);
 }
