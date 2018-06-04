@@ -7,6 +7,7 @@ import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
 import pt.isep.nsheets.shared.ext.CellExtension;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.Formula.BinaryOperationExtension;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.CellDTO;
 
 public class ConditionalFormattingExtension extends Extension {
 
@@ -50,6 +51,11 @@ public class ConditionalFormattingExtension extends Extension {
             } catch (UnknownElementException | IllegalValueTypeException e) {
                 e.printStackTrace();
             }
+        }
+
+        @Override
+        public CellDTO toDTO() {
+            return null;
         }
     }
 }
