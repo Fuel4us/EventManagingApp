@@ -104,6 +104,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialModal conditionalModal;
     @UiField
     MaterialListBox lstConditions;
+    /*
     @UiField
     MaterialListValueBox backgroundColorTrue;
     @UiField
@@ -226,7 +227,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @Inject
     WorkbookView(Binder uiBinder) {
 
-        populateColourListBox();
+        //populateColourListBox();
 
         initWidget(uiBinder.createAndBindUi(this));
 
@@ -313,7 +314,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                         MaterialToast m = new MaterialToast();
                         m.toast("Flag =" + flag);
                         m.toast("Result =" + result);
-                        m.toast("BackgroundColorTrue selected:"+backgroundColorTrue.getSelectedIndex());
+                        //m.toast("BackgroundColorTrue selected:"+backgroundColorTrue.getSelectedIndex());
 
                     } catch (UnknownElementException e) {
                         flag = false; //conditionalFormatting is off
@@ -459,13 +460,13 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         return dto;
     }
 
-    private void populateColourListBox(){
+    /*private void populateColourListBox(){
         for (Color c : Color.values()){
             backgroundColorTrue.addItem(c);
             fontColorTrue.addItem(c);
             backgroundColorFalse.addItem(c);
             fontColorFalse.addItem(c);
         }
-    }
+    }*/
 
 }
