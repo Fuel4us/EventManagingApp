@@ -2,6 +2,9 @@ package pt.isep.nsheets.client.application.calendar;
 
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 
+/**
+ * @author Gonçalo Silva
+ */
 public class CalendarModule extends AbstractPresenterModule {
 
     @Override

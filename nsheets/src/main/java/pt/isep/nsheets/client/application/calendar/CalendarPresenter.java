@@ -9,15 +9,16 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
-import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
-import pt.isep.nsheets.server.lapr4.red.s1.core.n1161140.calendar.domain.CalendarEvent;
 import pt.isep.nsheets.shared.services.*;
 
 import java.util.ArrayList;
 
+/**
+ * @author Gonçalo Silva
+ */
 public class CalendarPresenter extends Presenter<CalendarPresenter.MyView, CalendarPresenter.MyProxy> {
 
     private MyView view;
@@ -42,25 +43,5 @@ public class CalendarPresenter extends Presenter<CalendarPresenter.MyView, Calen
         super.onReveal();
 
         SetPageTitleEvent.fire("Calendar", "Manage your calendars and events", "", "", this);
-
-        refreshView();
     }
-
-    private void refreshView() {
-        CalendarEventServiceAsync workbooksSvc = GWT.create(CalendarEventService.class);
-
-        // Set up the callback object.
-        AsyncCallback<ArrayList<CalendarEventDTO>> callback = new AsyncCallback<ArrayList<CalendarEventDTO>>() {
-            public void onFailure(Throwable caught) {
-                // TODO: Do something with errors.
-            }
-
-            public void onSuccess(ArrayList<CalendarEventDTO> result) {
-                view.setContents(result);
-            }
-        };
-
-        workbooksSvc.getWorkbooks(callback);
-    }
-
 }

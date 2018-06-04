@@ -6,24 +6,10 @@
              
     <m:MaterialPanel>
  	
-        <m:MaterialCard ui:field="message_card">
+        <m:MaterialCard ui:field="messageCard">
             <!-->Message Colection<!-->
-            <m:MaterialRow>
-                <m:MaterialCollection ui:field="MessageCollection">
-                    <m:MaterialCollectionItem type="AVATAR">
-                        <m:MaterialImage url="https://cdn.pixabay.com/photo/2016/11/18/23/38/child-1837375_960_720.png" type="CIRCLE"/>
-                        <m:MaterialLabel text="User1" fontSize="1.2em"/>
-                        <m:MaterialLabel text="Hello there, How are you doing?"/>
-                        <m:MaterialLabel text="1/2/2016" fontSize="0.6em" float="RIGHT"/>
-                    </m:MaterialCollectionItem>
-                    <m:MaterialCollectionItem type="AVATAR">
-                        <m:MaterialImage url="https://cdn.pixabay.com/photo/2016/11/18/23/38/child-1837375_960_720.png" type="CIRCLE"/>
-                        <m:MaterialLabel text="User2" fontSize="1.2em"/>
-                        <m:MaterialLabel text="Hello"/>
-                        <m:MaterialLabel text="1/2/2016" fontSize="0.6em" float="RIGHT"/>
-                    </m:MaterialCollectionItem>
-                </m:MaterialCollection>  
-            </m:MaterialRow>
+            <m:MaterialCollection ui:field="messageCollection">
+            </m:MaterialCollection>  
         </m:MaterialCard>
         
         

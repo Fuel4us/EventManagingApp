@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -26,128 +27,183 @@ import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialRow;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
-import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
 import pt.isep.nsheets.shared.services.WorkbooksService;
 import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
 
 class HomeView extends ViewImpl implements HomePresenter.MyView {
 
-	interface Binder extends UiBinder<Widget, HomeView> {
-	}
-	
-	@UiField
-	HTMLPanel htmlPanel;
-
-	@UiField
-	MaterialButton newWorkbookButton, saveButton;
+    interface Binder extends UiBinder<Widget, HomeView> {
+    }
+    
+    private WorkbookDTO wdto;
+    
+    @UiField
+    HTMLPanel htmlPanel;
+    
+    @UiField
+    MaterialButton newWorkbookButton, saveButton, deleteButton, renameButton, cancelButton;
+    
+    @UiField
+    MaterialModal modal, optionModal;
+    
+    @UiField
+    MaterialTextBox name, description, renameTxt;
+    
+    @Inject
+    HomeView(Binder uiBinder) {
+        initWidget(uiBinder.createAndBindUi(this));
+    }
+    
+    private MaterialCard createCard(WorkbookDTO wb) {
+        MaterialCard card = new MaterialCard();
+        card.setBackgroundColor(Color.BLUE_DARKEN_1);
         
-        @UiField
-	MaterialModal modal;
+        MaterialCardContent cardContent = new MaterialCardContent();
+        cardContent.setTextColor(Color.WHITE);
         
-        @UiField
-        MaterialTextBox name, description;
+        MaterialCardTitle cardTitle = new MaterialCardTitle();
+        cardTitle.add(new Anchor(wb.name, "#workbook"));
+        cardTitle.setIconType(IconType.SETTINGS);
+        cardTitle.setIconPosition(IconPosition.RIGHT);
         
-	@Inject
-	HomeView(Binder uiBinder) {
-		initWidget(uiBinder.createAndBindUi(this));		
-	}
-	
-	private MaterialCard createCard(WorkbookDescriptionDTO wb) {
-	    MaterialCard card=new MaterialCard();
-	    card.setBackgroundColor(Color.BLUE_DARKEN_1);
-	    
-            MaterialCardContent cardContent=new MaterialCardContent();
-            cardContent.setTextColor(Color.WHITE);
+        MaterialLabel label = new MaterialLabel();
+        label.setText(wb.description);
+        
+        cardContent.add(cardTitle);
+        cardContent.add(label);
+        
+        card.add(cardContent);
+        
+        card.addClickHandler(e -> {
+            WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
 
-            MaterialCardTitle cardTitle=new MaterialCardTitle();
-            cardTitle.setText(wb.getName());
-            cardTitle.setIconType(IconType.INSERT_DRIVE_FILE);
-            cardTitle.setIconPosition(IconPosition.RIGHT);
-
-            MaterialLabel label=new MaterialLabel();
-            label.setText(wb.getDescription());
-
-            cardContent.add(cardTitle);
-            cardContent.add(label);
-
-            card.add(cardContent);
-            
-            card.addClickHandler(e -> {
-                WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
-
-                // Set up the callback object.
-                AsyncCallback<WorkbookDescriptionDTO> callback = new AsyncCallback<WorkbookDescriptionDTO>() {
-                        public void onFailure(Throwable caught) {
-                                MaterialToast.fireToast("Error! " + caught.getMessage());
-                        }
-
-                        public void onSuccess(WorkbookDescriptionDTO result) {
-                                MaterialToast.fireToast(result.getName());
-                        }
-                };
+            // Set up the callback object.
+            AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
+                public void onFailure(Throwable caught) {
+                    
+                }
                 
-                workbooksSvc.findByName(wb.getName(), callback);
-            });
+                public void onSuccess(WorkbookDTO result) {
+                    MaterialToast.fireToast(result.name);
+                    wdto = result;
+                    openOptionModal();
+                    
+                    
+                    try {
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(HomeView.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            };
             
-            return card;
-	}
+            workbooksSvc.findByName(wb.name, callback);
+        });
+        
+        return card;
+    }
+  
+    @Override
+    public void setContents(ArrayList<WorkbookDTO> contents
+    ) {
+        int colCount = 1;
+        
+        MaterialRow row = null;
+        
+        htmlPanel.clear();
+        
+        for (WorkbookDTO wb : contents) {
+            MaterialCard card = createCard(wb);
+            
+            if (colCount == 1) {
+                row = new MaterialRow();
+                htmlPanel.add(row);
+                ++colCount;
+                if (colCount >= 4) {
+                    colCount = 1;
+                }
+            }
+            
+            MaterialColumn col = new MaterialColumn();
+            col.setGrid("l4");
+            row.add(col);
+            
+            col.add(card);
+        }
+        
+    }
+    
+    @Override
+    public void buttonClickHandler(ClickHandler ch
+    ) {
+        saveButton.addClickHandler(ch);
+    }
+    
+    @Override
+    public void addClickHandler(ClickHandler ch
+    ) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void setContents(ArrayList<WorkbookDescriptionDTO> contents) {
-		int colCount=1;
-		
-		MaterialRow row=null;
-		
-		htmlPanel.clear();
-		
-		for (WorkbookDescriptionDTO wb: contents) {
-			MaterialCard card=createCard(wb);
-			
-			if (colCount==1) {
-				row=new MaterialRow();
-				htmlPanel.add(row);
-				++colCount;
-				if (colCount>=4) colCount=1;
-			}
+        newWorkbookButton.addClickHandler(ch);
+    }
+    
+     @Override
+    public void renameClickHandler(ClickHandler ch) {
+        renameButton.addClickHandler(ch);
+    }
 
-			MaterialColumn col=new MaterialColumn();
-		    col.setGrid("l4");
-		    row.add(col);
-	
-		    col.add(card); 		    
-		}
-		
-	}
-	
-        @Override
-        public void buttonClickHandler(ClickHandler ch) {
-            saveButton.addClickHandler(ch);
-        }
-        
-	@Override
-	public void addClickHandler(ClickHandler ch) {
-		// TODO Auto-generated method stub
-		
-		newWorkbookButton.addClickHandler( ch );
-	}
-        
-        @Override
-        public void openModal() {
-            this.modal.open();
-        }
-        
-        @Override
-        public void closeModal() {
-            this.modal.close();
-        }
-        
-        @Override
-        public String title(){
-            return this.name.getValue();
-        }
-        
-        @Override
-        public String description(){
-            return this.description.getValue();
-        }
+    @Override
+    public void deleteClickHandler(ClickHandler ch) {
+        deleteButton.addClickHandler(ch);
+    }
+
+    @Override
+    public void cancelClickHandler(ClickHandler ch) {
+        cancelButton.addClickHandler(ch);
+    }
+    
+       @Override
+    public WorkbookDTO focusedWorkbookDTO() {
+        return wdto;
+    }
+
+    @Override
+    public String rename() {
+       return this.renameTxt.getText();
+    }
+    
+    @Override
+    public void openModal() {
+        this.modal.open();
+    }
+    
+    @Override
+    public void openOptionModal() {
+        this.optionModal.open();
+    }
+    
+    @Override
+    public void closeModal() {
+        this.modal.close();
+    }
+    
+    @Override
+    public void closeOptionModal() {
+        this.optionModal.close();
+    }
+    
+    
+    @Override
+    public String title() {
+        return this.name.getValue();
+    }
+    
+    @Override
+    public String description() {
+        return this.description.getValue();
+    }
 }

@@ -30,17 +30,23 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyJoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.ext.SpreadsheetExtension;
-import pt.isep.nsheets.shared.services.SpreadsheetDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.AddressDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.CellDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
 
 /**
  * The implementation of the <code>Spreadsheet</code> interface.
@@ -56,11 +62,16 @@ public class SpreadsheetImpl implements Spreadsheet {
 	public static final String BASE_TITLE = "Sheet ";
 
 	/** The workbook to which the spreadsheet belongs */
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "workbookID")
 	private Workbook workbook;
 
 	/** The cells that have been instantiated */
-        @ManyToMany (targetEntity = CellImpl.class)
+        @OneToMany(targetEntity = CellImpl.class)
+        @JoinTable(name="spreadsheet_cell",
+                  joinColumns=@JoinColumn(name="SpreadsheetImpl"),
+                  inverseJoinColumns=@JoinColumn(name="CellImpl"))
+        @MapKeyJoinColumn(name="address")
 	private Map<Address, Cell> cells = new HashMap<Address, Cell>();
 
 	/** The title of the spreadsheet */
@@ -89,7 +100,9 @@ public class SpreadsheetImpl implements Spreadsheet {
         @Id
         @GeneratedValue
         private Long id;
-
+        
+        public SpreadsheetImpl() {}
+        
 	/**
 	 * Creates a new spreadsheet.
 	 * @param workbook the workbook to which the spreadsheet belongs
@@ -99,6 +112,11 @@ public class SpreadsheetImpl implements Spreadsheet {
 		this.workbook = workbook;
 		this.title = title;
 	}
+        
+        public SpreadsheetImpl(String title, Map<Address, Cell> cells){
+            this.title = title;
+            this.cells = cells;
+        }
 
 	/**
 	 * Creates a new spreadsheet, in which cells are initialized with data from
@@ -307,14 +325,31 @@ public class SpreadsheetImpl implements Spreadsheet {
         this.id = id;
     }
 
-	public SpreadsheetDTO toDTO() {
-		return new SpreadsheetDTO(this.workbook.toDTO(), this.title);
-	}
+    public SpreadsheetDTO toDTO() {
+        Map<AddressDTO, CellDTO> cells = new HashMap<>();
+        
+        for(Address a : this.cells.keySet()){
+            AddressDTO addressDTO = a.toDTO();
+            CellDTO cellDTO = this.cells.get(a).toDTO();
+            
+            cells.put(addressDTO, cellDTO);
+        }
+        
+        return new SpreadsheetDTO(cells, this.title, this.columns, this.rows);
+    }
 
-	public Spreadsheet fromDTO() {
-		return null;
-	}
-
+    public static Spreadsheet fromDTO(SpreadsheetDTO dto) throws FormulaCompilationException {
+        Map<Address, Cell> cells = new HashMap<>();
+        
+        for(AddressDTO a : dto.cells.keySet()){
+            Address address = Address.fromDTO(a);
+            Cell cellDTO = CellImpl.fromDTO(dto.cells.get(a));
+            
+            cells.put(address, cellDTO);
+        }
+        
+        return new SpreadsheetImpl(dto.title, cells);
+    }
 
 /*
  * GENERAL

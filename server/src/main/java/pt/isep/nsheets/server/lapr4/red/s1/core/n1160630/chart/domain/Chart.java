@@ -6,14 +6,11 @@
 package pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain;
 
 import java.io.Serializable;
-import pt.isep.nsheets.shared.core.Address;
-import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.services.ChartDTO;
-import pt.isep.nsheets.shared.services.NoteDTO;
 
 /**
- *
+ * The Chart Interface.
  * @author pedromonteiro
  */
 public interface Chart extends Serializable{

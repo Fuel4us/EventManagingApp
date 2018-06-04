@@ -20,8 +20,9 @@
  */
 package pt.isep.nsheets.shared.ext;
 
+
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalFormattingExtension;
-import pt.isep.nsheets.shared.ext.extensions.ValueColorExtension;
+import pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629.ValueColorExtension;
 
 import java.util.Collection;
 import java.util.SortedMap;

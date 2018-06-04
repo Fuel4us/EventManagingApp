@@ -5,10 +5,10 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import java.util.ArrayList;
 
 /**
- *
+ * The Chart Service interface
  * @author pedromonteiro
  */
-@RemoteServiceRelativePath("chartService")
+@RemoteServiceRelativePath("chartsService")
 public interface ChartsService extends RemoteService{
     
     ArrayList<ChartDTO> getCharts();

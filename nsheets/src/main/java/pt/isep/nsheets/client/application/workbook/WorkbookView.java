@@ -25,14 +25,20 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.gwtplatform.mvp.client.ViewImpl;
 
 import com.google.gwt.user.client.ui.Panel;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
+import gwt.material.design.addins.client.window.MaterialWindow;
+
 import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
@@ -43,6 +49,10 @@ import static gwt.material.design.jquery.client.api.JQuery.$;
 
 import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.Formula.BinaryOperationExtension;
+
+import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.application.SortSpreadsheetController;
+import pt.isep.nsheets.shared.core.Address;
+import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
@@ -50,10 +60,14 @@ import pt.isep.nsheets.shared.services.ChartDTO;
 // public class WorkbookView extends NavigatedView implements WorkbookPresenter.MyView {
 public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
+    public static ChartDTO selectedChart;
+    
+    @Override
     public MaterialTextBox getFirstBox() {
         return firstBox;
     }
 
+    @Override
     public MaterialIcon getFirstButton() {
         return firstButton;
     }
@@ -62,7 +76,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox firstBox;
     @UiField
     MaterialIcon firstButton;
-
+    
+    @UiField
+    MaterialLink saveButton, click_chart;
     /*
 	Conditional UI Objects @1050475
      */
@@ -99,9 +115,37 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
 
     @UiField
+    MaterialLink sortLink;
+    @UiField
+    MaterialWindow window;
+    @UiField
+    MaterialButton sortButton;
+    @UiField
+    MaterialTextBox windowFirstBox;
+    @UiField
+    MaterialTextBox windowSecondBox;
+    @UiField
+    MaterialListBox sortListBox;
+    @UiField
     MaterialDataTable<SheetCell> customTable;
+    
+    @UiHandler("click_chart")
+    void onclick(ClickEvent e){
+        this.activeCell = null;
+        selectedChart = null;
+    }
 
+    @Override
+    public MaterialDropDown getChartDropDown() {
+        return chart_dropdown;
+    }
 
+    @Override
+    public MaterialPopupMenu getPopChart() {
+        return popChart;
+    }
+
+    
     interface Binder extends UiBinder<Widget, WorkbookView> {
     }
 
@@ -114,10 +158,12 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         this.firstBox.setText(cell.getContent().toString());
     }
 
+    @Override
     public pt.isep.nsheets.shared.core.Cell getActiveCell() {
         return this.activeCell;
     }
 
+    @Override
     public MaterialDataTable<SheetCell> getTable() {
         return customTable;
     }
@@ -141,7 +187,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     void initWorkbook() {
         // Test the initialization of an Workbook
 
-        Spreadsheet sh = Settings.getInstance().getSpreadsheet(0);
+        Spreadsheet sh = Settings.getInstance().getWorkbook().getSpreadsheet(0);
 
         int columnNumber = 0;
 
@@ -283,7 +329,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             conditionalModal.close();
 		});
 
-
         /* BETWEEN OPTION CONDITIONAL
         lstConditions.addValueChangeHandler(event -> {
             if (lstConditions.getSelectedIndex() == 6) {
@@ -303,7 +348,11 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         customTable.getView().setRenderer(new SheetRenderer<SheetCell>());
 
         initWorkbook();
-
+        
+        saveButton.addClickHandler(event -> {
+            MaterialToast.fireToast("Here");
+        });
+        
         // Set the visible range of the table for pager (later)
         customTable.setVisibleRange(0, 2001);
 
@@ -317,14 +366,38 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             customTable.selectRow($(event.getRow()).asElement(), true);
             popupMenu.setSelected(event.getModel());
             // Get the PageX and getPageY
+
             popupMenu.setPopupPosition(event.getMouseEvent().getPageX(), event.getMouseEvent().getPageY());
             popupMenu.open();
         });
+        
+        
 
         // Added access to ToolPanel to add icon widget
         Panel panel = customTable.getScaffolding().getToolPanel();
         panel.clear();
         panel.setVisible(false);
+
+        sortLink.addClickHandler(event -> {
+            window.open();
+        });
+        sortButton.addClickHandler(event -> {
+            try {
+                boolean ascending = (sortListBox.getSelectedIndex() == 0)?true:false;
+                SortSpreadsheetController.sortCells(windowFirstBox.getText(), windowSecondBox.getText(), this.customTable.getRow(0).getData().sheet, ascending);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                Window.alert(e.getMessage());
+            } finally {
+                //resultLabel.setText(result);
+
+                // refresh the table...
+                customTable.getView().setRedraw(true);
+                customTable.getView().refresh();
+                window.close();
+            }
+        });
 
         customTable.getTableTitle().setText("The Future Worksheet!");
     }
@@ -335,8 +408,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         // table.getTableTitle().setText("The Future Worksheet!");
     }
-    
-    
 
     public ChartDTO initChartTEST() {
         String[][] matrix = new String[][]{
@@ -351,7 +422,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             {"1", " 2", "3"},
             {"1", " 2", "40"}};
 
-        Workbook wb = new Workbook(matrix);
+        Workbook wb = new Workbook("Teste", "Teste", matrix);
         Spreadsheet ss = wb.getSpreadsheet(0);
 
         ChartDTO dto = new ChartDTO(
@@ -364,4 +435,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         return dto;
     }
+    
+    
+
 }

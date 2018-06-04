@@ -12,6 +12,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.gwt.charts.client.ChartLoader;
 import com.googlecode.gwt.charts.client.ChartPackage;
@@ -41,8 +42,10 @@ import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.animate.MaterialAnimation;
 import gwt.material.design.client.ui.animate.Transition;
 import javax.inject.Inject;
+import pt.isep.nsheets.shared.core.Address;
 
 /**
+ * The Chart View Class.
  *
  * @author pedromonteiro
  */
@@ -51,20 +54,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     private static final int ENTER_TIME = 700;
     private static final int EXIT_TIME = 500;
     private ColumnChart chart;
-//    private String[][] matrix = new String[][]{
-//        {"a", " 2", "3"},
-//        {"4", " 2", "3"},
-//        {"6", " 2", "3"},
-//        {"1", " 2", "3"},
-//        {"1", " 4", "3"},
-//        {"1", " 2", "3"}, 
-//        {"1", " 2", "3"}, 
-//        {"1", " 2", "3"},
-//        {"1", " 2", "3"}, 
-//        {"1", " 2", "3"}};
     private static boolean edit = false;
-    
-//    private CreateChartController create_controller = new CreateChartController();
 
     @Override
     public String getFistCell() {
@@ -96,7 +86,10 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         save_btn.addClickHandler(click);
     }
 
-    
+    @Override
+    public void saveChart(ClickHandler click) {
+        save_chart_btn.addClickHandler(click);
+    }
 
     interface Binder extends UiBinder<Widget, ChartView> {
     }
@@ -132,7 +125,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
 
     @UiField
     MaterialSwitch switch_isRow, switch_considerFist;
-    
+
     @UiField
     MaterialCardTitle chart_name;
 
@@ -166,18 +159,14 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     void click_save(ClickEvent e) {
         if (!edit) {
             if (enableElements(false)) {
-                save_btn.setText("Edit");
-                save_btn.setIconType(IconType.CREATE);
                 edit = true;
+//                drawChart(chartName(), , isRow(), isConsiderFirstField());
             }
 
         } else {
             if (enableElements(true)) {
-                save_btn.setText("Save");
-                save_btn.setIconType(IconType.SAVE);
                 edit = false;
             }
-
         }
     }
 
@@ -185,7 +174,6 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     ChartView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
         initialize();
-
     }
 
     private void initialize() {
@@ -216,7 +204,6 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         return !(!name_textbox.validate() || !start_textbox.validate() || !end_textbox.validate());
     }
 
-
     @Override
     public void drawChart(String chart_name, String[][] matrix, boolean isRow, boolean considerFirstLine) {
 
@@ -227,7 +214,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         int start;
 
         if (isRow) {
-            
+
             char letter = 'A';
             for (int i = 1; i <= matrix[0].length; i++) {
                 dataTable.addColumn(ColumnType.NUMBER, String.valueOf(i));
@@ -250,14 +237,15 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
 
             for (int row = 0; row < matrix.length; row++) {
                 for (int col = start; col < matrix[row].length; col++) {
-                    if(canAddColumn(matrix[row][col]))
-                    dataTable.setValue(row, col + 1, matrix[row][col]);
+                    if (canAddColumn(matrix[row][col])) {
+                        dataTable.setValue(row, col + 1, matrix[row][col]);
+                    }
                 }
             }
 
         } else {
             fieldName = "Column";
-             char letter = 'A';
+            char letter = 'A';
             matrix = transposeMatrix(matrix);
             for (int i = 0; i < matrix[0].length; i++) {
                 dataTable.addColumn(ColumnType.NUMBER, String.valueOf(letter));
@@ -271,7 +259,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
                 for (int i = 0; i < matrix.length; i++) {
                     dataTable.setValue(i, 0, String.valueOf(matrix[i][0]));
                 }
-                
+
             } else {
                 start = 0;
                 for (int i = 0; i < matrix.length; i++) {
@@ -281,11 +269,11 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
 
             for (int row = 0; row < matrix.length; row++) {
                 for (int col = start; col < matrix[row].length; col++) {
-                    if(canAddColumn(matrix[row][col]))
-                    dataTable.setValue(row, col + 1, matrix[row][col]);
+                    if (canAddColumn(matrix[row][col])) {
+                        dataTable.setValue(row, col + 1, matrix[row][col]);
+                    }
                 }
             }
-            
 
         }
 
@@ -294,7 +282,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         chart.draw(dataTable, getOptions(fieldName, matrix));
     }
 
-    private ColumnChartOptions getOptions(String HAxis_name, String[][]matrix) {
+    private ColumnChartOptions getOptions(String HAxis_name, String[][] matrix) {
         // Grid Lines
         Gridlines lines = Gridlines.create();
         lines.setColor("fff");
@@ -413,14 +401,21 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
                 MaterialToast.fireToast("Invalid Start");
                 return false;
             }
+
+            save_btn.setText("Edit");
+            save_btn.setIconType(IconType.CREATE);
+        } else {
+            save_btn.setText("Save");
+            save_btn.setIconType(IconType.SAVE);
         }
+
         name_textbox.setEnabled(enable);
         end_textbox.setEnabled(enable);
         start_textbox.setEnabled(enable);
         switch_considerFist.setEnabled(enable);
         switch_isRow.setEnabled(enable);
         chart_button.setEnabled(!enable);
-        
+
         return true;
     }
 
@@ -435,19 +430,29 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         }
         return temp;
     }
-    
-    
+
+    @Override
+    public ChartView fillChartInfo(String chart_name, Address firstCell, Address lastCell, boolean isConsideredFirst, boolean isRow) {
+        this.name_textbox.setText(chart_name);
+        this.switch_isRow.setValue(isRow);
+        this.switch_considerFist.setValue(isConsideredFirst);
+        if(firstCell == null) this.start_textbox.setText("");
+        else this.start_textbox.setText(firstCell.toString());
+        if(lastCell ==null) this.end_textbox.setText("");
+        else this.end_textbox.setText(lastCell.toString());
+        if(!edit) this.save_btn.fireEvent(new ClickEvent(){});
+        return this;
+    }
+
     private boolean canAddColumn(String value) {
         Double number;
-        
-        try{
+
+        try {
             number = Double.valueOf(value);
             return true;
-        }catch (NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             return false;
         }
     }
 
-
-    
 }
