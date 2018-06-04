@@ -41,7 +41,6 @@ import com.google.gwt.user.client.ui.Panel;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
 import gwt.material.design.addins.client.window.MaterialWindow;
 
-import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
@@ -106,13 +105,13 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialListBox lstConditions;
     /*
     @UiField
-    MaterialListValueBox backgroundColorTrue;
+    MaterialInput backgroundColorTrue;
     @UiField
-    MaterialListValueBox fontColorTrue;
+    MaterialInput fontColorTrue;
     @UiField
-    MaterialListValueBox backgroundColorFalse;
+    MaterialInput backgroundColorFalse;
     @UiField
-    MaterialListValueBox fontColorFalse;
+    MaterialInput fontColorFalse;
     /* End of Conditional UI Objects */
 
     @UiField
@@ -228,7 +227,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     WorkbookView(Binder uiBinder) {
 
         //populateColourListBox();
-
         initWidget(uiBinder.createAndBindUi(this));
 
         firstButton.addClickHandler(event -> {
@@ -315,6 +313,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                         m.toast("Flag =" + flag);
                         m.toast("Result =" + result);
                         //m.toast("BackgroundColorTrue selected:"+backgroundColorTrue.getSelectedIndex());
+
 
                     } catch (UnknownElementException e) {
                         flag = false; //conditionalFormatting is off
@@ -468,5 +467,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             fontColorFalse.addItem(c);
         }
     }*/
+
 
 }

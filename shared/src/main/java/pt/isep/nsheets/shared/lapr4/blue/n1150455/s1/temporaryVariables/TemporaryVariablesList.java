@@ -26,12 +26,11 @@ public class TemporaryVariablesList {
      * Adds variable to list
      *
      * @param sheet sheet
-     * @param cell cell
      * @param var
      * @param value value
      */
-    public static void add(Spreadsheet sheet, Cell cell, String var, Value[] value) {
-        TemporaryVariable tempVar = new TemporaryVariable(sheet, cell, var, value);
+    public static void addTempVariable(Spreadsheet sheet, String var, Value value) {
+        TemporaryVariable tempVar = new TemporaryVariable(sheet, var, value);
         list.add(tempVar);
     }
 
@@ -45,7 +44,7 @@ public class TemporaryVariablesList {
     public static void update(TemporaryVariable tempVar, Value value, int pos) {
         if (list.contains(tempVar)) {
             int index = list.indexOf(tempVar);
-            list.get(index).changeValue(value, pos);
+            list.get(index).changeValue(value);
         }
     }
 
@@ -68,8 +67,9 @@ public class TemporaryVariablesList {
      */
     public static TemporaryVariable getVariable(Spreadsheet sheet, Cell cell, String var) {
         for (TemporaryVariable variable : list) {
-            if (variable.getName().equals(var) && variable.getSheet().equals(sheet) && variable.getCell().equals(cell)) {
+            if (variable.getName().equals(var) && variable.getSheet().equals(sheet)) {
                 return variable;
+            } else {
             }
         }
         return null;

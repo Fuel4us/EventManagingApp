@@ -15,4 +15,6 @@ public interface WorkbooksServiceAsync {
     void renameWorkbook(String name, WorkbookDTO workbookDTO, AsyncCallback<WorkbookDTO> callback);
 
     void deleteWorkbook(WorkbookDTO workbook, AsyncCallback<WorkbookDTO> callback);
+    
+    void searchWorkbooks(String name, AsyncCallback<ArrayList<WorkbookDTO>> callback);
 }

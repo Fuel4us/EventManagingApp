@@ -35,6 +35,7 @@ import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
 
 class HomeView extends ViewImpl implements HomePresenter.MyView {
 
+
     interface Binder extends UiBinder<Widget, HomeView> {
     }
     
@@ -156,6 +157,11 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
     @Override
     public void cancelClickHandler(ClickHandler ch) {
         cancelButton.addClickHandler(ch);
+    }
+    
+    @Override
+    public void searchClickHandler(ClickHandler ch) {
+        searchButton.addClickHandler(ch);
     }
     
        @Override
