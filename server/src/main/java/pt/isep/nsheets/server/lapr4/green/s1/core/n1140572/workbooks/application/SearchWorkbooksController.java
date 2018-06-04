@@ -22,7 +22,7 @@ public class SearchWorkbooksController {
         ArrayList<Workbook> searchedWorkbooks = new ArrayList<>();
         
         for (Workbook workbook : repo.findAll()) {
-            if (workbook.name().contains(workbookName)) {
+            if (workbook.name().toLowerCase().contains(workbookName.toLowerCase())) {
                 searchedWorkbooks.add(workbook);
             }
         }
