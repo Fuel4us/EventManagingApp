@@ -1,7 +1,6 @@
-package pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings;
+package pt.isep.nsheets.client.application;
 
 import pt.isep.nsheets.shared.core.Workbook;
-import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 /**
@@ -10,7 +9,7 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
  */
 public class Settings {
     
-    private static String[][][] SPREADSHEET_DEFAULT = {{
+    public static String[][][] SPREADSHEET_DEFAULT = {{
                 {"\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B"},
                 {"\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B"},
                 {"\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B"},
