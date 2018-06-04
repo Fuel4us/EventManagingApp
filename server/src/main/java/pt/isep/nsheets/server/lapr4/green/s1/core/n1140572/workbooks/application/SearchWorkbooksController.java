@@ -20,17 +20,10 @@ public class SearchWorkbooksController {
 
     public ArrayList<Workbook> searchWorkbooks(String workbookName) {
         ArrayList<Workbook> searchedWorkbooks = new ArrayList<>();
-        int cont = 0;
-
+        
         for (Workbook workbook : repo.findAll()) {
-            for (int i = 0; i < workbookName.length(); i++) {
-                if (workbook.name().charAt(i) == workbookName.charAt(i)) {
-                    cont++;
-                }
-            }
-            if (cont == workbookName.length()) {
+            if (workbook.name().toLowerCase().contains(workbookName.toLowerCase())) {
                 searchedWorkbooks.add(workbook);
-                cont=0;
             }
         }
         return searchedWorkbooks;
