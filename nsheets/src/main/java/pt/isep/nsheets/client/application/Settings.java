@@ -1,7 +1,5 @@
-package pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings;
+package pt.isep.nsheets.client.application;
 
-import pt.isep.nsheets.shared.core.Workbook;
-import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 /**
@@ -10,7 +8,7 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
  */
 public class Settings {
     
-    private static String[][][] SPREADSHEET_DEFAULT = {{
+    public static String[][][] SPREADSHEET_DEFAULT = {{
                 {"\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B"},
                 {"\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B"},
                 {"\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B"},
@@ -29,17 +27,15 @@ public class Settings {
         return instance;
     }
     
-    private Workbook workbook;
+    private WorkbookDTO workbook;
     
-    private Settings(){
-        workbook = new Workbook("Title", "Tile", SPREADSHEET_DEFAULT);
-    }
+    private Settings(){}
     
-    public Workbook getWorkbook(){
+    public WorkbookDTO getWorkbook(){
         return this.workbook;
     }
     
     public void updateWorkbook(WorkbookDTO workbook) {
-        this.workbook = Workbook.fromDTO(workbook);
+        this.workbook = workbook;
     }
 }
