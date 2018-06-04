@@ -26,11 +26,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
@@ -56,6 +59,7 @@ public class CellImpl implements Cell {
 	private static final long serialVersionUID = 926673794084390673L;
 
 	/** The spreadsheet to which the cell belongs */
+        @Transient
 	private Spreadsheet spreadsheet;
 
 	/** The address of the cell */
@@ -63,27 +67,29 @@ public class CellImpl implements Cell {
 	private Address address;
 
 	/** The value of the cell */
+        @Embedded
 	private Value value = new Value();
 
 	/** The content of the cell */
 	private String content = "";
 
 	/** The cell's formula */
+        @Transient
 	private Formula formula;
 
 	/** The cell's precedents */
-	private SortedSet<Cell> precedents = new TreeSet<Cell>();
+        @ManyToMany (targetEntity = CellImpl.class)
+	private Set<Cell> precedents = new TreeSet<Cell>();
 
 	/** The cell's dependents */
-	private SortedSet<Cell> dependents = new TreeSet<Cell>();
+        @ManyToMany (targetEntity = CellImpl.class)
+	private Set<Cell> dependents = new TreeSet<Cell>();
 
 	/** The cell listeners that have been registered on the cell */
-        @Transient
 	private transient List<CellListener> listeners
 		= new ArrayList<CellListener>();
 
 	/** The cell extensions that have been instantiated */
-        @Transient
 	private transient Map<String, CellExtension> extensions = 
 		new HashMap<String, CellExtension>();
         

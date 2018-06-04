@@ -10,6 +10,6 @@ public class AddMessageController implements Controller {
 
     public Message addMessage(MessagesDTO mDTO) throws DataConcurrencyException, DataIntegrityViolationException {
         
-    	return new AddMessageService().addMessage(mDTO);
+    	return new ChatService().addMessage(mDTO);
     }
 }

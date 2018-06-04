@@ -3,7 +3,7 @@ package pt.isep.nsheets.shared.services;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author Gonçalo Silva
@@ -11,11 +11,11 @@ import java.util.List;
 @RemoteServiceRelativePath("calendarEventsService")
 public interface CalendarEventService extends RemoteService {
 
-    List<CalendarEventDTO> getCalendarEvents();
+    ArrayList<CalendarEventDTO> getCalendarEvents();
 
-    void createCalendarEvent(CalendarEventDTO dto) throws DataException;
+    CalendarEventDTO createCalendarEvent(CalendarEventDTO dto) throws DataException;
 
-    void editCalendarEvent(CalendarEventDTO dto);
+    CalendarEventDTO editCalendarEvent(CalendarEventDTO dto);
 
-    void deleteCalendarEvent(CalendarEventDTO dto);
+    CalendarEventDTO deleteCalendarEvent(CalendarEventDTO dto);
 }

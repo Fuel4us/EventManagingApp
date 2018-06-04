@@ -69,14 +69,30 @@ governing permissions and limitations under the License. #L% -->
                             <m.html:Option text="equal or greater than"/>
                             <m.html:Option text="equal or less than"/>
                             <m.html:Option text="different"/>
-                            <m.html:Option text="between"/>
+                            <!--m.html:Option text="between"/-->
                         </m:MaterialListBox>
 
                         <m:MaterialTextBox ui:field="conditionalText" placeholder="Value" active="true" grid="s3"/>
                         <m:MaterialTextBox ui:field="conditionalText2" placeholder="Second Value" visibility="HIDDEN" grid="s3"/>
                     </m:MaterialRow>
                     <m:MaterialRow>
-                        <m:MaterialTitle title="TRUE" description="Select option if condition is true"/>
+                        <m:MaterialColumn grid="s6">
+                            <m:MaterialLabel text="When Condition is True" fontSize="2em"/>
+                            <m:MaterialLabel text="Background Color"/>
+                            <m:MaterialInput type="COLOR" ui:field="backgroundColorTrue" value="#ffffff"/>
+                            <m:MaterialLabel text="Font Color"/>
+                            <m:MaterialInput type="COLOR" ui:field="fontColorTrue"/>
+                        </m:MaterialColumn>
+                        <m:MaterialColumn grid="s6">
+                            <m:MaterialLabel text="When Condition is False" fontSize="2em"/>
+                            <m:MaterialLabel text="Background Color"/>
+                            <m:MaterialInput type="COLOR" ui:field="backgroundColorFalse" value="#ffffff"/>
+                            <m:MaterialLabel text="Font Color"/>
+                            <m:MaterialInput type="COLOR" ui:field="fontColorFalse"/>
+                        </m:MaterialColumn>
+
+
+                        <!--m:MaterialTitle title="TRUE" description="Select option if condition is true"/>
                         <m:MaterialListBox placeholder="Background Color" grid="s3" ui:field="lstBackgroundColorTrue">
                             <m.html:Option text="White"/>
                             <m.html:Option text="Blue"/>
@@ -107,7 +123,7 @@ governing permissions and limitations under the License. #L% -->
                             <m.html:Option text="Red"/>
                             <m.html:Option text="Green"/>
                             <m.html:Option text="Yellow"/>
-                        </m:MaterialListBox>
+                        </m:MaterialListBox-->
                     </m:MaterialRow>
                 </m:MaterialModalContent>
                 <m:MaterialModalFooter>
@@ -119,7 +135,10 @@ governing permissions and limitations under the License. #L% -->
         </m:MaterialRow>
         <m:MaterialRow marginTop="60">
             <m:MaterialColumn>
-                <m:MaterialLink  targetHistoryToken="{chart}" text="Create Chart" textColor="RED" iconType="INSERT_CHART" iconPosition="LEFT"/>
+                <m:MaterialLink  ui:field="saveButton" text="Save" textColor="GREEN" iconType="SAVE" iconPosition="LEFT"/>
+            </m:MaterialColumn>
+            <m:MaterialColumn>
+                <m:MaterialLink  ui:field="click_chart" targetHistoryToken="{chart}" text="Create Chart" textColor="RED" iconType="INSERT_CHART" iconPosition="LEFT"/>
             </m:MaterialColumn>
             <m:MaterialColumn>
                 <m:MaterialLink  targetHistoryToken="{code}" text="Add Visual Basic" textColor="ORANGE" iconType="CODE" iconPosition="LEFT"/>
@@ -151,6 +170,9 @@ governing permissions and limitations under the License. #L% -->
                                 iconType="CONTENT_PASTE" textColor="BLACK" />
                 <m:MaterialLink display="BLOCK" text="Rename"
                                 iconType="EDIT" textColor="BLACK" />
+                <m:MaterialLink display="BLOCK" text="Sort"
+                                iconType="EDIT" textColor="BLACK"
+                                ui:field="sortLink" />
 
                 <!-- Second level -->
                 <m:MaterialLink activates="moveTo" display="BLOCK"
@@ -163,7 +185,7 @@ governing permissions and limitations under the License. #L% -->
                                         iconType="CONTENT_PASTE" textColor="BLACK" />
                         <m:MaterialLink display="BLOCK" text="Shared"
                                         iconType="EDIT" textColor="BLACK" />
-
+                        
                         <!-- Third level -->
                         <m:MaterialLink activates="others" display="BLOCK"
                                         text="Others" iconType="DEVICES_OTHER" textColor="BLACK">
@@ -182,7 +204,7 @@ governing permissions and limitations under the License. #L% -->
                 </m:MaterialLink>
             </ma:popupmenu.MaterialPopupMenu>
             
-           <ma:popupmenu.MaterialPopupMenu ui:field="popChart">
+            <ma:popupmenu.MaterialPopupMenu ui:field="popChart">
                 
                     
                 <m:MaterialLink activates="view_chart" display="BLOCK"
@@ -195,6 +217,25 @@ governing permissions and limitations under the License. #L% -->
             </ma:popupmenu.MaterialPopupMenu>
 
         </m:MaterialRow>
+        <ma:window.MaterialWindow ui:field="window" width="70%" title="Define Sort Range">
+            <m:MaterialPanel padding="32" textAlign="CENTER" height="300px">
+                <m:MaterialRow grid="s6 m10">
+                    <m:MaterialListBox old="true" ui:field="sortListBox">
+                        <m.html:Option text="Sort in ascending order"/>
+                        <m.html:Option text="Sort in descending order"/>
+                    </m:MaterialListBox>
+                    <m:MaterialTextBox
+                        m:id="fBox" ui:field="windowFirstBox" placeholder="Enter First Cell here" label="Enter First Cell Here"
+                        active="true" grid="s11" />
+                    <m:MaterialTextBox
+                        m:id="fBox" ui:field="windowSecondBox" placeholder="Enter Second Cell Here" label="Enter Second Cell Here"
+                        active="true" grid="s11"  />
+                </m:MaterialRow>
+                <m:MaterialRow grid="s6 m2">
+                    <m:MaterialButton ui:field="sortButton" width="100%;" text="Sort" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK"/>
+                </m:MaterialRow>
+            </m:MaterialPanel>
+        </ma:window.MaterialWindow>
     </g:HTMLPanel>
 
 </ui:UiBinder>

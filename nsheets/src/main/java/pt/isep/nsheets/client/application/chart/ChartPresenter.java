@@ -13,6 +13,8 @@ import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
+import pt.isep.nsheets.client.application.workbook.WorkbookPresenter;
+import pt.isep.nsheets.client.application.workbook.WorkbookView;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import pt.isep.nsheets.shared.core.Address;
@@ -30,6 +32,7 @@ import pt.isep.nsheets.shared.services.ChartsServiceAsync;
 public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresenter.MyProxy> {
 
     private MyView view;
+    ChartDTO dto;
 
     interface MyView extends View {
 
@@ -48,6 +51,8 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
         boolean isRow();
 
         void drawChart(String chart_name, String[][] matrix, boolean permute, boolean considerFirstLine);
+        
+        ChartView fillChartInfo(String chart_name, Address firstCell, Address lastCell, boolean isConsideredFirst, boolean isRow );
 
     }
 
@@ -59,20 +64,15 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
     @Inject
     ChartPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
+        
         this.view = view;
         
         this.view.saveDataHandler(event -> {
-            
-            ChartDTO dto = createDTOTest();
-
-            this.view.drawChart(dto.getGraph_name(), dto.getContent(), dto.isIsRow(), dto.isConsiderFirstField());
-
+            this.view.drawChart(view.chartName(), dto.getContent(), view.isRow(), view.isConsiderFirstField());
         });
 
         this.view.saveChart(event -> {
 
-            ChartDTO dto = createDTOTest();
-            
             ChartsServiceAsync chartSrv = GWT.create(ChartsService.class);
             AsyncCallback<ChartDTO> callback = new AsyncCallback<ChartDTO>() {
                 @Override
@@ -90,40 +90,24 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
             chartSrv.addChart(dto, ChartType.BAR_CHART, callback);
 
         });
+        
+        
 
     }
 
     private void refreshView() {
+        
+        dto = WorkbookView.selectedChart;
+        
+        if(dto != null){
+            this.view = view.fillChartInfo(dto.getGraph_name(), dto.getFirstAddress(), dto.getLastAddress(), dto.isConsiderFirstField(), dto.isRow());
+        }else{
+            this.view = view.fillChartInfo(null, null, null, true, true);
+        }
+        
     }
 
-    private ChartDTO createDTOTest() {
-        String[][] matrix = new String[][]{
-            {"a", " 2", "3"},
-            {"4", " 2", "3"},
-            {"6", " 2", "3"},
-            {"1", " 2", "3"},
-            {"1", " 4", "3"},
-            {"1", " 2", "3"},
-            {"1", " 2", "3"},
-            {"1", " 2", "3"},
-            {"1", " 2", "3"},
-            {"1", " 2", "40"}};
-
-//        Workbook wb = new Workbook(matrix);
-//        Spreadsheet ss = wb.getSpreadsheet(0);
-
-        ChartDTO dto = new ChartDTO(
-                view.chartName(),
-                new Address(view.getLastCell()),
-                new Address(view.getLastCell()),
-                matrix,
-                view.isRow(),
-                view.isConsiderFirstField());
-        Workbook wb = new Workbook("Teste", "Teste", matrix);
-        Spreadsheet ss = wb.getSpreadsheet(0);
-
-        return dto;
-    }
+    
 
     @Override
     protected void onReveal() {
