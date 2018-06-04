@@ -43,7 +43,10 @@ import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
+import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.application.SortSpreadsheetController;
 import pt.isep.nsheets.shared.core.Address;
+import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
@@ -97,6 +100,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox windowFirstBox;
     @UiField
     MaterialTextBox windowSecondBox;
+    @UiField
+    MaterialListBox sortListBox;
     @UiField
     MaterialDataTable<SheetCell> customTable;
 
@@ -263,23 +268,22 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         });
         sortButton.addClickHandler(event -> {
             try {
-                System.out.println("AQUI");
-                //WorkbookSortService.sortCells(windowFirstBox.getText(), windowSecondBox.getText(), this.customTable.getRow(0).getData().sheet,  true);
-                } catch (Exception e) {
+                boolean ascending = (sortListBox.getSelectedIndex() == 0)?true:false;
+                SortSpreadsheetController.sortCells(windowFirstBox.getText(), windowSecondBox.getText(), this.customTable.getRow(0).getData().sheet, ascending);
+            } catch (Exception e) {
                 // TODO Auto-generated catch block
-                // e.printStackTrace();
+                e.printStackTrace();
                 Window.alert(e.getMessage());
-                System.out.println(e.getStackTrace());
             } finally {
                 //resultLabel.setText(result);
- 
+
                 // refresh the table...
                 customTable.getView().setRedraw(true);
                 customTable.getView().refresh();
                 window.close();
             }
         });
-        
+
         customTable.getTableTitle().setText("The Future Worksheet!");
     }
 

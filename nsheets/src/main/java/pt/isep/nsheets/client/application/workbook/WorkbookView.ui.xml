@@ -166,7 +166,7 @@ governing permissions and limitations under the License. #L% -->
                                         iconType="CONTENT_PASTE" textColor="BLACK" />
                         <m:MaterialLink display="BLOCK" text="Shared"
                                         iconType="EDIT" textColor="BLACK" />
-
+                        
                         <!-- Third level -->
                         <m:MaterialLink activates="others" display="BLOCK"
                                         text="Others" iconType="DEVICES_OTHER" textColor="BLACK">
@@ -185,7 +185,7 @@ governing permissions and limitations under the License. #L% -->
                 </m:MaterialLink>
             </ma:popupmenu.MaterialPopupMenu>
             
-           <ma:popupmenu.MaterialPopupMenu ui:field="popChart">
+            <ma:popupmenu.MaterialPopupMenu ui:field="popChart">
                 
                     
                 <m:MaterialLink activates="view_chart" display="BLOCK"
@@ -201,6 +201,10 @@ governing permissions and limitations under the License. #L% -->
         <ma:window.MaterialWindow ui:field="window" width="70%" title="Define Sort Range">
             <m:MaterialPanel padding="32" textAlign="CENTER" height="300px">
                 <m:MaterialRow grid="s6 m10">
+                    <m:MaterialListBox old="true" ui:field="sortListBox">
+                        <m.html:Option text="Sort in ascending order"/>
+                        <m.html:Option text="Sort in descending order"/>
+                    </m:MaterialListBox>
                     <m:MaterialTextBox
                         m:id="fBox" ui:field="windowFirstBox" placeholder="Enter First Cell here" label="Enter First Cell Here"
                         active="true" grid="s11" />
