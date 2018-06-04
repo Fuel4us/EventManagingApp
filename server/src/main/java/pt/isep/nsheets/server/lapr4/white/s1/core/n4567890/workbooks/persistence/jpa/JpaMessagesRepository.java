@@ -6,9 +6,9 @@
 package pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.jpa;
 
 
-import pt.isep.nsheets.server.lapr4.green.s1.core.n1160815.users.domain.Message;
+import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.domain.Message;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;
-import pt.isep.nsheets.server.lapr4.green.s1.core.n1160815.users.persistence.MessagesRepository;
+import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.persistence.MessagesRepository;
 
 /**
  *
