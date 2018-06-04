@@ -75,8 +75,8 @@ governing permissions and limitations under the License. #L% -->
                         <m:MaterialTextBox ui:field="conditionalText" placeholder="Value" active="true" grid="s3"/>
                         <m:MaterialTextBox ui:field="conditionalText2" placeholder="Second Value" visibility="HIDDEN" grid="s3"/>
                     </m:MaterialRow>
-                    <!--m:MaterialRow>
-                        <m:MaterialColumn grid="s6">
+                    <m:MaterialRow>
+                        <!--m:MaterialColumn grid="s6">
                             <m:MaterialLabel text="When Condition is True" fontSize="2em"/>
                             <m:MaterialLabel text="Background Color"/>
                             <m:MaterialInput type="COLOR" ui:field="backgroundColorTrue" value="#ffffff"/>
@@ -90,13 +90,12 @@ governing permissions and limitations under the License. #L% -->
                             <m:MaterialLabel text="Font Color"/>
                             <m:MaterialInput type="COLOR" ui:field="fontColorFalse"/>
                         </m:MaterialColumn-->
-                        <!--m:MaterialColumn grid="s6">
+                        <m:MaterialColumn>
                             <m:MaterialLabel text="When cell value is True" fontSize="2em"/>
                             <m:MaterialLabel text="Background Color"/>
                             <m:MaterialListValueBox ui:field="backgroundColorTrue" grid="s12"/>
                             <m:MaterialLabel text="Font Color"/>
                             <m:MaterialListValueBox ui:field="fontColorTrue" grid="s12"/>
-
                         </m:MaterialColumn>
                         <m:MaterialColumn grid="s6">
                             <m:MaterialLabel text="When cell value is False" fontSize="2em"/>
@@ -105,7 +104,7 @@ governing permissions and limitations under the License. #L% -->
                             <m:MaterialLabel text="Font Color"/>
                             <m:MaterialListValueBox ui:field="fontColorFalse" grid="s12"/>
                         </m:MaterialColumn>
-                    </m:MaterialRow-->
+                    </m:MaterialRow>
                 </m:MaterialModalContent>
                 <m:MaterialModalFooter>
                     <m:MaterialIcon ui:field="conditionalModalCloseButton" iconType="CLOSE" iconColor="RED" waves="DEFAULT" circle="true" grid="s1"/>
