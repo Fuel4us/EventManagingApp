@@ -14,6 +14,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.application.workbook.WorkbookPresenter;
+import pt.isep.nsheets.client.application.workbook.WorkbookView;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import pt.isep.nsheets.shared.core.Address;
@@ -96,7 +97,7 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
 
     private void refreshView() {
         
-        dto = WorkbookPresenter.selectedChart;
+        dto = WorkbookView.selectedChart;
         
         if(dto != null){
             this.view = view.fillChartInfo(dto.getGraph_name(), dto.getFirstAddress(), dto.getLastAddress(), dto.isConsiderFirstField(), dto.isRow());

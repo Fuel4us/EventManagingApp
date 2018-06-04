@@ -122,7 +122,7 @@ governing permissions and limitations under the License. #L% -->
                 <m:MaterialLink  ui:field="saveButton" text="Save" textColor="GREEN" iconType="SAVE" iconPosition="LEFT"/>
             </m:MaterialColumn>
             <m:MaterialColumn>
-                <m:MaterialLink  targetHistoryToken="{chart}" text="Create Chart" textColor="RED" iconType="INSERT_CHART" iconPosition="LEFT"/>
+                <m:MaterialLink  ui:field="click_chart" targetHistoryToken="{chart}" text="Create Chart" textColor="RED" iconType="INSERT_CHART" iconPosition="LEFT"/>
             </m:MaterialColumn>
             <m:MaterialColumn>
                 <m:MaterialLink  targetHistoryToken="{code}" text="Add Visual Basic" textColor="ORANGE" iconType="CODE" iconPosition="LEFT"/>

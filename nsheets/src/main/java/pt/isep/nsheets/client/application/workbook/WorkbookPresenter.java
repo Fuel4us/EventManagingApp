@@ -49,7 +49,7 @@ import pt.isep.nsheets.shared.services.ChartDTO;
 
 public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, WorkbookPresenter.MyProxy> {
 
-    public static ChartDTO selectedChart;
+    
     
     interface MyView extends View {
 
@@ -149,7 +149,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
                 getView().getPopChart().setPopupPosition(handler.getClientX(), handler.getClientY());
                 getView().getPopChart().open();
             }else{
-                selectedChart = null;
+                WorkbookView.selectedChart = null;
             }
         });
 
@@ -177,8 +177,8 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
             MaterialLink link = new MaterialLink(chart.getGraph_name(), null, IconType.INSERT_CHART);
             link.setTextColor(Color.BLACK);
             link.addClickHandler(handler ->{
-                selectedChart = chart;
-                MaterialToast.fireToast(selectedChart.getGraph_name());
+                WorkbookView.selectedChart = chart;
+                MaterialToast.fireToast(WorkbookView.selectedChart.getGraph_name());
                 redirectToChartPage();
             });
             getView().getChartDropDown().add(link);

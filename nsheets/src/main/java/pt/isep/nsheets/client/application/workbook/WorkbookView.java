@@ -25,8 +25,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -54,6 +56,8 @@ import pt.isep.nsheets.shared.services.ChartDTO;
 // public class WorkbookView extends NavigatedView implements WorkbookPresenter.MyView {
 public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
+    public static ChartDTO selectedChart;
+    
     @Override
     public MaterialTextBox getFirstBox() {
         return firstBox;
@@ -70,7 +74,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialIcon firstButton;
     
     @UiField
-    MaterialLink saveButton;
+    MaterialLink saveButton, click_chart;
     /*
 	Conditional UI Objects @1050475
      */
@@ -108,6 +112,12 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialListBox sortListBox;
     @UiField
     MaterialDataTable<SheetCell> customTable;
+    
+    @UiHandler("click_chart")
+    void onclick(ClickEvent e){
+        this.activeCell = null;
+        selectedChart = null;
+    }
 
     @Override
     public MaterialDropDown getChartDropDown() {
