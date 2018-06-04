@@ -39,6 +39,7 @@ import com.google.gwt.user.client.ui.Panel;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
 import gwt.material.design.addins.client.window.MaterialWindow;
 
+import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
@@ -99,13 +100,13 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialListBox lstConditions;
     @UiField
-    MaterialInput backgroundColorTrue;
+    MaterialListValueBox backgroundColorTrue;
     @UiField
-    MaterialInput fontColorTrue;
+    MaterialListValueBox fontColorTrue;
     @UiField
-    MaterialInput backgroundColorFalse;
+    MaterialListValueBox backgroundColorFalse;
     @UiField
-    MaterialInput fontColorFalse;
+    MaterialListValueBox fontColorFalse;
     /* End of Conditional UI Objects */
 
     @UiField
@@ -220,6 +221,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @Inject
     WorkbookView(Binder uiBinder) {
 
+        populateColourListBox();
+
         initWidget(uiBinder.createAndBindUi(this));
 
         firstButton.addClickHandler(event -> {
@@ -304,7 +307,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                         MaterialToast m = new MaterialToast();
                         m.toast("Flag =" + flag);
                         m.toast("Result =" + result);
-                        m.toast(backgroundColorTrue.getText());
+                        m.toast("BackgroundColorTrue selected:"+backgroundColorTrue.getSelectedIndex());
 
                     } catch (UnknownElementException e) {
                         flag = false; //conditionalFormatting is off
@@ -436,7 +439,14 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         return dto;
     }
-    
-    
+
+    private void populateColourListBox(){
+        for (Color c : Color.values()){
+            backgroundColorTrue.addItem(c);
+            fontColorTrue.addItem(c);
+            backgroundColorFalse.addItem(c);
+            fontColorFalse.addItem(c);
+        }
+    }
 
 }
