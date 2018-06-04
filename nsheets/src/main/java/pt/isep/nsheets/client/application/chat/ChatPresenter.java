@@ -32,7 +32,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 
     interface MyView extends View {
 
-        void setContents(ArrayList<MessagesDTO> contents);
+        void setContents(ArrayList<MessagesDTO> contents,String currentNickName);
 
         void buttonClickHandler(ClickHandler ch);
 
@@ -88,7 +88,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
             }
 
             public void onSuccess(ArrayList<MessagesDTO> result) {
-                view.setContents(result);
+                view.setContents(result,user.getUser().getNickname());
             }
         };
 
