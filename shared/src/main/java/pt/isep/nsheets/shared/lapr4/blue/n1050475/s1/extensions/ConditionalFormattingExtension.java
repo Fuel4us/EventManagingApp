@@ -49,6 +49,7 @@ public class ConditionalFormattingExtension extends Extension {
             super(delegate, name);
             this.conditional = cond;
             this.configuration = config;
+            this.valueChanged(this);
         }
 
         public Conditional condition() {
