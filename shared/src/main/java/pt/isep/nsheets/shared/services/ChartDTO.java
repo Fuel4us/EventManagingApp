@@ -7,9 +7,6 @@ package pt.isep.nsheets.shared.services;
 
 import java.io.Serializable;
 import pt.isep.nsheets.shared.core.Address;
-import pt.isep.nsheets.shared.core.Cell;
-import pt.isep.nsheets.shared.core.Spreadsheet;
-import pt.isep.nsheets.shared.ext.SpreadsheetExtension;
 
 /**
  * A DTO for the Chart
@@ -22,7 +19,7 @@ public class ChartDTO implements Serializable{
     private Address firstAddress;
     private Address lastAddress;
     private ChartType type;
-    private Cell associatedCell;
+    private Address associatedCell;
     private boolean considerFirstField;
     private String[][] content;
     private boolean isRow;
@@ -46,12 +43,12 @@ public class ChartDTO implements Serializable{
             boolean isRow, 
             boolean considerFirstField, 
             ChartType type,
-            Cell associatedCell,String[][] content) {
+            Address associatedCell,
+            String[][] content) {
         
         this.graph_name = graph_name;
         this.firstAddress = firstAddress;
         this.lastAddress = lastAddress;
-//        this.spreadsheet = spreadsheet;
         this.isRow = isRow;
         this.considerFirstField = considerFirstField;
         this.type = type;
@@ -69,10 +66,9 @@ public class ChartDTO implements Serializable{
         this.graph_name = "";
         this.firstAddress = new Address(-1, -1);
         this.lastAddress = new Address(-1, -1);
-//        this.content = new String[][]{};
+        this.content = new String[][]{};
         this.isRow = false;
         this.considerFirstField = false;
-//        this.spreadsheet = null;
         this.type = null;
         this.associatedCell = null;
     }
@@ -85,13 +81,6 @@ public class ChartDTO implements Serializable{
         return graph_name;
     }
 
-//    /**
-//     * Returns the shown cells in the graph
-//     * @return content
-//     */
-//    public String[][] getContent() {
-//        return content;
-//    }
 
     /**
      * Returns if the first field shows be parte of the content
@@ -125,15 +114,12 @@ public class ChartDTO implements Serializable{
         return lastAddress;
     }
 
-//    public Spreadsheet getSpreadsheet() {
-//        return spreadsheet;
-//    }
 
     public ChartType getType() {
         return type;
     }
 
-    public Cell getAssociatedCell() {
+    public Address getAssociatedCell() {
         return associatedCell;
     }
 

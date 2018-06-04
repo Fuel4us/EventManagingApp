@@ -15,8 +15,8 @@ import pt.isep.nsheets.shared.core.Spreadsheet;
 public interface ChartsService extends RemoteService{
     
     ArrayList<ChartDTO> getCharts();
-    ChartDTO addChart(ChartDTO chartDTO, Spreadsheet s) throws DataException;
-    String [][] getChartContent(ChartDTO dto, Spreadsheet s);
+    ChartDTO addChart(ChartDTO chartDTO/*, Spreadsheet s*/) throws DataException;
+    String [][] getChartContent(ChartDTO dto/*, Spreadsheet s*/);
     
     
 }

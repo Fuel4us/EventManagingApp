@@ -63,6 +63,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     private static final int EXIT_TIME = 500;
     private ColumnChart chart;
     private static boolean edit = false;
+    
     private Spreadsheet spreadsheet= Settings.getInstance().getWorkbook().getSpreadsheet(0);
 
     @Override
@@ -224,6 +225,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
                 @Override
                 public void onFailure(Throwable caught) {
                     MaterialToast.fireToast("Error draw chart --> " + caught.getMessage());
+                    MaterialToast.fireToast("Error --> " + caught.getLocalizedMessage());
                 }
 
                 @Override
@@ -235,7 +237,9 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
 
             };
             
-            chartSrv.getChartContent(dto, spreadsheet, callback);
+            MaterialToast.fireToast("Active SpreadSheet: "+spreadsheet.getTitle());
+            
+            chartSrv.getChartContent(dto/*, spreadsheet,*/, callback);
            
     }
     

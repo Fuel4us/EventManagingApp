@@ -29,7 +29,6 @@ import pt.isep.nsheets.shared.services.ChartType;
 public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
 
     private String graph_name;
-//    private Spreadsheet spreadsheet;
     private String[][] content;
     @OneToOne
     private Address firstCell;
@@ -37,7 +36,8 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
     private Address lastCell;
     private boolean considerFirstField;
     private boolean isRow;
-    private Cell associatedCell;
+    @OneToOne
+    private Address associatedCell;
     private static String BAR_CHART_NAME = "Bar Chart";
 
     @Id
@@ -51,32 +51,31 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
         //FOR ORM
     }
     
-    public BarChart(ChartDTO dto, Spreadsheet spreadsheet){
-        this(spreadsheet,dto.getFirstAddress(), dto.getLastAddress() ,dto.isConsiderFirstField(), dto.isRow(), dto.getAssociatedCell());
+    public BarChart(ChartDTO dto){
+        this(dto.getFirstAddress(), dto.getLastAddress() ,dto.isConsiderFirstField(), dto.isRow(), dto.getAssociatedCell());
         
         if(dto.getType() != ChartType.BAR_CHART) throw new IllegalArgumentException("Cannot instantiate a "+dto.getType().name()+"in BarChart");
         
         this.graph_name = dto.getGraph_name();
     }
+    
 
     /**
      * The constructor with the following parameters:
      *
-     * @param sh SpreadSheet
      * @param firstAddress First cell Address
      * @param lastAddress Last cell Address
      * @param considerFirstField consider first field content of the graph
      * @param isRow is based on row
      * @param associatedCell
      */
-    public BarChart(Spreadsheet sh, Address firstAddress, Address lastAddress, boolean considerFirstField, boolean isRow, Cell associatedCell) {
+    public BarChart( Address firstAddress, Address lastAddress, boolean considerFirstField, boolean isRow, Address associatedCell) {
         this.graph_name = BAR_CHART_NAME;
         firstCell = firstAddress;
         lastCell = lastAddress;
         this.considerFirstField = considerFirstField;
         this.isRow = isRow;
         this.associatedCell = associatedCell;
-        generateChartValues(sh);
 
     }
 
@@ -89,25 +88,25 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
      * @param lastAddress Last cell Address
      * @param considerFirstField consider first field content of the graph
      * @param isRow is based on row
+     * @param associatedCell
      */
-    public BarChart(String graph_name, Spreadsheet sh, Address firstAddress, Address lastAddress, boolean considerFirstField, boolean isRow, Cell associatedCell) {
-        this(sh, firstAddress, lastAddress, considerFirstField, isRow,associatedCell);
+    public BarChart(String graph_name, Address firstAddress, Address lastAddress, boolean considerFirstField, boolean isRow, Address associatedCell) {
+        this(firstAddress, lastAddress, considerFirstField, isRow,associatedCell);
         this.graph_name = graph_name;
     }
 
     /**
-     * Graph generator.
-     * @return 
+     * Graph generator. 
+     * @param spreadsheet
      */
     @Override
     public void generateChartValues(Spreadsheet spreadsheet) {
-
         int endCol = lastCell.getColumn() + 1;
         int startCol = firstCell.getColumn();
         int endRow = lastCell.getRow() + 1;
         int startRow = firstCell.getRow();
         
-        associatedCell = spreadsheet.getCell(endCol, startRow);
+        associatedCell = spreadsheet.getCell(endCol, startRow).getAddress();
 
         Cell[] cells = (Cell[]) spreadsheet.getCells(firstCell, lastCell).toArray();
 
@@ -176,7 +175,7 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
     }
 
     @Override
-    public Cell associatedCell() {
+    public Address associatedCell() {
         return associatedCell;
     }
 

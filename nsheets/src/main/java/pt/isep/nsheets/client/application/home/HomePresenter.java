@@ -111,7 +111,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
             // Set up the callback object.
             AsyncCallback<ArrayList<WorkbookDTO>> callback = new AsyncCallback<ArrayList<WorkbookDTO>>() {
-                String workbookName = view.search();
 
                 @Override
                 public void onFailure(Throwable caught) {
@@ -122,13 +121,13 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                 public void onSuccess(ArrayList<WorkbookDTO> result) {
                     try {
                         MaterialToast.fireToast("Workbooks filtered by name!");
-                        refreshViewAfterSearch(workbookName);
                     } catch (IllegalArgumentException ex) {
                         Logger.getLogger(HomeView.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             };
             workbooksSvc.searchWorkbooks(workbookName, callback);
+            refreshViewAfterSearch(workbookName);
         });
 
         this.view.renameClickHandler(e -> {
@@ -163,13 +162,14 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
             AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
                 @Override
                 public void onFailure(Throwable caught) {
-
+                    MaterialToast.fireToast("Workbook cannot be deleted!");
                 }
 
                 @Override
                 public void onSuccess(WorkbookDTO result) {
                     try {
                         MaterialToast.fireToast("Workbook deleted successfully!");
+                        refreshView();
                     } catch (IllegalArgumentException ex) {
                         Logger.getLogger(HomeView.class.getName()).log(Level.SEVERE, null, ex);
                     }
