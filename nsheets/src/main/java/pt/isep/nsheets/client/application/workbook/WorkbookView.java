@@ -151,9 +151,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
     @Override
     public void setContents(WorkbookDTO contents) {
-        customTable.clear();
         Settings.getInstance().updateWorkbook(contents);
-        initWorkbook();
+        customTable.getView().setRedraw(true);
+        customTable.getView().refresh();
     }
     
     interface Binder extends UiBinder<Widget, WorkbookView> {

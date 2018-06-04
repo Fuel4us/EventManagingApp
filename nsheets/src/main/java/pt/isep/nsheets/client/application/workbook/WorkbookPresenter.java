@@ -23,6 +23,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
+import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -87,6 +88,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
     WorkbookPresenter(EventBus eventBus, MyView view, MyProxy proxy, PlaceManager placeManager) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
 
+        this.wDTO = Settings.getInstance().getWorkbook().toDTO();
         this.view = view;
 		this.placeManager = placeManager;
 	}
