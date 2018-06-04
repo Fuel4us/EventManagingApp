@@ -27,12 +27,14 @@ import javax.inject.Inject;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.gwtplatform.mvp.client.ViewImpl;
 
 import com.google.gwt.user.client.ui.Panel;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
+import gwt.material.design.addins.client.window.MaterialWindow;
 import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
@@ -49,10 +51,12 @@ import pt.isep.nsheets.shared.services.ChartDTO;
 // public class WorkbookView extends NavigatedView implements WorkbookPresenter.MyView {
 public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
+    @Override
     public MaterialTextBox getFirstBox() {
         return firstBox;
     }
 
+    @Override
     public MaterialIcon getFirstButton() {
         return firstButton;
     }
@@ -61,7 +65,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox firstBox;
     @UiField
     MaterialIcon firstButton;
-
+    
+    @UiField
+    MaterialLink saveButton;
     /*
 	Conditional UI Objects @1050475
      */
@@ -86,9 +92,29 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     /* End of Conditional UI Objects */
 
     @UiField
+    MaterialLink sortLink;
+    @UiField
+    MaterialWindow window;
+    @UiField
+    MaterialButton sortButton;
+    @UiField
+    MaterialTextBox windowFirstBox;
+    @UiField
+    MaterialTextBox windowSecondBox;
+    @UiField
     MaterialDataTable<SheetCell> customTable;
 
+    @Override
+    public MaterialDropDown getChartDropDown() {
+        return chart_dropdown;
+    }
 
+    @Override
+    public MaterialPopupMenu getPopChart() {
+        return popChart;
+    }
+
+    
     interface Binder extends UiBinder<Widget, WorkbookView> {
     }
 
@@ -101,10 +127,12 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         this.firstBox.setText(cell.getContent().toString());
     }
 
+    @Override
     public pt.isep.nsheets.shared.core.Cell getActiveCell() {
         return this.activeCell;
     }
 
+    @Override
     public MaterialDataTable<SheetCell> getTable() {
         return customTable;
     }
@@ -203,10 +231,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             /*
 				FIREWORKS NEEDED
              */
-			conditionalModal.close();
-		});
-
-
+            conditionalModal.close();
+        });
 
         lstConditions.addValueChangeHandler(event -> {
             if (lstConditions.getSelectedIndex() == 6) {
@@ -226,7 +252,11 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         customTable.getView().setRenderer(new SheetRenderer<SheetCell>());
 
         initWorkbook();
-
+        
+        saveButton.addClickHandler(event -> {
+            MaterialToast.fireToast("Here");
+        });
+        
         // Set the visible range of the table for pager (later)
         customTable.setVisibleRange(0, 2001);
 
@@ -240,15 +270,40 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             customTable.selectRow($(event.getRow()).asElement(), true);
             popupMenu.setSelected(event.getModel());
             // Get the PageX and getPageY
+
             popupMenu.setPopupPosition(event.getMouseEvent().getPageX(), event.getMouseEvent().getPageY());
             popupMenu.open();
         });
+        
+        
 
         // Added access to ToolPanel to add icon widget
         Panel panel = customTable.getScaffolding().getToolPanel();
         panel.clear();
         panel.setVisible(false);
 
+        sortLink.addClickHandler(event -> {
+            window.open();
+        });
+        sortButton.addClickHandler(event -> {
+            try {
+                System.out.println("AQUI");
+                //WorkbookSortService.sortCells(windowFirstBox.getText(), windowSecondBox.getText(), this.customTable.getRow(0).getData().sheet,  true);
+                } catch (Exception e) {
+                // TODO Auto-generated catch block
+                // e.printStackTrace();
+                Window.alert(e.getMessage());
+                System.out.println(e.getStackTrace());
+            } finally {
+                //resultLabel.setText(result);
+ 
+                // refresh the table...
+                customTable.getView().setRedraw(true);
+                customTable.getView().refresh();
+                window.close();
+            }
+        });
+        
         customTable.getTableTitle().setText("The Future Worksheet!");
     }
 
@@ -258,8 +313,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         // table.getTableTitle().setText("The Future Worksheet!");
     }
-    
-    
 
     public ChartDTO initChartTEST() {
         String[][] matrix = new String[][]{
@@ -287,4 +340,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         return dto;
     }
+    
+    
+
 }

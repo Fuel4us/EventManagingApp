@@ -82,7 +82,7 @@ public class ChartDTO implements Serializable{
      * Returns if it is ordered the row or column
      * @return is row
      */
-    public boolean isIsRow() {
+    public boolean isRow() {
         return isRow;
     }
 

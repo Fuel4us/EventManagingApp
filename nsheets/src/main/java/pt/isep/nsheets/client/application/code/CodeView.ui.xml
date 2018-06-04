@@ -20,13 +20,13 @@
             </m:MaterialColumn>
         </m:MaterialRow>
         <m:MaterialRow>
-            <m:MaterialColumn grid="s4" offset="s4">
+            <m:MaterialColumn grid="s1" offset="s4">
                 <m:MaterialButton ui:field="runButton" text="RUN" textColor="GREEN" type="FLAT" waves="TEAL" />
             </m:MaterialColumn>
         </m:MaterialRow>
         <m:MaterialRow>
             <m:MaterialColumn grid="s4" offset="s4">
-                <m:MaterialTextBox ui:field="OutputTextBox" readOnly="true" enabled="false" label="Output Area" length="120"/>
+                <m:MaterialTextArea ui:field="OutputText" label="Output Area" length="400" resizeRule="AUTO"/>
             </m:MaterialColumn>
         </m:MaterialRow>
 

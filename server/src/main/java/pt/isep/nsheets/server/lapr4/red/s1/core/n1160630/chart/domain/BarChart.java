@@ -140,7 +140,7 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
                 dto.getFirstAddress(),
                 dto.getLastAddress(),
                 dto.isConsiderFirstField(),
-                dto.isIsRow());
+                dto.isRow());
         return chart;
     }
 
