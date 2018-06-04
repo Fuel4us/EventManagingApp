@@ -116,6 +116,13 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 		fireSpreadsheetInserted(spreadsheet, spreadsheets.size() - 1);
 	}
 
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
 	/**
 	 * Adds a new spreadsheet to the workbook, in which cells are initialized
 	 * with data from the given content matrix.

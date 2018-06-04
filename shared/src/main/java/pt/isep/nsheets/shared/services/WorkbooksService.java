@@ -1,6 +1,5 @@
 package pt.isep.nsheets.shared.services;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import java.util.ArrayList;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -15,7 +14,5 @@ public interface WorkbooksService extends RemoteService {
         
         WorkbookDTO findByName(String name) throws DataException;
         
-        WorkbookDTO setName(String name);
-        
-        WorkbookDTO saveWorkbook(WorkbookDTO wb);
+        void setName(String name, WorkbookDTO workbook)throws DataException;
 }
