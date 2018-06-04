@@ -1,5 +1,6 @@
 package pt.isep.nsheets.client.application.export;
 
+import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.shared.services.ExportDTO;
 import pt.isep.nsheets.shared.services.ExportService;
 import pt.isep.nsheets.shared.services.ExportServiceAsync;
@@ -17,7 +18,6 @@ import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import gwt.material.design.client.ui.MaterialToast;
-import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.settings.Settings;
 
 public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPresenter.MyProxy>  {
 	
