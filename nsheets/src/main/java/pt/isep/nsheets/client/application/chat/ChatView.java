@@ -55,7 +55,7 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
     }
 
     @Override
-    public void setContents(ArrayList<MessagesDTO> contents) {
+    public void setContents(ArrayList<MessagesDTO> contents,String currentNickName) {
         //update the message container
         //messageCard.clear();
         messageCollection.clear();
@@ -64,7 +64,7 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
         //scrollMessagesPanel.setSize("1150px", "350px");
         
         for (MessagesDTO m : contents) {
-            MaterialCollectionItem card = createCard(m);
+            MaterialCollectionItem card = createCard(m, currentNickName);
 
             messageCollection.add(card);
         }
@@ -73,7 +73,7 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
         //messageCard.add(scrollMessagesPanel);
     }
 
-    private MaterialCollectionItem createCard(MessagesDTO m) {
+    private MaterialCollectionItem createCard(MessagesDTO m, String currentNickName) {
         MaterialCollectionItem card = new MaterialCollectionItem();
         card.setType(CollectionType.AVATAR);
 
@@ -81,10 +81,13 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
         avatar.setUrl("https://cdn.pixabay.com/photo/2016/11/18/23/38/child-1837375_960_720.png");
         avatar.setType(ImageType.CIRCLE);
 
+        String messageuser = m.getUser();
+        
+        
         MaterialLabel userLabel = new MaterialLabel();
-        userLabel.setText(m.getUser());
+        userLabel.setText(messageuser);
         userLabel.setFontSize("1.2em");
-
+        
         MaterialLabel textLabel = new MaterialLabel();
         textLabel.setText(m.getText());
 
@@ -93,6 +96,10 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
         dateLabel.setFontSize("0.6em");
         dateLabel.setFloat(Style.Float.RIGHT);
 
+        if(messageuser.equals(currentNickName)){
+            card.setBackgroundColor(Color.GREY);
+        }
+        
         card.add(avatar);
         card.add(userLabel);
         card.add(textLabel);
