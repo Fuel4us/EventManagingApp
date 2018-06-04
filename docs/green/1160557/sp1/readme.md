@@ -70,39 +70,12 @@ No ato de *login*, o servidor verifica na lista de utilizadores registados (para
 
 ## 3.4 Analysis Diagrams
 
-The main idea for the "workflow" of this feature increment.
-
-**Use Cases**
-
-![Use Cases](us.png)
-
-- **Use Cases**. Since these use cases have a one-to-one correspondence with the User Stories we do not add here more detailed use case descriptions. We find that these use cases are very simple and may eventually add more specification at a later stage if necessary.
-
-**Domain Model (for this feature increment)**
-
-![Domain Model](dm.png)
-
-- **Domain Model**. Since we found no specific requirements for the structure of Workbook Descriptions we follow the Structure of the existing DTO (WorkbookDescriptionDTO).
-
-**System Sequence Diagrams**
-
-**For US1**
-
-![Analysis SD](analysis.png)
-
-**For US2**
-
-![Analysis SD](analysis2.png)
+![SSD](ssd.png)
 
 # 4. Design
 
-*In this section you should present the design solution for the requirements of this sprint.*
-
-
 
 ## 4.1. Tests
-
-*In this section you should describe the design of the tests that, as much as possibe, cover the requirements of the sprint.*
 
 De modo a testar este caso de uso, para além dos testes unitários já implementados, devem ser realizados os seguintes testes:  
 Aceder a qualquer página da aplicação -> Resultado esperado: Página em branco ou simplesmente não apresenta nada bloqueando a aplicação  
@@ -112,72 +85,29 @@ Voltar a aceder a qualquer página da aplicação -> Resultado esperado: O conte
 
 ## 4.2. Requirements Realization
 
-*In this section you should present the design realization of the requirements.*
-
-Following the guidelines for JPA from EAPLI we envision a scenario like the following for realizing the use cases for this feature increment.
-
-**For US1**
-
-![SD US1](design1.png)
-
-Notes:  
-- The diagram only depicts the less technical details of the scenario;  
-- For clarity reasons details such as the PersistenceContext or the RepositoryFactory are not depicted in this diagram.   
-- **WorkbookServices** realizes the GWT RPC mechanism;  
-- **ListWorkbookDescriptionController** is the *use case controller*;  
-- **ListWorkbookDescriptionServices** is to group together all the services related to WorkbookDescription. 
-
-**For US2**
-
-![SD US2](design2.png)
+![SD US](sd.png)
 
 ## 4.3. Classes
 
-*Present and describe the major classes of you solution.*
+**User** 
+**UsersServiceImpl**  
 
 ## 4.4. Design Patterns and Best Practices
 
-*Present and explain how you applied design patterns and best practices.*
-
 By memory we apply/use:  
 - Singleton  
-- Repository  
 - DTO  
-- MVP  
 
 **TODO:** Exemplify the realization of these patterns using class diagrams and/or SD with roles marked as stereotypes. 
 
 # 5. Implementation
 
-*If required you should present in this section more details about the implementation. For instance, configuration files, grammar files, etc. You may also explain the organization of you code. You may reference important commits.*
+Para a implementação deste UC criamos uma UI simples para efetuar login, 2 caixas de texto e 1 botão para submeter os dados introduzidos.  
+A primeira caixa de texto será onde o utilizador deve introduzir o email, a segunda caixa de texto que é do tipo *password* é onde o utilizador deve introduzir a password. Nessa caixa de texto todos os caracteres introduzidos são ofuscados para maior segurança da aplicação.
 
-**For US1**
+O botão de autenticação tem um evento associado no LoginPresenter.java que irá obter os dados introduzidos na caixa de texto e submeter ao UsersService para verificar se existe algum utilizador com o mesmo email + password.  
 
-The UI for this US was already implemented. We simply implemented the server as described previously.
-
-**For US2**
-
-**UI: Button for adding a new Workbook Description**
-
-For this concern we decided to use a Material Widget called Material FAB (Floating Action Button). This is a kind of button that usually appears at the left bottom part of the screen and contains actions available for the elements of the page.  
-
-We updated the HomeView.ui.xml accordingly and declare the element with a tag *ui:field="newWorkbookButton"*. In the corresponding class View (i.e., HomeView) we bind that button to the corresponding widget class: 	
-
-	@UiField
-	MaterialButton newWorkbookButton;
-
-We must now add the code that invokes the server to add a new workbook description when the user clicks in the button. This is an event. To implement this behavior we could use GWT Events such as the SetPageTitleEvent already used in the application. These are special type of events that GWT manages and are available to all pages in the application. 
-
-We chose to provide our click event globally but to simple use the click event handler of the button and connect it to a method in the HomePresenter.
-
-Since Presenters should only depend on a View interface we added a new method to the HomePresenter.MyView:
-
-	interface MyView extends View {
-		void setContents(ArrayList<WorkbookDescriptionDTO> contents);
-		void addClickHandler(ClickHandler ch);
-	}
-
-Then, we implemented the *addClickHandler* in the HomeView class and call this method in the constructor of the HomePresenter. In the constructor our handler class the server method that adds a new workbook description.   
+Caso a condição anterior se verifique, o serviço irá retornar o utilizador que estará guardado na BD ao presenter, o presenter irá guardar o User no Singleton CurrentUser bem como irá colocar a bolean de autenticação a verdadeiro. Por ultimo, redireciona o utilizador já autenticado para a Home page.
 
 **Code Organization**  
 
@@ -222,9 +152,4 @@ Commits:
 
 [Controller Unit Tests](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/6ebc75653a2e56c790f3976701dc878f7e0440a8)
 
-
-
-
-
-
-
+[Documentation, Unit Tests](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/94e01e27098ff623f82e0cd4b64fa33b356143c9)

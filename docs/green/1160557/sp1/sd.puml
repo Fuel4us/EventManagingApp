@@ -1,0 +1,29 @@
+@startuml hilario2
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+User -> LoginPresenter : onReveal() / navigate to page
+LoginPresenter -> LoginPresenter : getEmail()
+LoginPresenter -> LoginPresenter : getPassword()
+
+LoginPresenter -> UsersServiceImpl : UserDTO user : attemptLogin(email, password)
+UsersServiceImpl -> LoginUserController : UserDTO user : attemptLogin(email, password)
+
+loop allUsers
+    LoginUserController -> ArrayUsers : string : getEmail()
+
+    alt "string equals email" case
+        LoginUserController -> ArrayUsers : b : verifyPassword(password)
+    end
+end
+
+alt "user != null" case
+    LoginPresenter -> LoginPresenter : redirectToHomePage()
+end
+LoginPresenter -> LoginPresenter : refreshView()
+@enduml
