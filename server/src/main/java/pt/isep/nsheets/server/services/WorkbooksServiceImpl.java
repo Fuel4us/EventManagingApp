@@ -78,6 +78,7 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
         return workbook.toDTO();
     }
 
+    @Override
     public WorkbookDTO findByName(String name) throws DataException {
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
@@ -94,9 +95,9 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
         return workbook.toDTO();
     }
 
-    public void renameWorkbook(String name, WorkbookDTO wdto) throws DataException {
+    @Override
+    public void renameWorkbook(String name, WorkbookDTO wdto){
         PersistenceContext.setSettings(this.getPersistenceSettings());
-
         RenameWorkbookController ctrl = new RenameWorkbookController();
         ctrl.renameWorkbook(name, wdto);
     }
@@ -104,7 +105,7 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
     @Override
     public void deleteWorkbook(WorkbookDTO wdto) {
         PersistenceContext.setSettings(this.getPersistenceSettings());
-        
+
         DeleteWorkbookController ctrl = new DeleteWorkbookController();
         ctrl.deleteWorkbook(wdto);
     }
