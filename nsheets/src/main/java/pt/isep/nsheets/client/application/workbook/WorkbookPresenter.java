@@ -75,9 +75,6 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
     WorkbookPresenter(EventBus eventBus, MyView view, MyProxy proxy, PlaceManager placeManager) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
 
-
-
-
 		this.placeManager = placeManager;
 	}
 

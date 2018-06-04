@@ -47,7 +47,7 @@ public abstract class SpreadsheetExtension implements Spreadsheet {
 		this.delegate = delegate;
 		this.name = name;
 	}
-
+        
 	/**
 	 * Returns the name of the extensions to which the spreadsheet extensions belongs.
 	 * @return the name of the extensions to which the spreadsheet extensions belongs

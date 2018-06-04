@@ -18,7 +18,7 @@ import pt.isep.nsheets.shared.services.ChartDTO;
 public interface Chart extends Serializable{
     
     ChartDTO toDTO();
-    Cell associatedCell();
+    Address associatedCell();
     void generateChartValues(Spreadsheet spreadsheet);
     
 }
