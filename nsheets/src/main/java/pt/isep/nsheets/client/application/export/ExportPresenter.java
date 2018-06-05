@@ -68,7 +68,8 @@ public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPre
                 }
             };
 
-
+            WorkbookDTO workbookDTO = Settings.getInstance().getWorkbook().toDTO();
+            exportServiceAsync.exportWorkbook(workbookDTO, "PDF", callback);
         });
     }
 
