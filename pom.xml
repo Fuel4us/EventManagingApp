@@ -302,24 +302,28 @@ governing permissions and limitations under the License. #L% -->
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
             <version>5.5.14-SNAPSHOT</version>
+            <systemPath>${basedir}/server/src/main/java/pt/isep/nsheets/server/lapr4/green/s1/ipc/n1150503/Libraries/itextpdf-5.5.14-SNAPSHOT.jar</systemPath>
         </dependency>
 
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itext-pdfa</artifactId>
             <version>5.5.14-SNAPSHOT</version>
+            <systemPath>${basedir}/server/src/main/java/pt/isep/nsheets/server/lapr4/green/s1/ipc/n1150503/Libraries/itext-pdfa-5.5.14-SNAPSHOT.jar</systemPath>
         </dependency>
 
         <dependency>
             <groupId>com.itextpdf.tool</groupId>
             <artifactId>xmlworker</artifactId>
             <version>5.5.14-SNAPSHOT</version>
+            <systemPath>${basedir}/server/src/main/java/pt/isep/nsheets/server/lapr4/green/s1/ipc/n1150503/Libraries/xmlworker-5.5.14-SNAPSHOT.jar</systemPath>
         </dependency>
 
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itext-xtra</artifactId>
             <version>5.5.14-SNAPSHOT</version>
+            <systemPath>${basedir}/server/src/main/java/pt/isep/nsheets/server/lapr4/green/s1/ipc/n1150503/Libraries/itext-xtra-5.5.14-SNAPSHOT.jar</systemPath>
         </dependency>
 
     </dependencies>
