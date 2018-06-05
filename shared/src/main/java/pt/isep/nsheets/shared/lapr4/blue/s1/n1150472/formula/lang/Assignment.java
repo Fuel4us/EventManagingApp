@@ -1,18 +1,21 @@
-package pt.isep.nsheets.shared.core.formula.lang;
+package pt.isep.nsheets.shared.lapr4.blue.s1.n1150472.formula.lang;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Value;
 import static pt.isep.nsheets.shared.core.Value.Type.*;
 import pt.isep.nsheets.shared.core.formula.BinaryOperator;
 import pt.isep.nsheets.shared.core.formula.Expression;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
+import pt.isep.nsheets.shared.core.formula.lang.CellReference;
 
 /**
  * @author Pedro Alves 1150372@isep.ipp.pt s1
  */
 public class Assignment implements BinaryOperator {
+
+    public Assignment() {
+    }
 
     @Override
     public Value applyTo(Expression leftOperand, Expression rightOperand) throws IllegalValueTypeException {
@@ -39,9 +42,9 @@ public class Assignment implements BinaryOperator {
             try {
                 leftOp.getCell().setContent(content);
             } catch (FormulaCompilationException ex) {
-                Logger.getLogger(Assignment.class.getName()).log(Level.SEVERE, null, ex);
+                MaterialToast.fireToast("Erro na classe Assigment.");
             }
-            return value;
+            return new Value(content);
         } else {
             throw new UnsupportedOperationException("The Left Operand are not a cellreference.");
         }

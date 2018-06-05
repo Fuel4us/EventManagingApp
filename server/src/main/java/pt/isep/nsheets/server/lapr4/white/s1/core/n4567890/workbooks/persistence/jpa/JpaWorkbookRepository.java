@@ -26,9 +26,11 @@ public class JpaWorkbookRepository extends NSheetsJpaRepositoryBase<Workbook, Lo
 
     @Override
     public void deleteWorkbook(Workbook workbook) {
+        entityManager().getTransaction().begin();
         entityManager().createQuery("delete from Workbook w where w.id=:workbookid")
                 .setParameter("workbookid", workbook.getId())
                 .executeUpdate();
+        entityManager().getTransaction().commit();
     }
 
     @Override

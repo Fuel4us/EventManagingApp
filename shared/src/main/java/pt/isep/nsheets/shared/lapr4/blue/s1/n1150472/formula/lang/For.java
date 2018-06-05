@@ -1,4 +1,4 @@
-package pt.isep.nsheets.shared.core.formula.lang;
+package pt.isep.nsheets.shared.lapr4.blue.s1.n1150472.formula.lang;
 
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Value;
@@ -11,19 +11,14 @@ import pt.isep.nsheets.shared.core.formula.FunctionParameter;
  */
 public class For implements Function {
 
-    /**
-     * Parameters: Assignment, Expressions, Cell Reference & signal compartion
-     * and final assigmnment.
-     */
+    public boolean initialized = false;
+    Value value = null;
+    Value boundary = new Value(true);
+    private int nextBlock = 1;
+    
     public static final FunctionParameter[] parameters = new FunctionParameter[]{
-        new FunctionParameter(Value.Type.TEXT, "Assignment", true,
-        "The assignment binary operation"),
-        new FunctionParameter(Value.Type.MATRIX, "Expressions", true,
-        "Expressions."),
-        new FunctionParameter(Value.Type.TEXT, "CELL REF", true,
-        "Reference and comparation."),
-        new FunctionParameter(Value.Type.TEXT, "Assignment", true,
-        "The assignment binary operation")
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", false,
+        "The for expressions")
     };
 
     public For() {
@@ -47,7 +42,7 @@ public class For implements Function {
 
     @Override
     public boolean isVarArg() {
-        return false;
+        return value.isOfType(Value.Type.UNDEFINED);
     }
 
 }
