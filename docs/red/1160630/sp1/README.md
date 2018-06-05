@@ -173,13 +173,19 @@ As a gwt chart only supports one type of data (STRING, NUMBERS...) I decided to 
 
 
 # 8. Work Log
+* [Added dummy matrix](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/60bea2466c78e2ce65e9525879193cc97462a9d8)
+* [Complete Analysis and Design](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/01643c9557ad3d9f3f7613d5bd2cdaecade0da2c)
 * [Tried to make the chart work with the current spreedsheat](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/420b2306a57047200f9eaaf2b652759a8260e181)
-* [Added Sequence diagrams and SSD to the documentations;
-](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/83a763163052a3ad699e03862830ad54689c1fc5)
+* [Added Sequence diagrams and SSD to the documentations](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/83a763163052a3ad699e03862830ad54689c1fc5)
 * [Create chart using the active spreadsheet](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/98081d6c84ac441bf6817d526604dbdb5d566799)
-* [Added a functional popup when a cell has a/various chart(s) associated;
-Added more information to de Analisys - GWT, Material design and DataBase;](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/f0e427eeb7e0b6fac5dee2cc8727404dc09aaa35)
+* [Adjust Create Chart Button](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/665bec9e47b7079c87d61216dcc52a2dd6887d92)
+* [Added a functional popup when a cell has a/various chart(s) associated](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/f0e427eeb7e0b6fac5dee2cc8727404dc09aaa35)
+* [Added more information to de Analisys - GWT, Material design and DataBase](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/f0e427eeb7e0b6fac5dee2cc8727404dc09aaa35)
+* [Added javadoc](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/fc9420cd8b756e86196d6f7bb7ab67c12083b85e)
 * [Added a functional popup menu in cell with associated charts](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/20bf885842a3d6c2cfcb5ed5217e4403955b608c)
 * [Chart working using ChartDTO](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/07faf7003e2dda4d4729ec26b3de832e6fcef7d7)
 * [Structured the Chart Page based on GWT Material documentation, not functional yet;](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/49f41f545ca84d1b03ad3987789693daace9dfdb)
-
+* [Structured the Chart Page based on GWT Material documentation, not functional yet;](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/49f41f545ca84d1b03ad3987789693daace9dfdb)
+* [Added Chart UI package](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/95bcf85e7846e9b02260625a404b8f3f042eb8e0)
+* [Added Chart option to menu bar](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/9a64835fda6b9d7bafdbc6c058373e184ba9f697)
+* [Added User Story analysis](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/05c83e6cdaea33a68957b2d196e354c491a2b181);
