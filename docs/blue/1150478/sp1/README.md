@@ -233,7 +233,7 @@ The main idea for the "workflow" of this feature increment.
 ## 4.2. Requirements Realization
 
 *Sequence Diagram:*
-
+![Use Cases](ds.png)
 
 ## 4.3. Classes
 
