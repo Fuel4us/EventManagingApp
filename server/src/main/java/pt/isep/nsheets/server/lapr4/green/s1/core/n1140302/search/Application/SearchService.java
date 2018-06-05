@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchService {
-    final WorkbookRepository workbookRepository = PersistenceContext.repositories().workbooks();
+    private final WorkbookRepository workbookRepository = PersistenceContext.repositories().workbooks();
 
     public SearchService(){
 
@@ -42,5 +42,16 @@ public class SearchService {
         }
 
         return cellInfoDTOList;
+    }
+
+    public String getCellInfoString(List<CellImpl> cellList, String expression){
+        String str = "";
+        for (CellImpl cell:
+             cellList) {
+            if(cell.getContent().startsWith(expression)){
+                str+= "Cell Address : "+((char)cell.getAddress().getRow()+16)+cell.getAddress().getColumn()+", Value: "+cell.getValue().toString()+", Content: "+cell.getContent()+"\n";
+            }
+        }
+        return str;
     }
 }
