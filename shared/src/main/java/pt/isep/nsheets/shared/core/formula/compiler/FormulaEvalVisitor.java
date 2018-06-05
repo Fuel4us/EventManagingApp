@@ -27,7 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.v4.runtime.Token;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
-import pt.isep.nsheets.shared.lapr4.blue.s1.n1150472.formula.lang.For;
+import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.For;
 
 /**
  *
@@ -64,22 +64,24 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
     @Override
     public Expression visitComparison(FormulaParser.ComparisonContext ctx) {
         if (ctx.getChildCount() == 3) {
-            Token t = (Token) ctx.getChild(0).getPayload();
-            if (t.getType() == FormulaParser.ICHA) {
+            if (ctx.getChild(0).getText().equalsIgnoreCase("{")) {
                 return visit(ctx.manyexpressions());
             } else {
-                try {
-                    //BinaryOperator operator = Language.getInstance().getBinaryOperator(ctx.getChild(1).getText());
-                    BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
+                if (ctx.getChild(0).getText().equalsIgnoreCase("FOR{")) {
+                    return visit(ctx.forexpression());
+                } else {
+                    try {
+                        BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
 
-                    return new BinaryOperation(
-                            visit(ctx.getChild(0)),
-                            operator,
-                            visit(ctx.getChild(2))
-                    );
-                } catch (UnknownElementException ex) {
-                    MaterialToast.fireToast("ERRO Comparison getBinaryOperator");
-                    addVisitError(ex.getMessage());
+                        return new BinaryOperation(
+                                visit(ctx.getChild(0)),
+                                operator,
+                                visit(ctx.getChild(2))
+                        );
+                    } catch (UnknownElementException ex) {
+                        MaterialToast.fireToast("ERRO Comparison getBinaryOperator");
+                        addVisitError(ex.getMessage());
+                    }
                 }
             }
         }
@@ -199,7 +201,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
                 return new Literal(Value.parseValue(value, Value.Type.BOOLEAN, Value.Type.DATE));
             }
         }
-        MaterialToast.fireToast("RETURN NULL Literaç");
+        MaterialToast.fireToast("RETURN NULL Literal");
         return null;
     }
 
@@ -241,6 +243,31 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
         }
         MaterialToast.fireToast("RETURN NULL ASSIGNMENT");
         return null;
+    }
+
+    @Override
+    public Expression visitForexpression(FormulaParser.ForexpressionContext ctx) {
+        Function function = new For();
+        Value value = null;
+        MaterialToast.fireToast("visitForexpression");
+
+        List<Expression> args = new ArrayList<>();
+
+        for (int i = 0; i < ctx.getChildCount(); i += 2) {
+            args.add(visit(ctx.getChild(i)));
+        }
+
+        Expression[] argArray = args.toArray(new Expression[args.size()]);
+        try {
+            value = function.applyTo(argArray);
+            MaterialToast.fireToast("applyTo");
+        } catch (IllegalValueTypeException ex) {
+            MaterialToast.fireToast("ERRO ForExpression apply to.");
+            Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        MaterialToast.fireToast("RETURN NULL FOREXPRESSION");
+        return new Literal(value);
     }
 
     @Override

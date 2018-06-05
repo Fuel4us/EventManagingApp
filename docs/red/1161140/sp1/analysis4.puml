@@ -1,4 +1,4 @@
-@startuml  analysis2
+@startuml  analysis4
 
 skinparam monochrome true
 skinparam shadowing false
@@ -7,9 +7,9 @@ hide footbox
 actor User
 database Database order 100
 
-User -> Browser : Creates an event
-Browser ->> Server : createCalendarEvent()
-Server -> Database : save()
+User -> Browser : Deletes an event
+Browser ->> Server : deleteCalendarEvent()
+Server -> Database : delete()
 
 Server -->> Browser : return
 Browser -> Browser : display
