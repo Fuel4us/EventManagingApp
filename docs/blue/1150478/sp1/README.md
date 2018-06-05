@@ -1,4 +1,4 @@
-**Jo√£o Pereira** (1150478) - Sprint 1 - Lang05.1
+**Jo„o Pereira** (1150478) - Sprint 1 - Lang05.1
 ===============================
 
 # 1. General Notes
@@ -204,16 +204,16 @@ The main idea for the "workflow" of this feature increment.
 **System Sequence Diagrams**
 
 **For US1**
-
+![Use Cases](us1.png)
 
 **For US2**
-
+![Use Cases](us2.png)
 
 **For US3**
-
+![Use Cases](us3.png)
 
 **For US4**
-
+![Use Cases](us4.png)
 
 # 4. Design
 
