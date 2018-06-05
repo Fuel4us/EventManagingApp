@@ -13,10 +13,10 @@ import pt.isep.nsheets.shared.core.formula.lang.CellReference;
  * @author Pedro Alves 1150372@isep.ipp.pt s1
  */
 public class Assignment implements BinaryOperator {
-    
+
     public Assignment() {
     }
-    
+
     @Override
     public Value applyTo(Expression leftOperand, Expression rightOperand) throws IllegalValueTypeException {
         if (leftOperand instanceof CellReference) {
@@ -44,25 +44,25 @@ public class Assignment implements BinaryOperator {
             } catch (FormulaCompilationException ex) {
                 MaterialToast.fireToast("Erro na classe Assigment.");
             }
-            return value;
+            return new Value(content);
         } else {
             throw new UnsupportedOperationException("The Left Operand are not a cellreference.");
         }
     }
-    
+
     @Override
     public String getIdentifier() {
         return ":=";
     }
-    
+
     @Override
     public Value.Type getOperandValueType() {
         return Value.Type.UNDEFINED;
     }
-    
+
     @Override
     public String toString() {
         return getIdentifier();
     }
-    
+
 }

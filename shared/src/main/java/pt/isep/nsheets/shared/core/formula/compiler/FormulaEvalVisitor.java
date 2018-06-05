@@ -209,11 +209,11 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
         Value value = null;
 
         List<Expression> args = new ArrayList<>();
-        if (1 < ctx.getChildCount()) {
-            for (int i = 0; i < ctx.getChildCount(); i += 2) {
-                args.add(visit(ctx.getChild(i)));
-            }
+
+        for (int i = 0; i < ctx.getChildCount(); i += 2) {
+            args.add(visit(ctx.getChild(i)));
         }
+
         Expression[] argArray = args.toArray(new Expression[args.size()]);
         try {
             for (int i = 0; i < argArray.length; i++) {
