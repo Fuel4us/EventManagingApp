@@ -19,6 +19,7 @@
  */
 package pt.isep.nsheets.client.application.workbook;
 
+import gwt.material.design.client.ui.*;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
@@ -36,20 +37,24 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
 import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.constants.IconType;
-import gwt.material.design.client.ui.MaterialDropDown;
-import gwt.material.design.client.ui.MaterialIcon;
-import gwt.material.design.client.ui.MaterialLink;
-import gwt.material.design.client.ui.MaterialTextBox;
-import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.table.MaterialDataTable;
 import pt.isep.nsheets.client.application.workbook.WorkbookView.SheetCell;
 import pt.isep.nsheets.client.place.ParameterTokens;
 import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.core.CellListener;
+import pt.isep.nsheets.shared.core.Value;
+import pt.isep.nsheets.shared.ext.Extension;
+import pt.isep.nsheets.shared.ext.ExtensionManager;
+import pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629.Configuration;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalFormattingExtension;
 import pt.isep.nsheets.shared.services.ChartDTO;
+
+import java.text.ParseException;
 
 public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, WorkbookPresenter.MyProxy> {
 
-    
+    private MyView view;
 
     interface MyView extends View {
 
@@ -64,6 +69,21 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         public MaterialDropDown getChartDropDown();
 
         public MaterialPopupMenu getPopChart();
+
+        public MaterialModal getConditionalModal();
+
+        public void addConfirmationHandler(ClickHandler cMDB);
+
+
+        public int getBackgroudColorTrue();
+        public int getFontColorTrue();
+        public int getBackgroudColorFalse();
+        public int getFontColorFalse();
+
+        public String getOperator();
+
+        public String getConditionalValue();
+
     }
 
     @ProxyStandard
@@ -75,11 +95,25 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
     WorkbookPresenter(EventBus eventBus, MyView view, MyProxy proxy, PlaceManager placeManager) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
 
+        this.view = view;
 
+        view.addConfirmationHandler(event -> {
+            if (view.getConditionalValue().matches("[+-]?([0-9]*[.])?[0-9]+")) {
+                conditionalFormattingAction();
 
+                view.getConditionalModal().close();
+            }
+        });
+
+        /* 1050475 Hernani Gil
+           Repository loading
+         */
+        //conditionalService();
 
 		this.placeManager = placeManager;
 	}
+
+
 
     PlaceManager placeManager;
 
@@ -168,5 +202,75 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
             getView().getChartDropDown().add(link);
         }
     }
+
+    protected void conditionalFormattingAction(){
+
+        try {
+            Value conditionalValue = Value.parseNumericValue(this.view.getConditionalValue());
+            int[] values = new int[4];
+            values[0]=view.getBackgroudColorTrue();
+            values[1]=view.getFontColorTrue();
+            values[2]=view.getBackgroudColorFalse();
+            values[3]=view.getFontColorFalse();
+
+            Configuration configuration = new Configuration(values);
+
+            Conditional conditional = new Conditional(this.view.getActiveCell(), configuration, view.getOperator(), conditionalValue);
+
+            /*1050475 lang03.1 persistencia com erro no Conditional service
+            ConditionalServiceAsync conditionalSvc = GWT.create(ConditionalService.class);
+
+            AsyncCallback<ConditionalDTO> callback = new AsyncCallback<ConditionalDTO>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error configuring Conditionalextension! " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(ConditionalDTO result) {
+                    MaterialToast.fireToast("Conditionalextension conditional configured!");
+                }
+                conditionalSvc.saveConditional(conditional.toDTO(), callback);
+            };
+            */
+
+
+            Extension extension = ExtensionManager.getInstance().getExtension("ConditionalExtension");
+            ConditionalFormattingExtension.addConditional(conditional);
+            this.view.getActiveCell().getExtension("ConditionalExtension");
+            MaterialToast.fireToast(this.view.getActiveCell().getAddress().toString()+" conditional result ="
+                    + ConditionalFormattingExtension.setOperation(this.view.getActiveCell(), conditional.getCondOperator(), conditional.getCondValue()));
+
+            for(CellListener l : this.view.getActiveCell().getCellListeners()) {
+                l.valueChanged(this.view.getActiveCell());
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    /* 1050475 Hernani Gil
+               Repository loading
+             */
+    /*
+    private void conditionalService() {
+        ConditionalServiceAsync conditionalSvc = GWT.create(ConditionalService.class);
+
+        AsyncCallback<List<ConditionalDTO>> callback = new AsyncCallback<List<ConditionalDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                MaterialToast.fireToast("Error retrieving conditional! " + caught.getMessage());
+            }
+
+            @Override
+            public void onSuccess(List<ConditionalDTO> conditionalDTOS) {
+                MaterialToast.fireToast("List conditionals retrieved! ");
+            }
+        };
+        conditionalSvc.getListConditional(callback);
+    }*/
+
 
 }

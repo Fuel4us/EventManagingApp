@@ -1,25 +1,18 @@
 package pt.isep.nsheets.client.application.workbook;
 
 import com.google.gwt.cell.client.Cell.Context;
-import com.google.gwt.dom.client.Style;
-import gwt.material.design.client.constants.ButtonType;
-import gwt.material.design.client.constants.Color;
-import gwt.material.design.client.constants.IconPosition;
-import gwt.material.design.client.constants.IconType;
-import gwt.material.design.client.constants.TextAlign;
+import gwt.material.design.client.constants.*;
 import gwt.material.design.client.ui.MaterialButton;
-import gwt.material.design.client.ui.MaterialLabel;
-import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.table.cell.WidgetColumn;
 import pt.isep.nsheets.client.application.workbook.WorkbookView.SheetCell;
 import pt.isep.nsheets.shared.core.Cell;
-import pt.isep.nsheets.shared.core.IllegalValueTypeException;
-import pt.isep.nsheets.shared.core.Value;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
-import pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629.ValueColorExtension;
-import pt.isep.nsheets.shared.services.ChartDTO;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.CellStyleExtension;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalFormattingExtension;
+
 
 public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
 
@@ -62,7 +55,7 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
         return TextAlign.CENTER;
     }
 
-        @Override
+    @Override
         public MaterialButton getValue(SheetCell object) {
         MaterialButton btn = new MaterialButton();
         if (this.colNumber == -1) {
@@ -80,10 +73,30 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
             btn.setTextColor(Color.BLACK);
             btn.setType(ButtonType.FLAT);
 
+            //btn.setPixelSize(220,30);
+
             Extension extension = ExtensionManager.getInstance().getExtension("Value Colour Extension");
             if(extension!=null){
                 extension.getUIExtension(btn).decorate(object.getCell(this.colNumber));
             }
+
+            Extension extensionCell = ExtensionManager.getInstance().getExtension("CellStyleExtension");
+            Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
+            if(extensionCell!=null && extensionCond !=null){
+
+                Conditional cond = ConditionalFormattingExtension.containsCondition(object.getCell(this.colNumber));
+
+                 /*1050475 Other possibility to change CellSyle but need colaboration from Core8.1*/
+                if(cond != null){
+                    boolean flag = ConditionalFormattingExtension.setOperation(object.getCell(this.colNumber), cond.getCondOperator(), cond.getCondValue());
+                    MaterialToast.fireToast("Cell"+ object.getCell(this.colNumber).getAddress().toString()+"Conditional equals "+flag);
+
+                    CellStyleExtension.setConfig(cond.getConfiguration());
+                    CellStyleExtension.setResult(ConditionalFormattingExtension.setOperation(object.getCell(this.colNumber), cond.getCondOperator(), cond.getCondValue()));
+                    extensionCell.getUIExtension(btn).decorate(object.getCell(this.colNumber));
+                }
+            }
+
 
         return btn;
     }
