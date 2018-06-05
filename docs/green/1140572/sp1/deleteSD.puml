@@ -1,0 +1,30 @@
+@startuml Pedro
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+User->HomePresenter : Select the workbook
+HomePresenter->HomePresenter : setFocusedWorkbookDTO()
+HomePresenter -> WorkbookServicesAsync : deleteWorkbook(workbookDTO, callback)
+WorkbookServicesAsync -> WorkbookServices: deleteWorkbook(workbookDTO)
+WorkbookServices -> DeleteWorkbookController : deleteWorkbook(workbook)
+DeleteWorkbookController->WorkbookRepositoty : workbook : findByName(workbookDTO.name())
+DeleteWorkbookController->WorkbookRepository : deleteWorkbook(workbook)
+WorkbookRepository->JpaWorkbookRepository : deleteWorkbook(workbook)
+JpaWorkbookRepository -> JpaTxlessRepository : entityManager()
+JpaTxlessRepository -> EntityManager : getTransaction()
+EntityManager -> EntityTransaction : begin()
+JpaWorkbookRepository -> JpaTxlessRepository : entityManager()
+JpaTxlessRepository -> EntityManager : createQuery(...).setParemeter(workbook.name()).executeUpdate()   
+JpaWorkbookRepository -> JpaTxlessRepository : entityManager()
+JpaTxlessRepository -> EntityManager : getTransaction()
+EntityManager -> EntityTransaction : commit()
+HomePresenter->HomePresenter : refreshView()
+HomePresenter-->User : Notifies the user with success
+
+
+@enduml
