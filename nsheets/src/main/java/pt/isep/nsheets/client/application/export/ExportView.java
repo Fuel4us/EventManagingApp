@@ -16,6 +16,11 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
 		export_csv.addClickHandler(ch);
 	}
 
+        @Override
+	public void xmlButtonClickHandler(ClickHandler cHandler) {
+		export_xml.addClickHandler(cHandler);
+	}
+
 	@Override
 	public void pdfButtonClickHandler(ClickHandler clickHandler) {
 		export_pdf.addClickHandler(clickHandler);
@@ -29,6 +34,9 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
 
 	@UiField
 	MaterialButton export_csv;
+        
+        @UiField
+	MaterialButton export_xml;
 
 	@Inject
 	ExportView(Binder uiBinder) {

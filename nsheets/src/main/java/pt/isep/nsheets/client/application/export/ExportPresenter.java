@@ -27,6 +27,7 @@ public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPre
 
     interface MyView extends View  {
         void csvButtonClickHandler(ClickHandler ch);
+        void xmlButtonClickHandler(ClickHandler cHandler);
         void pdfButtonClickHandler(ClickHandler clickHandler);
     }
 
@@ -58,6 +59,25 @@ public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPre
             exportSrv.exportWorkbook(workbookDTO,"CSV", callback);
         });
 
+                getView().xmlButtonClickHandler(ev -> {
+
+            ExportServiceAsync exportSrvAs = GWT.create(ExportService.class);
+
+            AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
+                @Override
+                public void onFailure(Throwable caught) { MaterialToast.fireToast("Error:" + caught.getMessage(), "rounded"); }
+
+                @Override
+                public void onSuccess(WorkbookDTO result) {
+                    MaterialToast.fireToast("Exporting XML file...", "rounded");
+                }
+            };
+
+            WorkbookDTO workbookDTO = Settings.getInstance().getWorkbook().toDTO();
+
+            exportSrvAs.exportWorkbook(workbookDTO,"XML", callback);
+        });
+                
         getView().pdfButtonClickHandler(e -> {
             ExportServiceAsync exportServiceAsync = GWT.create(ExportService.class);
 
