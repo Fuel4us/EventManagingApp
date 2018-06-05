@@ -345,7 +345,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         options.setVAxis(vAxis);
         options.setHAxis(hAxis);
         options.setLegend(legend);
-        options.setWidth(matrix.length * matrix[0].length * 50);
+        options.setWidth(matrix.length * matrix[0].length * 100);
         options.setHeight(300);
 
         // Set Bar
