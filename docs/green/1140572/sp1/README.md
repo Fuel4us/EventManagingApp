@@ -56,10 +56,10 @@ Therefore:
   is manipulated in the HomeView.ui.xml file, where is defined the icons, text, grid, effects, etc. 
   The ActionHandlers are implemented in the HomePresenter class, where each button is a function. So:
   
-  1. HomeModule
-  2. HomePresenter
-  3. HomeView
-  4. HomeView.ui.xml
+  1. **HomeModule**
+  2. **HomePresenter**
+  3. **HomeView**
+  4. **HomeView.ui.xml**
 
 ## 3.3 Server and RPC
 
@@ -204,9 +204,9 @@ Commits:
 
 [UI Minor Update](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/bf6abb1e4e9c96ebfce166bdf98d71aa7a5b885b)
 
-[Improvement of UI and Button click Handler Search] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/5bedbfe84778b4d0f1fe07f030544078bb5fa524)
+[Improvement of UI and Button click Handler Search](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/5bedbfe84778b4d0f1fe07f030544078bb5fa524)
 
-[Improvement of UI and Button click Handler Search 2] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/78bd02c7ecfb39e52ea3c8748b41690a9780b928)
+[Improvement of UI and Button click Handler Search 2](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/78bd02c7ecfb39e52ea3c8748b41690a9780b928)
 
 [Implementation of Delete Function](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/439892e8f7341e029d0ba9485876721838c80d19)
 
@@ -222,6 +222,6 @@ Commits:
 
 [Improvement of Rename Function 2](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/59eb8157f4eab330bae14667d36dc2bad63a9b1d)
 
-[Controller Unit Tests]()
+[Controller Unit Tests](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/7a5fc056c57634d063d84355a434f1f1c5ac09aa)
 
-[Documentation, Unit Tests]()
+[Documentation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/2973e25cd9b693db7988237998ea14eb41497ce3)
