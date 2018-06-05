@@ -225,7 +225,6 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
                 @Override
                 public void onFailure(Throwable caught) {
                     MaterialToast.fireToast("Error draw chart --> " + caught.getMessage());
-                    MaterialToast.fireToast("Error --> " + caught.getLocalizedMessage());
                 }
 
                 @Override

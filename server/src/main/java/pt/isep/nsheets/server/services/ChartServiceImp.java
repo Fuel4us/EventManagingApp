@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.application.AddChartController;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.application.CreateChartController;
+import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.application.ListChartsController;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.Chart;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;
@@ -49,9 +50,9 @@ public class ChartServiceImp extends RemoteServiceServlet implements ChartsServi
     public ArrayList<ChartDTO> getCharts() {
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
-		ArrayList<ChartDTO> charts = new ArrayList<ChartDTO>();
+		ArrayList<ChartDTO> charts = new ArrayList<>();
 
-		AddChartController ctrl = new AddChartController();
+		ListChartsController ctrl = new ListChartsController();
 
 		Iterable<Chart> it_charts= ctrl.listAllCharts();
 

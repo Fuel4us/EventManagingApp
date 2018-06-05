@@ -38,7 +38,7 @@ public class CreateChartController implements Controller{
     public String[][] generateChartValues(ChartDTO dto/*, Spreadsheet ss*/){
         Window.alert("generateChartValues");
         Chart c = newChart(dto);
-        /*c.generateChartValues(ss);*/
+        c.generateChartValues(null);
         return c.toDTO().getContent();
     }
     
