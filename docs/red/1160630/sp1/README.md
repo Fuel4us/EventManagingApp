@@ -4,7 +4,7 @@
 # 1. General Notes
 In Application Engineering (EAPLI) were shown several standards/patterns for project development.
 The of LAPR4 is to take advantage of the knowledge acquired in EAPLI and apply it, however for this iteration, as we are limited in a matter of time and it is the first time that we came in contact with the project, I found it well to ignore the TDD standard (test-driven development) for at least this iteration. This way I tried as hard as I could to implement my Use Case based on the domain model, and as I was implementing it, I improved my project structure skills.
-As a gwt chart only supports one type of data (STRING, NUMBERS...) I decided to only accept numbers and ignore other types;
+
 
 
 
@@ -140,15 +140,46 @@ Based on JPA, in this project, we usually find:
 
 # 5. Implementation
 
+Code Organization
+
+We followed the recommended organization for packages:
+- Code should be added (when possible) inside packages that identify the group, sprint, functional area and author; - For instance, we used lapr4.red.s1.core.1160630
+
+The code for this sprint:
+Project server 
+- pt.isep.nsheets.server.lapr4.red.s1.core.1160630.chart.application: contains the controllers
+- pt.isep.nsheets.server.lapr4.red.s1.core.1160630.chart.domain: contains the domain classes
+- pt.isep.nsheets.server.lapr4.red.s1.core.1160630.chart.persistence: contains the persistence/JPA classes;
+* Updated the existing packages: 
+    * pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.jpa;
+        * Added JpaChartRepository;
+    * pt.isep.nsheets.server.services;
+        * Added ChartServiceImpl;
+
+Project shared
+- Updated the classes: pt.isep.nsheets.shared.services.ChartDTO, pt.isep.nsheets.shared.services.ChartType,  pt.isep.nsheets.shared.services.ChartService and pt.isep.nsheets.shared.services.ChartServiceAsync
+
+Project NShests - Updated the classes: pt.isep.nsheets.client.aaplication.home.ChartView and pt.isep.nsheets.client.aaplication.home.ChartPresenter
+pt.isep.nsheets.client.application.home.ChartView.ui.xml
 
 
-# 6. Integration/Demonstration
+
+<!-- # 6. Integration/Demonstration -->
 
 
 
 # 7. Final Remarks 
-
+As a gwt chart only supports one type of data (STRING, NUMBERS...) I decided to only accept numbers and ignore other types;
 
 
 # 8. Work Log
+* [Tried to make the chart work with the current spreedsheat](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/420b2306a57047200f9eaaf2b652759a8260e181)
+* [Added Sequence diagrams and SSD to the documentations;
+](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/83a763163052a3ad699e03862830ad54689c1fc5)
+* [Create chart using the active spreadsheet](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/98081d6c84ac441bf6817d526604dbdb5d566799)
+* [Added a functional popup when a cell has a/various chart(s) associated;
+Added more information to de Analisys - GWT, Material design and DataBase;](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/f0e427eeb7e0b6fac5dee2cc8727404dc09aaa35)
+* [Added a functional popup menu in cell with associated charts](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/20bf885842a3d6c2cfcb5ed5217e4403955b608c)
+* [Chart working using ChartDTO](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/07faf7003e2dda4d4729ec26b3de832e6fcef7d7)
+* [Structured the Chart Page based on GWT Material documentation, not functional yet;](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/49f41f545ca84d1b03ad3987789693daace9dfdb)
 
