@@ -54,7 +54,7 @@ Therefore:
 
 ## 3.4 Analysis Diagrams
 
-
+![sd](sd.jpg)
 
 # 4. Design
 
@@ -71,7 +71,7 @@ ExportPresenter , ExportServiceImp
 
 ## 4.4. Design Patterns and Best Practices
 
-
+![ss](ssd.jpg)
 
 By memory we apply/use: - DTO
 
