@@ -87,7 +87,7 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
         this.view.saveChart(event -> {
 
             
-//            chartSrv.addChart(dto, callback);
+            chartSrv.addChart(dto, callback);
             
 
         });

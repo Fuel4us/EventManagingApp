@@ -15,21 +15,24 @@ import pt.isep.nsheets.shared.services.ChartDTO;
 
 /**
  * The Chart Service.
+ *
  * @author pedromonteiro
  */
-public class ChartService{
-    
+public class ChartService {
+
     /**
      * Find all the charts in the persistence
+     *
      * @return all charts
      */
     public Iterable<Chart> allCharts() {
         final ChartRepository chartRepo = PersistenceContext.repositories().charts();
         return chartRepo.findAll();
     }
-    
+
     /**
      * Adds a Chart to the persistence
+     *
      * @param dto Chart DTO
      * @return the added Chart
      * @throws DataConcurrencyException
@@ -38,19 +41,19 @@ public class ChartService{
     public Chart addUChart(ChartDTO dto) throws DataConcurrencyException, DataIntegrityViolationException {
 
         final ChartRepository chartRepo = PersistenceContext.repositories().charts();
-        
-        Chart chart = null;
-        
-        switch(dto.getType()){
-            
+
+        switch (dto.getType()) {
+
             case BAR_CHART:
-                
-                chart = new BarChart(dto);
-                break;
-                
+
+                BarChart chart = new BarChart(dto);
+                chartRepo.save(chart);
+                return chart;
+
         }
-        if(chart != null) chartRepo.save(chart);
-        return chart;
+        
+        return null;
+
     }
-    
+
 }
