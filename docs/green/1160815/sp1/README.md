@@ -34,12 +34,12 @@ The main idea for the "workflow" of this feature increment.
 
 **Use Cases**
 
-![Use Cases](us.png)
+![Use Cases](us.PNG)
 
 **System Sequence Diagrams
 **For US1**
 
-![Analysis SD](ssd.png)
+![Analysis SD](ssd.PNG)
 
 # 4. Design
 
@@ -55,7 +55,7 @@ Following the guidelines for JPA from EAPLI we envision a scenario like the foll
 
 **For US1**
 
-![SD](sd.png)
+![SD](sd.PNG)
 
 MUDAR ISTO
 MUDAR
