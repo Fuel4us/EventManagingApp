@@ -27,6 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.v4.runtime.Token;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
+import pt.isep.nsheets.shared.lapr4.blue.n1150455.s1.temporaryVariables.TemporaryVariable;
 import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.For;
 
 /**
@@ -134,7 +135,6 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
         return visitChildren(ctx);
     }
 
-    @Override
     public Expression visitFunction_call(FormulaParser.Function_callContext ctx) {
         // Convert function call
         Function function = null;
@@ -142,8 +142,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
             // function = Language.getInstance().getFunction(ctx.getChild(0).getText());
             function = this.language.getFunction(ctx.getChild(0).getText());
         } catch (UnknownElementException ex) {
-            MaterialToast.fireToast("ERRO FUNCTION_CALL getFunction");
-            addVisitError(ex.getMessage());
+            Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         if (function != null) {
@@ -178,7 +177,13 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
                         new CellReference(cell.getSpreadsheet(), ctx.getChild(2).getText())
                 );
             } else {
-                return new CellReference(cell.getSpreadsheet(), ctx.getText());
+                Token t = (Token) ctx.getChild(0).getPayload();
+                if (t.getType() == FormulaParser.CELL_REF) {
+                    return new CellReference(cell.getSpreadsheet(), ctx.getText());
+                } else {
+                    return visit(ctx.getChild(0));
+                }
+
             }
             // return visitChildren(ctx); 
         } catch (ParseException | UnknownElementException ex) {
@@ -272,20 +277,24 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
 
     @Override
     public Expression visitTemporaryreference(FormulaParser.TemporaryreferenceContext ctx) {
-//        try {
-//            BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(2).getText());
-//            try {
-//                return new BinaryOperation(
-//                        new CellReference(cell.getSpreadsheet(), ctx.getChild(0).getText(), ctx.getChild(1).getText()),
-//                        operator,
-//                        visit(ctx.getChild(2))
-//                );
-//            } catch (ParseException ex) {
-//                Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        } catch (UnknownElementException ex) {
-//            Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        if (ctx.getChildCount() == 3) {
+            try {
+                BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(2).getText());
+                return new BinaryOperation(
+                        visit(ctx.getChild(0)),
+                        operator,
+                        visit(ctx.getChild(2))
+                );
+            } catch (UnknownElementException ex) {
+                MaterialToast.fireToast("Error in Temporary Reference");
+            }
+        } else {
+            String name = "";
+            for (int i = 0; i < ctx.getChildCount(); i++) {
+                name = name + ctx.getChild(i);
+            }
+            return new TemporaryVariable(new Value(name));
+        }
 
         return null;
     }
