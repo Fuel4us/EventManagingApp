@@ -8,10 +8,14 @@ package pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain;
 import eapli.framework.domain.AggregateRoot;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Spreadsheet;
@@ -26,7 +30,8 @@ import pt.isep.nsheets.shared.services.ChartType;
  */
 @SuppressWarnings("serial")
 @Entity
-public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
+@DiscriminatorColumn(name="BAR")
+public class BarChart extends Chart{
 
     private String graph_name;
     private String[][] content;
@@ -147,41 +152,7 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
     }
 
 
-    @Override
-    public boolean sameAs(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final BarChart other = (BarChart) obj;
-        if (this.considerFirstField != other.considerFirstField) {
-            return false;
-        }
-        if (this.isRow != other.isRow) {
-            return false;
-        }
-        if (!Objects.equals(this.firstCell, other.firstCell)) {
-            return false;
-        }
-        return Objects.equals(this.lastCell, other.lastCell);
-    }
-
-    @Override
-    public boolean is(Long id) {
-        return (this.id.compareTo(id) == 0);
-    }
-
-    @Override
-    public Long id() {
-        return this.id;
-    }
-
-    @Override
+   @Override
     public Address associatedCell() {
         return associatedCell;
     }
@@ -191,6 +162,8 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
         Workbook wb = new Workbook("graph", "desc", contents);
         return wb.getSpreadsheet(0);
     }
+
+    
 
 
     
