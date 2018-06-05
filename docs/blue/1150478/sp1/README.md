@@ -7,7 +7,7 @@
 
 # 2. Requirements
 
-*Lang05.1 - Forms Editor - Description:*
+Lang05.1: 
 "The application should have a new option to launch a window for editing a form. 
 A Form is a window that is designed by the end user and is used for interacting with the user (input and output). 
 The new window should support the creation and testing of a Form. Forms should be very simple. 
@@ -20,8 +20,6 @@ At the moment it is only required to support a single Form for each workbook.
 Macros and formulas should have a new function that can be used to display the form of the current workbook. 
 Forms should have an icon or button to close the form. When the form is closed the function (in macros or formulas) who call it returns."
 
-*Specification of the user stories:* 
-
 ```
 US01
 	As an user,
@@ -31,7 +29,7 @@ US01
 ```
 US02
 	As an user,
-	I want to add an row to the form, by choosing the widgets that will appear on the form, edit the properties of them, and play the form to see the final design.
+	I want to add an row to the form, by choosing the widgets that will appear on the form, and edit the properties of them.
 ```
 
 ```
@@ -40,22 +38,11 @@ US03
 	I want to remove and edit an existing row on the form, and play the form to see the final design.
 ```
 
-```
-US04
-	As an user,
-	I want to edit an existing row on the form, and play the form to see the final design.
-```
-
 # 3. Analysis
 
-## 3.1 Analysis Plan
-**Form** - A form is composed by rows;
-**Row** - Each row can have zero, one or two widgets;
-**Widget** - The widgets can be: buttons, static text fields or text fields to insert data;
-**EditForm** - A window with options that can edit a form;
-**Options** - Add row, edit row, remove row.
+*In this section you should describe the study/analysis/research you developed in order to design a solution.*  
 
-## 3.2 GWT and Project Structure
+## 3.1 GWT and Project Structure
 
 **Modules**. From the pom.xml file we can see that the application is composed of 5 modules:  
 - **server**. It is the "server part" of the web application.  
@@ -86,7 +73,7 @@ Therefore:
    
    In this project the shared, server and client (i.e, nsheets) code are separated also in Maven modules (but they could all be in the same project/maven module). 
    
-## 3.3 Application Startup and GWTP
+## 3.2 Application Startup and GWTP
 
 As described before the entry point for the application is the class **pt.isep.nsheets.client.gin.ClientModule**.
 
@@ -137,7 +124,7 @@ Then we can use this instances to access the widgets link in:
         new MaterialAnimation().transition(Transition.BOUNCEINLEFT).animate(this.description);
     }    
 
-## 3.4 Server and RPC
+## 3.3 Server and RPC
 
 The Home page displays what seems to be Workbooks that should reside in the server.
 
@@ -197,9 +184,13 @@ Since the service is a servlet it must be declared in the **web.xml** file of th
 	</servlet-mapping> 
 	
 
-## 3.5 Analysis Diagrams
+## 3.4 Analysis Diagrams
 
 The main idea for the "workflow" of this feature increment.
+
+**Use Cases**
+
+**Domain Model**
 
 **System Sequence Diagrams**
 
@@ -212,28 +203,25 @@ The main idea for the "workflow" of this feature increment.
 **For US3**
 
 
-**For US4**
-
-
 # 4. Design
+
+*In this section you should present the design solution for the requirements of this sprint.*
+
 
 ## 4.1. Tests
 
-### 4.1.1 Testing the use case:
+*In this section you should describe the design of the tests that, as much as possibe, cover the requirements of the sprint.*
 
-		- Log in;
-		- Go to the workbook section;
-		- Click on the button "forms" or write the formula to display the forms;
-		- Go to the edit form option;
-		- In the edit form window, you can add new rows and choose wich widgets will appear on the form;
-		- On the remove rows option, you can remove rows from the form by the index;
-		- On the edit rows option, you can edit rows on the form, by the index.
-		
+Regarding tests we try to follow an approach inspired by test driven development. However it is not realistic to apply it for all the application (for instance for the UI part). Therefore we focus on the domain classes and also on the services provided by the server.
+
 
 ## 4.2. Requirements Realization
 
-*Sequence Diagram:*
+*In this section you should present the design realization of the requirements.*
 
+**For US1**
+
+**For US2**
 
 ## 4.3. Classes
 
@@ -241,41 +229,38 @@ The main idea for the "workflow" of this feature increment.
 
 ## 4.4. Design Patterns and Best Practices
 
+*Present and explain how you applied design patterns and best practices.*
+
 By memory we apply/use:
 - Repository  
 - DTO
 - MVP
+
+**TODO:** Exemplify the realization of these patterns using class diagrams and/or SD with roles marked as stereotypes. 
 
 # 5. Implementation
 
 *If required you should present in this section more details about the implementation. For instance, configuration files, grammar files, etc. You may also explain the organization of you code. You may reference important commits.*
 
 **For US1**
-	- It was needed to implement the xml code to create the buttons on the form field, that is invoked by a button or formula on the workbook area.
-	- Also it was needed to implement the xml code to create the windows, the window of the form and the and the window of the form edit.
 
 **For US2**
-	- To do the use storie 2, we needed to create the combo box so that the user can choose witch widget/widgets would appear on the form.
-	- It was also needed to create on the same field the label to write any data on the widget, and the buttons to add the row, and play the design of the form.
-	
-**For US3** 
 
-	- Here it was needed to implement the label to get the index of the row to be removed.
-	- It was also needed to implement the buttons to remove the row and play the design of the form.
-	
-**For US4** 
 
-	- Here it was needed to implement the label to get the index of the row to be edited.
-	- It was also needed to implement the buttons to edit the row and play the design of the form.
+**Code Organization**  
 
 
 # 6. Integration/Demonstration
 
---
+*In this section document your contribution and efforts to the integration of your work with the work of the other elements of the team and also your work regarding the demonstration (i.e., tests, updating of scripts, etc.)*
 
 # 7. Final Remarks 
 
-Some Questions/Issues identified during the work in this feature increment
+*In this section present your views regarding alternatives, extra work and future work on the issue.*
+
+Some Questions/Issues identified during the work in this feature increment:
+
+1. The method getWorkbooks in the WorkbooksService returns an ArrayList. Maybe we should not bind the result to a specific collection implementation.
 
 # 8. Work Log
 
@@ -284,4 +269,3 @@ Some Questions/Issues identified during the work in this feature increment
 * [Lang 05.1 - Layout of Forms changed. Other changes.] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/4b359bb67c9a695d6d640bac266e1f8329eb8d01)
 * [Lang 05.1 - Changes on the form edit.] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/27ad41501217c27674512fd028b54b91a7b2b214)
 * [Lang 05.1 - Adding row and Removing row working. Layout Changed.] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/779bc7b834ad89b886b62f4b5892a9d22b68de55)
-* [[Implementation] Lang 05.1 (Forms Edit) - Now users can choose wich widget will appear. Changes on the layout.] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/1651cc727b6c82d09de8e3f80934ba846fb49099)
