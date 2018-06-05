@@ -46,7 +46,7 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
 
         boolean isRow();
 
-        void drawChart(String chart_name, ChartDTO dto,String firstAddress, String lastAddress, boolean permute, boolean considerFirstLine);
+        void drawChart(String chart_name, ChartDTO dto,String firstAddress, String lastAddress, boolean isRow, boolean considerFirstLine);
         
         ChartView fillChartInfo(String chart_name, Address firstCell, Address lastCell, boolean isConsideredFirst, boolean isRow );
 
@@ -81,7 +81,7 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
             
         
         this.view.saveDataHandler(event -> {
-            this.view.drawChart(view.chartName(), dto, view.getFistCell(), view.getLastCell(), view.isConsiderFirstField(), view.isRow());
+            this.view.drawChart(view.chartName(), dto, view.getFistCell(), view.getLastCell(), view.isRow(), view.isConsiderFirstField());
         });
 
         this.view.saveChart(event -> {
