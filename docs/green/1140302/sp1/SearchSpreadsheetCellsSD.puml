@@ -1,0 +1,22 @@
+@startuml Diogo
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+actor User
+User->WorkbookPresenter: onReveal()
+WorkbookPresenter->CellsServiceImpl:getResult(String name, String expression, String result
+CellsServiceImpl-->SearchSpreadSheetController:create()
+SearchSpreadSheetController-->SearchService:create()
+CellsServiceImpl->SearchSpreadSheetController:setSpreadSheetList(name)
+SearchSpreadSheetController->SearchService:getSpreadsheetsByWorkBookName(name)
+SearchService->WorkbookRepository:getSpreadsheetsByWorkBookName(name)
+CellsServiceImpl->SearchSpreadSheetController:cellList = setCellList()
+SearchSpreadSheetController->SearchService:setSpreadSheetList()
+CellsServiceImpl->SearchSpreadSheetController:setString(expression)
+SearchSpreadSheetController->SearchService:getCellInfoString(cellList,expression)
+CellsServiceImpl->SearchSpreadSheetController: result = getString()
+WorkbookPresenter-->User: Notifies sucess of the operation
+
+@enduml
