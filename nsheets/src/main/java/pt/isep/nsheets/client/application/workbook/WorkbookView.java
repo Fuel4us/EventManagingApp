@@ -45,6 +45,7 @@ import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.table.MaterialDataTable;
+import pt.isep.nsheets.server.lapr4.green.s1.core.n1140302.search.Application.SearchSpreadsheetController;
 import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
@@ -56,9 +57,7 @@ import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.application.SortSpreads
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.client.application.Settings;
-import pt.isep.nsheets.shared.services.ChartDTO;
-import pt.isep.nsheets.shared.services.WorkbooksService;
-import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
+import pt.isep.nsheets.shared.services.*;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
 // public class WorkbookView extends NavigatedView implements WorkbookPresenter.MyView {
@@ -80,6 +79,17 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox firstBox;
     @UiField
     MaterialIcon firstButton;
+
+    @UiField
+    MaterialTextBox searchBox;
+    @UiField
+    MaterialIcon searchButton;
+    @UiField
+    MaterialModal searchModal;
+    @UiField
+    MaterialTitle searchTitle;
+    @UiField
+    MaterialTextArea searchTextArea;
     
     @UiField
     MaterialLink saveButton, click_chart;
@@ -147,6 +157,12 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @Override
     public MaterialPopupMenu getPopChart() {
         return popChart;
+    }
+
+    @Override
+    public void setText(String string) {
+        searchTextArea.setText(string);
+        searchTextArea.setReadOnly(true);
     }
 
     @Override
@@ -255,6 +271,31 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 }
             }
             // Window.alert("Hello");
+        });
+
+        searchButton.addClickHandler(event ->{
+            searchModal.open();
+            CellsServiceAsync cellsServiceAsync = GWT.create(CellsService.class);
+            AsyncCallback<Void> asyncCallback = new AsyncCallback<Void>() {
+                @Override
+                public void onFailure(Throwable throwable) {
+                    MaterialToast.fireToast("Error! " + throwable.getMessage());
+                    setText("Supposed Search Results");
+                }
+
+                @Override
+                public void onSuccess(Void aVoid) {
+                    MaterialToast.fireToast("Cells Searched Sucessfully", "rounded");
+                }
+
+            };
+
+
+            String result="";
+
+            cellsServiceAsync.getResult(Settings.getInstance().getWorkbook().name(),searchBox.getText(),result,asyncCallback);
+            setText(result);
+
         });
 
         // It is possible to create your own custom renderer per table

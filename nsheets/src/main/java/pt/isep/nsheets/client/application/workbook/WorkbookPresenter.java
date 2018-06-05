@@ -74,6 +74,8 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 
         public MaterialPopupMenu getPopChart();
 
+        void setText(String string);
+
         void setContents(WorkbookDTO contents);
     }
 
