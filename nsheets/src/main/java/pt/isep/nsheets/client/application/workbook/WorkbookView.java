@@ -23,6 +23,8 @@ import com.google.gwt.core.client.GWT;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gwt.event.dom.client.ClickHandler;
 import gwt.material.design.client.constants.Color;
 import javax.inject.Inject;
 
@@ -45,6 +47,7 @@ import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.table.MaterialDataTable;
+import pt.isep.nsheets.server.lapr4.green.s1.core.n1140302.search.Application.SearchSpreadsheetController;
 import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
@@ -56,9 +59,7 @@ import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.application.SortSpreads
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.client.application.Settings;
-import pt.isep.nsheets.shared.services.ChartDTO;
-import pt.isep.nsheets.shared.services.WorkbooksService;
-import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
+import pt.isep.nsheets.shared.services.*;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
 // public class WorkbookView extends NavigatedView implements WorkbookPresenter.MyView {
@@ -80,6 +81,17 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox firstBox;
     @UiField
     MaterialIcon firstButton;
+
+    @UiField
+    MaterialTextBox searchBox;
+    @UiField
+    MaterialIcon searchButton;
+    @UiField
+    MaterialModal searchModal;
+    @UiField
+    MaterialTitle searchTitle;
+    @UiField
+    MaterialTextArea searchTextArea;
     
     @UiField
     MaterialLink saveButton, click_chart;
@@ -148,14 +160,20 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     public MaterialPopupMenu getPopChart() {
         return popChart;
     }
+    
+    @Override
+    public void setText(String string) {
+        searchTextArea.setText(string);
+        searchTextArea.setReadOnly(true);
+    }
 
     @Override
     public void setContents(WorkbookDTO contents) {
-        customTable.clear();
         Settings.getInstance().updateWorkbook(contents);
-        initWorkbook();
+        customTable.getView().setRedraw(true);
+        customTable.getView().refresh();
     }
-    
+
     interface Binder extends UiBinder<Widget, WorkbookView> {
     }
 
@@ -232,7 +250,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         initWidget(uiBinder.createAndBindUi(this));
 
         populateColourListBox();
-        
+
         firstButton.addClickHandler(event -> {
             if (activeCell != null) {
                 String result = "";
@@ -257,6 +275,31 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             // Window.alert("Hello");
         });
 
+        searchButton.addClickHandler(event ->{
+            searchModal.open();
+            CellsServiceAsync cellsServiceAsync = GWT.create(CellsService.class);
+            AsyncCallback<Void> asyncCallback = new AsyncCallback<Void>() {
+                @Override
+                public void onFailure(Throwable throwable) {
+                    MaterialToast.fireToast("Error! " + throwable.getMessage());
+                    setText("Supposed Search Results");
+                }
+
+                @Override
+                public void onSuccess(Void aVoid) {
+                    MaterialToast.fireToast("Cells Searched Sucessfully", "rounded");
+                }
+
+            };
+
+
+            String result="";
+
+            cellsServiceAsync.getResult(Settings.getInstance().getWorkbook().name(),searchBox.getText(),result,asyncCallback);
+            setText(result);
+
+        });
+
         // It is possible to create your own custom renderer per table
         // When you use the BaseRenderer you can override certain draw
         // methods to create elements the way you would like.
@@ -269,6 +312,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             }
         });
 
+        /*
         conditionalModalDoneButton.addClickHandler(event -> {
             if (conditionalText.getText().matches("[+-]?([0-9]*[.])?[0-9]+")) {
                     String operator;
@@ -321,27 +365,20 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
                     } catch (UnknownElementException e) {
                         flag = false; //conditionalFormatting is off
+                        MaterialToast m = new MaterialToast();
+                        m.toast("UnknownElementException Flag =" + flag);
                     } catch (IllegalValueTypeException e) {
                         flag = false;
+                        MaterialToast m = new MaterialToast();
+                        m.toast("IllegalValueTypeException Flag =" + flag);
                     }
                     conditionalModal.close();
 
-/*
-                    ConditionalCellFormattingController ccfController = new ConditionalCellFormattingController(activeCell, operator, conditionalText.getText());
-
-                    //TRUE
-                    ccfController.setBackgroundColorTrue(backgroundColorTrue.getText());
-                    ccfController.setFontColorTrue(fontColorTrue.getText());
-                    //FALSE
-                    ccfController.setBackgroundColorFalse(backgroundColorFalse.getText());
-                    ccfController.setFontColorFalse(fontColorFalse.getText());
-                    MaterialToast m = new MaterialToast();
-                    boolean flag = ccfController.ConditionalOperation();
-                    m.toast("result =" + flag);*/
 
             }
             conditionalModal.close();
 		});
+        */
 
         /* BETWEEN OPTION CONDITIONAL
         lstConditions.addValueChangeHandler(event -> {
@@ -472,5 +509,70 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         }
     }
 
+    @Override
+    public void addConfirmationHandler(ClickHandler cMDB) {
+            conditionalModalDoneButton.addClickHandler(cMDB);
+    }
 
+    @Override
+    public int getBackgroudColorTrue() {
+        return backgroundColorTrue.getSelectedIndex();
+    }
+
+    @Override
+    public int getFontColorTrue() {
+        return fontColorTrue.getSelectedIndex();
+    }
+
+    @Override
+    public int getBackgroudColorFalse() {
+        return backgroundColorFalse.getSelectedIndex();
+    }
+
+    @Override
+    public int getFontColorFalse() {
+        return fontColorFalse.getSelectedIndex();
+    }
+
+    @Override
+    public String getOperator() {
+        String operator;
+        switch (lstConditions.getSelectedIndex()) {
+            case 0:
+                operator = "=";
+                break;
+            case 1:
+                operator = ">";
+                break;
+            case 2:
+                operator = "<";
+                break;
+            case 3:
+                operator = ">=";
+                break;
+            case 4:
+                operator = "<=";
+                break;
+            case 5:
+                operator = "<>";
+                break;
+            //case 6:  operator = "<<";
+            //  break;
+            default:
+                operator = "Invalid";
+                break;
+        }
+
+        return operator;
+    }
+
+    @Override
+    public String getConditionalValue() {
+        return conditionalText.getText();
+    }
+
+    @Override
+    public MaterialModal getConditionalModal() {
+        return this.conditionalModal;
+    }
 }

@@ -11,53 +11,96 @@ import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.Formula.BinaryOperationExte
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.CellDTO;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ConditionalFormattingExtension extends Extension {
+    public static List<Conditional> lstConditional = new ArrayList<Conditional>();
 
     public ConditionalFormattingExtension(String name) {
         super(name);
     }
 
-    public CellExtension extend(CellExtension cell) {
-        return new ConditionalFormattingCellExtension(cell, getName());
+    public static List<Conditional> getLstConditional(){return lstConditional;}
+
+    public static void setLstConditional(List<Conditional> conditionalList) {
+        lstConditional = conditionalList;
     }
 
-    class ConditionalFormattingCellExtension extends CellExtension {
+    public static void addConditional(Conditional conditional){
+        lstConditional.add(conditional);
+    }
 
-        private Value conditionValue;
+    public static Conditional containsCondition(Cell cell){
+        for(Conditional c : lstConditional){
+            if(c.getCell().compareTo(cell) == 0){
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public static void removeConditional(Cell cell){
+        if(lstConditional != null){
+            for(Conditional conditional : lstConditional){
+                if(conditional.getCell().compareTo(cell) == 0){
+                    lstConditional.remove(conditional);
+                }
+            }
+        }
+    }
+
+    public CellExtension extend(CellExtension cell) {
+        if(lstConditional != null){
+            for(Conditional conditional : lstConditional){
+                if(conditional.getCell().compareTo(cell) == 0){
+                    return new ConditionalFormattingCellExtension(cell, getName(), conditional.getCondOperator(), conditional.getCondValue() );
+                }
+            }
+        }
+        return null;
+    }
+
+    public static boolean setOperation(Cell cell, String conditionOperator, Value conditionValue){
+        try {
+            BinaryOperationExtension binaryOperation = new BinaryOperationExtension(cell.getValue(), conditionOperator, conditionValue);
+            return binaryOperation.evaluate().toBoolean();
+        } catch (NullPointerException | UnknownElementException | IllegalValueTypeException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public class ConditionalFormattingCellExtension extends CellExtension {
         private String conditionOperator;
+        private Value conditionValue;
         private boolean result;
 
-        public ConditionalFormattingCellExtension(Cell delegate, String name) {
+        public ConditionalFormattingCellExtension(Cell delegate, String name, String conditionOperator, Value conditionValue) {
             super(delegate, name);
-        }
-
-        public void setConditionValue(Value conditionValue) {
+            this.conditionOperator = conditionOperator;
             this.conditionValue = conditionValue;
         }
 
-        public void setConditionOperator(String operator) {
-            this.conditionOperator = conditionOperator;
-        }
 
         @Override
         public void valueChanged(Cell cell) {
-            try {
-                BinaryOperationExtension binaryOperation = new BinaryOperationExtension(this.getDelegate().getValue(), conditionOperator, conditionValue);
-                if (this.result = binaryOperation.evaluate().toBoolean()) {
-                    //fire styleTRUE
+            this.result = ConditionalFormattingExtension.setOperation(cell, conditionOperator, conditionValue);
+            if (result) {
+                    //change CellExtensionStyle colors when true
+                    //fire styleTRUE listener
+                    //
                     //this.getDelegate().getExtension("StyleChange");
-                } else {
-                    //fire styleFALSE
+            } else {
+                //change CellExtensionStyle colors when false
+                //fire styleFalse listener
                     //this.getDelegate().getExtension("StyleChange");
-                }
-            } catch (UnknownElementException | IllegalValueTypeException e) {
-                e.printStackTrace();
             }
         }
 
         @Override
         public CellDTO toDTO() {
-            return null;
+            return this.getDelegate().toDTO();
         }
 
     }

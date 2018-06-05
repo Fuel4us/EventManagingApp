@@ -296,6 +296,8 @@ governing permissions and limitations under the License. #L% -->
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>eclipselink</artifactId>
             <version>2.6.2</version>
-        </dependency>		
+        </dependency>
+        
+
     </dependencies>
 </project>

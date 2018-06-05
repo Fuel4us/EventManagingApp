@@ -1,0 +1,21 @@
+@startuml Pedro
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+User->HomePresenter : Select the workbook
+HomePresenter->HomePresenter : setFocusedWorkbookDTO()()
+HomePresenter->HomePresenter : getNewName()
+HomePresenter -> WorkbookServicesAsync : renameWorkbook(newName, workbookDTO, callback)
+WorkbookServicesAsync -> WorkbookServices: renameWorkbook(newName, workbookDTO)
+WorkbookServices -> RenameWorkbookController : renameWorkbook(newName, workbook)
+RenameWorkbookController->WorkbookRepositoty : workbook : findByName(workbookDTO.name())
+RenameWorkbookController -> Workbook : setName(newName)
+RenameWorkbookController -> WorkbookRepository : save(workbook)
+HomePresenter->HomePresenter : refreshView() 
+HomePresenter-->User : Notifies the user with success
+@enduml

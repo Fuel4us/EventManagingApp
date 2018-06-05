@@ -1,0 +1,24 @@
+@startuml  sd.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+User -> WorkbookPresenter : onReveal() / navigate to page
+WorkbookPresenter -> WorkbookPresenter : timer()
+loop t.scheduleRepeating(1000)
+    WorkbookPresenter -> WorkbookPresenter : refreshWorkbooks()
+    loop for(WorkbookDTO w : result)
+        alt currentWorkbook.equals(w)
+            WorkbookPresenter -> WorkbookView : setContents(w)
+            WorkbookView -> WorkbookView : Settings.getInstance().updateWorkbook(w)
+            WorkbookView -> WorkbookView : MaterialDataTable<SheetCell> customTable.getView().setRedraw(true)
+            WorkbookView -> WorkbookView : customTable.getView().refresh()
+        end
+    end
+end
+
+@enduml

@@ -12,7 +12,7 @@
 			<br/>
 		</g:HTMLPanel>
 		<m:MaterialButton ui:field="export_csv" text="Export to CSV" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
-		<m:MaterialButton text="Export to XML" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
-		<m:MaterialButton ui:field="export_pdf" text="Export to PDF" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
+                <m:MaterialButton ui:field="export_xml" text="Export to XML" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
+                <m:MaterialButton ui:field="export_pdf" text="Export to PDF" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
 	</m:MaterialPanel>
 </ui:UiBinder>
