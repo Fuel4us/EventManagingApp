@@ -1,10 +1,11 @@
-**Pedro Vieira** (1160634) - Sprint 1 - Core07.1
+**Pedro Vieira** (1160634) - Sprint 1 - Core07.1)
 ===============================
 
 # 1. General Notes
 
-[Had a prblem on this regard](https://moodle.isep.ipp.pt/mod/forum/discuss.php?d=16911)
+*In this section you should register important notes regarding your work during the sprint. For instance, if you spend significant time helping a colleague or if you work in more than one feature increment.*
 
+[Had a problem on this regard](https://moodle.isep.ipp.pt/mod/forum/discuss.php?d=16911)
 
 # 2. Requirements
 
@@ -27,7 +28,7 @@ For this feature increment, since it is the first one to be developed in a new p
 
 - Understand how the application works and also understand the key aspects of GWT, since it is the main technology behind the application  
 
-- Understand how the Home Page is implemented (for instance, how the UI gets the Workbook Descriptions that are displayed)  
+- Understand how the Notes Page is implemented (for instance, how the UI gets the Note that are displayed)  
 
 - Understand how to integrate a relational database into the project (Will be assuming JPA since it is studied in EAPLI)   
 
@@ -79,7 +80,8 @@ The **ApplicationModule** module install all the other modules of the applicatio
 	    install(new HomeModule());
 		install(new MenuModule());
 		install(new AboutModule());
-		install(new WorkbookModule());   
+		install(new NotesModule()); 
+		...
 
 Each module represents an MVP page in the application.
 
@@ -118,15 +120,15 @@ Then we can use this instances to access the widgets link in:
 
 ## 3.3 Server and RPC
 
-The Home page displays what seems to be Workbooks that should reside in the server.
+The Notes page displays what seems to be Notes that should reside in the server.
 
-In the method **onReveal** the Home presenter invokes a WorkbookService asynchronously. It uses the base communication mechanism of GWT called [GWT RPC](http://www.gwtproject.org/doc/latest/tutorial/RPC.html).
+In the method **onReveal** the Home presenter invokes a NoteService asynchronously. It uses the base communication mechanism of GWT called [GWT RPC](http://www.gwtproject.org/doc/latest/tutorial/RPC.html).
 
 Basically, it requires the definition of an interface for the service. In this case:
 
-	@RemoteServiceRelativePath("workbooksService")
-	public interface WorkbooksService extends RemoteService {
-		ArrayList<WorkbookDescriptionDTO> getWorkbooks();
+	@RemoteServiceRelativePath("notesService")
+	public interface NotesService extends RemoteService {
+		ArrayList<NoteDTO> getNotes();
 	}
 	
 Note: The @RemoteServiceRelativePath annotation associates the service with a default path relative to the module base URL.
@@ -134,16 +136,16 @@ Note: The @RemoteServiceRelativePath annotation associates the service with a de
 When an RPC is invoked since it is always executed asynchronously we have to prove a callback: 
 
 	// Make the call to the stock price service.
-	workbooksSvc.getWorkbooks(callback);
+	NotesSvc.getNotes(callback);
 	
 The callback is simple a class that provides two methods, one for a successful result and the other for a failure:
 
 	// Set up the callback object.
-	AsyncCallback<ArrayList<WorkbookDescriptionDTO>> callback = new AsyncCallback<ArrayList<WorkbookDescriptionDTO>>() {
+	AsyncCallback<ArrayList<NoteDTO>> callback = new AsyncCallback<ArrayList<NoteDTO>>() {
 		public void onFailure(Throwable caught) {
 			// TODO: Do something with errors.
 		}
-		public void onSuccess(ArrayList<WorkbookDescriptionDTO> result) {
+		public void onSuccess(ArrayList<WorkbooknDTO> result) {
 			refreshView(result);
 		}
 	}; 
@@ -153,26 +155,26 @@ Since the interface is code that must be accessed by both server and client code
 The interface must be implemented in the **server**. The implementation can be very simple, like the one presented in the project. In this case the server simply returns always the same objects:
 
 	@Override
-	public ArrayList<WorkbookDescriptionDTO> getWorkbooks() {
-	    ArrayList<WorkbookDescriptionDTO> workbooks = new ArrayList<WorkbookDescriptionDTO>();
-	    WorkbookDescriptionDTO wb=new WorkbookDescriptionDTO("workbook1", "Este workbook contem uma lista...");
-	    workbooks.add(wb);
-		WorkbookDescriptionDTO wb2=new WorkbookDescriptionDTO("workbook notas", "Este workbook contem notas de disciplinas...");
-	    workbooks.add(wb2);	    
-		return workbooks;
+	public ArrayList<NoteDTO> getNotes() {
+	    ArrayList<NoteDTO> Notes = new ArrayList<NoteDTO>();
+	    NoteDTO note=new NoteDTO("Note1", "Esta Nota contem uma lista...");
+	    Notes.add(note);
+		NoteDTO note2=new NoteDTO("Note notas", "Esta Nota contem notas de disciplinas...");
+	    Notes.add(note2); 
+		return Notes;
 	}
 
 Since the service is a servlet it must be declared in the **web.xml** file of the project (see file nsheets/src/main/webapp/WEB-INF/web.xml).
 
-	<!-- Servlets for the workbooks -->
+	<!-- Servlets for the notes -->
 	<servlet>
-		<servlet-name>workbooksServiceServlet</servlet-name>
-		<servlet-class>pt.isep.nsheets.server.services.WorkbooksServiceImpl</servlet-class>
+		<servlet-name>notesServiceServlet</servlet-name>
+		<servlet-class>pt.isep.nsheets.server.services.NotesServiceImpl</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>workbooksServiceServlet</servlet-name>
+		<servlet-name>notesServiceServlet</servlet-name>
 		<!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
-		<url-pattern>/nsheets/workbooksService</url-pattern>
+		<url-pattern>/nsheets/NotesService</url-pattern>
 	</servlet-mapping> 
 	
 
@@ -225,88 +227,87 @@ Regarding tests we try to follow an approach inspired by test driven development
 **Domain classes**
 
 For the Domain classes we will have a class that represents the entity **Note**. This entity will have attributes that, for the moment, will be based on the class **NoteDTO**:
-	
+
 	- titleNote (string)
 	- textNote (string)
-        - dateNote (Date) 
+    - dateNote (Date) 
 
 **Test:** We should ensure that a Note can be created when all the attributes are set.  
 
 	@Test(expected = IllegalArgumentException.class)
 		public void ensureNullIsNotAllowed() {
 		System.out.println("ensureNullIsNotAllowed");
-		WorkbookDescription instance = new WorkbookDescription(null, null);
+		Note instance = new Note(null, null);
 	}
 
 **Services/Controllers**
 
-For the services the application already has a service specified in the interface **WorkbooksService**:
+For the services the application already has a service specified in the interface **NotesService**:
 
-	@RemoteServiceRelativePath("workbooksService")
-	public interface WorkbooksService extends RemoteService {
-		ArrayList<WorkbookDescriptionDTO> getWorkbooks();
+	@RemoteServiceRelativePath("notesService")
+	public interface NotesService extends RemoteService {
+		ArrayList<NoteDTO> getNotes();
 	}
 	
-This method seems to be sufficient for supporting US1 but not US2.
 
-For US2 we need a method that can be used to create a new WorkbookDescription given a WorkbookDescriptionDTO.
+For US2 we need a method that can be used to create a new Note given a NoteDTO.
 
 The proposal is:
 
-	@RemoteServiceRelativePath("workbooksService")
-	public interface WorkbooksService extends RemoteService {
-		ArrayList<WorkbookDescriptionDTO> getWorkbooks();
-		WorkbookDescriptionDTO addWorkbookDescription(WorkbookDescriptionDTO wdDto) throws DataException;
+	@RemoteServiceRelativePath("notesService")
+	public interface NotesService extends RemoteService {
+		ArrayList<NoteDTO> getNotes();
+		NoteDTO addNote(NotenDTO noteDto) throws DataException;
 	}
-		
+
 Tests:  
-- The tests on the controllers require the presence of a database.  
-- We will use the database in memory (H2).  
-- We will have a *controller* from adding new WorkbookDescriptions. This controller will be invoked by the GWT RPC service.
-- We will have a *controller* from listing WorkbookDescriptions. This controller will be invoked by the GWT RPC service.
+- The tests on the controllers require the presence of a database.
+- We will use the database in memory (H2).
+- We will have a *controller* from adding new Notess. This controller will be invoked by the GWT RPC service.
+- We will have a *controller* from listing Notes. This controller will be invoked by the GWT RPC service.
 
-Controller **AddWorkbookDescriptionController**
+Controller **AddNoteController**
 
-**Test:** Verify the normal creation of an WorkbookDescription.  
+**Test:** Verify the normal creation of an Note.  
 
 	@Test
 	public void testNormalBehaviour() throws Exception {
 		System.out.println("testNormalBehaviour");
-		final String name = "Workbook1";
-		final String description = "Description for Workbook1";
-		final WorkbookDescription expected = new WorkbookDescription(name, description);
-		AddWorkbookDescriptionController ctrl = new AddWorkbookDescriptionController();
-		WorkbookDescription result = ctrl.addWorkbookDescription(expected.toDTO());
-		assertTrue("the added WorkbookDescription does not have the same data as input", expected.sameAs(result));
+		final String titleNote = "Title of Note1";
+		final String textNote = "Text for Note1";
+		final Note expected = new Note(titleNote, textNote);
+		AddNoteController ctrl = new AddNoteController();
+		Note result = ctrl.addNote(expected.toDTO());
+		assertTrue("the added Note does not have the same data as input", expected.sameAs(result));
 	}
 
-Controller **ListWorkbookDescriptionController**
+Controller **ListNoteController**
 
 Note: We will be using the annotation @FixMethodOrder(MethodSorters.NAME_ASCENDING) to ensure the test methods are executed in order. This is useful since the memory database will have state changing between tests.
  
-**Test:** At the beginning of the tests the memory database should be empty, so listWorkbookDiscriptions should return an empty set.
+**Test:** At the beginning of the tests the memory database should be empty, so listNoteDiscriptions should return an empty set.
 
 	   @Test 
-	   public void testAensureGetWorkbooksEmpty() {
-		   System.out.println("testAensureGetWorkbooksEmpty");
-		   ListWorkbookDescriptionController ctrl=new ListWorkbookDescriptionController();
-		   Iterable<WorkbookDescription> wbs=ctrl.listWorkbookDescriptions();
-		   assertTrue("the list of WorkbookDescriptions is not empty", !wbs.iterator().hasNext());
+	   public void testAensureGetNotesEmpty() {
+		   System.out.println("testAensureGetNotesEmpty");
+		   ListNoteController ctrl=new ListNoteController();
+		   Iterable<Note> notes=ctrl.listNotes();
+		   assertTrue("the list of Notes is not empty", !notes.iterator().hasNext());
 	   } 
  
-**Test:** If a WorkbookDescription is created it should be present in a following invocation of getWorkbooks().
+**Test:** If a Note is created it should be present in a following invocation of getNotes().
 
 		@Test
 		public void testBtestDatabaseInsertion() throws Exception {
 			System.out.println("testBtestDatabaseInsertion");
-			final String name = "Workbook1";
-			final String description = "Description for Workbook1";
-			final WorkbookDescription expected = new WorkbookDescription(name, description);
-			AddWorkbookDescriptionController ctrlAdd = new AddWorkbookDescriptionController();
-			WorkbookDescription result = ctrlAdd.addWorkbookDescription(expected.toDTO());
-			ListWorkbookDescriptionController ctrlList=new ListWorkbookDescriptionController();
-			Iterable<WorkbookDescription> wbs=ctrlList.listWorkbookDescriptions();
-			assertTrue("the added WorkbookDescription is not in the database", wbs.iterator().hasNext());
+			final String titleNote = "Title of Note1";
+			final String textNote = "Text for Note1";
+			final Note expected = new Note(titleNote, textNote);
+			AddNoteController ctrlAdd = new AddNoteController();
+			Note result = ctrlAdd.addNote(expected.toDTO());
+			ListNoteController ctrlList=new ListNoteController();
+			Iterable<Note> notes=ctrlList.listNotes();
+			assertTrue("the added Note is not in the database", notes.iterator().hasNext());
 		}
 
 **Test Coverage**  
@@ -356,13 +357,13 @@ Notes:
 
 *Present and explain how you applied design patterns and best practices.*
 
-By memory we apply/use:  
-- Singleton  
-- Repository  
-- DTO  
-- MVP  
-
-**TODO:** Exemplify the realization of these patterns using class diagrams and/or SD with roles marked as stereotypes. 
+By memory we apply/use:
+- Singleton, across multiple classes
+- Repository, in the package Server
+- DTO, in the package Shared
+- MVP, in the package NSheets
+- GRASP, GoF, SOLID and DDD, where shown in some classes and relations bettween classes.
+	For instance, we have controller pattern in controller classes, pure fabrication in the factory's done by Server,  high cohesion and low coupling especially important for Shared package and many moore.
 
 
 # 5. Implementation
@@ -371,36 +372,63 @@ By memory we apply/use:
 
 **For US1**
 
-The UI for this US was already implemented. We simply implemented the server as described previously.
+The UI for this US was implemented according the Home and About implementations.
+
+	**UI: Button for adding a new Note**
+
+	For this concern we decided to use a Material Widget called Material FAB (Floating Action Button). This is a kind of button that usually appears at the left bottom part of the screen and contains actions available for the elements of the page.  
+
+	We updated the NotesView.ui.xml accordingly and declare two elements with the tags *ui:field="openModalBtn"* and *ui:field="saveBtn"*. In the corresponding class View (i.e., NotesView) we bind that button to the corresponding widget class: 	
+
+		@UiField
+		MaterialButton openModalBtn, saveBtn;
+
+	We must now add the code that invokes the server to add a new Note when the user clicks in the button. This is an event. To implement this behavior we could use GWT Events such as the SetPageTitleEvent already used in the application. These are special type of events that GWT manages and are available to all pages in the application. 
+
+	We chose to provide our click event globally but to simple use the click event handler of the button and connect it to a method in the NotesPresenter.
+
+	Since Presenters should only depend on a View interface we added a new method to the NotesPresenter.MyView:
+
+		interface MyView extends View {
+			void addClickHandlerOpenModal(ClickHandler ch);
+			void buttonClickHandlerSaveNote(ClickHandler ch);
+			...
+		}
+
+	Then, we implemented both *addClickHandler* in the NotesView class and call this method in the constructor of the NotesPresenter. In the constructor our handler class the server method that adds a new Note.
+
+	**UI: Creating a Card for the Note**
+
+	The method createCard(NoteDTO note) on NotesView shows how a card it's implemented, with a title, a text (both adding to a MaterialCardContent) and 3 buttons, check, edit and remove (with the help of a MaterialCardAction).
+
+	**UI: Buttons for editing a new Note**
+
+	This is done with the edit and check buttons and it's similar to add button.
+
+	In NotesView, the checkBtn it's created invivible for the user and when the user clicks the edit button, the check button shows, so that the user can edit the Note.
+
+	**UI: Button for removing a new Note**
+
+	This is done with the remove button and it's similar to add button.
+
+	In NotesView, the removeBtn have a addClickHandler (similar to all buttons) that when clicked the card of that Note stays invisible.
 
 **For US2**
 
-**UI: Button for adding a new Workbook Description**
+This UC is done with the help of setContents(ArrayList<NoteDTO> contents) of NotesView. First, it's important to metion that this method it's called by the refreshView() of NotesPresenter, that it's called by onReveal() and this.view.buttonClickHandlerSaveNote(event -> ...), both in NotesPresenter. This is important to know, because when we don't have note's it shows a ma:emptystate.MaterialEmptyState, basically a beatiful optional logo that informs that you don't have Notes yet. This changes when:
 
-For this concern we decided to use a Material Widget called Material FAB (Floating Action Button). This is a kind of button that usually appears at the left bottom part of the screen and contains actions available for the elements of the page.  
+if (!contents.isEmpty()) 
+    emptyState.setVisible(false);
 
-We updated the HomeView.ui.xml accordingly and declare the element with a tag *ui:field="newWorkbookButton"*. In the corresponding class View (i.e., HomeView) we bind that button to the corresponding widget class: 	
-
-	@UiField
-	MaterialButton newWorkbookButton;
-
-We must now add the code that invokes the server to add a new workbook description when the user clicks in the button. This is an event. To implement this behavior we could use GWT Events such as the SetPageTitleEvent already used in the application. These are special type of events that GWT manages and are available to all pages in the application. 
-
-We chose to provide our click event globally but to simple use the click event handler of the button and connect it to a method in the HomePresenter.
-
-Since Presenters should only depend on a View interface we added a new method to the HomePresenter.MyView:
-
-	interface MyView extends View {
-		void setContents(ArrayList<WorkbookDescriptionDTO> contents);
-		void addClickHandler(ClickHandler ch);
-	}
-
-Then, we implemented the *addClickHandler* in the HomeView class and call this method in the constructor of the HomePresenter. In the constructor our handler class the server method that adds a new workbook description.   
+in setContents(...), that does disappear that logo when you add a new Note. The grid it's done with the help of a card that have all the cards done in the NotesView.ui.xml that have a m:MaterialCollection, which is added a MaterialRow and the card (of each Note) is added to a MaterialColumn, that bassically allows to have a 3 horizontal Notes.
 
 **For US3**
 
+This US, it's done with the help of a modal created in the xml and two methods of the interface MyView of NotesPresenter, which have openModalToAddNote() and closeModalToAddNote(), whose open() and closes() the modal corresponding, and, titleNote() and textNote(), they return the getValue() of MaterialTextBox and MaterialTextArea corresponding.
+
 **For US4**
 
+First it's importatnt to meation how the dateNote it's implemented by the NoteDTO (in Shared) and Note (in Server). They instantiate the date with new Date(), in the default constructor and in the setters of the titleNote and textNote, and obviously the dateNote doens't have a setter, for that reason. Second, the MaterialTextBox cardHistory, cardHistory.setText(note.getDateNote().toString()), that way the Note displays the Date of when was created.
 
 **Code Organization**  
 
@@ -420,8 +448,8 @@ Project **shared**
 - Updated the classes: **pt.isep.nsheets.shared.services.NoteService** and **pt.isep.nsheets.shared.services.NoteServiceAsync**  
 
 Project **NShests** 
-- Updated the classes: **pt.isep.nsheets.client.aaplication.home.HomeView** and **pt.isep.nsheets.client.aaplication.home.HomePresenter**  
-- Updated the file: **pt.isep.nsheets.client.aaplication.home.HomeView.ui.xml**  
+- Updated the classes: **pt.isep.nsheets.client.aaplication.notes.NotesView** and **pt.isep.nsheets.client.aaplication.notes.NotesPresenter**  
+- Updated the file: **pt.isep.nsheets.client.aaplication.Notes.NotesView.ui.xml**  
 - Created the package (and the classes of that package): **pt.isep.nsheets.client.aaplication.notes** 
 
 
@@ -429,6 +457,7 @@ Project **NShests**
 
 *In this section document your contribution and efforts to the integration of your work with the work of the other elements of the team and also your work regarding the demonstration (i.e., tests, updating of scripts, etc.)*
 
+Nothing to report, all that is important to mention, has already been mentioned
 
 # 7. Final Remarks 
 
@@ -436,7 +465,7 @@ Project **NShests**
 
 Some Questions/Issues identified during the work in this feature increment:
 
-Nothing to report.
+The only "extra work" I have done was with the ma:emptystate.MaterialEmptyState of xml, that I already meation in Implementation - for US2.
 
 
 # 8. Work Log
@@ -469,7 +498,7 @@ Commits:
 
 [Core07.1 US1 and 2 done](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/9845442527aa2ed8c376e623e2b455c3c03ac234)
 
-[Core07.1 US1, 2 and 3 improvments]()
+[Core07.1 US1, 2 and 3 improvments](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/d8de2b7b98087c964c6869a706f2c45443a8e276)
 
-
+[Core07.1 All US done with small things missing]()
 
