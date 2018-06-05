@@ -58,6 +58,17 @@
     <url-pattern>/nsheets/configurationService</url-pattern>
   </servlet-mapping>
 
+    <!-- Servlet for Extension Conditional -->
+    <servlet>
+        <servlet-name>conditionalServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.ConditionalServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>conditionalServiceServlet</servlet-name>
+        <url-pattern>/nsheets/conditionalService</url-pattern>
+    </servlet-mapping>
+
     <!-- Servlets for the notes -->
     <servlet>
         <servlet-name>notesServiceServlet</servlet-name>
