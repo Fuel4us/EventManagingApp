@@ -59,70 +59,11 @@ Therefore:
   3. **HomeView**
   4. **HomeView.ui.xml**
 
-## 3.3 Server and RPC
+## 3.3 PDF method and iText library
 
-The Home page displays what seems to be Workbooks that should reside in the server.
-
-In the method **onReveal** the Home presenter invokes a WorkbookService asynchronously. It uses the base communication mechanism of GWT called [GWT RPC](http://www.gwtproject.org/doc/latest/tutorial/RPC.html).
-
-Basically, it requires the definition of an interface for the service. In this case:
-
-	@RemoteServiceRelativePath("workbooksService")
-	public interface WorkbooksService extends RemoteService {
-		ArrayList<WorkbookDescriptionDTO> getWorkbooks();
-	}
+  Used iText library to export to pdf, after some hours reading the documentation coding and setting up everything
+  wasn't that hard. The library basicly is build around the common Document Builder but much more customizable and pdf friendly.
 	
-Note: The @RemoteServiceRelativePath annotation associates the service with a default path relative to the module base URL.
-
-When an RPC is invoked since it is always executed asynchronously we have to prove a callback: 
-
-	// Make the call to the stock price service.
-	workbooksSvc.getWorkbooks(callback);
-	
-The callback is simple a class that provides two methods, one for a successful result and the other for a failure:
-
-	// Set up the callback object.
-	AsyncCallback<ArrayList<WorkbookDescriptionDTO>> callback = new AsyncCallback<ArrayList<WorkbookDescriptionDTO>>() {
-		public void onFailure(Throwable caught) {
-			// TODO: Do something with errors.
-		}
-		public void onSuccess(ArrayList<WorkbookDescriptionDTO> result) {
-			refreshView(result);
-		}
-	}; 
-
-Since the interface is code that must be accessed by both server and client code it should reside in the **shared** project.
-
-The interface must be implemented in the **server**. The implementation can be very simple, like the one presented in the project. In this case the server simply returns always the same objects:
-
-	@Override
-	public ArrayList<WorkbookDescriptionDTO> getWorkbooks() {
-	    ArrayList<WorkbookDescriptionDTO> workbooks = new ArrayList<WorkbookDescriptionDTO>();
-	    WorkbookDescriptionDTO wb=new WorkbookDescriptionDTO("workbook1", "Este workbook contem uma lista...");
-	    workbooks.add(wb);
-		WorkbookDescriptionDTO wb2=new WorkbookDescriptionDTO("workbook notas", "Este workbook contem notas de disciplinas...");
-	    workbooks.add(wb2);	    
-		return workbooks;
-	}
-
-Since the service is a servlet it must be declared in the **web.xml** file of the project (see file nsheets/src/main/webapp/WEB-INF/web.xml).
-
-	<!-- Servlets for the workbooks -->
-	<servlet>
-		<servlet-name>workbooksServiceServlet</servlet-name>
-		<servlet-class>pt.isep.nsheets.server.services.WorkbooksServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>workbooksServiceServlet</servlet-name>
-		<!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
-		<url-pattern>/nsheets/workbooksService</url-pattern>
-	</servlet-mapping> 
-	
-	
-
-## 3.4 Analysis Diagrams
-
-
 
 # 4. Design
 
@@ -131,6 +72,8 @@ Since the service is a servlet it must be declared in the **web.xml** file of th
 
 
 ## 4.2. Requirements Realization
+
+![SD](SSD.jpg)
 
 
 ## 4.3. Classes
