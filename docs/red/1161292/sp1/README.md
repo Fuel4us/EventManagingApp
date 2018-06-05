@@ -15,7 +15,7 @@ Questions made to Product Owner (PRP):
 	A: Yes. If it doesn't exist any, you can show an error message.
 ```
 
-I also want to thanks my roommates [Hil√°rio Coelho](https://bitbucket.org/lei-isep/lapr4-18-2db/src/master/docs/green/1160557/), [M√°rio Vaz](https://bitbucket.org/lei-isep/lapr4-18-2db/src/cc167398006242b74e9edda58f7c87ce9adc6134/docs/green/1160832/) and [Leandro Pinto](https://bitbucket.org/lei-isep/lapr4-18-2db/src/cc167398006242b74e9edda58f7c87ce9adc6134/docs/green/1160815/) for every help they gave me so I could finish this Use Case, even though it wasn't possible at all.
+I also want to thanks my roommates [Hil·rio Coelho](https://bitbucket.org/lei-isep/lapr4-18-2db/src/master/docs/green/1160557/), [M·rio Vaz](https://bitbucket.org/lei-isep/lapr4-18-2db/src/cc167398006242b74e9edda58f7c87ce9adc6134/docs/green/1160832/) and [Leandro Pinto](https://bitbucket.org/lei-isep/lapr4-18-2db/src/cc167398006242b74e9edda58f7c87ce9adc6134/docs/green/1160815/) for every help they gave me so I could finish this Use Case, even though it wasn't possible at all.
 
 # 2. Requirements
 
@@ -129,6 +129,7 @@ Some Questions/Issues identified during the work in this feature increment:
 
 # 7. Work Log
 
+* [Updated Core01.1 readme](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/33540c0ee9dd2172624cdf49aa810d5df22af249)
 * [Fixed Singleton Implementation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/08ef4a576658ca812b790e98d27c75a9af7a95f6)
 * [Fixed workbook loading](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/5f07efe16a57b83d9fb2427b8db0416791423c17)
 * [Fixed compilation errors](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/389d8f43710b26bf6473d9846b5f053e285d975f)
