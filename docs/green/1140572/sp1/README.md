@@ -5,7 +5,7 @@
 
 The workbooks are visible to all users.
 
-3 Functions implemented: Search Workbook, Delete Workbook and Open Workbook
+3 Functions implemented: Search Workbook, Delete Workbook and Rename Workbook
 
 # 2. Requirements
 
@@ -125,7 +125,9 @@ Since the service is a servlet it must be declared in the **web.xml** file of th
 ## 3.4 Analysis Diagrams
 
 ![SSD1](deleteSSD.png)
+
 ![SSD2](renameSSD.png)
+
 ![SSD3](searchSSD.png)
 
 # 4. Design
@@ -142,13 +144,17 @@ The following tests must be realized (JUnit Tests are done):
 ## 4.2. Requirements Realization
 
 ![SD US1](deleteSD.png)
+
 ![SD US2](renameSD.png)
+
 ![SD US3](searchSD.png)
 
 ## 4.3. Classes
 
 **Workbook** 
+
 **WorkbookDTO**
+
 **WorkbookServicesImpl**  
 
 ## 4.4. Design Patterns and Best Practices
