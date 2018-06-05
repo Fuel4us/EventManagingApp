@@ -109,10 +109,25 @@ governing permissions and limitations under the License. #L% -->
                 <m:MaterialModalFooter>
                     <m:MaterialIcon ui:field="conditionalModalCloseButton" iconType="CLOSE" iconColor="RED" waves="DEFAULT" circle="true" grid="s1"/>
                     <m:MaterialIcon ui:field="conditionalModalDoneButton" iconType="DONE" iconColor="GREEN" waves="DEFAULT" circle="true" grid="s1"/>
+
                 </m:MaterialModalFooter>
             </m:MaterialModal>
             <m:MaterialIcon ui:field="conditionalButton" iconType="SETTINGS" iconColor="RED" waves="DEFAULT" circle="true" grid="s1"/>
         </m:MaterialRow>
+        <m:MaterialRow marginTop="60">
+            <m:MaterialTextBox ui:field="searchBox" placeholder="Enter your regular expression" label="Enter your regular expression" title="Search Spreadsheet Cells" active="true" grid="s11" iconType="SEARCH"/>
+            <m:MaterialIcon ui:field="searchButton" iconType="SEARCH" iconColor="BLUE" waves="DEFAULT" circle="true" grid="s1"/>
+        </m:MaterialRow>
+        <m:MaterialModal ui:field="searchModal" type="DEFAULT" dismissible="true">
+            <m:MaterialModalContent>
+                <m:MaterialRow>
+                    <m:MaterialTitle ui:field="searchTitle" title="Search Results"/>
+                </m:MaterialRow>
+                <m:MaterialRow>
+                    <m:MaterialTextArea ui:field="searchTextArea"/>
+                </m:MaterialRow>
+            </m:MaterialModalContent>
+        </m:MaterialModal>
         <m:MaterialRow marginTop="60">
             <m:MaterialColumn>
                 <m:MaterialLink  ui:field="saveButton" text="Save" textColor="GREEN" iconType="SAVE" iconPosition="LEFT"/>

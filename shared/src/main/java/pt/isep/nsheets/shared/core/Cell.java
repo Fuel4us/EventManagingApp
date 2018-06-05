@@ -155,7 +155,11 @@ public interface Cell extends Comparable<Cell>, Extensible<Cell>, Serializable {
 	 */
 	public CellListener[] getCellListeners();
         
- /*
+
+        
+        public CellDTO toDTO();
+        
+         /*
   * CHARTS
   */   
         
@@ -164,6 +168,4 @@ public interface Cell extends Comparable<Cell>, Extensible<Cell>, Serializable {
         public List<ChartDTO> chartList();
         
         public boolean addChart(ChartDTO chart);
-        
-        public CellDTO toDTO();
 }

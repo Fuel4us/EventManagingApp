@@ -6,6 +6,8 @@
 package pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain;
 
 import java.io.Serializable;
+import pt.isep.nsheets.shared.core.Address;
+import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
@@ -15,8 +17,8 @@ import pt.isep.nsheets.shared.services.ChartDTO;
  */
 public interface Chart extends Serializable{
     
-    void generateChart(Spreadsheet sh, boolean considerFirst, boolean isRow);
     ChartDTO toDTO();
-    Chart newInstanceFromDTO(ChartDTO dto) throws IllegalArgumentException;
+    Address associatedCell();
+    void generateChartValues(Spreadsheet spreadsheet);
     
 }

@@ -47,6 +47,7 @@ import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.table.MaterialDataTable;
+import pt.isep.nsheets.server.lapr4.green.s1.core.n1140302.search.Application.SearchSpreadsheetController;
 import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
@@ -55,13 +56,10 @@ import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.Formula.BinaryOperationExtension;
 
 import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.application.SortSpreadsheetController;
-import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.client.application.Settings;
-import pt.isep.nsheets.shared.services.ChartDTO;
-import pt.isep.nsheets.shared.services.WorkbooksService;
-import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
+import pt.isep.nsheets.shared.services.*;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
 // public class WorkbookView extends NavigatedView implements WorkbookPresenter.MyView {
@@ -83,6 +81,17 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox firstBox;
     @UiField
     MaterialIcon firstButton;
+
+    @UiField
+    MaterialTextBox searchBox;
+    @UiField
+    MaterialIcon searchButton;
+    @UiField
+    MaterialModal searchModal;
+    @UiField
+    MaterialTitle searchTitle;
+    @UiField
+    MaterialTextArea searchTextArea;
     
     @UiField
     MaterialLink saveButton, click_chart;
@@ -151,9 +160,19 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     public MaterialPopupMenu getPopChart() {
         return popChart;
     }
+    
+    @Override
+    public void setText(String string) {
+        searchTextArea.setText(string);
+        searchTextArea.setReadOnly(true);
+    }
 
-
-
+    @Override
+    public void setContents(WorkbookDTO contents) {
+        Settings.getInstance().updateWorkbook(contents);
+        customTable.getView().setRedraw(true);
+        customTable.getView().refresh();
+    }
 
     interface Binder extends UiBinder<Widget, WorkbookView> {
     }
@@ -216,10 +235,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
             SheetCell cell = new SheetCell(sh, k);
 
-
-            if (k == 1) {
-                cell.getCell(4).addChart(initChartTEST());
-            }
+//            if (k == 1) {
+//                cell.getCell(4).addChart(initChartTEST());
+//            }
 
             rows.add(cell);
         }
@@ -255,6 +273,31 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 }
             }
             // Window.alert("Hello");
+        });
+
+        searchButton.addClickHandler(event ->{
+            searchModal.open();
+            CellsServiceAsync cellsServiceAsync = GWT.create(CellsService.class);
+            AsyncCallback<Void> asyncCallback = new AsyncCallback<Void>() {
+                @Override
+                public void onFailure(Throwable throwable) {
+                    MaterialToast.fireToast("Error! " + throwable.getMessage());
+                    setText("Supposed Search Results");
+                }
+
+                @Override
+                public void onSuccess(Void aVoid) {
+                    MaterialToast.fireToast("Cells Searched Sucessfully", "rounded");
+                }
+
+            };
+
+
+            String result="";
+
+            cellsServiceAsync.getResult(Settings.getInstance().getWorkbook().name(),searchBox.getText(),result,asyncCallback);
+            setText(result);
+
         });
 
         // It is possible to create your own custom renderer per table
@@ -430,32 +473,32 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         // table.getTableTitle().setText("The Future Worksheet!");
     }
 
-    public ChartDTO initChartTEST() {
-        String[][] matrix = new String[][]{
-            {"a", " 2", "3"},
-            {"4", " 2", "3"},
-            {"6", " 2", "3"},
-            {"1", " 2", "3"},
-            {"1", " 4", "3"},
-            {"1", " 2", "3"},
-            {"1", " 2", "3"},
-            {"1", " 2", "3"},
-            {"1", " 2", "3"},
-            {"1", " 2", "40"}};
-
-        Workbook wb = new Workbook("Teste", "Teste", matrix);
-        Spreadsheet ss = wb.getSpreadsheet(0);
-
-        ChartDTO dto = new ChartDTO(
-                "CHART TEST",
-                new Address(1, 1),
-                new Address(5, 5),
-                matrix,
-                true,
-                false);
-
-        return dto;
-    }
+//    public ChartDTO initChartTEST() {
+//        String[][] matrix = new String[][]{
+//            {"a", " 2", "3"},
+//            {"4", " 2", "3"},
+//            {"6", " 2", "3"},
+//            {"1", " 2", "3"},
+//            {"1", " 4", "3"},
+//            {"1", " 2", "3"},
+//            {"1", " 2", "3"},
+//            {"1", " 2", "3"},
+//            {"1", " 2", "3"},
+//            {"1", " 2", "40"}};
+//
+//        Workbook wb = new Workbook("Teste", "Teste", matrix);
+//        Spreadsheet ss = wb.getSpreadsheet(0);
+//
+//        ChartDTO dto = new ChartDTO(
+//                "CHART TEST",
+//                new Address(1, 1),
+//                new Address(5, 5),
+//                matrix,
+//                true,
+//                false);
+//
+//        return dto;
+//    }
 
     private void populateColourListBox(){
         for (Color c : Color.values()){

@@ -9,10 +9,8 @@ import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.BarChart;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.Chart;
-import pt.isep.nsheets.shared.services.ChartType;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.persistence.ChartRepository;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
-import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
 /**
@@ -33,22 +31,21 @@ public class ChartService{
     /**
      * Adds a Chart to the persistence
      * @param dto Chart DTO
-     * @param type Chart Type
      * @return the added Chart
      * @throws DataConcurrencyException
      * @throws DataIntegrityViolationException
      */
-    public Chart addUChart(ChartDTO dto, ChartType type) throws DataConcurrencyException, DataIntegrityViolationException {
+    public Chart addUChart(ChartDTO dto) throws DataConcurrencyException, DataIntegrityViolationException {
 
         final ChartRepository chartRepo = PersistenceContext.repositories().charts();
         
         Chart chart = null;
         
-        switch(type){
+        switch(dto.getType()){
             
             case BAR_CHART:
-                Workbook wb = new Workbook("Teste", "Teste", dto.getContent());
-                chart = new BarChart(dto.getGraph_name(), wb.getSpreadsheet(0), dto.getFirstAddress(), dto.getLastAddress(),dto.isConsiderFirstField(), dto.isRow());
+                
+                chart = new BarChart(dto);
                 break;
                 
         }

@@ -15,29 +15,46 @@ import pt.isep.nsheets.shared.core.Address;
 @SuppressWarnings("serial")
 public class ChartDTO implements Serializable{
     
-    private  String graph_name;
-    private  String [][] content;
-    private  Address firstAddress;
-    private  Address lastAddress;
-    private  boolean considerFirstField;
-    private  boolean isRow;
+    private String graph_name;
+    private Address firstAddress;
+    private Address lastAddress;
+    private ChartType type;
+    private Address associatedCell;
+    private boolean considerFirstField;
+    private String[][] content;
+    private boolean isRow;
 
     /**
      * Constrcutor with parameters: 
      * @param graph_name Graph name
      * @param firstAddress First address
      * @param lastAddress Last Address
-     * @param content the cells values
+     * @param spreadsheet SpreadSheet
      * @param isRow show row
      * @param considerFirstField consider first field as content cells.
+     * @param type
+     * @param content
+     * @param associatedCell
      */
-    public ChartDTO(String graph_name,Address firstAddress, Address lastAddress, String[][] content, boolean isRow, boolean considerFirstField) {
+    public ChartDTO(String graph_name,
+            Address firstAddress,
+            Address lastAddress,
+            /*Spreadsheet spreadsheet, */
+            boolean isRow, 
+            boolean considerFirstField, 
+            ChartType type,
+            Address associatedCell,
+            String[][] content) {
+        
         this.graph_name = graph_name;
         this.firstAddress = firstAddress;
         this.lastAddress = lastAddress;
-        this.content = content;
         this.isRow = isRow;
         this.considerFirstField = considerFirstField;
+        this.type = type;
+        this.associatedCell = associatedCell;
+        this.content = content;
+        
     }
     
     
@@ -52,6 +69,8 @@ public class ChartDTO implements Serializable{
         this.content = new String[][]{};
         this.isRow = false;
         this.considerFirstField = false;
+        this.type = null;
+        this.associatedCell = null;
     }
     
     /**
@@ -62,13 +81,6 @@ public class ChartDTO implements Serializable{
         return graph_name;
     }
 
-    /**
-     * Returns the shown cells in the graph
-     * @return content
-     */
-    public String[][] getContent() {
-        return content;
-    }
 
     /**
      * Returns if the first field shows be parte of the content
@@ -101,16 +113,19 @@ public class ChartDTO implements Serializable{
     public Address getLastAddress() {
         return lastAddress;
     }
-    
-    
-   
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+    public ChartType getType() {
+        return type;
+    }
+
+    public Address getAssociatedCell() {
+        return associatedCell;
+    }
+
+    public String[][] getContent() {
+        return content;
+    }
+
     
 }

@@ -20,7 +20,11 @@
 package pt.isep.nsheets.client.application.workbook;
 
 import gwt.material.design.client.ui.*;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
+import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -48,7 +52,12 @@ import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629.Configuration;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalFormattingExtension;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.ChartDTO;
+import pt.isep.nsheets.shared.services.WorkbooksService;
+import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
+
+import java.util.ArrayList;
 
 import java.text.ParseException;
 
@@ -84,7 +93,12 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 
         public String getConditionalValue();
 
+        void setText(String string);
+
+        void setContents(WorkbookDTO contents);
     }
+
+    private WorkbookDTO wDTO;
 
     @ProxyStandard
     @NameToken(NameTokens.workbook)
@@ -109,6 +123,9 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
            Repository loading
          */
         //conditionalService();
+
+        this.wDTO = Settings.getInstance().getWorkbook().toDTO();
+        this.view = view;
 
 		this.placeManager = placeManager;
 	}
@@ -178,6 +195,8 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         super.onReveal();
 
         SetPageTitleEvent.fire("Workbook", "The current Workbook", "", "", this);
+
+        this.timer();
     }
 
     private void redirectToChartPage() {
@@ -272,5 +291,36 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         conditionalSvc.getListConditional(callback);
     }*/
 
+    private void refreshWorkbooks() {
+        WorkbooksServiceAsync workbookSvc = GWT.create(WorkbooksService.class);
+
+        AsyncCallback<ArrayList<WorkbookDTO>> callback = new AsyncCallback<ArrayList<WorkbookDTO>>() {
+            public void onFailure(Throwable caught) {
+
+            }
+
+            public void onSuccess(ArrayList<WorkbookDTO> result) {
+                for(WorkbookDTO w : result)
+                    if(wDTO.equals(w))
+                        view.setContents(w);
+
+                //nunca deve chegar aqui
+                //alterar pagina atual para a home em vez disto
+                view.setContents(null);
+            }
+        };
+
+        workbookSvc.getWorkbooks(callback);
+    }
+
+    private void timer() {
+        Timer t = new Timer() {
+            @Override
+            public void run() {
+                refreshWorkbooks();
+            }
+        };
+        t.scheduleRepeating(1000);
+    }
 
 }

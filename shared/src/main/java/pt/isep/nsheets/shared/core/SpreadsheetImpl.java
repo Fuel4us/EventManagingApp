@@ -22,6 +22,7 @@ package pt.isep.nsheets.shared.core;
 
 // import java.io.ObjectInputStream;		// not supported in GWT
 // import java.io.ObjectOutputStream;	// not supported in GWT
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -53,7 +54,7 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO
  * @author Einar Pehrson
  */
 @Entity
-public class SpreadsheetImpl implements Spreadsheet {
+public class SpreadsheetImpl implements Spreadsheet, Serializable {
 
 	/** The unique version identifier used for serialization */
 	private static final long serialVersionUID = 7010464744129096272L;

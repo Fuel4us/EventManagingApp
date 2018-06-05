@@ -1,8 +1,7 @@
 package pt.isep.nsheets.shared.services;
 
 import java.io.Serializable;
-//import java.util.Calendar;
-//import java.util.Date;
+import java.util.Date;
 
 /**
  *
@@ -13,7 +12,7 @@ public class NoteDTO implements Serializable {
 
     private String titleNote;
     private String textNote;
-//    private Date dateNote;
+    private Date dateNote;
 
     /**
      * 
@@ -32,7 +31,7 @@ public class NoteDTO implements Serializable {
         else
             this.textNote = textNote;
         
-//        this.dateNote = Calendar.getInstance().getTime();
+        this.dateNote = new Date();
     }
 
     /**
@@ -40,9 +39,6 @@ public class NoteDTO implements Serializable {
      * serializable!
      */
     public NoteDTO() {
-        this.titleNote = "";
-        this.textNote = "";
-//        this.dateNote = new Date();
     }
 
     /**
@@ -61,13 +57,13 @@ public class NoteDTO implements Serializable {
         return this.textNote;
     }
 
-//    /**
-//     *
-//     * @return
-//     */
-//    public Date getDateNote() {
-//        return this.dateNote;
-//    }
+    /**
+     *
+     * @return
+     */
+    public Date getDateNote() {
+        return this.dateNote;
+    }
 
     /**
      * It updates the date of the Note automatically
@@ -75,7 +71,7 @@ public class NoteDTO implements Serializable {
      */
     public void changeTitleNote(String titleNote) {
         this.titleNote = titleNote;
-//        this.dateNote = Calendar.getInstance().getTime();
+        this.dateNote = new Date();
     }
 
     /**
@@ -84,7 +80,7 @@ public class NoteDTO implements Serializable {
      */
     public void changeTextNote(String textNote) {
         this.textNote = textNote;
-//        this.dateNote = Calendar.getInstance().getTime();
+        this.dateNote = new Date();
     }
 
 }

@@ -22,6 +22,7 @@ package pt.isep.nsheets.shared.core;
 
 //import java.io.ObjectInputStream;		// not supported in GWT
 //import java.io.ObjectOutputStream;		// not supported in GWT
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +54,7 @@ import pt.isep.nsheets.shared.services.ChartDTO;
  * @author Einar Pehrson
  */
 @Entity
-public class CellImpl implements Cell {
+public class CellImpl implements Cell, Serializable {
 
 	/** The unique version identifier used for serialization */
 	private static final long serialVersionUID = 926673794084390673L;
@@ -93,6 +94,7 @@ public class CellImpl implements Cell {
 	private transient Map<String, CellExtension> extensions = 
 		new HashMap<String, CellExtension>();
         
+        @Transient
         private List<ChartDTO> chartList = new ArrayList<>();
         
         @Id
@@ -100,7 +102,7 @@ public class CellImpl implements Cell {
         private Long id;
         
         
-        protected CellImpl() {}
+        public CellImpl() {}
         
 	/**
 	 * Creates a new cell at the given address in the given spreadsheet.
@@ -482,17 +484,17 @@ public class CellImpl implements Cell {
     
 //    @Override
 //    public boolean hasChart() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//        return chartList.size() >0;
 //    }
 //
 //    @Override
-//    public List<Chart> chartList() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    public List<ChartDTO> chartList() {
+//        return chartList;
 //    }
 //
 //    @Override
-//    public boolean addChart(Chart chart) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    public boolean addChart(ChartDTO chart) {
+//        return chartList.add(chart);
 //    }
 
 	/**

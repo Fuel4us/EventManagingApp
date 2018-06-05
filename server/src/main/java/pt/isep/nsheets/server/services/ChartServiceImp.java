@@ -6,11 +6,12 @@
 package pt.isep.nsheets.server.services;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import gwt.material.design.client.ui.MaterialToast;
 import java.util.ArrayList;
 import java.util.Properties;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.application.AddChartController;
+import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.application.CreateChartController;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.Chart;
-import pt.isep.nsheets.shared.services.ChartType;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;
 import pt.isep.nsheets.shared.services.ChartDTO;
@@ -60,16 +61,28 @@ public class ChartServiceImp extends RemoteServiceServlet implements ChartsServi
     }
 
     @Override
-    public ChartDTO addChart(ChartDTO chartDTO, ChartType type) throws DataException {
+    public ChartDTO addChart(ChartDTO chartDTO/*, Spreadsheet ss*/) throws DataException {
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
-		      AddChartController ctrl = new AddChartController();
+		AddChartController ctrl = new AddChartController();
 
 		Chart chart=null; 
 		
-		chart = ctrl.addChart(chartDTO, type);
+                chart = ctrl.addChart(chartDTO/*, ss*/);
+                
 		
 		return chart.toDTO();
+    }
+
+    @Override
+    public String[][] getChartContent(ChartDTO dto/*, Spreadsheet s*/) {
+        
+                MaterialToast.fireToast("BEOFRE CTRL");
+                CreateChartController ctrl = new CreateChartController();
+                MaterialToast.fireToast("AFETR CTRL");
+                
+                
+                return ctrl.generateChartValues(dto/*, s*/);
     }
 
     

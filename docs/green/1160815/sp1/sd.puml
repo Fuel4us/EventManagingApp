@@ -1,0 +1,51 @@
+@startuml  sd.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+boundary ChatView
+control ChatPresenter
+control MessagesService
+control ListMessagesController
+control ChatService
+entity MessagesRepository
+database Database 
+
+box "NSheets Client"
+participant ChatView
+participant ChatPresenter 
+end box
+
+box "Server"
+participant MessagesService
+participant ListMessagesController
+participant addMessageController
+participant ChatService
+participant MessagesRepository
+end box
+
+box "Database"
+participant Database
+end box
+
+User -> ChatPresenter : onReveal() / navigate to page 
+ChatPresenter ->> MessagesService : getMessages()
+MessagesService -> ListMessagesController : listMessages()
+ListMessagesController -> ChatService : allMessages()
+ChatService -> MessagesRepository : findAll()
+MessagesRepository -> Database : fetch
+MessagesService ->> ChatPresenter : onSuccess() 
+ChatPresenter -> ChatView : setContents()
+
+User -> ChatPresenter : input message
+ChatPresenter ->> MessagesService : getText()
+MessagesService -> addMessageController : addMessagemessage()
+addMessageController -> ChatService : addMessage(message)
+ChatService -> MessagesRepository : save(message)
+MessagesRepository -> Database : fetch
+MessagesService ->> ChatPresenter : onSuccess() 
+ChatPresenter -> ChatView : setContents()
+@enduml

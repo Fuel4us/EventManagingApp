@@ -89,6 +89,9 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
                 
                 public void onSuccess(WorkbookDTO result) {
                     MaterialToast.fireToast(result.name);
+                    renameTxt.setText(result.name);
+                    openOptionModal();
+                    
                     wdto = result;
                     Settings.getInstance().updateWorkbook(result);
                 }

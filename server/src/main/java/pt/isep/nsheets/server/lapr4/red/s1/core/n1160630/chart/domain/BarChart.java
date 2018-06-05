@@ -11,11 +11,13 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.services.ChartDTO;
+import pt.isep.nsheets.shared.services.ChartType;
 
 /**
  * The Bar Chart Implementation.
@@ -28,10 +30,14 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
 
     private String graph_name;
     private String[][] content;
+    @OneToOne
     private Address firstCell;
+    @OneToOne
     private Address lastCell;
     private boolean considerFirstField;
     private boolean isRow;
+    @OneToOne
+    private Address associatedCell;
     private static String BAR_CHART_NAME = "Bar Chart";
 
     @Id
@@ -44,21 +50,32 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
     protected BarChart() {
         //FOR ORM
     }
+    
+    public BarChart(ChartDTO dto){
+        this(dto.getFirstAddress(), dto.getLastAddress() ,dto.isConsiderFirstField(), dto.isRow(), dto.getAssociatedCell());
+        
+        if(dto.getType() != ChartType.BAR_CHART) throw new IllegalArgumentException("Cannot instantiate a "+dto.getType().name()+"in BarChart");
+        
+        this.graph_name = dto.getGraph_name();
+    }
+    
 
     /**
      * The constructor with the following parameters:
      *
-     * @param sh SpreadSheet
      * @param firstAddress First cell Address
      * @param lastAddress Last cell Address
      * @param considerFirstField consider first field content of the graph
      * @param isRow is based on row
+     * @param associatedCell
      */
-    public BarChart(Spreadsheet sh, Address firstAddress, Address lastAddress, boolean considerFirstField, boolean isRow) {
+    public BarChart( Address firstAddress, Address lastAddress, boolean considerFirstField, boolean isRow, Address associatedCell) {
         this.graph_name = BAR_CHART_NAME;
         firstCell = firstAddress;
         lastCell = lastAddress;
-        generateChart(sh, considerFirstField, isRow);
+        this.considerFirstField = considerFirstField;
+        this.isRow = isRow;
+        this.associatedCell = associatedCell;
 
     }
 
@@ -71,30 +88,27 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
      * @param lastAddress Last cell Address
      * @param considerFirstField consider first field content of the graph
      * @param isRow is based on row
+     * @param associatedCell
      */
-    public BarChart(String graph_name, Spreadsheet sh, Address firstAddress, Address lastAddress, boolean considerFirstField, boolean isRow) {
-        this(sh, firstAddress, lastAddress, considerFirstField, isRow);
+    public BarChart(String graph_name, Address firstAddress, Address lastAddress, boolean considerFirstField, boolean isRow, Address associatedCell) {
+        this(firstAddress, lastAddress, considerFirstField, isRow,associatedCell);
         this.graph_name = graph_name;
     }
 
     /**
-     * Graph generator.
-     * @param sh SpreadSheet
-     * @param considerFirstField consider first field content of the graph
-     * @param isRow is based on row
+     * Graph generator. 
+     * @param spreadsheet
      */
     @Override
-    public void generateChart(Spreadsheet sh, boolean considerFirstField, boolean isRow) {
-
-        this.considerFirstField = considerFirstField;
-        this.isRow = isRow;
-
+    public void generateChartValues(Spreadsheet spreadsheet) {
         int endCol = lastCell.getColumn() + 1;
         int startCol = firstCell.getColumn();
         int endRow = lastCell.getRow() + 1;
         int startRow = firstCell.getRow();
+        
+        associatedCell = spreadsheet.getCell(endCol, startRow).getAddress();
 
-        Cell[] cells = (Cell[]) sh.getCells(firstCell, lastCell).toArray();
+        Cell[] cells = (Cell[]) spreadsheet.getCells(firstCell, lastCell).toArray();
 
         if (isRow) {
             if (considerFirstField) {
@@ -113,7 +127,7 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
             }
         }
 
-        content = values;
+        content =  values;
     }
 
     /**
@@ -122,27 +136,9 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
      */
     @Override
     public ChartDTO toDTO() {
-        return new ChartDTO(graph_name, firstCell, lastCell, content, isRow, considerFirstField);
+        return new ChartDTO(graph_name, firstCell, lastCell, isRow, considerFirstField, ChartType.BAR_CHART, associatedCell, content);
     }
 
-    /**
-     * Creates a new Bar Chart from a Chart DTO
-     * @param dto Chart DTO
-     * @return The created chart
-     * @throws IllegalArgumentException
-     */
-    @Override
-    public Chart newInstanceFromDTO(ChartDTO dto) throws IllegalArgumentException {
-        //FIX ME 
-        Workbook wb = new Workbook("Teste", "Teste", dto.getContent());
-        Chart chart = new  BarChart(dto.getGraph_name(),
-                wb.getSpreadsheet(0),
-                dto.getFirstAddress(),
-                dto.getLastAddress(),
-                dto.isConsiderFirstField(),
-                dto.isRow());
-        return chart;
-    }
 
     @Override
     public boolean sameAs(Object obj) {
@@ -177,5 +173,13 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
     public Long id() {
         return this.id;
     }
+
+    @Override
+    public Address associatedCell() {
+        return associatedCell;
+    }
+
+
+    
 
 }

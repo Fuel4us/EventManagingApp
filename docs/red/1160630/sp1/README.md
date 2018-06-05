@@ -4,6 +4,7 @@
 # 1. General Notes
 In Application Engineering (EAPLI) were shown several standards/patterns for project development.
 The of LAPR4 is to take advantage of the knowledge acquired in EAPLI and apply it, however for this iteration, as we are limited in a matter of time and it is the first time that we came in contact with the project, I found it well to ignore the TDD standard (test-driven development) for at least this iteration. This way I tried as hard as I could to implement my Use Case based on the domain model, and as I was implementing it, I improved my project structure skills.
+As a gwt chart only supports one type of data (STRING, NUMBERS...) I decided to only accept numbers and ignore other types;
 
 
 
@@ -68,15 +69,61 @@ Based on JPA, in this project, we usually find:
 
 ## 3.45 Analysis Diagrams
 
+####USE CASES
+![use_cases](use_cases.png)
+
+* **Use Cases:** Since these use cases have a one-to-one correspondence with the User Stories we do not add here more detailed use case descriptions. We find that these use cases are very simple and may eventually add more specification at a later stage if necessary.
+
+####DOMAIN MODEL (for this feauture increment)
+![domain](domain.png)
+
+* **Domain Model:** Since we found no specific requirements for the structure of Chart we follow the Structure of the existing DTO (ChartDTO).
+
+
+####SHORT SEQUENCE DIAGRAMS
+#####FOR UC1
+![UC1](analysis1.png)
+#####FOR UC2
+![UC2](analysis2.png)
+#####FOR UC3
+![UC3](analysis3.png)
 
 
 # 4. Design
 
 
-## 4.1. Tests
+## 4.1. Functional Test
+
+####TEST ADD A CHART SUCCEFULLY
+1. User requests a chart creation;
+2. The system shows the "Create Chart" UI;
+3. The User inserts all the data to create the chart and locks the information;
+4. The systems verifies the information e shows a correct chart based on it;
+
+####TEST ADD A CHART WITH INVALID CELL RANGE
+1. User requests a chart creation;
+2. The system shows the "Create Chart" UI;
+3. The User inserts all the data to create the chart and locks the information;
+4. The systems verifies the information :
+    4.1 The Spresheat does not support de chosen cell range;
+    4.2 The system goes to 2;
+
+####TEST CREATE A CHART WITH A RANGE WITH ZERO ELEMENT
+1. User requests a chart creation;
+2. The system shows the "Create Chart" UI;
+3. The User inserts all the data to create the chart and locks the information;
+4. The systems verifies the information:
+    4.1 The chart has no content;
+    4.2 The systems shows a message informing that a return to 2;
 
 
 ## 4.2. Requirements Realization
+#####FOR UC1
+![UC1](design1.png.png)
+#####FOR UC2
+![UC2](design2.png.png)
+#####FOR UC3
+![UC3](design3png.png)
 
 
 
@@ -84,6 +131,10 @@ Based on JPA, in this project, we usually find:
 
 
 ## 4.4. Design Patterns and Best Practices
+* MVP;
+* Repository;
+* Hibernate;
+* SOLID (Interface segregation principle);
 
 
 

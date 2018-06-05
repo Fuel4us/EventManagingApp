@@ -1,17 +1,18 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-             xmlns:g="urn:import:com.google.gwt.user.client.ui"
-             xmlns:m="urn:import:gwt.material.design.client.ui">
+			 xmlns:g="urn:import:com.google.gwt.user.client.ui"
+			 xmlns:m="urn:import:gwt.material.design.client.ui">
 
 	<m:MaterialPanel>
 		<g:HTMLPanel ui:field="htmlPanel">
 			<br/>
 			Export the current workbook:
+			<br>
+			</br>
 			<br/>
 		</g:HTMLPanel>
-		<m:MaterialButton text="Export to CSV" waves="LIGHT" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT"/>
-		<m:MaterialButton text="Export to XML" waves="LIGHT" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT"/>
-		<m:MaterialButton text="Export to PDF" waves="LIGHT" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginLeft="0.5"/>
+		<m:MaterialButton ui:field="export_csv" text="Export to CSV" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
+                <m:MaterialButton ui:field="export_xml" text="Export to XML" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
+                <m:MaterialButton ui:field="export_pdf" text="Export to PDF" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
 	</m:MaterialPanel>
-
 </ui:UiBinder>

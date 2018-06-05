@@ -13,15 +13,11 @@ import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
-import pt.isep.nsheets.client.application.workbook.WorkbookPresenter;
 import pt.isep.nsheets.client.application.workbook.WorkbookView;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import pt.isep.nsheets.shared.core.Address;
-import pt.isep.nsheets.shared.core.Spreadsheet;
-import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.services.ChartDTO;
-import pt.isep.nsheets.shared.services.ChartType;
 import pt.isep.nsheets.shared.services.ChartsService;
 import pt.isep.nsheets.shared.services.ChartsServiceAsync;
 
@@ -50,7 +46,7 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
 
         boolean isRow();
 
-        void drawChart(String chart_name, String[][] matrix, boolean permute, boolean considerFirstLine);
+        void drawChart(String chart_name, ChartDTO dto,String firstAddress, String lastAddress, boolean permute, boolean considerFirstLine);
         
         ChartView fillChartInfo(String chart_name, Address firstCell, Address lastCell, boolean isConsideredFirst, boolean isRow );
 
@@ -67,13 +63,9 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
         
         this.view = view;
         
-        this.view.saveDataHandler(event -> {
-            this.view.drawChart(view.chartName(), dto.getContent(), view.isRow(), view.isConsiderFirstField());
-        });
-
-        this.view.saveChart(event -> {
-
-            ChartsServiceAsync chartSrv = GWT.create(ChartsService.class);
+        refreshView();
+        
+        ChartsServiceAsync chartSrv = GWT.create(ChartsService.class);
             AsyncCallback<ChartDTO> callback = new AsyncCallback<ChartDTO>() {
                 @Override
                 public void onFailure(Throwable caught) {
@@ -87,7 +79,16 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
 
             };
             
-            chartSrv.addChart(dto, ChartType.BAR_CHART, callback);
+        
+        this.view.saveDataHandler(event -> {
+            this.view.drawChart(view.chartName(), dto, view.getFistCell(), view.getLastCell(), view.isConsiderFirstField(), view.isRow());
+        });
+
+        this.view.saveChart(event -> {
+
+            
+//            chartSrv.addChart(dto, callback);
+            
 
         });
         
@@ -103,7 +104,10 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
             this.view = view.fillChartInfo(dto.getGraph_name(), dto.getFirstAddress(), dto.getLastAddress(), dto.isConsiderFirstField(), dto.isRow());
         }else{
             this.view = view.fillChartInfo(null, null, null, true, true);
+            
         }
+        
+//       MaterialToast.fireToast("Graph: "+dto.getGraph_name());
         
     }
 

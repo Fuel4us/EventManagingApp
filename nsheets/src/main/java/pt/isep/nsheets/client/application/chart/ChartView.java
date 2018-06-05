@@ -5,6 +5,7 @@
  */
 package pt.isep.nsheets.client.application.chart;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -13,6 +14,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.gwt.charts.client.ChartLoader;
 import com.googlecode.gwt.charts.client.ChartPackage;
@@ -42,7 +44,13 @@ import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.animate.MaterialAnimation;
 import gwt.material.design.client.ui.animate.Transition;
 import javax.inject.Inject;
+import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.shared.core.Address;
+import pt.isep.nsheets.shared.core.Spreadsheet;
+import pt.isep.nsheets.shared.services.ChartDTO;
+import pt.isep.nsheets.shared.services.ChartType;
+import pt.isep.nsheets.shared.services.ChartsService;
+import pt.isep.nsheets.shared.services.ChartsServiceAsync;
 
 /**
  * The Chart View Class.
@@ -55,6 +63,8 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     private static final int EXIT_TIME = 500;
     private ColumnChart chart;
     private static boolean edit = false;
+    
+    private Spreadsheet spreadsheet= Settings.getInstance().getWorkbook().getSpreadsheet(0);
 
     @Override
     public String getFistCell() {
@@ -203,11 +213,38 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     private boolean validateForm() {
         return !(!name_textbox.validate() || !start_textbox.validate() || !end_textbox.validate());
     }
+    
 
     @Override
-    public void drawChart(String chart_name, String[][] matrix, boolean isRow, boolean considerFirstLine) {
+    public void drawChart(String chart_name, ChartDTO dto,String firstAddress, String lastAddress, boolean isRow, boolean considerFirstLine) {
 
         // Prepare the data
+        
+        ChartsServiceAsync chartSrv = GWT.create(ChartsService.class);
+            AsyncCallback<String[][]> callback = new AsyncCallback<String[][]>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error draw chart --> " + caught.getMessage());
+                    MaterialToast.fireToast("Error --> " + caught.getLocalizedMessage());
+                }
+
+                @Override
+                public void onSuccess(String[][] result) {
+                    String[][] matrix = result;
+                    draw(chart_name, matrix, isRow, considerFirstLine);
+                    MaterialToast.fireToast("SUCESS draw chart!");
+                }
+
+            };
+            
+            MaterialToast.fireToast("Active SpreadSheet: "+spreadsheet.getTitle());
+            
+            chartSrv.getChartContent(dto/*, spreadsheet,*/, callback);
+           
+    }
+    
+    private void draw(String chart_name,String[][] matrix, boolean isRow, boolean considerFirstLine){
+        
         DataTable dataTable = DataTable.create();
         dataTable.addColumn(ColumnType.STRING, "Year");
         String fieldName = "Row";

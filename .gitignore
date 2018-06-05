@@ -47,3 +47,4 @@ server/.project
 shared/.classpath
 shared/.project
 /server/nbproject/
+server/src/test/java/pt/isep/nsheets/server/lapr4/green/s1/ipc/n1140317/ExportXML/application/spreadsheetTest.xml

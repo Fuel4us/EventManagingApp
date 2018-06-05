@@ -1,5 +1,6 @@
 package pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions;
 
+import java.util.List;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Value;
@@ -8,6 +9,7 @@ import pt.isep.nsheets.shared.ext.CellExtension;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.Formula.BinaryOperationExtension;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.CellDTO;
+import pt.isep.nsheets.shared.services.ChartDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,5 +102,6 @@ public class ConditionalFormattingExtension extends Extension {
         public CellDTO toDTO() {
             return this.getDelegate().toDTO();
         }
+
     }
 }
