@@ -126,7 +126,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                     }
                 }
             };
-            workbooksSvc.searchWorkbooks(workbookName, callback);
             refreshViewAfterSearch(workbookName);
         });
 
