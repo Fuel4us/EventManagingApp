@@ -204,16 +204,16 @@ The main idea for the "workflow" of this feature increment.
 **System Sequence Diagrams**
 
 **For US1**
-![Use Cases](us1.jpg)
+![Use Cases](us1.JPG)
 
 **For US2**
-![Use Cases](us2.jpg)
+![Use Cases](us2.JPG)
 
 **For US3**
-![Use Cases](us3.jpg)
+![Use Cases](us3.JPG)
 
 **For US4**
-![Use Cases](us4.jpg)
+![Use Cases](us4.JPG)
 
 # 4. Design
 
@@ -233,7 +233,7 @@ The main idea for the "workflow" of this feature increment.
 ## 4.2. Requirements Realization
 
 *Sequence Diagram:*
-![Use Cases](ds.jpg)
+![Use Cases](ds.JPG)
 
 ## 4.3. Classes
 
