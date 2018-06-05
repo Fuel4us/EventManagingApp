@@ -83,12 +83,12 @@
 
     <!-- Servlets for the charts -->
     <servlet>
-        <servlet-name>chartsServiceServlet</servlet-name>
+        <servlet-name>pt.isep.nsheets.nsheets ChartsService</servlet-name>
         <servlet-class>pt.isep.nsheets.server.services.ChartServiceImp</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>chartsServiceServlet</servlet-name>
+        <servlet-name>pt.isep.nsheets.nsheets ChartsService</servlet-name>
         <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
         <url-pattern>/nsheets/chartsService</url-pattern>
     </servlet-mapping>

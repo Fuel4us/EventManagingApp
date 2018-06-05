@@ -25,7 +25,7 @@
             </m:MaterialCollection>  
         </m:MaterialCard>
         
-        <m:MaterialModal ui:field="modal" type="DEFAULT" dismissible="true">
+        <m:MaterialModal ui:field="modalAddNote" type="DEFAULT" dismissible="true">
             <m:MaterialModalContent>
                 <m:MaterialRow>
                     <m:MaterialColumn grid="s6" offset="s6" >

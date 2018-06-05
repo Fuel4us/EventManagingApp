@@ -32,13 +32,13 @@ public class NotesPresenter extends Presenter<NotesPresenter.MyView, NotesPresen
 
         void buttonClickHandlerSaveNote(ClickHandler ch);
         
+//        void buttonClickHandlerCheckEditNote(ClickHandler ch);
+        
 //        void buttonClickHandlerEditNote(ClickHandler ch);
         
 //        void buttonClickHandlerRemoveNote(ClickHandler ch);
         
-//        void buttonClickHandlerCheckEditNote(ClickHandler ch);
-        
-        void openModal();
+        void openModalToAddNote();
 
         void setContents(ArrayList<NoteDTO> contents);
 
@@ -46,7 +46,7 @@ public class NotesPresenter extends Presenter<NotesPresenter.MyView, NotesPresen
 
         String textNote();
 
-        void closeModal();
+        void closeModalToAddNote();
     }
 
     @NameToken(NameTokens.notes)
@@ -62,7 +62,7 @@ public class NotesPresenter extends Presenter<NotesPresenter.MyView, NotesPresen
 
         this.view.addClickHandlerOpenModal(event -> {
 
-            this.view.openModal();
+            this.view.openModalToAddNote();
         });
 
         this.view.buttonClickHandlerSaveNote(event -> {
@@ -86,7 +86,7 @@ public class NotesPresenter extends Presenter<NotesPresenter.MyView, NotesPresen
             NoteDTO notesDto = new NoteDTO(this.view.titleNote(), this.view.textNote());
             notesSvc.addNote(notesDto, callback);
 
-            this.view.closeModal();
+            this.view.closeModalToAddNote();
         });
         
 //        this.view.buttonClickHandlerCheckEditNote(event -> {
