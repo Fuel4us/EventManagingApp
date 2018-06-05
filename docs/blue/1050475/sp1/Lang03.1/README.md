@@ -4,8 +4,8 @@
 # 1. General Notes
 
 Helped in the creating of the codeUI from Issue Lang06.1
+Tried to Implement the Cell"Style"Extension that might be the Core08.1 to apply and me to use. But no success, however, the CellStyleExtension was created.
 
-*In this section you should register important notes regarding your work during the sprint. For instance, if you spend significant time helping a colleague or if you work in more than one feature increment.*
 
 # 2. Requirements
 
@@ -259,7 +259,7 @@ The proposal is:
 	}
 		
 Tests:  
-- The tests on the controllers require the presence of a database.  
+- The tests on the controllers require the presence of a database.
 - We will use the database in memory (H2).  
 - We will have a *controller* from adding new WorkbookDescriptions. This controller will be invoked by the GWT RPC service.
 - We will have a *controller* from listing WorkbookDescriptions. This controller will be invoked by the GWT RPC service.
@@ -289,28 +289,7 @@ Note: We will be using the annotation @FixMethodOrder(MethodSorters.NAME_ASCENDI
 	   public void testAensureGetWorkbooksEmpty() {
 		   System.out.println("testAensureGetWorkbooksEmpty");
 		   ListWorkbookDescriptionController ctrl=new ListWorkbookDescriptionController();
-		   Iterable<WorkbookDescription> wbs=ctrl.listWorkbookDescriptions();
-		   assertTrue("the list of WorkbookDescriptions is not empty", !wbs.iterator().hasNext());
-	   } 
- 
-**Test:** If a WorkbookDescription is created it should be present in a following invocation of getWorkbooks().
-
-		@Test
-		public void testBtestDatabaseInsertion() throws Exception {
-			System.out.println("testBtestDatabaseInsertion");
-			final String name = "Workbook1";
-			final String description = "Description for Workbook1";
-			final WorkbookDescription expected = new WorkbookDescription(name, description);
-			AddWorkbookDescriptionController ctrlAdd = new AddWorkbookDescriptionController();
-			WorkbookDescription result = ctrlAdd.addWorkbookDescription(expected.toDTO());
-			ListWorkbookDescriptionController ctrlList=new ListWorkbookDescriptionController();
-			Iterable<WorkbookDescription> wbs=ctrlList.listWorkbookDescriptions();
-			assertTrue("the added WorkbookDescription is not in the database", wbs.iterator().hasNext());
-		}
-
-**Test Coverage**  
-- The actual coverage for domain classes: 61%
-- The actual coverage for application(controller) classes: 100%
+		   Iterable<WorkbookDescription> wbs=ctrl.listWorkbookDescriptions(
  
 - TODO: Add more tests to increase the coverage of the domain class. 
 
@@ -439,6 +418,11 @@ the formatting condition.
 [#55] Configuration implementing Serializable (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/7ceebe9fc3f1564de3d347b82fb091438a6007c7)
 [#55] Conditional JPa and Contional Repository created (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/b748cd766d2c82187a5594671f7b0fcf2d86a120)
 [#55] Lang03.1 - UI for conditionalModal updated to offer colors from gwt (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/7512fd708a2d74644806bad30c1aee5af7122fbc)
+[#55] Lang03.1: Conditional class persistence. A small unknown compilation bug in the ConditionalService result (commented the issues: https://bitbucket.org/lei-isep/lapr4-18-2db/commits/2f5e3db8ab9e5be00bf20eeb152c665d96661aef)
+[#55] Lang03.1 ConditionalFormattingExtension (no StyleExtensions. Tried two different aproachs parcially commented. need Core08.1 https://bitbucket.org/lei-isep/lapr4-18-2db/commits/4a93792a00c0cd66c2ede6f9b4f63e98f11e1854)
+stores Conditional with conditions and formatting configs
+[#55] Lang03.1 - UC can verify if the condition is true or false but lack o Core funcionality to change colors in cell (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/cc6ae8402566fe1be859414945b0a8cbc342b657)
+[#55] CellStyleExtension created to StyleExtension but incomplete [extra UC boundaries](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/de7a056bcde222a4bd19bbed1cf4ba4e8257beb1)
 
 
 
