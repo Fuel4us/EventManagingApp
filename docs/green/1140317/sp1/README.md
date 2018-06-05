@@ -64,6 +64,7 @@ There were no tests for this use case
 
 ## 4.2. Requirements Realization
 
+![ss](ssd.jpg)
 
 ## 4.3. Classes
 
@@ -71,7 +72,7 @@ ExportPresenter , ExportServiceImp
 
 ## 4.4. Design Patterns and Best Practices
 
-![ss](ssd.jpg)
+
 
 By memory we apply/use: - DTO
 
