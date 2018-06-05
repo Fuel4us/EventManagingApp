@@ -5,6 +5,7 @@
  */
 package pt.isep.nsheets.server.services;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import gwt.material.design.client.ui.MaterialToast;
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.application.ListC
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.Chart;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;
+import pt.isep.nsheets.shared.core.Spreadsheet;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
 import pt.isep.nsheets.shared.services.ChartDTO;
 import pt.isep.nsheets.shared.services.ChartsService;
 import pt.isep.nsheets.shared.services.DataException;
@@ -62,28 +65,22 @@ public class ChartServiceImp extends RemoteServiceServlet implements ChartsServi
     }
 
     @Override
-    public ChartDTO addChart(ChartDTO chartDTO/*, Spreadsheet ss*/) throws DataException {
+    public ChartDTO addChart(ChartDTO chartDTO, SpreadsheetDTO ss) throws DataException {
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
 		AddChartController ctrl = new AddChartController();
 
-		Chart chart=null; 
-		
-                chart = ctrl.addChart(chartDTO/*, ss*/);
+		Chart chart = ctrl.addChart(chartDTO, ss);
                 
 		
 		return chart.toDTO();
     }
 
     @Override
-    public String[][] getChartContent(ChartDTO dto/*, Spreadsheet s*/) {
-        
-                MaterialToast.fireToast("BEOFRE CTRL");
+    public String[][] getChartContent(ChartDTO dto, SpreadsheetDTO s) {
                 CreateChartController ctrl = new CreateChartController();
-                MaterialToast.fireToast("AFETR CTRL");
                 
-                
-                return ctrl.generateChartValues(dto/*, s*/);
+                return ctrl.generateChartValues(dto, s);
     }
 
     

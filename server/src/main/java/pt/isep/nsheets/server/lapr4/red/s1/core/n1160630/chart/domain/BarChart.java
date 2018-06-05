@@ -5,17 +5,13 @@
  */
 package pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain;
 
-import eapli.framework.domain.AggregateRoot;
-import java.io.Serializable;
-import java.util.Objects;
+import java.util.Iterator;
+import java.util.SortedSet;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Spreadsheet;
@@ -30,8 +26,8 @@ import pt.isep.nsheets.shared.services.ChartType;
  */
 @SuppressWarnings("serial")
 @Entity
-@DiscriminatorColumn(name="BAR")
-public class BarChart extends Chart{
+@DiscriminatorColumn(name = "BAR")
+public class BarChart extends Chart {
 
     private String graph_name;
     private String[][] content;
@@ -55,15 +51,16 @@ public class BarChart extends Chart{
     protected BarChart() {
         //FOR ORM
     }
-    
-    public BarChart(ChartDTO dto){
-        this(dto.getFirstAddress(), dto.getLastAddress() ,dto.isConsiderFirstField(), dto.isRow(), dto.getAssociatedCell());
-        
-        if(dto.getType() != ChartType.BAR_CHART) throw new IllegalArgumentException("Cannot instantiate a "+dto.getType().name()+"in BarChart");
-        
+
+    public BarChart(ChartDTO dto) {
+        this(dto.getFirstAddress(), dto.getLastAddress(), dto.isConsiderFirstField(), dto.isRow(), dto.getAssociatedCell());
+
+        if (dto.getType() != ChartType.BAR_CHART) {
+            throw new IllegalArgumentException("Cannot instantiate a " + dto.getType().name() + "in BarChart");
+        }
+
         this.graph_name = dto.getGraph_name();
     }
-    
 
     /**
      * The constructor with the following parameters:
@@ -74,7 +71,7 @@ public class BarChart extends Chart{
      * @param isRow is based on row
      * @param associatedCell
      */
-    public BarChart( Address firstAddress, Address lastAddress, boolean considerFirstField, boolean isRow, Address associatedCell) {
+    public BarChart(Address firstAddress, Address lastAddress, boolean considerFirstField, boolean isRow, Address associatedCell) {
         this.graph_name = BAR_CHART_NAME;
         firstCell = firstAddress;
         lastCell = lastAddress;
@@ -95,40 +92,36 @@ public class BarChart extends Chart{
      * @param associatedCell
      */
     public BarChart(String graph_name, Address firstAddress, Address lastAddress, boolean considerFirstField, boolean isRow, Address associatedCell) {
-        this(firstAddress, lastAddress, considerFirstField, isRow,associatedCell);
+        this(firstAddress, lastAddress, considerFirstField, isRow, associatedCell);
         this.graph_name = graph_name;
     }
 
     /**
-     * Graph generator. 
+     * Graph generator.
+     *
      * @param spreadsheet
      */
     @Override
     public void generateChartValues(Spreadsheet spreadsheet) {
-        
-        
-        int endCol = lastCell.getColumn() + 1;
+
+        int endCol = lastCell.getColumn();
         int startCol = firstCell.getColumn();
-        int endRow = lastCell.getRow() + 1;
+        int endRow = lastCell.getRow();
         int startRow = firstCell.getRow();
-        
-        if(spreadsheet == null){
+
+        endCol++; //Incrementes because col-2 is the 3rd column
+        endRow++;
+
+        if (spreadsheet == null) {
             spreadsheet = generateSpreadsheet();
             firstCell = new Address(0, 0);
             lastCell = new Address(2, 2);
         }
-        
+
         associatedCell = spreadsheet.getCell(endCol, startRow).getAddress();
 
-        Cell[] cells = (Cell[]) spreadsheet.getCells(firstCell, lastCell).toArray();
+        Cell[] cells = cellSetToArray(spreadsheet.getCells(firstCell, lastCell));
 
-        if (isRow) {
-            if (considerFirstField) {
-                startRow++;
-            } else if (considerFirstField) {
-                startCol++;
-            }
-        }
 
         String values[][] = new String[endCol - startCol][endRow - startRow];
         int k = 0;
@@ -139,11 +132,12 @@ public class BarChart extends Chart{
             }
         }
 
-        content =  values;
+        content = values;
     }
 
     /**
      * Tranforms a bar chart in a DTO Chart.
+     *
      * @return Chart DTO
      */
     @Override
@@ -151,21 +145,30 @@ public class BarChart extends Chart{
         return new ChartDTO(graph_name, firstCell, lastCell, isRow, considerFirstField, ChartType.BAR_CHART, associatedCell, content);
     }
 
-
-   @Override
+    @Override
     public Address associatedCell() {
         return associatedCell;
     }
 
     private Spreadsheet generateSpreadsheet() {
-        String[][] contents = new String[][]{{"1", "2", "3"},{"1", "2", "3"},{"1", "2", "3"},{"1", "2", "3"}};
+        String[][] contents = new String[][]{{"1", "2", "3"}, {"1", "2", "3"}, {"1", "2", "3"}, {"1", "2", "3"}};
         Workbook wb = new Workbook("graph", "desc", contents);
         return wb.getSpreadsheet(0);
     }
 
-    
+    private Cell[] cellSetToArray(SortedSet<Cell> setCell) {
 
+        Cell[] cells = new Cell[setCell.size()];
+        int i = 0;
 
-    
+        Iterator iterator = setCell.iterator();
+
+        while (iterator.hasNext()) {
+            cells[i] = (Cell) iterator.next();
+            i++;
+        }
+
+        return cells;
+    }
 
 }

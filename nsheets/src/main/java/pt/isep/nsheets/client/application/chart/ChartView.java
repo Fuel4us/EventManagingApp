@@ -48,7 +48,6 @@ import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.services.ChartDTO;
-import pt.isep.nsheets.shared.services.ChartType;
 import pt.isep.nsheets.shared.services.ChartsService;
 import pt.isep.nsheets.shared.services.ChartsServiceAsync;
 
@@ -62,9 +61,8 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     private static final int ENTER_TIME = 700;
     private static final int EXIT_TIME = 500;
     private ColumnChart chart;
-    private static boolean edit = false;
+    private boolean edit = false;
     
-    private Spreadsheet spreadsheet= Settings.getInstance().getWorkbook().getSpreadsheet(0);
 
     @Override
     public String getFistCell() {
@@ -101,13 +99,18 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         save_chart_btn.addClickHandler(click);
     }
 
+    @Override
+    public boolean isEditMode() {
+        return this.edit;
+    }
+
     interface Binder extends UiBinder<Widget, ChartView> {
     }
 
     class CellValidator extends RegExValidator {
 
         public CellValidator() {
-            super("[a-zA-Z]{1}[0-9]*", "The cell pattern should be \"[a-zA-Z][0-9]*\", i.e: \"A3\"");
+            super("[a-zA-Z]*[0-9]*", "The cell pattern should be \"[a-zA-Z][0-9]*\", i.e: \"A3\"");
         }
     }
 
@@ -211,14 +214,19 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     }
 
     private boolean validateForm() {
-        return !(!name_textbox.validate() || !start_textbox.validate() || !end_textbox.validate());
+        
+        if((!name_textbox.validate() || !start_textbox.validate() || !end_textbox.validate()))
+            return false;
+        return true;
     }
     
 
     @Override
-    public void drawChart(String chart_name, ChartDTO dto,String firstAddress, String lastAddress, boolean isRow, boolean considerFirstLine) {
+    public void drawChart(String chart_name, ChartDTO dto) {
 
         // Prepare the data
+        
+        MaterialToast.fireToast("DRAW CHART");
         
         ChartsServiceAsync chartSrv = GWT.create(ChartsService.class);
             AsyncCallback<String[][]> callback = new AsyncCallback<String[][]>() {
@@ -229,22 +237,24 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
                         {"1", "2", "3"},
                         {"1", "2", "3"},
                         {"1", "2", "A"}};
-                    draw(chart_name, matrix, isRow, considerFirstLine);
+                    draw(chart_name, matrix, dto.isRow(), dto.isConsiderFirstField());
                     MaterialToast.fireToast("UNSUCESS draw chart!");
                 }
 
                 @Override
                 public void onSuccess(String[][] result) {
                     String[][] matrix = result;
-                    draw(chart_name, matrix, isRow, considerFirstLine);
+                    draw(chart_name, matrix, dto.isRow(), dto.isConsiderFirstField());
                     MaterialToast.fireToast("SUCESS draw chart!");
                 }
 
             };
             
-            MaterialToast.fireToast("Active SpreadSheet: "+spreadsheet.getTitle());
+            Spreadsheet spreadsheet= Settings.getInstance().getWorkbook().getSpreadsheet(0);
             
-            chartSrv.getChartContent(dto/*, spreadsheet,*/, callback);
+            if(spreadsheet.toDTO() != null && dto !=null) {
+                chartSrv.getChartContent(dto, spreadsheet.toDTO(), callback);
+            }
            
     }
     
@@ -258,7 +268,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         if (isRow) {
 
             char letter = 'A';
-            for (int i = 1; i <= matrix[0].length; i++) {
+            for (int i = 1; i <= matrix.length; i++) {
                 dataTable.addColumn(ColumnType.NUMBER, String.valueOf(i));
             }
 
@@ -280,7 +290,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
             for (int row = 0; row < matrix.length; row++) {
                 for (int col = start; col < matrix[row].length; col++) {
                     if (canAddColumn(matrix[row][col])) {
-                        dataTable.setValue(row, col + 1, matrix[row][col]);
+                        dataTable.setValue(row, col+1 , matrix[row][col]);
                     }
                 }
             }
@@ -289,7 +299,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
             fieldName = "Column";
             char letter = 'A';
             matrix = transposeMatrix(matrix);
-            for (int i = 0; i < matrix[0].length; i++) {
+            for (int i = 0; i < matrix.length; i++) {
                 dataTable.addColumn(ColumnType.NUMBER, String.valueOf(letter));
                 letter++;
             }
@@ -312,7 +322,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
             for (int row = 0; row < matrix.length; row++) {
                 for (int col = start; col < matrix[row].length; col++) {
                     if (canAddColumn(matrix[row][col])) {
-                        dataTable.setValue(row, col + 1, matrix[row][col]);
+                        dataTable.setValue(row, col+1, matrix[row][col]);
                     }
                 }
             }
@@ -482,7 +492,6 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         else this.start_textbox.setText(firstCell.toString());
         if(lastCell ==null) this.end_textbox.setText("");
         else this.end_textbox.setText(lastCell.toString());
-        if(!edit) this.save_btn.fireEvent(new ClickEvent(){});
         return this;
     }
 

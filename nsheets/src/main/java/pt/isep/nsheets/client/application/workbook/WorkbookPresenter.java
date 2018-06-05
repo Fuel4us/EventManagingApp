@@ -69,7 +69,6 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 
     private MyView view;
 
-
     interface MyView extends View {
 
         public MaterialTextBox getFirstBox();
@@ -88,10 +87,12 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 
         public void addConfirmationHandler(ClickHandler cMDB);
 
-
         public int getBackgroudColorTrue();
+
         public int getFontColorTrue();
+
         public int getBackgroudColorFalse();
+
         public int getFontColorFalse();
 
         public String getOperator();
@@ -127,14 +128,11 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
            Repository loading
          */
         //conditionalService();
-
         this.wDTO = Settings.getInstance().getWorkbook().toDTO();
         this.view = view;
 
-		this.placeManager = placeManager;
-	}
-
-
+        this.placeManager = placeManager;
+    }
 
     PlaceManager placeManager;
 
@@ -191,15 +189,16 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 //                WorkbookView.selectedChart = null;
 //            }
 //        });
-
+        updateCellCharts();
     }
 
     @Override
     protected void onReveal() {
         super.onReveal();
 
-        SetPageTitleEvent.fire("Workbook", "The current Workbook", "", "", this);
         updateCellCharts();
+        SetPageTitleEvent.fire("Workbook", "The current Workbook", "", "", this);
+        
 
         this.timer();
     }
@@ -213,7 +212,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         placeManager.revealPlace(placeRequest);
     }
 
-    protected void updateCellCharts() {
+    private void updateCellCharts() {
 
         ChartsServiceAsync chartSrv = GWT.create(ChartsService.class);
         AsyncCallback<ArrayList<ChartDTO>> callback = new AsyncCallback<ArrayList<ChartDTO>>() {
@@ -224,39 +223,53 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 
             @Override
             public void onSuccess(ArrayList<ChartDTO> result) {
-                List<ChartDTO> charts = result;
                 getView().getChartDropDown().clear();
                 for (ChartDTO chart : result) {
-                    
                     Settings.getInstance().getWorkbook().getSpreadsheet(0).getCell(chart.getAssociatedCell()).addChart(chart);
-                    
+                }
+                addPopUptoCell();
+                MaterialToast.fireToast("Chart Information successfully updated ");
+            }
+
+        };
+        chartSrv.getCharts(callback);
+
+    }
+
+    private void addPopUptoCell() {
+
+        getView().getChartDropDown().clear();
+
+        getView().getTable().addClickHandler(handler -> {
+            if (getView().getActiveCell().hasChart()) {
+                for (ChartDTO chart : getView().getActiveCell().chartList()) {
                     MaterialLink link = new MaterialLink(chart.getGraph_name(), null, IconType.INSERT_CHART);
                     link.setTextColor(Color.BLACK);
-                    link.addClickHandler(handler -> {
+                    link.addClickHandler(event -> {
                         WorkbookView.selectedChart = chart;
                         MaterialToast.fireToast(WorkbookView.selectedChart.getGraph_name());
                         redirectToChartPage();
                     });
                     getView().getChartDropDown().add(link);
                 }
+                getView().getPopChart().setPopupPosition(handler.getClientX(), handler.getClientY());
+                getView().getPopChart().open();
+            } else {
+                WorkbookView.selectedChart = null;
             }
-
-        };
-
-
-        chartSrv.getCharts(callback);
+        });
 
     }
 
-    protected void conditionalFormattingAction(){
+    protected void conditionalFormattingAction() {
 
         try {
             Value conditionalValue = Value.parseNumericValue(this.view.getConditionalValue());
             int[] values = new int[4];
-            values[0]=view.getBackgroudColorTrue();
-            values[1]=view.getFontColorTrue();
-            values[2]=view.getBackgroudColorFalse();
-            values[3]=view.getFontColorFalse();
+            values[0] = view.getBackgroudColorTrue();
+            values[1] = view.getFontColorTrue();
+            values[2] = view.getBackgroudColorFalse();
+            values[3] = view.getFontColorFalse();
 
             Configuration configuration = new Configuration(values);
 
@@ -277,29 +290,26 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
                 }
                 conditionalSvc.saveConditional(conditional.toDTO(), callback);
             };
-            */
-
-
+             */
             Extension extension = ExtensionManager.getInstance().getExtension("ConditionalExtension");
             ConditionalFormattingExtension.addConditional(conditional);
             this.view.getActiveCell().getExtension("ConditionalExtension");
-            MaterialToast.fireToast(this.view.getActiveCell().getAddress().toString()+" conditional result ="
+            MaterialToast.fireToast(this.view.getActiveCell().getAddress().toString() + " conditional result ="
                     + ConditionalFormattingExtension.setOperation(this.view.getActiveCell(), conditional.getCondOperator(), conditional.getCondValue()));
 
-            for(CellListener l : this.view.getActiveCell().getCellListeners()) {
+            for (CellListener l : this.view.getActiveCell().getCellListeners()) {
                 l.valueChanged(this.view.getActiveCell());
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-
     }
 
     /* 1050475 Hernani Gil
                Repository loading
-             */
-    /*
+     */
+ /*
     private void conditionalService() {
         ConditionalServiceAsync conditionalSvc = GWT.create(ConditionalService.class);
 
@@ -316,7 +326,6 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         };
         conditionalSvc.getListConditional(callback);
     }*/
-
     private void refreshWorkbooks() {
         WorkbooksServiceAsync workbookSvc = GWT.create(WorkbooksService.class);
 

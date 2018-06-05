@@ -29,7 +29,6 @@ public class ChartDTO implements Serializable{
      * @param graph_name Graph name
      * @param firstAddress First address
      * @param lastAddress Last Address
-     * @param spreadsheet SpreadSheet
      * @param isRow show row
      * @param considerFirstField consider first field as content cells.
      * @param type
@@ -69,8 +68,8 @@ public class ChartDTO implements Serializable{
         this.content = new String[][]{};
         this.isRow = false;
         this.considerFirstField = false;
-        this.type = null;
-        this.associatedCell = null;
+        this.associatedCell = new Address(-1, -1);
+        this.type = ChartType.BAR_CHART;
     }
     
     /**

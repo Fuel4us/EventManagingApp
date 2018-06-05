@@ -213,7 +213,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     }
 
     void initWorkbook() {
-        // Test the initialization of an Workbook
 
         Spreadsheet sh = Settings.getInstance().getWorkbook().getSpreadsheet(0);
 

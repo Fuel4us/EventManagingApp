@@ -96,8 +96,6 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
                     extensionCell.getUIExtension(btn).decorate(object.getCell(this.colNumber));
                 }
             }
-
-
         return btn;
     }
 

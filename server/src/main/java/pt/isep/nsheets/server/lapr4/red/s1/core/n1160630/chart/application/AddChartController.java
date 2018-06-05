@@ -11,6 +11,7 @@ import eapli.framework.persistence.DataIntegrityViolationException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.Chart;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
 /**
@@ -27,15 +28,11 @@ public class AddChartController implements Controller {
      * @param ss
      * @return the added Chart
      */
-    public Chart addChart(ChartDTO chartDto/*, Spreadsheet ss*/){
+    public Chart addChart(ChartDTO chartDto, SpreadsheetDTO ss){
 
         Chart c = null;
         try {
             c =  new ChartService().addUChart(chartDto);
-            if(c!=null) {
-//                addChartToCell(chartDto/*, ss*/);
-            }
-            
             return c;
         } catch (DataConcurrencyException | DataIntegrityViolationException ex) {
             Logger.getLogger(AddChartController.class.getName()).log(Level.SEVERE, null, ex);

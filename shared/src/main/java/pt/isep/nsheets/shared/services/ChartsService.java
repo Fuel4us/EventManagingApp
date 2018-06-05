@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Spreadsheet;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
 
 /**
  * The Chart Service interface
@@ -15,8 +16,8 @@ import pt.isep.nsheets.shared.core.Spreadsheet;
 public interface ChartsService extends RemoteService{
     
     ArrayList<ChartDTO> getCharts();
-    ChartDTO addChart(ChartDTO chartDTO/*, Spreadsheet s*/) throws DataException;
-    String [][] getChartContent(ChartDTO dto/*, Spreadsheet s*/);
+    ChartDTO addChart(ChartDTO chartDTO, SpreadsheetDTO s) throws DataException;
+    String [][] getChartContent(ChartDTO dto, SpreadsheetDTO s);
     
     
 }

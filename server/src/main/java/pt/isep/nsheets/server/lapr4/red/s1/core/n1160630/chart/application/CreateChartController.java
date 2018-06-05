@@ -5,11 +5,11 @@
  */
 package pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.application;
 
-import com.google.gwt.user.client.Window;
 import eapli.framework.application.Controller;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.BarChart;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.Chart;
-import pt.isep.nsheets.shared.core.Spreadsheet;
+import pt.isep.nsheets.shared.core.SpreadsheetImpl;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
 /**
@@ -24,21 +24,25 @@ public class CreateChartController implements Controller{
      * @param spreadsheet
      * @return the created chart
      */
-    public Chart newChart(ChartDTO dto/*, Spreadsheet spreadsheet*/){
+    public Chart newChart(ChartDTO dto, SpreadsheetDTO spreadsheet){
         
         Chart chart = null;
+        
         
         switch(dto.getType()){
             case BAR_CHART:
                 chart = new BarChart(dto.getGraph_name(), dto.getFirstAddress(), dto.getLastAddress(),dto.isConsiderFirstField(), dto.isRow(), dto.getAssociatedCell());
+                break;
+            default:
+                chart = new BarChart(dto.getGraph_name(), dto.getFirstAddress(), dto.getLastAddress(),dto.isConsiderFirstField(), dto.isRow(), dto.getAssociatedCell());
+                break;
         }
         return chart;
     }
     
-    public String[][] generateChartValues(ChartDTO dto/*, Spreadsheet ss*/){
-        Window.alert("generateChartValues");
-        Chart c = newChart(dto);
-        c.generateChartValues(null);
+    public String[][] generateChartValues(ChartDTO dto, SpreadsheetDTO ss){
+        Chart c = newChart(dto, ss);
+        c.generateChartValues(SpreadsheetImpl.fromDTO(ss));
         return c.toDTO().getContent();
     }
     

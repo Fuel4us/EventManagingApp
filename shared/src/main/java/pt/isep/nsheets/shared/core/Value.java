@@ -35,6 +35,7 @@ import java.util.Arrays;
 import java.util.Date;
 import javax.persistence.Embeddable;
 import javax.persistence.Enumerated;
+import javax.persistence.Lob;
 //import java.util.GregorianCalendar;	// Not supported in GWT
 
 /**
