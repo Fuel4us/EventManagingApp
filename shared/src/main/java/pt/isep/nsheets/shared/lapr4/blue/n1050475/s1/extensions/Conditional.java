@@ -7,6 +7,7 @@ import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.services.ConditionalDTO;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import pt.isep.nsheets.shared.core.CellImpl;
 
 @Entity
 public class Conditional implements Serializable {
@@ -15,7 +16,7 @@ public class Conditional implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pk;
 
-    @OneToOne
+    @OneToOne(targetEntity = CellImpl.class)
     private Cell cell;
     @OneToOne
     private Configuration configuration;
