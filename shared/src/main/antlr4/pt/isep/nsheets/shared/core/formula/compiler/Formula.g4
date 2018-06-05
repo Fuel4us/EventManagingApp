@@ -5,25 +5,14 @@ grammar Formula;
 }
 	         
 expression
-	: EQ comparisonGlobal EOF
-	;
-	
-comparisonGlobal
-	: ICHA? comparison FCHA?
-	| FOR ICHA concatenationFor FCHA
+	: EQ comparison /* EOF */
 	;
 	
 comparison
 	: concatenation
-		( (sinal) concatenation )? (SEMI comparison)?
-	;
-	
-concatenationFor
-	:	((assignment) SEMI)? (comparison SEMI)? CELL_REF sinal concatenation SEMI assignment
-	;
-
-sinal
-	:	( EQ | NEQ | GT | LT | LTEQ | GTEQ )
+		( ( EQ | NEQ | GT | LT | LTEQ | GTEQ ) concatenation )?
+        | ICHA manyexpressions FCHA
+        | FOR ICHA assignment SEMI concatenation (( EQ | NEQ | GT | LT | LTEQ | GTEQ ) concatenation) SEMI manyexpressions FCHA
 	;
 
 concatenation
@@ -39,9 +28,9 @@ concatenation
 atom
 	:	function_call
 	|	reference
+        |       assignment
 	|	literal
 	|	LPAR concatenation RPAR
-	|   assignment
 	;
 
 function_call
@@ -52,7 +41,7 @@ function_call
 reference
 	:	CELL_REF
 		( ( COLON ) CELL_REF )?
-		| temp_reference
+		| temporaryreference
 	;
 	
 literal
@@ -60,26 +49,29 @@ literal
 	|	STRING
 	;
 	
+manyexpressions
+	:	comparison (SEMI comparison)*
+	;
+	
 assignment
-	: 	CELL_REF ASSIGN concatenation
+	:	reference ASSIGN concatenation
 	;
 
 LETTER: ('a'..'z'|'A'..'Z') ;
   
 FUNCTION : 
-	  ( LETTER )+ 
+	  ( LETTER )+
 	;	
 	 
- 
 CELL_REF
 	:	( ABS )? LETTER ( LETTER )?
 		( ABS )? ( DIGIT )+
 	;
 	
 
-temp_reference
-    :	UNDERSCORE LETTER+ ( LBRACKET DIGIT RBRACKET )?
-	;
+temporaryreference
+    :	UNDERSCORE LETTER+ ASSIGN concatenation
+    ;
 
 /* String literals, i.e. anything inside the delimiters */
 STRING  : QUOT ('\\"' | ~'"')* QUOT
@@ -141,6 +133,3 @@ FOR : 'FOR';
 
 /* White-space (ignored) */
 WS: ( ' ' | '\r' '\n' | '\n' | '\t' ) -> skip ;
-	
-	
- 

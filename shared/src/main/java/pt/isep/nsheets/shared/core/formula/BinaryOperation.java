@@ -51,6 +51,7 @@ public class BinaryOperation extends Operation<BinaryOperator> {
 		this.rightOperand = rightOperand;
 	}
 
+        @Override
 	public Value evaluate() throws IllegalValueTypeException {
 		return operator.applyTo(leftOperand, rightOperand);
 	}

@@ -5,7 +5,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 
-import java.util.List;
 
 /**
  *
@@ -14,7 +13,7 @@ import java.util.List;
 @RemoteServiceRelativePath("ExportService")
 public interface ExportService extends RemoteService {
 
-        void exportWorkbook(WorkbookDTO workbookDTO, String type);
+      void exportWorkbook(WorkbookDTO workbookDTO, String type);
 //
 //    String[][] exportSpreadsheet(Spreadsheet spreadsheet);
 //
