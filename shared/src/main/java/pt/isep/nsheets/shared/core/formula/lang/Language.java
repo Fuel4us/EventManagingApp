@@ -28,7 +28,8 @@ import java.util.List;
 import pt.isep.nsheets.shared.core.formula.BinaryOperator;
 import pt.isep.nsheets.shared.core.formula.Function;
 import pt.isep.nsheets.shared.core.formula.UnaryOperator;
-import pt.isep.nsheets.shared.lapr4.blue.s1.n1150472.formula.lang.Assignment;
+import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.Assignment;
+import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.For;
 
 /**
  * A factory for creating certain types of language elements.
@@ -76,6 +77,7 @@ public class Language {
         functions.add(new Or());
         functions.add(new Sum());
         functions.add(new True());
+        functions.add(new For());
     }
 
     protected void initBinaryOperators() {

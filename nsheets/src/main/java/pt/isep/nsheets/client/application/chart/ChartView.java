@@ -225,6 +225,9 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
                 @Override
                 public void onFailure(Throwable caught) {
                     MaterialToast.fireToast("Error draw chart --> " + caught.getMessage());
+                    String [][]matrix = new String[][]{{"2", "3", "4"},{"1", "0", "4"},{"2", "4", "a"}};
+                    draw(chart_name, matrix, isRow, considerFirstLine);
+                    MaterialToast.fireToast("UNSUCESS draw chart!");
                 }
 
                 @Override

@@ -12,8 +12,12 @@ comparison
 	: concatenation
 		( ( EQ | NEQ | GT | LT | LTEQ | GTEQ ) concatenation )?
         | ICHA manyexpressions FCHA
-        | FOR ICHA assignment SEMI concatenation (( EQ | NEQ | GT | LT | LTEQ | GTEQ ) concatenation) SEMI manyexpressions FCHA
+        | FOR forexpression FCHA
 	;
+
+forexpression
+        : concatenation SEMI comparison SEMI manyexpressions
+        ;
 
 concatenation
         : ( MINUS )? atom                                       
@@ -129,7 +133,7 @@ RBRACKET : ']' ;
 ASSIGN 	: ':=' ;
 
 /* For Operator */
-FOR : 'FOR';	
+FOR : 'FOR{';	
 
 /* White-space (ignored) */
 WS: ( ' ' | '\r' '\n' | '\n' | '\t' ) -> skip ;

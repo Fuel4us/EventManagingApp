@@ -89,11 +89,7 @@ Therefore:
 By memory we apply/use:  
 - Interaction View/Presenter
 - Interaction Services/Controller
-- Repository
 - DTO  
-- Singleton
-
-**TODO:** Exemplify the realization of these patterns using class diagrams and/or SD with roles marked as stereotypes. 
 
 # 5. Implementation
 
@@ -122,5 +118,5 @@ Some Questions/Issues identified during the work in this feature increment:
 
 # 8. Work Log
 
-Commits:
+Many commits, ill try to keep track of them next iteration
 
