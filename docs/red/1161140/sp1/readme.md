@@ -7,6 +7,10 @@
 
 The application should have a calendar view to display events. An event has a title, description, time stamp and duration. Events should be displayed in the calendar ordered by their time stamp. It should be possible to create, edit and delete events. The calendar should display all events.
 
+We can further specify this textual requirements as user stories.
+
+Proposal:
+
 * US1 - As a User, I want to access my calendar, so I can view my events.
 
 * US2 - As a User, I want to create an event, so I can .
@@ -17,11 +21,21 @@ The application should have a calendar view to display events. An event has a ti
 
 ## Analysis
 
+For this feature increment, since it is the first one to be developed in a new project I need to:  
+
+- Understand how the application works and also understand the key aspects of GWT, since it is the main technology behind the application
+
+- Understand how the UI is implemented
+
+- Understand how to integrate a relational database into the project
+
 **Use Cases**
 
 ![US](us.png)
 
 **System Sequence Diagrams**
+
+**US1**
 
 ![Analysis SD](analysis1.png)
 
@@ -64,6 +78,8 @@ Regarding tests we try to follow an approach inspired by test driven development
 
 
 ## Work Log
+
+Commits:
 
 [Added base folder for documentation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/e75f35afa3b5a8ec77c9eb332fb9eb97f87f3157)
 
