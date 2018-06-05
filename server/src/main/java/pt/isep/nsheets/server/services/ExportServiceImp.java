@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 
+import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1150503.ExportPDF.ExportPdfController;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160998.ExportCSV.ExportCSVController;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Cell;
@@ -27,6 +28,11 @@ public class ExportServiceImp implements ExportService {
         if(type.equalsIgnoreCase("CSV")) {
             ExportCSVController controller = new ExportCSVController();
 
+            controller.exportWorkbook(workbook);
+        }
+
+        if(type.equalsIgnoreCase("PDF")) {
+            ExportPdfController controller = new ExportPdfController();
             controller.exportWorkbook(workbook);
         }
     }

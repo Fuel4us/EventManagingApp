@@ -19,6 +19,10 @@ import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import gwt.material.design.client.ui.MaterialToast;
 
+/**
+ * @author Gonçalo Fonseca <1150503@isep.ipp.pt>, Rubén André <1160998@isep.ipp.pt>
+ */
+
 public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPresenter.MyProxy>  {
 
     interface MyView extends View  {
@@ -68,7 +72,8 @@ public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPre
                 }
             };
 
-
+            WorkbookDTO workbookDTO = Settings.getInstance().getWorkbook().toDTO();
+            exportServiceAsync.exportWorkbook(workbookDTO, "PDF", callback);
         });
     }
 
