@@ -73,8 +73,6 @@ ExportPresenter , ExportServiceImp
 
 
 
-By memory we apply/use:  
-
 By memory we apply/use: - DTO
 
 
