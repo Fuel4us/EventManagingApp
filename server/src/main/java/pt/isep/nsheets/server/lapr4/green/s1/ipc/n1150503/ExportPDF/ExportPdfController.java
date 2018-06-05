@@ -1,12 +1,12 @@
 package pt.isep.nsheets.server.lapr4.green.s1.ipc.n1150503.ExportPDF;
 
-/*import com.itextpdf.text.*;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import java.io.FileOutputStream;
-import java.util.Date;*/
+import java.util.Date;
 
 import pt.isep.nsheets.shared.core.Workbook;
 
@@ -15,7 +15,7 @@ import pt.isep.nsheets.shared.core.Workbook;
  */
 public class ExportPdfController {
 
-/*    private String FILE;
+    private String FILE;
     private Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
     private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
 
@@ -98,10 +98,8 @@ public class ExportPdfController {
         for (int i = 0; i < number; i++) {
             paragraph.add(new Paragraph(" "));
         }
-    }*/
-
-    public void exportWorkbook(Workbook workbook) {
-
     }
+
+
 
 }
