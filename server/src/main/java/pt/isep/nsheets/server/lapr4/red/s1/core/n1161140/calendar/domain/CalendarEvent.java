@@ -22,12 +22,14 @@ public class CalendarEvent implements AggregateRoot<Long>, Serializable {
     String name;
     String description;
     Date date;
+    Date time;
     Integer duration;
 
-    public CalendarEvent(String name, String description, Date date, Integer duration) {
+    public CalendarEvent(String name, String description, Date date, Date time, Integer duration) {
         this.name = name;
         this.description = description;
         this.date = date;
+        this.time = time;
         this.duration = duration;
     }
 
@@ -53,6 +55,9 @@ public class CalendarEvent implements AggregateRoot<Long>, Serializable {
         if (!this.date.equals(that.date)) {
             return false;
         }
+        if (!this.time.equals(that.time)) {
+            return false;
+        }
         if (!this.duration.equals(that.duration)) {
             return false;
         }
@@ -70,10 +75,10 @@ public class CalendarEvent implements AggregateRoot<Long>, Serializable {
     }
 
     public CalendarEventDTO toDTO() {
-        return new CalendarEventDTO(this.name, this.description, this.date, this.duration);
+        return new CalendarEventDTO(this.name, this.description, this.date, this.time, this.duration);
     }
 
     public static CalendarEvent fromDTO(CalendarEventDTO dto) {
-        return new CalendarEvent(dto.getName(), dto.getDescription(), dto.getDate(), dto.getDuration());
+        return new CalendarEvent(dto.getName(), dto.getDescription(), dto.getDate(), dto.getTime(), dto.getDuration());
     }
 }
