@@ -26,7 +26,7 @@ import pt.isep.nsheets.shared.services.ChartDTO;
  * @author pedromonteiro
  */
 @Entity
-@Table (name="CHART")
+@Table (name="Chart")
 @Inheritance(strategy= InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="DISC")
 public abstract class Chart implements Serializable, AggregateRoot<Long> {
