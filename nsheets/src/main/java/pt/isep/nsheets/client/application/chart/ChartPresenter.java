@@ -107,7 +107,6 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
             
         }
         
-//       MaterialToast.fireToast("Graph: "+dto.getGraph_name());
         
     }
 

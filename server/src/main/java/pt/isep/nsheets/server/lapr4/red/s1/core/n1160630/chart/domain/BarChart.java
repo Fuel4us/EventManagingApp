@@ -83,7 +83,6 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
      * The constructor with the following parameters:
      *
      * @param graph_name Graph Name
-     * @param sh SpreadSheet
      * @param firstAddress First cell Address
      * @param lastAddress Last cell Address
      * @param considerFirstField consider first field content of the graph
@@ -101,10 +100,18 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
      */
     @Override
     public void generateChartValues(Spreadsheet spreadsheet) {
+        
+        
         int endCol = lastCell.getColumn() + 1;
         int startCol = firstCell.getColumn();
         int endRow = lastCell.getRow() + 1;
         int startRow = firstCell.getRow();
+        
+        if(spreadsheet == null){
+            spreadsheet = generateSpreadsheet();
+            firstCell = new Address(0, 0);
+            lastCell = new Address(2, 2);
+        }
         
         associatedCell = spreadsheet.getCell(endCol, startRow).getAddress();
 
@@ -177,6 +184,12 @@ public class BarChart implements AggregateRoot<Long>, Serializable, Chart {
     @Override
     public Address associatedCell() {
         return associatedCell;
+    }
+
+    private Spreadsheet generateSpreadsheet() {
+        String[][] contents = new String[][]{{"1", "2", "3"},{"1", "2", "3"},{"1", "2", "3"},{"1", "2", "3"}};
+        Workbook wb = new Workbook("graph", "desc", contents);
+        return wb.getSpreadsheet(0);
     }
 
 

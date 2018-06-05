@@ -58,12 +58,17 @@ import pt.isep.nsheets.shared.services.WorkbooksService;
 import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
 
 import java.util.ArrayList;
+import java.util.List;
+import pt.isep.nsheets.client.application.Settings;
+import pt.isep.nsheets.shared.services.ChartsService;
+import pt.isep.nsheets.shared.services.ChartsServiceAsync;
 
 import java.text.ParseException;
 
 public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, WorkbookPresenter.MyProxy> {
 
     private MyView view;
+
 
     interface MyView extends View {
 
@@ -110,7 +115,6 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
 
         this.view = view;
-
         view.addConfirmationHandler(event -> {
             if (view.getConditionalValue().matches("[+-]?([0-9]*[.])?[0-9]+")) {
                 conditionalFormattingAction();
@@ -178,15 +182,15 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
             }
         });
 
-        getView().getTable().addClickHandler(handler -> {
-            if (getView().getActiveCell().hasChart()) {
-                updateCellCharts(getView().getActiveCell());
-                getView().getPopChart().setPopupPosition(handler.getClientX(), handler.getClientY());
-                getView().getPopChart().open();
-            }else{
-                WorkbookView.selectedChart = null;
-            }
-        });
+//        getView().getTable().addClickHandler(handler -> {
+//            if (getView().getActiveCell().hasChart()) {
+//                updateCellCharts(getView().getActiveCell());
+//                getView().getPopChart().setPopupPosition(handler.getClientX(), handler.getClientY());
+//                getView().getPopChart().open();
+//            } else {
+//                WorkbookView.selectedChart = null;
+//            }
+//        });
 
     }
 
@@ -195,6 +199,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         super.onReveal();
 
         SetPageTitleEvent.fire("Workbook", "The current Workbook", "", "", this);
+        updateCellCharts();
 
         this.timer();
     }
@@ -208,18 +213,39 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         placeManager.revealPlace(placeRequest);
     }
 
-    protected void updateCellCharts(Cell cell) {
-        getView().getChartDropDown().clear();
-        for (ChartDTO chart : cell.chartList()) {
-            MaterialLink link = new MaterialLink(chart.getGraph_name(), null, IconType.INSERT_CHART);
-            link.setTextColor(Color.BLACK);
-            link.addClickHandler(handler ->{
-                WorkbookView.selectedChart = chart;
-                MaterialToast.fireToast(WorkbookView.selectedChart.getGraph_name());
-                redirectToChartPage();
-            });
-            getView().getChartDropDown().add(link);
-        }
+    protected void updateCellCharts() {
+
+        ChartsServiceAsync chartSrv = GWT.create(ChartsService.class);
+        AsyncCallback<ArrayList<ChartDTO>> callback = new AsyncCallback<ArrayList<ChartDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                MaterialToast.fireToast("Error draw chart --> " + caught.getMessage());
+            }
+
+            @Override
+            public void onSuccess(ArrayList<ChartDTO> result) {
+                List<ChartDTO> charts = result;
+                getView().getChartDropDown().clear();
+                for (ChartDTO chart : result) {
+                    
+                    Settings.getInstance().getWorkbook().getSpreadsheet(0).getCell(chart.getAssociatedCell()).addChart(chart);
+                    
+                    MaterialLink link = new MaterialLink(chart.getGraph_name(), null, IconType.INSERT_CHART);
+                    link.setTextColor(Color.BLACK);
+                    link.addClickHandler(handler -> {
+                        WorkbookView.selectedChart = chart;
+                        MaterialToast.fireToast(WorkbookView.selectedChart.getGraph_name());
+                        redirectToChartPage();
+                    });
+                    getView().getChartDropDown().add(link);
+                }
+            }
+
+        };
+
+
+        chartSrv.getCharts(callback);
+
     }
 
     protected void conditionalFormattingAction(){
@@ -300,9 +326,11 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
             }
 
             public void onSuccess(ArrayList<WorkbookDTO> result) {
-                for(WorkbookDTO w : result)
-                    if(wDTO.equals(w))
+                for (WorkbookDTO w : result) {
+                    if (wDTO.equals(w)) {
                         view.setContents(w);
+                    }
+                }
 
                 //nunca deve chegar aqui
                 //alterar pagina atual para a home em vez disto
