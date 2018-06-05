@@ -1,0 +1,54 @@
+@startuml design1
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+boundary HomeView
+control HomePresenter
+control WorkbookServices
+control ListWorkbookController
+control WorkbookService
+entity WorkbookRepository
+entity Workbook
+entity WorkbookDTO
+database Database 
+
+box "NSheets Client"
+participant HomeView
+participant HomePresenter
+end box
+
+box "NSheets Shared"
+participant Workbook
+participant WorkbookDTO
+end box
+
+box "NSheets Server"
+participant WorkbookServices
+participant ListWorkbookController
+participant WorkbookService
+participant WorkbookRepository
+end box
+
+box "Database"
+participant Database
+end box
+
+User -> HomePresenter : onReveal() / navigate to page 
+User -> HomePresenter : Select to create a workbook
+HomePresenter -> User : Asks for Name and Description
+User -> HomePresenter : Insert data asked
+HomePresenter -> Workbook : w : new Workbook(name, desc, SPREADSHEET_DEFAULT)
+Workbook -> WorkbookDTO : w.toDTO()
+HomePresenter ->> WorkbookServices : refreshView
+WorkbookServices -> ListWorkbookController : getWorkbooks()
+ListWorkbookController -> WorkbookService : allWorkbooks()
+WorkbookService -> WorkbookRepository : findAll()
+WorkbookRepository -> Database : fetch
+WorkbookServices ->> HomePresenter : onSuccess() 
+HomePresenter -> HomeView : setContents()
+
+@enduml

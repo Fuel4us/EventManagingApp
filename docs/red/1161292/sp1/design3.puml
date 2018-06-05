@@ -1,0 +1,50 @@
+@startuml design3
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+boundary WorkbookView
+control WorkbookPresenter
+control WorkbookServices
+control ListWorkbookController
+control WorkbookService
+entity WorkbookRepository
+entity Workbook
+entity WorkbookDTO
+database Database 
+
+box "NSheets Client"
+participant WorkbookView
+participant WorkbookPresenter
+end box
+
+box "NSheets Shared"
+participant Workbook
+participant WorkbookDTO
+end box
+
+box "NSheets Server"
+participant WorkbookServices
+participant ListWorkbookController
+participant WorkbookService
+participant WorkbookRepository
+end box
+
+box "Database"
+participant Database
+end box
+
+User -> WorkbookPresenter : onReveal() / navigate to page 
+User -> WorkbookView : saveButtonClickHandler
+User -> WorkbookServices : addWorkbook(Settings.getInstance().getWorkbook().toDTO())
+WorkbookServices -> ListWorkbookController : addWorkbook()
+ListWorkbookController -> WorkbookService : addWorkbook()
+WorkbookService -> WorkbookRepository : save()
+WorkbookRepository -> Database : save
+WorkbookServices ->> WorkbookPresenter : onSuccess() 
+WorkbookPresenter -> WorkbookView : FireToast with WorkbookName
+
+@enduml

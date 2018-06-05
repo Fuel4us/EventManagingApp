@@ -1,0 +1,50 @@
+@startuml design2
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+boundary HomeView
+boundary WorkbookView
+control HomePresenter
+control WorkbookServices
+control ListWorkbookController
+control WorkbookService
+entity WorkbookRepository
+entity Settings
+database Database 
+
+box "NSheets Client"
+participant WorkbookView
+participant HomeView
+participant HomePresenter
+participant Settings
+end box
+
+box "Server"
+participant WorkbookServices
+participant ListWorkbookController
+participant WorkbookService
+participant WorkbookRepository
+end box
+
+box "Database"
+participant Database
+end box
+
+User -> HomePresenter : onReveal() / navigate to page 
+HomePresenter ->> WorkbookServices : getWorkbooks()
+WorkbookServices -> ListWorkbookController : listWorkbooks()
+ListWorkbookController -> WorkbookService : allWorkbooks()
+WorkbookService -> WorkbookRepository : findAll()
+WorkbookRepository -> Database : fetch
+WorkbookServices ->> HomePresenter : onSuccess() 
+HomePresenter -> HomeView : setContents()
+User -> HomeView : wb : select a workbook
+HomeView -> Settings : s : getInstance()
+HomeView -> Settings : s.updateWorkbook(wb)
+HomeView -> WorkbookView : onReveal()
+
+@enduml

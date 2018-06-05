@@ -1,0 +1,56 @@
+@startuml
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+hide empty methods
+
+class Workbook << (E,yellow) >> {
+        String name
+	    String description
+        List<Spreadsheet> spreadsheets
+	    int createdSpreadsheets
+}
+
+class SpreadsheetImpl << (E,yellow) >> {
+        Workbook workbook
+        Map<Address,Cell> cells
+        String title
+        int columns
+        int rows
+}
+
+class CellImpl << (E,yellow) >> {
+        Address address
+        Value value
+        Formula formula
+        Set<Cell> precedents
+        Set<Cell> dependents
+}
+
+class Address << (E,yellow) >> {
+        int column
+        int row
+        String string
+}
+
+class Value << (E,yellow) >> {
+        Type type
+        Serializable value
+}
+
+interface Spreadsheet << (I,yellow) >> {
+}
+
+interface Cell << (I,yellow) >> {
+}
+
+Workbook --> SpreadsheetImpl
+SpreadsheetImpl --> CellImpl
+CellImpl --> Address
+CellImpl --> Value
+SpreadsheetImpl ..|> Spreadsheet
+CellImpl ..|> Cell
+@enduml
