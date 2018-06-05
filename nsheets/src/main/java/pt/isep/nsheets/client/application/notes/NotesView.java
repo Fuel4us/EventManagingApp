@@ -48,7 +48,7 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
     MaterialButton openModalBtn, saveBtn;
 
     @UiField
-    MaterialModal modal;
+    MaterialModal modalAddNote;
 
     @UiField
     MaterialTextBox titleNote;
@@ -93,11 +93,10 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
 //
 //        removeBtn.addClickHandler(ch);
 //    }
-
     @Override
-    public void openModal() {
+    public void openModalToAddNote() {
 
-        this.modal.open();
+        this.modalAddNote.open();
 
     }
 
@@ -109,6 +108,7 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
         if (!contents.isEmpty()) {
             emptyState.setVisible(false);
         }
+
         int colCount = 1;
 
         MaterialRow row = null;
@@ -147,9 +147,9 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
     }
 
     @Override
-    public void closeModal() {
+    public void closeModalToAddNote() {
 
-        this.modal.close();
+        this.modalAddNote.close();
     }
 
     private MaterialCard createCard(NoteDTO note) {
@@ -157,7 +157,7 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
         card.setBackgroundColor(Color.BLUE_DARKEN_1);
 
         MaterialCardContent cardContent = new MaterialCardContent();
-        cardContent.setTextColor(Color.WHITE);  //FIX-ME: não altera a cor?
+        cardContent.setTextColor(Color.WHITE);
 
         MaterialTextBox cardTitle = new MaterialTextBox();
         cardTitle.setFontSize("1.4em");
@@ -224,7 +224,7 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
 
         card.add(cardContent);
         card.add(cardAction);
-
+        
         return card;
     }
 

@@ -22,7 +22,7 @@ public class Settings {
     
     public static Settings getInstance(){
         if (instance == null){
-            return new Settings();
+            instance = new Settings();
         }
         
         return instance;
