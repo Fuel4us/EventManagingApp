@@ -5,6 +5,7 @@
  */
 package pt.isep.nsheets.shared.core.formula.compiler;
 
+import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Value;
 import pt.isep.nsheets.shared.core.formula.BinaryOperation;
@@ -22,7 +23,11 @@ import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.antlr.v4.runtime.Token;
+import pt.isep.nsheets.shared.core.IllegalValueTypeException;
+import pt.isep.nsheets.shared.lapr4.blue.s1.n1150472.formula.lang.For;
 
 /**
  *
@@ -33,14 +38,14 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
     private Cell cell = null;
     int numberOfErros;
     private final StringBuilder errorBuffer;
-    
+
     final private Language language;
 
     public FormulaEvalVisitor(Cell cell, Language lang) {
         this.cell = cell;
         numberOfErros = 0;
         errorBuffer = new StringBuilder();
-        this.language=lang;
+        this.language = lang;
     }
 
     public int getNumberOfErrors() {
@@ -53,27 +58,32 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
 
     @Override
     public Expression visitExpression(FormulaParser.ExpressionContext ctx) {
-        return visit(ctx.comparisonGlobal());
+        return visit(ctx.comparison());
     }
 
     @Override
     public Expression visitComparison(FormulaParser.ComparisonContext ctx) {
         if (ctx.getChildCount() == 3) {
-            try {
-                //BinaryOperator operator = Language.getInstance().getBinaryOperator(ctx.getChild(1).getText());
-                BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
-                
-                return new BinaryOperation(
-                        visit(ctx.getChild(0)),
-                        operator,
-                        visit(ctx.getChild(2))
-                );
-            } catch (UnknownElementException ex) {
-                addVisitError(ex.getMessage());
+            Token t = (Token) ctx.getChild(0).getPayload();
+            if (t.getType() == FormulaParser.ICHA) {
+                return visit(ctx.manyexpressions());
+            } else {
+                try {
+                    //BinaryOperator operator = Language.getInstance().getBinaryOperator(ctx.getChild(1).getText());
+                    BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
+
+                    return new BinaryOperation(
+                            visit(ctx.getChild(0)),
+                            operator,
+                            visit(ctx.getChild(2))
+                    );
+                } catch (UnknownElementException ex) {
+                    MaterialToast.fireToast("ERRO Comparison getBinaryOperator");
+                    addVisitError(ex.getMessage());
+                }
             }
         }
-
-        return visit(ctx.concatenation(0));
+        return visit(ctx.getChild(0));
     }
 
     @Override
@@ -91,7 +101,6 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
                 return new UnaryOperation(
                         // Language.getInstance().getUnaryOperator(ctx.getChild(operatorid).getText()),
                         this.language.getUnaryOperator(ctx.getChild(operatorid).getText()),
-                        
                         visit(ctx.getChild(operand))
                 );
 
@@ -107,6 +116,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
             }
 
         } catch (FormulaCompilationException ex) {
+            MaterialToast.fireToast("ERRO Concatenation");
             addVisitError(ex.getMessage());
         }
 
@@ -130,6 +140,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
             // function = Language.getInstance().getFunction(ctx.getChild(0).getText());
             function = this.language.getFunction(ctx.getChild(0).getText());
         } catch (UnknownElementException ex) {
+            MaterialToast.fireToast("ERRO FUNCTION_CALL getFunction");
             addVisitError(ex.getMessage());
         }
 
@@ -145,8 +156,10 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
                 return new FunctionCall(function, argArray);
             } catch (IllegalFunctionCallException ex) {
                 addVisitError(ex.getMessage());
+                MaterialToast.fireToast("ERRO FUNCTION_CALLL visit childs");
             }
         }
+        MaterialToast.fireToast("RETURN NULL_FUNCTION_CALL");
         return null;
     }
 
@@ -156,7 +169,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
             if (ctx.getChildCount() == 3) {
                 //BinaryOperator operator = Language.getInstance().getBinaryOperator(ctx.getChild(1).getText());
                 BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
-                
+
                 return new ReferenceOperation(
                         new CellReference(cell.getSpreadsheet(), ctx.getChild(0).getText()),
                         (RangeReference) operator,
@@ -168,7 +181,9 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
             // return visitChildren(ctx); 
         } catch (ParseException | UnknownElementException ex) {
             addVisitError(ex.getMessage());
+            MaterialToast.fireToast("ERRO REFERENCE");
         }
+        MaterialToast.fireToast("RETURN NULL Reference");
         return null;
     }
 
@@ -180,10 +195,70 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
             return new Literal(Value.parseValue(ctx.getText()));
         } else {
             if (t.getType() == FormulaParser.STRING) {
-                String value = ctx.getText().substring(1, ctx.getText().length()-1);
+                String value = ctx.getText().substring(1, ctx.getText().length() - 1);
                 return new Literal(Value.parseValue(value, Value.Type.BOOLEAN, Value.Type.DATE));
             }
         }
+        MaterialToast.fireToast("RETURN NULL Literaç");
+        return null;
+    }
+
+    @Override
+    public Expression visitManyexpressions(FormulaParser.ManyexpressionsContext ctx) {
+
+        Value value = null;
+
+        List<Expression> args = new ArrayList<>();
+        if (1 < ctx.getChildCount()) {
+            for (int i = 0; i < ctx.getChildCount(); i += 2) {
+                args.add(visit(ctx.getChild(i)));
+            }
+        }
+        Expression[] argArray = args.toArray(new Expression[args.size()]);
+        try {
+            for (int i = 0; i < argArray.length; i++) {
+                if (i == argArray.length - 1) {
+                    value = argArray[i].evaluate();
+                }
+                argArray[i].evaluate();
+            }
+        } catch (IllegalValueTypeException ex) {
+            MaterialToast.fireToast("ERRO MANY EXPRESSIONS");
+        }
+        return new Literal(value);
+    }
+
+    @Override
+    public Expression visitAssignment(FormulaParser.AssignmentContext ctx) {
+        try {
+            BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
+            return new BinaryOperation(
+                    visit(ctx.getChild(0)),
+                    operator,
+                    visit(ctx.getChild(2)));
+        } catch (UnknownElementException ex) {
+            MaterialToast.fireToast("ERRO ASSIGNMENT");
+        }
+        MaterialToast.fireToast("RETURN NULL ASSIGNMENT");
+        return null;
+    }
+
+    @Override
+    public Expression visitTemporaryreference(FormulaParser.TemporaryreferenceContext ctx) {
+//        try {
+//            BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(2).getText());
+//            try {
+//                return new BinaryOperation(
+//                        new CellReference(cell.getSpreadsheet(), ctx.getChild(0).getText(), ctx.getChild(1).getText()),
+//                        operator,
+//                        visit(ctx.getChild(2))
+//                );
+//            } catch (ParseException ex) {
+//                Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        } catch (UnknownElementException ex) {
+//            Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
         return null;
     }
