@@ -23,6 +23,8 @@ import com.google.gwt.core.client.GWT;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gwt.event.dom.client.ClickHandler;
 import gwt.material.design.client.constants.Color;
 import javax.inject.Inject;
 
@@ -158,7 +160,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     public MaterialPopupMenu getPopChart() {
         return popChart;
     }
-
+    
     @Override
     public void setText(String string) {
         searchTextArea.setText(string);
@@ -171,7 +173,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         customTable.getView().setRedraw(true);
         customTable.getView().refresh();
     }
-    
+
     interface Binder extends UiBinder<Widget, WorkbookView> {
     }
 
@@ -248,7 +250,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         initWidget(uiBinder.createAndBindUi(this));
 
         populateColourListBox();
-        
+
         firstButton.addClickHandler(event -> {
             if (activeCell != null) {
                 String result = "";
@@ -310,6 +312,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             }
         });
 
+        /*
         conditionalModalDoneButton.addClickHandler(event -> {
             if (conditionalText.getText().matches("[+-]?([0-9]*[.])?[0-9]+")) {
                     String operator;
@@ -362,27 +365,20 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
                     } catch (UnknownElementException e) {
                         flag = false; //conditionalFormatting is off
+                        MaterialToast m = new MaterialToast();
+                        m.toast("UnknownElementException Flag =" + flag);
                     } catch (IllegalValueTypeException e) {
                         flag = false;
+                        MaterialToast m = new MaterialToast();
+                        m.toast("IllegalValueTypeException Flag =" + flag);
                     }
                     conditionalModal.close();
 
-/*
-                    ConditionalCellFormattingController ccfController = new ConditionalCellFormattingController(activeCell, operator, conditionalText.getText());
-
-                    //TRUE
-                    ccfController.setBackgroundColorTrue(backgroundColorTrue.getText());
-                    ccfController.setFontColorTrue(fontColorTrue.getText());
-                    //FALSE
-                    ccfController.setBackgroundColorFalse(backgroundColorFalse.getText());
-                    ccfController.setFontColorFalse(fontColorFalse.getText());
-                    MaterialToast m = new MaterialToast();
-                    boolean flag = ccfController.ConditionalOperation();
-                    m.toast("result =" + flag);*/
 
             }
             conditionalModal.close();
 		});
+        */
 
         /* BETWEEN OPTION CONDITIONAL
         lstConditions.addValueChangeHandler(event -> {
@@ -513,5 +509,70 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         }
     }
 
+    @Override
+    public void addConfirmationHandler(ClickHandler cMDB) {
+            conditionalModalDoneButton.addClickHandler(cMDB);
+    }
 
+    @Override
+    public int getBackgroudColorTrue() {
+        return backgroundColorTrue.getSelectedIndex();
+    }
+
+    @Override
+    public int getFontColorTrue() {
+        return fontColorTrue.getSelectedIndex();
+    }
+
+    @Override
+    public int getBackgroudColorFalse() {
+        return backgroundColorFalse.getSelectedIndex();
+    }
+
+    @Override
+    public int getFontColorFalse() {
+        return fontColorFalse.getSelectedIndex();
+    }
+
+    @Override
+    public String getOperator() {
+        String operator;
+        switch (lstConditions.getSelectedIndex()) {
+            case 0:
+                operator = "=";
+                break;
+            case 1:
+                operator = ">";
+                break;
+            case 2:
+                operator = "<";
+                break;
+            case 3:
+                operator = ">=";
+                break;
+            case 4:
+                operator = "<=";
+                break;
+            case 5:
+                operator = "<>";
+                break;
+            //case 6:  operator = "<<";
+            //  break;
+            default:
+                operator = "Invalid";
+                break;
+        }
+
+        return operator;
+    }
+
+    @Override
+    public String getConditionalValue() {
+        return conditionalText.getText();
+    }
+
+    @Override
+    public MaterialModal getConditionalModal() {
+        return this.conditionalModal;
+    }
 }

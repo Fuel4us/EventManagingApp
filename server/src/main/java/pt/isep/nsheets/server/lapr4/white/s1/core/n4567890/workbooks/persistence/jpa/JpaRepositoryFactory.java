@@ -5,6 +5,7 @@
  */
 package pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.jpa;
 
+import pt.isep.nsheets.server.lapr4.blue.s1.n1050475.persistence.ConditionalRepository;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.persistence.UserRepository;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.persistence.MessagesRepository;
 //import pt.isep.nsheets.server.lapr4.green.s1.core.n1160832.spreadsheets.persistence.jpa.JpaSpreadsheetRepository;
@@ -17,6 +18,8 @@ import pt.isep.nsheets.server.lapr4.red.s1.core.n1161140.calendar.persistence.Ca
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.RepositoryFactory;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.WorkbookRepository;
+
+import java.util.concurrent.locks.Condition;
 
 /**
  *
@@ -68,5 +71,10 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     @Override
     public ConfigurationRepository configuration() {
         return new JpaConfigurationRepository(this.settings);
+    }
+
+    @Override
+    public ConditionalRepository conditional() {
+        return new JpaConditionalRepository(this.settings);
     }
 }

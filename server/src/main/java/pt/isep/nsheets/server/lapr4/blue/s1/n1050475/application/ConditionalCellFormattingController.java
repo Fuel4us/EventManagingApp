@@ -1,61 +1,52 @@
 package pt.isep.nsheets.server.lapr4.blue.s1.n1050475.application;
 
+import eapli.framework.persistence.DataConcurrencyException;
+import eapli.framework.persistence.DataIntegrityViolationException;
+import pt.isep.nsheets.server.lapr4.blue.s1.n1050475.persistence.ConditionalRepository;
+import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
 import pt.isep.nsheets.shared.core.Cell;
-import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Value;
-import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.Formula.BinaryOperationExtension;
-import pt.isep.nsheets.shared.core.formula.lang.*;
+import pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629.Configuration;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalFormattingExtension;
 
 
-import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class ConditionalCellFormattingController {
-    private Cell cell;
-    private String operator;
-    private Value conditionValue;
-    private String backgroundColorTrue;
-    private String fontColorTrue;
-    private String backgroundColorFalse;
-    private String fontColorFalse;
 
-    public ConditionalCellFormattingController(Cell cell, String operator, String conditionValue){
-        this.cell = cell;
-        this.operator = operator;
+
+    public ConditionalCellFormattingController(){
+    }
+
+    public Conditional addConditional(Cell cell, Configuration configuration, String condOperator, Value condValue) {
+        Conditional conditional = new Conditional(cell, configuration, condOperator, condValue);
+        final ConditionalRepository conditionalRepository = PersistenceContext.repositories().conditional();
+        Conditional ret = null;
         try {
-            this.conditionValue = Value.parseNumericValue(conditionValue);
-        } catch (ParseException e) {
+            ret = conditionalRepository.save(conditional);
+            ConditionalFormattingExtension.addConditional(ret);
+        } catch (DataConcurrencyException | DataIntegrityViolationException e) {
             e.printStackTrace();
         }
+
+        return ret;
     }
 
-    public void setBackgroundColorTrue(String backgroundColorTrue) {
-        this.backgroundColorTrue = backgroundColorTrue;
-    }
+    public List<Conditional> loadConditionalFromDatabase() {
+        List<Conditional> lstConditional = new ArrayList<Conditional>();
+        final ConditionalRepository conditionalRepository = PersistenceContext.repositories().conditional();
 
-    public void setBackgroundColorFalse(String backgroundColorFalse) {
-        this.backgroundColorFalse = backgroundColorFalse;
-    }
+        Iterator<Conditional> conditionalIterator = conditionalRepository.findAll().iterator();
+        if(conditionalIterator.hasNext()){
+            Conditional c = conditionalIterator.next();
+            ConditionalFormattingExtension.addConditional(c);
 
-    public void setFontColorTrue(String fontColorTrue){
-        this.fontColorTrue = fontColorTrue;
-    }
-
-    public void setFontColorFalse(String fontColorFalse) {
-        this.fontColorFalse = fontColorFalse;
-    }
-/*
-    public boolean ConditionalOperation(){
-
-
-        ConditionalFormattingCellExtension cellExt = new ConditonalCellExtension();
-
-        try {
-
-            BinaryOperationExtension binaryOperation = new BinaryOperationExtension(this.cell.getValue(), this.operator, this.conditionValue);
-
-            return binaryOperation.evaluate().toBoolean();
-        } catch (IllegalValueTypeException | UnknownElementException e) {
-            return false;
+            lstConditional.add(c);
         }
-    }*/
+        return lstConditional;
+    }
+
 }

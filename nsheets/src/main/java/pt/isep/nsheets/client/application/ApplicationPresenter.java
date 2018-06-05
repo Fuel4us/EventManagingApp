@@ -34,9 +34,17 @@ import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.menu.MenuPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629.ValueColorExtension;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalFormattingExtension;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.services.ConditionalDTO;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.services.ConditionalService;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.services.ConditionalServiceAsync;
 import pt.isep.nsheets.shared.services.ConfigurationDTO;
 import pt.isep.nsheets.shared.services.ConfigurationService;
 import pt.isep.nsheets.shared.services.ConfigurationServiceAsync;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApplicationPresenter
         extends Presenter<ApplicationPresenter.MyView, ApplicationPresenter.MyProxy> 
@@ -65,6 +73,7 @@ public class ApplicationPresenter
         //load extension configuration before showing anything else
         ConfigurationServiceAsync configurationSvc = GWT.create(ConfigurationService.class);
 
+
         AsyncCallback<ConfigurationDTO> callback = new AsyncCallback<ConfigurationDTO>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -77,6 +86,34 @@ public class ApplicationPresenter
             }
         };
         configurationSvc.getConfiguration(callback);
+
+        /* 1050475 Hernani Gil
+           Repository loading
+         */
+
+
+        /*1050475 lang03.1 persistencia com erro de compilacao no ConditionalService
+
+        ConditionalServiceAsync conditionalServiceAsync = GWT.create(ConditionalService.class);
+        AsyncCallback<List<ConditionalDTO>> callbackCond = new AsyncCallback<List<ConditionalDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                MaterialToast.fireToast("Error retrieving extension configuration! " + caught.getMessage());
+            }
+
+            @Override
+            public void onSuccess(List<ConditionalDTO> result) {
+                List<Conditional> lstResultFromDTO = new ArrayList<Conditional>();
+                for (ConditionalDTO cond: result) {
+                    lstResultFromDTO.add(cond.fromDTO());
+                }
+
+                ConditionalFormattingExtension.setLstConditional(lstResultFromDTO);
+            }
+        };
+
+        conditionalServiceAsync.getListConditional(callbackCond);*/
+
         //End of extension configuration loading
 
         this.menuPresenter = menuPresenter;
