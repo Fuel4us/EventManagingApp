@@ -113,34 +113,23 @@ Regarding tests we try to follow an approach inspired by test driven development
 - DTO
 - MVP
 
-# 5. Implementation
-
-*If required you should present in this section more details about the implementation. For instance, configuration files, grammar files, etc. You may also explain the organization of you code. You may reference important commits.*
-
-**For US1**
-
-The UI for this US was already implemented. We simply implemented the server as described previously.
-
-**For US2**
-
-
-**Code Organization**  
-
-
-# 6. Integration/Demonstration
+# 5. Integration/Demonstration
 
 *In this section document your contribution and efforts to the integration of your work with the work of the other elements of the team and also your work regarding the demonstration (i.e., tests, updating of scripts, etc.)*
 
-# 7. Final Remarks 
+# 6. Final Remarks 
 
 *In this section present your views regarding alternatives, extra work and future work on the issue.*
 
 Some Questions/Issues identified during the work in this feature increment:
 
-1. The method getWorkbooks in the WorkbooksService returns an ArrayList. Maybe we should not bind the result to a specific collection implementation.
+1. Settings' Singleton should be working with WorkbookDTO;
+2. Cells' value should be persisted;
+3. Some classes should have its name updated.
 
-# 8. Work Log
+# 7. Work Log
 
+* [Fixed Singleton Implementation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/08ef4a576658ca812b790e98d27c75a9af7a95f6)
 * [Fixed workbook loading](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/5f07efe16a57b83d9fb2427b8db0416791423c17)
 * [Fixed compilation errors](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/389d8f43710b26bf6473d9846b5f053e285d975f)
 * [Fixed Settings class](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/5474adbcee2366e04103e9b82577db512ca0451b)
