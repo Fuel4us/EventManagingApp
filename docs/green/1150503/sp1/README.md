@@ -15,7 +15,7 @@ IPC03.1 - It should be possible to export to PDF an entire workbook, a spreadshe
 
 - Understand how to use the GWT components to a certain function. (ActionHandlers, MaterialButtons, MaterialModals, etc)
 
-- Understand how to get together both UI and the Database information. 
+- Understand how to get together both UI and methods to export. 
 
 ## 3.1 GWT and Project Structure
 
@@ -122,30 +122,16 @@ Since the service is a servlet it must be declared in the **web.xml** file of th
 
 ## 3.4 Analysis Diagrams
 
-![SSD1](deleteSSD.png)
 
-![SSD2](renameSSD.png)
-
-![SSD3](searchSSD.png)
 
 # 4. Design
 
 
 ## 4.1. Tests 
 
-The following tests must be realized (JUnit Tests are done):
-- Try to rename a workbook -> Expected result: Page updated with the new name introduced.
-- Try to delete a workbook -> Expected result: The workbook disappear from the page.
-- Try do search a workbook -> Expected result: The workbooks that will appear should contains the word/words that you introduced.
-- Try to open a workbook by clicking in the name -> Expected result: The workbook should maximize.
 
 ## 4.2. Requirements Realization
 
-![SD US1](deleteSD.png)
-
-![SD US2](renameSD.png)
-
-![SD US3](searchSD.png)
 
 ## 4.3. Classes
 
@@ -153,7 +139,7 @@ The following tests must be realized (JUnit Tests are done):
 
 **WorkbookDTO**
 
-**WorkbookServicesImpl**  
+**ExportServicesImpl**  
 
 ## 4.4. Design Patterns and Best Practices
 
@@ -168,27 +154,18 @@ By memory we apply/use:
 
 # 5. Implementation
 
-To implement this UC, I created an UI with Rename, Delete and Cancel Options, with 1 Text Box and 3 Buttons. 
-The Text Box is to introduce the new name to the selected workbook.
-An ActionHandler was implemented for each button:
--Rename: get the TextBox text and then press the button "Rename" to change it in the Database.
--Delete: find the selected Workbook in the Database and then press the button "Delete" to eliminate.
--Cancel: simply closes the MaterialModal to cancel the operation.
+To implement this UC, I created an UI with the help of Rubén to export the current workbook.
+After that I had to connect the export to pdf with my controller so I could export the workbook to pdf
 
 
 **Code Organization**  
 
 The code for this sprint:  
 Project **Server**    
-- pt.isep.nsheets.server.**lapr4.green.s1.core.n1140572**.users.application: contains the controllers  
-- Added Query to delete Workbook: pt.isep.nsheets.server.**lapr4.white.s1.core.n4567890.workbooks.persistence.jpa**.JpaWorkbookRepository
-
+- pt.isep.nsheets.server.**lapr4.green.s1.ipc.n1150503** contains the controllers 
 
 Project **NShests** 
-- Changed: **pt.isep.nsheets.client.application.home.HomeView**  
-- Changed: **pt.isep.nsheets.client.application.home.HomePresenter** 
-
-**Note:** Minor changes in WorkbookServices and WorkbookServicesAsync
+- Changed: **pt.isep.nsheets.client.application.export.**
 
 # 6. Integration/Demonstration
 
@@ -196,36 +173,11 @@ Project **NShests**
 
 Some Questions/Issues identified during the work in this feature increment:
 
+- How do I export to pdf? 
+- How can I learn a 121 000 java project just to impliment on UC?
+- How to push the libraries so My collegues can build the project?
+
 # 8. Work Log
 
 Commits:
 
-[Creation of UI Delete](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/64d9eeed87aeaeda1a26a2f92396353fcbab5f9a)
-
-[Creation of UI Search](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/aae397d4afd36dedfffcd4423f79f87b756c80fb)
-
-[Creation of UI Rename](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/64d9eeed87aeaeda1a26a2f92396353fcbab5f9a)
-
-[UI Minor Update](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/bf6abb1e4e9c96ebfce166bdf98d71aa7a5b885b)
-
-[Improvement of UI and Button click Handler Search](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/5bedbfe84778b4d0f1fe07f030544078bb5fa524)
-
-[Improvement of UI and Button click Handler Search 2](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/78bd02c7ecfb39e52ea3c8748b41690a9780b928)
-
-[Implementation of Delete Function](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/439892e8f7341e029d0ba9485876721838c80d19)
-
-[Implementation of Search Function](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/d18a71654a04c7bdbd0302c7700ca69f8f21b162)
-
-[Implementation of Rename Function](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/657e77a52d59fe744a91f457f745f272f6c8abf2)
-
-[Improvement of Search Function](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/b18ad9a1674df59d38f7c85127553934452af048)
-
-[Improvement of Search Function 2](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/f49ad5bdacd506146270003cb5d705ac1adc4e91)
-
-[Improvement of Rename Function](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/85f09feeaae2cd07d13cf549d4f85e35052d76f1)
-
-[Improvement of Rename Function 2](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/59eb8157f4eab330bae14667d36dc2bad63a9b1d)
-
-[Controller Unit Tests](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/7a5fc056c57634d063d84355a434f1f1c5ac09aa)
-
-[Documentation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/2973e25cd9b693db7988237998ea14eb41497ce3)
