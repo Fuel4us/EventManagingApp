@@ -74,7 +74,8 @@ CELL_REF
 	
 
 temporaryreference
-    :	UNDERSCORE LETTER+ ASSIGN concatenation
+    :	temporaryreference ASSIGN concatenation
+    |   UNDERSCORE LETTER+
     ;
 
 /* String literals, i.e. anything inside the delimiters */

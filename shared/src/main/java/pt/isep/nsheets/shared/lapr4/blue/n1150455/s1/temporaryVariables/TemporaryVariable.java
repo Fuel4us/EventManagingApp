@@ -6,86 +6,44 @@
 package pt.isep.nsheets.shared.lapr4.blue.n1150455.s1.temporaryVariables;
 
 import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Value;
+import pt.isep.nsheets.shared.core.formula.Expression;
+import pt.isep.nsheets.shared.core.formula.Function;
+import pt.isep.nsheets.shared.core.formula.FunctionParameter;
+import pt.isep.nsheets.shared.core.formula.Literal;
+import pt.isep.nsheets.shared.core.formula.UnaryOperation;
+import pt.isep.nsheets.shared.core.formula.util.ExpressionVisitor;
 
 /**
  *
  * @author João Pires 1150455@isep.ipp.pt>
  */
-public class TemporaryVariable {
+public class TemporaryVariable extends Literal {
 
-    private Spreadsheet sheet;
+    private Expression expression;
 
-    private String variableName;
-
-    private Value variableValue;
-
-    /**
-     * Constructor with parameters
-     *
-     * @param sheet sheet
-     * @param varValue varValue
-     * @param name name
-     */
-    public TemporaryVariable(Spreadsheet sheet, String name, Value varValue) {
-        this.sheet = sheet;
-        this.variableName = name;
-        this.variableValue = varValue;
+    public TemporaryVariable(Value value) {
+        super(value);
     }
 
-    /**
-     * Constructor with no parameters
-     */
-    public TemporaryVariable() {
+    public TemporaryVariable(Value value, Expression expression) throws IllegalValueTypeException {
+        super(value);
+        this.expression = expression;
     }
 
-    /**
-     * Returns the sheet where the temporary variable is being used
-     *
-     * @return sheet of the temporary variable
-     */
-    public Spreadsheet getSheet() {
-        return sheet;
+    public Expression getExpression() {
+        return expression;
     }
 
-    /**
-     * Returns the name of the temporary variable
-     *
-     * @return name of temporary variable
-     */
-    public String getName() {
-        return variableName;
+    public void setContent(Expression expression) {
+        this.expression = expression;
     }
 
-    /**
-     * Returns the value of the temporary variable
-     *
-     * @return value of the temporary variable
-     */
-    public Value getValue() {
-        return variableValue;
-    }
-
-    public void changeValue(Value value) {
-        this.variableValue = value;
-    }
-
-    /**
-     * @param value is the new value applied to the temporary variable
-     */
-    public void setValue(Value value) {
-        this.variableValue = value;
-    }
-
-    /**
-     * Method declaration to print
-     *
-     * @return name and value format
-     */
     @Override
-    public String toString() {
-        return (this.getName());
+    public Value getValue() {
+        return super.getValue();
     }
 
 }
