@@ -9,10 +9,10 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class ConditionalDTO implements Serializable{
-    private Cell cell;
-    private Configuration configuration;
-    private String condOperator;
-    private Value condValue;
+    public Cell cell;
+    public Configuration configuration;
+    public String condOperator;
+    public Value condValue;
 
     public ConditionalDTO(Cell cell, Configuration configuration, String condOperator, Value condValue){
         this.cell = cell;
@@ -26,10 +26,6 @@ public class ConditionalDTO implements Serializable{
      * serializable!
      */
     public ConditionalDTO() {
-    }
-
-    public Conditional fromDTO(){
-        return new Conditional(this.cell, this.configuration, this.condOperator, this.condValue);
     }
 
     public Cell getCell(){ return cell;}

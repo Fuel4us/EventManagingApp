@@ -53,10 +53,14 @@ import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
 
 import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
+import pt.isep.nsheets.shared.ext.Extension;
+import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.Formula.BinaryOperationExtension;
 
 import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.application.SortSpreadsheetController;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalFormattingExtension;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.shared.services.*;
@@ -254,6 +258,18 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 String result = "";
                 try {
                     activeCell.setContent(firstBox.getText());
+//                    SpreadsheetImpl.fromDTO(Settings.getInstance().getWorkbook().spreadsheets.get(0).cells(activeCell.getAddress()).setContent(firstBox.getText());
+                    Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
+                    if(extensionCond !=null){
+
+                        Conditional cond = ConditionalFormattingExtension.containsCondition(activeCell);
+
+                        /*1050475 Other possibility to change CellSyle but need colaboration from Core8.1*/
+                        if(cond != null){
+                            boolean flag = ConditionalFormattingExtension.setOperation(activeCell, cond.getCondOperator(), cond.getCondValue());
+                            MaterialToast.fireToast("Update Cell. Conditional this "+ activeCell.getAddress().toString()+" " + cond.getCondOperator()+ " "+ cond.getCondValue().toString() + " is "+flag);
+                        }
+                    }
 //                    SpreadsheetImpl.fromDTO(Settings.getInstance().getWorkbook().spreadsheets.get(0).cells(activeCell.getAddress()).setContent(firstBox.getText());
                 } catch (FormulaCompilationException e) {
                     // TODO Auto-generated catch block

@@ -36,10 +36,10 @@ public class ConditionalServiceImpl  extends RemoteServiceServlet implements Con
     }
 
     @Override
-    public List<ConditionalDTO> getListConditional() {
+    public ArrayList<ConditionalDTO> getListConditional() {
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
-        List<ConditionalDTO> lstConditionalDTO = new ArrayList<ConditionalDTO>();
+        ArrayList<ConditionalDTO> lstConditionalDTO = new ArrayList<ConditionalDTO>();
 
         ConditionalCellFormattingController ctrl = new ConditionalCellFormattingController();
 

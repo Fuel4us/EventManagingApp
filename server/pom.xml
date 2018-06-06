@@ -42,8 +42,13 @@
            	<groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.191</version>
-        </dependency>        
-                
+        </dependency>
+        <dependency>
+            <groupId>org.mortbay.jasper</groupId>
+            <artifactId>apache-el</artifactId>
+            <version>8.0.9.M3</version>
+        </dependency>
+
     </dependencies>
 
 	<name>NSheets Server</name>
