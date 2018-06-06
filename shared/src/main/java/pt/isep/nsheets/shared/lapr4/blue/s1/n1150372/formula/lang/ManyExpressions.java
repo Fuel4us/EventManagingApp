@@ -9,40 +9,32 @@ import pt.isep.nsheets.shared.core.formula.FunctionParameter;
 /**
  * @author Pedro Alves 1150372@isep.ipp.pt
  */
-public class For implements Function {
+public class ManyExpressions implements Function {
 
     Value value = null;
-    Value boundary = new Value(true);
 
     public static final FunctionParameter[] parameters = new FunctionParameter[]{
-        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", false,
-        "The for expressions")
+        new FunctionParameter(Value.Type.UNDEFINED, "Many Expressions", false,
+        "The block of many expressions")
     };
 
-    public For() {
+    public ManyExpressions() {
     }
 
     @Override
     public String getIdentifier() {
-        return "FOR{";
+        return "{";
     }
 
     @Override
     public Value applyTo(Expression[] args) throws IllegalValueTypeException {
-        args[0].evaluate();
-        int i;
-        do {
-            i = 2;
-            while (i < args.length) {
-                if (i == args.length - 1) {
-                    value = args[i].evaluate();
-                } else {
-                    args[i].evaluate();
-                }
-                i++;
+        for (int i = 0; i < args.length; i++) {
+            if (i == args.length - 1) {
+                value = args[i].evaluate();
+            } else {
+                args[i].evaluate();
             }
-            boundary = args[1].evaluate();
-        } while (boundary.toBoolean());
+        }
         return value;
     }
 
