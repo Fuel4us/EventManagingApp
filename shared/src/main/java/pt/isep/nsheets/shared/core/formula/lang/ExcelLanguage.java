@@ -2,6 +2,7 @@ package pt.isep.nsheets.shared.core.formula.lang;
 
 import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.Assignment;
 import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.For;
+import pt.isep.nsheets.shared.lapr4.blue.s1.n1150478.formula.lang.Form;
 
 public class ExcelLanguage extends Language {
 
@@ -20,6 +21,8 @@ public class ExcelLanguage extends Language {
         functions.add(new Sum());
         functions.add(new True());
         functions.add(new For());
+        functions.add(new Form());
+
     }
 
     @Override
