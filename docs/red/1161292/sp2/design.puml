@@ -1,0 +1,67 @@
+@startuml design1
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor NonRegisteredUser
+boundary LoginView
+boundary SignupView
+control SignupPresenter
+control SignupServiceImpl
+control SignupController
+control SignupService
+entity UserRepository
+entity User
+entity UserBuilder
+database Database 
+
+box "NSheets Client"
+participant LoginView
+participant SignupView
+participant SignupPresenter
+end box
+
+box "NSheets Shared"
+participant UserBuilder
+participant User
+end box
+
+box "NSheets Server"
+participant SignupServiceImpl
+participant SignupController
+participant SignupService
+participant UserRepository
+end box
+
+box "Database"
+participant Database
+end box
+
+NonRegisteredUser -> LoginView : onReveal() / navigate to page 
+NonRegisteredUser -> LoginView : Select Signup request
+
+LoginView -> SignupView : onReveal() / navigate to page 
+SignupView -> NonRegisteredUser : Asks username, email, name, password and picture
+NonRegisteredUser -> SignupPresenter : Inserts requested data
+SignupPresenter -> NonRegisteredUser : Asks for confirmation
+NonRegisteredUser -> SignupPresenter : Confirms
+
+SignupPresenter -> UserBuilder : ub : new UserBuilder()
+SignupPresenter -> UserBuilder : ub.withEmail(email)
+SignupPresenter -> UserBuilder : ub.withPassword(password)
+SignupPresenter -> UserBuilder : ub.withUsername(username)
+SignupPresenter -> UserBuilder : ub.withPicture(picture)
+SignupPresenter -> UserBuilder : user : ub.build()
+UserBuilder -> User : user : new User()
+
+SignupPresenter -> SignupServiceImpl : registerNewUser(user)
+SignupServiceImpl -> SignupController : registerNewUser(user)
+SignupController -> SignupService : registerNewUser(user)
+SignupService -> UserRepository : addNewUser(user)
+UserRepository -> Database : save
+
+SignupServiceImpl -> SignupPresenter : onSuccess()
+SignupPresenter -> SignupPresenter : redirect to login page
+@enduml
