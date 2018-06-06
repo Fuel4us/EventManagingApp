@@ -112,13 +112,8 @@ public class BarChart extends Chart {
         endCol++; //Incrementes because col-2 is the 3rd column
         endRow++;
 
-        if (spreadsheet == null) {
-            spreadsheet = generateSpreadsheet();
-            firstCell = new Address(0, 0);
-            lastCell = new Address(2, 2);
-        }
 
-        associatedCell = spreadsheet.getCell(endCol-1, startRow-1).getAddress();
+        associatedCell = spreadsheet.getCell(endCol-1, startRow).getAddress();
 
         Cell[] cells = cellSetToArray(spreadsheet.getCells(firstCell, lastCell));
 
@@ -150,11 +145,6 @@ public class BarChart extends Chart {
         return associatedCell;
     }
 
-    private Spreadsheet generateSpreadsheet() {
-        String[][] contents = new String[][]{{"1", "2", "3"}, {"1", "2", "3"}, {"1", "2", "3"}, {"1", "2", "3"}};
-        Workbook wb = new Workbook("graph", "desc", contents);
-        return wb.getSpreadsheet(0);
-    }
 
     private Cell[] cellSetToArray(SortedSet<Cell> setCell) {
 

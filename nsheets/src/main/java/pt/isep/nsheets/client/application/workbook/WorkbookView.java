@@ -219,11 +219,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @Override
     public void initWorkbook() {
         
-        customTable.getColumns().clear();
-
         Spreadsheet sh = Settings.getInstance().getWorkbook().getSpreadsheet(0);
 
         int columnNumber = 0;
+        
 
         // Add the columns...
         customTable.addColumn(new SheetWidgetColumn(-1, this));
@@ -412,7 +411,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         // methods to create elements the way you would like.
         customTable.getView().setRenderer(new SheetRenderer<SheetCell>());
 
-        initWorkbook();
         
         saveButton.addClickHandler(event -> {
             WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
@@ -476,6 +474,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 window.close();
             }
         });
+        
+        
+        initWorkbook();
 
         customTable.getTableTitle().setText("The Future Worksheet!");
     }
@@ -483,36 +484,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @Override
     protected void onAttach() {
         super.onAttach();
-
-        // table.getTableTitle().setText("The Future Worksheet!");
     }
 
-//    public ChartDTO initChartTEST() {
-//        String[][] matrix = new String[][]{
-//            {"a", " 2", "3"},
-//            {"4", " 2", "3"},
-//            {"6", " 2", "3"},
-//            {"1", " 2", "3"},
-//            {"1", " 4", "3"},
-//            {"1", " 2", "3"},
-//            {"1", " 2", "3"},
-//            {"1", " 2", "3"},
-//            {"1", " 2", "3"},
-//            {"1", " 2", "40"}};
-//
-//        Workbook wb = new Workbook("Teste", "Teste", matrix);
-//        Spreadsheet ss = wb.getSpreadsheet(0);
-//
-//        ChartDTO dto = new ChartDTO(
-//                "CHART TEST",
-//                new Address(1, 1),
-//                new Address(5, 5),
-//                matrix,
-//                true,
-//                false);
-//
-//        return dto;
-//    }
 
     private void populateColourListBox(){
         for (Color c : Color.values()){

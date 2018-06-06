@@ -201,7 +201,6 @@ governing permissions and limitations under the License. #L% -->
             
             <ma:popupmenu.MaterialPopupMenu ui:field="popChart">
                 
-                    
                 <m:MaterialLink activates="view_chart" display="BLOCK"
                                 text="Charts" iconType="SHOW_CHART" textColor="BLACK">
                     <m:MaterialDropDown ui:field="chart_dropdown" activator="view_chart" hover="true" constrainWidth="true"
