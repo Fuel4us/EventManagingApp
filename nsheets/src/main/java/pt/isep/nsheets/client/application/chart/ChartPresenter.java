@@ -91,7 +91,6 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
         });
 
         this.view.saveChart(event -> {
-            MaterialToast.fireToast("Save Event");
             ChartsServiceAsync chartSrv = GWT.create(ChartsService.class);
             AsyncCallback<ChartDTO> callback = new AsyncCallback<ChartDTO>() {
                 @Override

@@ -416,8 +416,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         // methods to create elements the way you would like.
         customTable.getView().setRenderer(new SheetRenderer<SheetCell>());
 
-        initWorkbook();
-
         saveButton.addClickHandler(event -> {
             WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
 

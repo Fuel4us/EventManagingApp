@@ -274,38 +274,29 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
 
         if (isRow) {
             
-//            MaterialToast.fireToast("1.1");
-
             char letter = 'A';
             for (int i = 0; i < matrix[0].length; i++) {
                 dataTable.addColumn(ColumnType.NUMBER, String.valueOf(i));
             }
-//            MaterialToast.fireToast("1.2");
-
             dataTable.addRows(matrix.length);
-//            MaterialToast.fireToast("1.3");
 
             if (considerFirstLine) {
-//                MaterialToast.fireToast("1.4");
                 start = 1;
                 for (int i = 0; i < matrix.length; i++) {
                     dataTable.setValue(i, 0, String.valueOf(matrix[i][0]));
                 }
-//                MaterialToast.fireToast("1.5");
             } else {
-//                MaterialToast.fireToast("2.1");
                 start = 0;
                 for (int i = 0; i < matrix.length; i++) {
                     dataTable.setValue(i, 0, String.valueOf(letter));
                     letter++;
                 }
-//                MaterialToast.fireToast("2.2");
             }
-
+            
             for (int row = 0; row < matrix.length; row++) {
                 for (int col = start; col < matrix[row].length; col++) {
                     if (canAddColumn(matrix[row][col])) {
-                        dataTable.setValue(row, col , matrix[row][col]);
+                        dataTable.setValue(row, col+1 , matrix[row][col]);
                     }
                 }
             }
@@ -313,41 +304,32 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         } else {
             fieldName = "Column";
             char letter = 'A';
-//            MaterialToast.fireToast("3.1");
             matrix = transposeMatrix(matrix);
-//            MaterialToast.fireToast("3.2");
             for (int i = 0; i < matrix[0].length; i++) {
                 dataTable.addColumn(ColumnType.NUMBER, String.valueOf(letter));
                 letter++;
             }
-//            MaterialToast.fireToast("3.3");
 
             dataTable.addRows(matrix.length);
-//            MaterialToast.fireToast("3.4");
 
             if (considerFirstLine) {
-//                MaterialToast.fireToast("3.5");
                 start = 1;
                 for (int i = 0; i < matrix.length; i++) {
                     dataTable.setValue(i, 0, String.valueOf(matrix[i][0]));
                 }
-//                MaterialToast.fireToast("3.6");
 
             } else {
-//                MaterialToast.fireToast("4.1");
                 start = 0;
                 for (int i = 0; i < matrix.length; i++) {
                     dataTable.setValue(i, 0, String.valueOf(i + 1));
                 }
-//                MaterialToast.fireToast("4.2");
             }
             
-            MaterialToast.fireToast(String.valueOf(start));
 
             for (int row = 0; row < matrix.length; row++) {
                 for (int col = start; col < matrix[row].length; col++) {
                     if (canAddColumn(matrix[row][col])) {
-                        dataTable.setValue(row, col, matrix[row][col]);
+                        dataTable.setValue(row, col+1, matrix[row][col]);
                     }
                 }
             }
