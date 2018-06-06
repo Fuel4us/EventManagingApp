@@ -30,6 +30,7 @@ import pt.isep.nsheets.shared.core.formula.Function;
 import pt.isep.nsheets.shared.core.formula.UnaryOperator;
 import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.Assignment;
 import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.For;
+import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.ManyExpressions;
 import pt.isep.nsheets.shared.lapr4.blue.s1.n1150478.formula.lang.Form;
 
 /**
@@ -80,6 +81,7 @@ public class Language {
         functions.add(new True());
         functions.add(new For());
         functions.add(new Form());
+        functions.add(new ManyExpressions());
     }
 
     protected void initBinaryOperators() {
