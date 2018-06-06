@@ -1,3 +1,4 @@
+/*
 package pt.isep.nsheets.server.lapr4.green.s1.ipc.n1140317.ExportXML.application;
 
 import java.io.File;
@@ -16,10 +17,12 @@ import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 
+*/
 /**
  *
  * @author Carlos Figueiredo (1140317)
- */
+ *//*
+
 
 public class ExportXMLController {
 
@@ -121,3 +124,4 @@ public class ExportXMLController {
     }
 }
 
+*/
