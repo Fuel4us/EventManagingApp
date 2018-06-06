@@ -232,10 +232,10 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
                     }
                 }
                 Expression[] argArray = args.toArray(new Expression[args.size()]);
-                return new FunctionCall(function, argArray);
-            } catch (IllegalFunctionCallException ex) {
-                addVisitError(ex.getMessage());
-                MaterialToast.fireToast("ERRO Many expressions visit childs");
+                // return new FunctionCall(function, argArray);
+                return new Literal(function.applyTo(argArray));
+            } catch (IllegalValueTypeException ex) {
+                Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         MaterialToast.fireToast("RETURN NULL_Many expressions");
@@ -259,9 +259,12 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
 
     @Override
     public Expression visitForexpression(FormulaParser.ForexpressionContext ctx) {
-        Function function = new For();
-        Value value = null;
-        MaterialToast.fireToast("visitForexpression");
+        Function function = null;
+        try {
+            function = this.language.getFunction(ctx.getParent().getChild(0).getText());
+        } catch (UnknownElementException ex) {
+            MaterialToast.fireToast("ERROR getParent ForExpression.");
+        }
 
         List<Expression> args = new ArrayList<>();
 
@@ -271,14 +274,19 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
 
         Expression[] argArray = args.toArray(new Expression[args.size()]);
         try {
-            MaterialToast.fireToast("For Call");
-            return new FunctionCall(function, argArray);
-        } catch (IllegalFunctionCallException ex) {
-            MaterialToast.fireToast("ERRO ForExpression Function Call.");
+            if (function != null) {
+                MaterialToast.fireToast("Apply To");
+                //return new FunctionCall(function, argArray);  dava
+                return new Literal(function.applyTo(argArray));
+            } else {
+                MaterialToast.fireToast("FUNCTION NULL");
+            }
+        } catch (IllegalValueTypeException ex) {
+            Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         MaterialToast.fireToast("RETURN NULL FOREXPRESSION");
-        return new Literal(value);
+        return new Literal(new Value());
     }
 
     @Override
