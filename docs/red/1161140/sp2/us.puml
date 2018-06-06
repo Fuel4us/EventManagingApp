@@ -1,0 +1,9 @@
+@startuml us
+
+skinparam monochrome true
+skinparam shadowing false
+hide footbox
+
+User -> (Import XML)
+
+@enduml
