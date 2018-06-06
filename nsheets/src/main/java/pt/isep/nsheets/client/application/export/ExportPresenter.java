@@ -1,5 +1,6 @@
 package pt.isep.nsheets.client.application.export;
 
+import com.google.gwt.user.client.Window;
 import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.ExportService;
@@ -46,7 +47,10 @@ public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPre
 
             AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
                 @Override
-                public void onFailure(Throwable caught) { MaterialToast.fireToast("Error:" + caught.getMessage(), "rounded"); }
+                public void onFailure(Throwable caught) {
+                    //MaterialToast.fireToast("Error:" + caught.getMessage(), "rounded");
+                    Window.alert(caught.getMessage());
+                }
 
                 @Override
                 public void onSuccess(WorkbookDTO result) {
@@ -96,6 +100,8 @@ public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPre
             exportServiceAsync.exportWorkbook(workbookDTO, "PDF", callback);
         });
     }
+
+
 
     @Override
     protected void onReveal() {

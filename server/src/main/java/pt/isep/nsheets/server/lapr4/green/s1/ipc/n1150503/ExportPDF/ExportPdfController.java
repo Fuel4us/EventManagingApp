@@ -15,13 +15,12 @@ import pt.isep.nsheets.shared.core.Workbook;
  */
 public class ExportPdfController {
 
-    private String FILE;
+    private String FILE = "../PDF.pdf";;
     private Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
     private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
 
 
     public ExportPdfController() {
-        FILE = "../PDF.pdf";
     }
 
     public void exportWorkbook(Workbook workbook) {
