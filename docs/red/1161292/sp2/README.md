@@ -5,13 +5,25 @@
 
 Questions made to Product Owner (LMN):
 
+'''
+Q: Should I add security measures, for instance, password hash?
+A: 
+'''
+
+'''
+Q: Can I create business rules, like Password with minimum requirements?
+A: 
+'''
+
 # 2. Requirements
 
-IPC01.2 - 
+IPC01.2 - The application should add the possibility of registering new users. The identification of a user should be based on his email. Each user should have an email, name, nickname and picture (i.e., face photo). The application should display the nickname and photo of the authenticated user in the top of every page.
 
 ```
 US01
-
+    As a non-registered user,
+    I want to create a new account,
+    So I can use all the functionalities.
 ```
 
 # 3. Analysis
@@ -66,8 +78,9 @@ Regarding tests we try to follow an approach inspired by test driven development
 *Present and explain how you applied design patterns and best practices.*
 
 - Repository
-- DTO
+- Builder
 - MVP
+- ValueObject
 
 # 5. Integration/Demonstration
 
@@ -80,3 +93,5 @@ Regarding tests we try to follow an approach inspired by test driven development
 Some Questions/Issues identified during the work in this feature increment:
 
 # 7. Work Log
+
+* [Started IPC01.2 analysis](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/f3867671478948778f5b260af24a603b0a29ab35)
