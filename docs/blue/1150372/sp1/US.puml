@@ -10,5 +10,8 @@ actor User
 User -> Browser : addFormula() 
 Browser -> Shared : storeContent()
 Shared -> FormulaEvalVisitor : visitor();
+FormulaEvalVisitor -> Shared : showResult();
+Shared -> Browser : showResult();
+Browser -> User : showResult();
 
 @enduml
