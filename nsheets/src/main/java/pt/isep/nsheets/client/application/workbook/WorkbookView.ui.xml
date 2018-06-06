@@ -139,7 +139,7 @@ governing permissions and limitations under the License. #L% -->
                 <m:MaterialLink  targetHistoryToken="{code}" text="Add Visual Basic" textColor="ORANGE" iconType="CODE" iconPosition="LEFT"/>
             </m:MaterialColumn>
             <m:MaterialColumn>
-                <m:MaterialLink  targetHistoryToken="{form}" text="Forms" textColor="BLUE" iconType="POLYMER" iconPosition="LEFT"/>
+                <m:MaterialLink  ui:field="forms" targetHistoryToken="{form}" text="Forms" textColor="BLUE" iconType="POLYMER" iconPosition="LEFT"/>
             </m:MaterialColumn>
             <m:MaterialColumn>
                 <m:MaterialLink  ui:field="macro" text="Edit Macro" textColor="ORANGE" iconType="CODE" iconPosition="LEFT"/>
