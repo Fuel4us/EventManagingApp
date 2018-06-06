@@ -46,6 +46,8 @@ public class NameTokens {
     public static final String extensions = "extensions";
 
     public static final String search ="search";
+    
+    public static final String SIGNUP = "signup";
 
     public static String getSearch(){return search;}
 
