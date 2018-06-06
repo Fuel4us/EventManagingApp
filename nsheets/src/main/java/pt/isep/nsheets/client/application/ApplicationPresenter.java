@@ -105,7 +105,7 @@ public class ApplicationPresenter
             public void onSuccess(ArrayList<ConditionalDTO> result) {
                 List<Conditional> lstResultFromDTO = new ArrayList<Conditional>();
                 for (ConditionalDTO cond: result) {
-                    lstResultFromDTO.add(cond.fromDTO());
+                    lstResultFromDTO.add(Conditional.fromDTO(cond));
                 }
 
                 ConditionalFormattingExtension.setLstConditional(lstResultFromDTO);
