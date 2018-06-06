@@ -47,10 +47,7 @@ public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPre
 
             AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
                 @Override
-                public void onFailure(Throwable caught) {
-                    //MaterialToast.fireToast("Error:" + caught.getMessage(), "rounded");
-                    Window.alert(caught.getMessage());
-                }
+                public void onFailure(Throwable caught) { MaterialToast.fireToast("Error:" + caught.getMessage(), "rounded"); }
 
                 @Override
                 public void onSuccess(WorkbookDTO result) {
