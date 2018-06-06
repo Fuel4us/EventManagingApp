@@ -52,6 +52,9 @@ import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629.Configuration;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalFormattingExtension;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.services.ConditionalDTO;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.services.ConditionalService;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.services.ConditionalServiceAsync;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.ChartDTO;
 import pt.isep.nsheets.shared.services.WorkbooksService;
@@ -275,7 +278,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 
             Conditional conditional = new Conditional(this.view.getActiveCell(), configuration, view.getOperator(), conditionalValue);
 
-            /*1050475 lang03.1 persistencia com erro no Conditional service
+            /*1050475 lang03.1 persistencia com erro no Conditional service*/
             ConditionalServiceAsync conditionalSvc = GWT.create(ConditionalService.class);
 
             AsyncCallback<ConditionalDTO> callback = new AsyncCallback<ConditionalDTO>() {
@@ -288,9 +291,11 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
                 public void onSuccess(ConditionalDTO result) {
                     MaterialToast.fireToast("Conditionalextension conditional configured!");
                 }
-                conditionalSvc.saveConditional(conditional.toDTO(), callback);
             };
-             */
+            conditionalSvc.saveConditional(conditional.toDTO(), callback);
+
+
+            /* LANG03.1 NOT WORKING
             Extension extension = ExtensionManager.getInstance().getExtension("ConditionalExtension");
             ConditionalFormattingExtension.addConditional(conditional);
             this.view.getActiveCell().getExtension("ConditionalExtension");
@@ -300,6 +305,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
             for (CellListener l : this.view.getActiveCell().getCellListeners()) {
                 l.valueChanged(this.view.getActiveCell());
             }
+            */
         } catch (ParseException e) {
             e.printStackTrace();
         }

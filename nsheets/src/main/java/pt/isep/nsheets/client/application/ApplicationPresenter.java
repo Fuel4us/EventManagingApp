@@ -92,17 +92,17 @@ public class ApplicationPresenter
          */
 
 
-        /*1050475 lang03.1 persistencia com erro de compilacao no ConditionalService
+        /*1050475 lang03.1 persistencia com erro de compilacao no ConditionalService*/
 
         ConditionalServiceAsync conditionalServiceAsync = GWT.create(ConditionalService.class);
-        AsyncCallback<List<ConditionalDTO>> callbackCond = new AsyncCallback<List<ConditionalDTO>>() {
+        AsyncCallback<ArrayList<ConditionalDTO>> callbackCond = new AsyncCallback<ArrayList<ConditionalDTO>>() {
             @Override
             public void onFailure(Throwable caught) {
                 MaterialToast.fireToast("Error retrieving extension configuration! " + caught.getMessage());
             }
 
             @Override
-            public void onSuccess(List<ConditionalDTO> result) {
+            public void onSuccess(ArrayList<ConditionalDTO> result) {
                 List<Conditional> lstResultFromDTO = new ArrayList<Conditional>();
                 for (ConditionalDTO cond: result) {
                     lstResultFromDTO.add(cond.fromDTO());
@@ -112,7 +112,7 @@ public class ApplicationPresenter
             }
         };
 
-        conditionalServiceAsync.getListConditional(callbackCond);*/
+        conditionalServiceAsync.getListConditional(callbackCond);
 
         //End of extension configuration loading
 
