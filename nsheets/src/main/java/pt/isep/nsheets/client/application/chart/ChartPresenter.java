@@ -69,7 +69,7 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
 
         this.view = view;
 
-        refreshView();
+//        refreshView();
 
         ChartsServiceAsync chartSrv = GWT.create(ChartsService.class);
         AsyncCallback<ChartDTO> callback = new AsyncCallback<ChartDTO>() {
@@ -80,13 +80,14 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
 
             @Override
             public void onSuccess(ChartDTO result) {
-                MaterialToast.fireToast(result.getGraph_name()+"added successfully!");
+                MaterialToast.fireToast(result.getGraph_name() + " added successfully!");
             }
 
         };
         this.view.saveDataHandler(event -> {
 
-            dto = new ChartDTO(view.chartName(),
+            if (view.isEditMode()) {
+                dto = new ChartDTO(view.chartName(),
                     new Address(view.getFistCell()),
                     new Address(view.getLastCell()),
                     view.isRow(),
@@ -94,13 +95,8 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
                     ChartType.BAR_CHART,
                     null,
                     null);
-
-            if (view.isEditMode()) {
-                if (dto.getFirstAddress().compareTo(dto.getLastAddress()) >= 0) {
-                    MaterialToast.fireToast("The first cell is should be shorter than the last");
-                } else {
+                
                     this.view.drawChart(view.chartName(), dto);
-                }
             }
 
         });
@@ -112,13 +108,14 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
     }
 
     private void refreshView() {
+        
+        MaterialToast.fireToast("Charts Updated!");
 
         dto = WorkbookView.selectedChart;
 
         if (dto != null) {
             this.view = view.fillChartInfo(dto.getGraph_name(), dto.getFirstAddress(), dto.getLastAddress(), dto.isConsiderFirstField(), dto.isRow());
         } else {
-            dto = new ChartDTO();
             this.view = view.fillChartInfo(null, null, null, true, true);
         }
 
@@ -127,7 +124,6 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
     @Override
     protected void onReveal() {
         super.onReveal();
-
         SetPageTitleEvent.fire("Chart", "Widzar to create Charts", "", "", this);
         refreshView();
     }

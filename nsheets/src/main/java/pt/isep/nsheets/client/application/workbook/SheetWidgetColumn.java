@@ -73,7 +73,6 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
             btn.setTextColor(Color.BLACK);
             btn.setType(ButtonType.FLAT);
 
-            //btn.setPixelSize(220,30);
 
             Extension extension = ExtensionManager.getInstance().getExtension("Value Colour Extension");
             if(extension!=null){

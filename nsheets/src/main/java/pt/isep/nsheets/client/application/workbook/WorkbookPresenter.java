@@ -68,6 +68,7 @@ import java.text.ParseException;
 public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, WorkbookPresenter.MyProxy> {
 
     private MyView view;
+    private static int chart_number = 0;
 
     interface MyView extends View {
 
@@ -102,6 +103,8 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         void setText(String string);
 
         void setContents(WorkbookDTO contents);
+        
+        void initWorkbook();
     }
 
     private WorkbookDTO wDTO;
@@ -189,15 +192,19 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 //                WorkbookView.selectedChart = null;
 //            }
 //        });
-        updateCellCharts();
+        
     }
 
     @Override
     protected void onReveal() {
         super.onReveal();
 
-        updateCellCharts();
         SetPageTitleEvent.fire("Workbook", "The current Workbook", "", "", this);
+        
+        refreshWorkbooks();
+        updateCellCharts();
+        
+        MaterialToast.fireToast("Workbook page updated");
         
 
         this.timer();
@@ -228,7 +235,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
                     Settings.getInstance().getWorkbook().getSpreadsheet(0).getCell(chart.getAssociatedCell()).addChart(chart);
                 }
                 addPopUptoCell();
-                MaterialToast.fireToast("Chart Information successfully updated ");
+                MaterialToast.fireToast("Added "+result.size()+" charts!");
             }
 
         };
@@ -327,7 +334,10 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         conditionalSvc.getListConditional(callback);
     }*/
     private void refreshWorkbooks() {
+//        MaterialToast.fireToast("Workbooks refresh");
         WorkbooksServiceAsync workbookSvc = GWT.create(WorkbooksService.class);
+        
+        
 
         AsyncCallback<ArrayList<WorkbookDTO>> callback = new AsyncCallback<ArrayList<WorkbookDTO>>() {
             public void onFailure(Throwable caught) {
