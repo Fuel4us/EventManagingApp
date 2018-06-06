@@ -1,0 +1,9 @@
+@startuml us
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+NonRegisteredUser -> (US1: Create a new account)
+@enduml
