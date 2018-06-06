@@ -62,6 +62,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     private static final int EXIT_TIME = 500;
     private ColumnChart chart;
     private boolean edit = false;
+    Spreadsheet s = Settings.getInstance().getWorkbook().getSpreadsheet(0);
     
 
     @Override
@@ -173,7 +174,6 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         if (!edit) {
             if (enableElements(false)) {
                 edit = true;
-//                drawChart(chartName(), , isRow(), isConsiderFirstField());
             }
 
         } else {
@@ -226,7 +226,6 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
 
         // Prepare the data
         
-        MaterialToast.fireToast("DRAW CHART");
         
         ChartsServiceAsync chartSrv = GWT.create(ChartsService.class);
             AsyncCallback<String[][]> callback = new AsyncCallback<String[][]>() {
@@ -238,14 +237,14 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
                         {"1", "2", "3"},
                         {"1", "2", "A"}};
                     draw(chart_name, matrix, dto.isRow(), dto.isConsiderFirstField());
-                    MaterialToast.fireToast("UNSUCESS draw chart!");
+                    MaterialToast.fireToast("UNSUCESS drawing chart!");
                 }
 
                 @Override
                 public void onSuccess(String[][] result) {
                     String[][] matrix = result;
                     draw(chart_name, matrix, dto.isRow(), dto.isConsiderFirstField());
-                    MaterialToast.fireToast("SUCESS draw chart!");
+                    MaterialToast.fireToast("SUCESS drawing chart!");
                 }
 
             };
@@ -266,31 +265,39 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         int start;
 
         if (isRow) {
+            
+//            MaterialToast.fireToast("1.1");
 
             char letter = 'A';
-            for (int i = 1; i <= matrix.length; i++) {
+            for (int i = 1; i <= matrix[0].length; i++) {
                 dataTable.addColumn(ColumnType.NUMBER, String.valueOf(i));
             }
+//            MaterialToast.fireToast("1.2");
 
             dataTable.addRows(matrix.length);
+//            MaterialToast.fireToast("1.3");
 
             if (considerFirstLine) {
+//                MaterialToast.fireToast("1.4");
                 start = 1;
                 for (int i = 0; i < matrix.length; i++) {
                     dataTable.setValue(i, 0, String.valueOf(matrix[i][0]));
                 }
+//                MaterialToast.fireToast("1.5");
             } else {
+//                MaterialToast.fireToast("2.1");
                 start = 0;
-                for (int i = 0; i < matrix.length; i++) {
+                for (int i = 0; i < matrix[0].length; i++) {
                     dataTable.setValue(i, 0, String.valueOf(letter));
                     letter++;
                 }
+//                MaterialToast.fireToast("2.2");
             }
 
             for (int row = 0; row < matrix.length; row++) {
                 for (int col = start; col < matrix[row].length; col++) {
                     if (canAddColumn(matrix[row][col])) {
-                        dataTable.setValue(row, col+1 , matrix[row][col]);
+                        dataTable.setValue(row, col , matrix[row][col]);
                     }
                 }
             }
@@ -298,25 +305,33 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         } else {
             fieldName = "Column";
             char letter = 'A';
+//            MaterialToast.fireToast("3.1");
             matrix = transposeMatrix(matrix);
-            for (int i = 0; i < matrix.length; i++) {
+//            MaterialToast.fireToast("3.2");
+            for (int i = 0; i < matrix[0].length; i++) {
                 dataTable.addColumn(ColumnType.NUMBER, String.valueOf(letter));
                 letter++;
             }
+//            MaterialToast.fireToast("3.3");
 
             dataTable.addRows(matrix.length);
+//            MaterialToast.fireToast("3.4");
 
             if (considerFirstLine) {
+//                MaterialToast.fireToast("3.5");
                 start = 1;
                 for (int i = 0; i < matrix.length; i++) {
                     dataTable.setValue(i, 0, String.valueOf(matrix[i][0]));
                 }
+//                MaterialToast.fireToast("3.6");
 
             } else {
+//                MaterialToast.fireToast("4.1");
                 start = 0;
                 for (int i = 0; i < matrix.length; i++) {
                     dataTable.setValue(i, 0, String.valueOf(i + 1));
                 }
+//                MaterialToast.fireToast("4.2");
             }
 
             for (int row = 0; row < matrix.length; row++) {
@@ -451,6 +466,20 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
                 return false;
             } else if (start_textbox.getValue().length() == 0) {
                 MaterialToast.fireToast("Invalid Start");
+                return false;
+            }
+            
+            Address firstCell = new Address(start_textbox.getValue());
+            Address lastCell = new Address(end_textbox.getValue());
+            
+            if(firstCell.compareTo(lastCell)>= 0){
+                MaterialToast.fireToast("The first cell is should be shorter than the last");
+                return false;
+            }else if(firstCell.getColumn() >= s.getColumnCount() || firstCell.getRow()>=s.getRowCount() ||firstCell.getRow() < 0 || firstCell.getColumn()<0){
+                MaterialToast.fireToast("The first cell is too big");
+                return false;
+            }else if(lastCell.getColumn() >= s.getColumnCount() || lastCell.getRow()>=s.getRowCount()||lastCell.getRow() < 0 || lastCell.getColumn()<0){
+                MaterialToast.fireToast("The second cell is too big");
                 return false;
             }
 

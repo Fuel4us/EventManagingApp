@@ -118,7 +118,7 @@ public class BarChart extends Chart {
             lastCell = new Address(2, 2);
         }
 
-        associatedCell = spreadsheet.getCell(endCol, startRow).getAddress();
+        associatedCell = spreadsheet.getCell(endCol-1, startRow-1).getAddress();
 
         Cell[] cells = cellSetToArray(spreadsheet.getCells(firstCell, lastCell));
 

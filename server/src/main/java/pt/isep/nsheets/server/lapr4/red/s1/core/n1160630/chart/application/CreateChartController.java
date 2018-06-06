@@ -43,7 +43,8 @@ public class CreateChartController implements Controller{
     public String[][] generateChartValues(ChartDTO dto, SpreadsheetDTO ss){
         Chart c = newChart(dto, ss);
         c.generateChartValues(SpreadsheetImpl.fromDTO(ss));
-        return c.toDTO().getContent();
+        String[][] result = c.toDTO().getContent();
+        return result;
     }
     
 }

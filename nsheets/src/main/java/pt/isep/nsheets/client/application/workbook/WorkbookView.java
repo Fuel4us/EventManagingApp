@@ -216,7 +216,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
     }
 
-    void initWorkbook() {
+    @Override
+    public void initWorkbook() {
+        
+        customTable.getColumns().clear();
 
         Spreadsheet sh = Settings.getInstance().getWorkbook().getSpreadsheet(0);
 
@@ -237,10 +240,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         for (int k = 0; k < sh.getRowCount(); k++) {
 
             SheetCell cell = new SheetCell(sh, k);
-
-//            if (k == 1) {
-//                cell.getCell(4).addChart(initChartTEST());
-//            }
 
             rows.add(cell);
         }
