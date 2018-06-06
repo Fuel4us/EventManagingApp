@@ -46,8 +46,15 @@ public class NameTokens {
     public static final String extensions = "extensions";
 
     public static final String search ="search";
+    public static final String macro ="macro";
 
+    
+    
     public static String getSearch(){return search;}
+
+    public static String getMacro() {
+        return macro;
+    }
 
     public static String getWorkbook() {
         return workbook;
