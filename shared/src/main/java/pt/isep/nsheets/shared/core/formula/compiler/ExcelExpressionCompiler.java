@@ -38,6 +38,7 @@ import java.util.List;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.Recognizer;
+import pt.isep.nsheets.shared.core.formula.lang.ExcelLanguage;
 
 /**
  * A compiler that generates Excel-style formulas from strings.
@@ -57,9 +58,8 @@ public class ExcelExpressionCompiler implements ExpressionCompiler {
      * Creates the Excel expression compiler.
      */
     public ExcelExpressionCompiler() {
-        // (ATB) Instantiate the language
         language = LanguageManager.getInstance().getLanguage("excel");
-//    		language=new ExcelLanguage();
+    		//language=new ExcelLanguage();
     }
 
     public char getStarter() {
