@@ -15,9 +15,10 @@ public interface ExportService extends RemoteService {
 
       //void exportWorkbook(WorkbookDTO workbookDTO, String type);
 
-      WorkbookDTO exportWorkbook(WorkbookDTO workbookDTO, String type);
-//
-//    String[][] exportSpreadsheet(Spreadsheet spreadsheet);
-//
+      boolean exportWorkbookAsCSV(WorkbookDTO workbookDTO);
+      boolean exportWorkbookAsXML(WorkbookDTO workbookDTO);
+      boolean exportWorkbookAsPDF(WorkbookDTO workbookDTO);
+      boolean exportWorkbookAsCSL(WorkbookDTO workbookDTO);
+
 //    String[][] exportPartOfSpreadsheet(Spreadsheet spreadsheet, int beginColumn, int beginRow, int endColumn, int endRow);
 }

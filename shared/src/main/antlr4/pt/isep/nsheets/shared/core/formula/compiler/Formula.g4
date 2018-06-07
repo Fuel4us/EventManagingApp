@@ -65,10 +65,32 @@ assignment
 	:	reference ASSIGN concatenation
 	;
 
+monetary    
+        : CURRENCY ICHA ACCOUNT FCHA
+        ;
+
+ACCOUNT: NUMBER COINSIGN (OPERATOR NUMBER COINSIGN)*
+        ;
+        
+OPERATOR: PLUS 
+        | MINUS 
+        | DIV 
+        | MULTI
+        ;
+
+CURRENCY: 'DOLLAR'
+        | 'POUND'
+        | 'EURO'
+        ;
+
+COINSIGN: DOLLAR
+        | POUND
+        | EURO
+        ;
+
 LETTER: ('a'..'z'|'A'..'Z') ;
   
-FUNCTION : 
-	  ( LETTER )+
+FUNCTION : ( LETTER )+
 	;	
 	 
 CELL_REF
@@ -92,29 +114,32 @@ QUOT: '"'
 
 /* Numeric literals */
 NUMBER: DIGITNOTZERO ( DIGIT )* FRACTIONALPART? 
-		| DIGIT FRACTIONALPART;
+        | DIGIT FRACTIONALPART
+        ;
 		
-FRACTIONALPART: ( COMMA ( DIGIT )+ );
+FRACTIONALPART:  COMMA  DIGIT DIGIT
+                | DOT DIGIT DIGIT
+                ;
 
 DIGIT : '0'..'9' ;
 DIGITNOTZERO : '1'..'9' ;
 
 /* Comparison operators */
-EQ		: '=' ;
-NEQ		: '<>' ;
+EQ	: '=' ;
+NEQ	: '<>' ;
 LTEQ	: '<=' ;
 GTEQ	: '>=' ;
-GT		: '>' ;
-LT		: '<' ;
+GT	: '>' ;
+LT	: '<' ;
 
 /* Text operators */
-AMP		: '&' ;
+AMP	: '&' ;
 
 /* Arithmetic operators */
 PLUS	: '+' ;
 MINUS	: '-' ;
 MULTI	: '*' ;
-DIV		: '/' ;
+DIV	: '/' ;
 POWER	: '^' ;
 PERCENT : '%' ;
 
@@ -126,6 +151,7 @@ UNDERSCORE : '_' ;
  
 /* Miscellaneous operators */
 COMMA	: ',' ;
+DOT     : '.' ;
 SEMI	: ';' ;
 LPAR	: '(' ;
 RPAR	: ')' ;
@@ -133,6 +159,11 @@ ICHA	: '{' ;
 FCHA	: '}' ;
 LBRACKET : '[' ;
 RBRACKET : ']' ;
+
+/* Coin Signs */
+EURO : 'e' ;
+DOLLAR : '$' ;
+POUND : '£' ;
 
 /* Assignment Operator */
 ASSIGN 	: ':=' ;

@@ -23,4 +23,14 @@ public class SpreadsheetDTO implements Serializable {
         this.columns = columns;
         this.rows = rows;
     }
+    
+    public CellDTO getCell(int row, int column) {
+        for (AddressDTO add : cells.keySet()) {
+            if (add.column == column && add.row == row) {
+                return cells.get(add);
+            }
+        }
+
+        return null;
+    }
 }
