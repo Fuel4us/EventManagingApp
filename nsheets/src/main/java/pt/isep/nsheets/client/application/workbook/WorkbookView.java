@@ -130,7 +130,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialDropDown chart_dropdown;
     @UiField
-    MaterialPopupMenu popupMenu, popChart;
+    MaterialPopupMenu popChart;
+    @UiField
+    static MaterialPopupMenu popupMenu;
 
     @UiField
     MaterialLink sortLink;
@@ -154,6 +156,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     void onclick(ClickEvent e) {
         this.activeCell = null;
         selectedChart = null;
+    }
+
+    public static MaterialPopupMenu getPopupMenu() {
+        return popupMenu;
     }
 
     @Override
@@ -463,7 +469,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         });
         sortButton.addClickHandler(event -> {
             try {
-                boolean ascending = (sortListBox.getSelectedIndex() == 0)?true:false;
+                boolean ascending = (sortListBox.getSelectedIndex() == 0) ? true : false;
                 new SortSpreadsheetController().sortCells(windowFirstBox.getText(), windowSecondBox.getText(), this.customTable.getRow(0).getData().sheet, ascending);
             } catch (Exception e) {
                 // TODO Auto-generated catch block

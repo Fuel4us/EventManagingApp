@@ -17,15 +17,17 @@ import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.html.ListItem;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
-import pt.isep.nsheets.client.application.menu.MenuPresenter;
-import pt.isep.nsheets.client.application.menu.MenuView;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import pt.isep.nsheets.shared.services.ConfigurationDTO;
 import pt.isep.nsheets.shared.services.ConfigurationService;
 import pt.isep.nsheets.shared.services.ConfigurationServiceAsync;
 import pt.isep.nsheets.client.application.menu.MenuView;
+import pt.isep.nsheets.client.application.workbook.WorkbookView;
 
+/**
+ * João Pereira <1150478@isep.ipp.pt>
+ */
 public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, ExtensionsPresenter.MyProxy> {
     
     private MyView view;
@@ -53,6 +55,10 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
         MaterialButton getMenuButton();
         
         MaterialTextBox getMenuName();
+        
+        MaterialTextBox getPopName();
+        
+        MaterialButton getPopButton();
     }
     
     @NameToken(NameTokens.extensions)
@@ -130,6 +136,18 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
                 ls.setText(name);
                 newItem.add(ls);
                 MenuView.getSideNav().add(ls);
+                MaterialToast.fireToast("Menu Option created!");
+            }
+        });
+        
+        getView().getPopButton().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                String name = getView().getPopName().getText();
+                MaterialLink pop = new MaterialLink();
+                pop.setText(name);
+                WorkbookView.getPopupMenu().add(pop);
+                MaterialToast.fireToast("Popup option created!");
             }
         });
     }
