@@ -45,15 +45,27 @@ public class ChartService {
         switch (dto.getType()) {
 
             case BAR_CHART:
-
                 BarChart chart = new BarChart(dto);
-                chartRepo.save(chart);
-                return chart;
-
+                if (addChart(chartRepo, chart)) {
+                    chartRepo.save(chart);
+                    return chart;
+                }
+                break;
         }
-        
+
         return null;
 
+    }
+
+    private boolean addChart(ChartRepository repo, Chart chart) {
+
+        for (Chart c : repo.findAll()) {
+            if (c.equals(chart)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }

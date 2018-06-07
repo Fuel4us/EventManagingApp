@@ -1,6 +1,7 @@
 package pt.isep.nsheets.client.application.chart;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
@@ -11,7 +12,6 @@ import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import gwt.material.design.client.ui.MaterialToast;
-import javafx.scene.paint.Material;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.client.application.workbook.WorkbookView;
@@ -25,13 +25,12 @@ import pt.isep.nsheets.shared.services.ChartsService;
 import pt.isep.nsheets.shared.services.ChartsServiceAsync;
 
 /**
- *
+ * Chart Presenter.
  * @author pedromonteiro
  */
 public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresenter.MyProxy> {
 
     private MyView view;
-    ChartDTO dto;
     Spreadsheet s = Settings.getInstance().getWorkbook().getSpreadsheet(0);
 
     interface MyView extends View {
@@ -39,6 +38,8 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
         void saveDataHandler(ClickHandler click);
 
         void saveChart(ClickHandler click);
+        
+        void click_edit(ClickHandler click);
 
         String getFistCell();
 
@@ -53,8 +54,11 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
         boolean isEditMode();
 
         void drawChart(String chart_name, ChartDTO dto);
+        
+        void enterEditCard(boolean firstTime);
 
         ChartView fillChartInfo(String chart_name, Address firstCell, Address lastCell, boolean isConsideredFirst, boolean isRow);
+        
 
     }
 
@@ -69,52 +73,50 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
 
         this.view = view;
 
-//        refreshView();
-
-        ChartsServiceAsync chartSrv = GWT.create(ChartsService.class);
-        AsyncCallback<ChartDTO> callback = new AsyncCallback<ChartDTO>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                MaterialToast.fireToast("Error --> " + caught.getMessage());
-            }
-
-            @Override
-            public void onSuccess(ChartDTO result) {
-                MaterialToast.fireToast(result.getGraph_name() + " added successfully!");
-            }
-
-        };
         this.view.saveDataHandler(event -> {
 
             if (view.isEditMode()) {
-                dto = new ChartDTO(view.chartName(),
-                    new Address(view.getFistCell()),
-                    new Address(view.getLastCell()),
-                    view.isRow(),
-                    view.isConsiderFirstField(),
-                    ChartType.BAR_CHART,
-                    null,
-                    null);
-                
-                    this.view.drawChart(view.chartName(), dto);
+                ChartView.chartDTO = new ChartDTO(view.chartName(),
+                        new Address(view.getFistCell()),
+                        new Address(view.getLastCell()),
+                        view.isRow(),
+                        view.isConsiderFirstField(),
+                        ChartType.BAR_CHART,
+                        null,
+                        null);
+
+                this.view.drawChart(view.chartName(), ChartView.chartDTO);
             }
 
         });
 
         this.view.saveChart(event -> {
-            chartSrv.addChart(dto, s.toDTO(), callback);
+            ChartsServiceAsync chartSrv = GWT.create(ChartsService.class);
+            AsyncCallback<ChartDTO> callback = new AsyncCallback<ChartDTO>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error --> " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(ChartDTO result) {
+                    MaterialToast.fireToast(result.getGraph_name() + " added successfully!");
+                }
+
+            };
+            chartSrv.addChart(ChartView.chartDTO, callback);
         });
 
     }
 
     private void refreshView() {
-        
+
         MaterialToast.fireToast("Charts Updated!");
 
-        dto = WorkbookView.selectedChart;
+        ChartView.chartDTO = WorkbookView.selectedChart;
 
-        if (dto != null) {
-            this.view = view.fillChartInfo(dto.getGraph_name(), dto.getFirstAddress(), dto.getLastAddress(), dto.isConsiderFirstField(), dto.isRow());
+        if (ChartView.chartDTO != null) {
+            this.view = view.fillChartInfo(ChartView.chartDTO.getGraph_name(), ChartView.chartDTO.getFirstAddress(), ChartView.chartDTO.getLastAddress(), ChartView.chartDTO.isConsiderFirstField(), ChartView.chartDTO.isRow());
         } else {
             this.view = view.fillChartInfo(null, null, null, true, true);
         }
@@ -125,6 +127,7 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
     protected void onReveal() {
         super.onReveal();
         SetPageTitleEvent.fire("Chart", "Widzar to create Charts", "", "", this);
+        this.view.click_edit((event) -> {});
         refreshView();
     }
 

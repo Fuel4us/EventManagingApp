@@ -61,12 +61,15 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
         if (this.colNumber == -1) {
             btn.setText("" + (object.getCell(0).getAddress().getRow() + 1));
         } else {
+            
             Cell cell = object.getCell(this.colNumber);
             String value = cell.getValue().toString();
             if(cell.hasChart()) {
                 btn.setIconType(IconType.INSERT_CHART);
                 btn.setIconPosition(IconPosition.LEFT);
             }
+            
+           
             btn.setText(value);
         }
         

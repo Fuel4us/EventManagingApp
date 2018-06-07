@@ -8,6 +8,15 @@
     <!-- <class>pt.isep.nsheets.shared.core.SpreadsheetImpl</class> -->
     <class>pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.BarChart</class>
     <class>pt.isep.nsheets.server.lapr4.green.s1.core.n1160815.users.domain.Message</class>
+    <class>pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.Chart</class>
+    <class>pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.domain.Message</class>
+    <class>pt.isep.nsheets.server.lapr4.red.s1.core.n1161140.calendar.domain.CalendarEvent</class>
+    <class>pt.isep.nsheets.shared.core.Address</class>
+    <class>pt.isep.nsheets.shared.core.CellImpl</class>
+    <class>pt.isep.nsheets.shared.core.Workbook</class>
+    <class>pt.isep.nsheets.shared.core.SpreadsheetImpl</class>
+    <class>pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629.Configuration</class>
+    <class>pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test"/>
       <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>

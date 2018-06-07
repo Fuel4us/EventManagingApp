@@ -11,12 +11,15 @@ expression
 comparison
 	: concatenation
 		( ( EQ | NEQ | GT | LT | LTEQ | GTEQ ) concatenation )?
-        | ICHA manyexpressions FCHA
-        | FOR forexpression FCHA
 	;
 
+block
+        : manyexpressions
+        | FOR forexpression
+        ;
+
 forexpression
-        : concatenation SEMI comparison SEMI manyexpressions
+        : assignment SEMI comparison (SEMI concatenation)+ FCHA
         ;
 
 concatenation
@@ -26,6 +29,7 @@ concatenation
         | concatenation ( MULTI | DIV ) concatenation
         | concatenation ( PLUS | MINUS ) concatenation
         | concatenation AMP concatenation
+        | block
         ;
 		
 
@@ -54,7 +58,7 @@ literal
 	;
 	
 manyexpressions
-	:	comparison (SEMI comparison)*
+	:	ICHA comparison (SEMI comparison)* FCHA
 	;
 	
 assignment

@@ -9,20 +9,28 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import gwt.material.design.client.ui.MaterialNavBar;
 import gwt.material.design.client.ui.MaterialSideNavPush;
+import gwt.material.design.client.ui.html.ListItem;
 
 class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements MenuPresenter.MyView {
 
-	interface Binder extends UiBinder<Widget, MenuView> {
-            
-	}
+    interface Binder extends UiBinder<Widget, MenuView> {
 
-	@UiField
-	MaterialNavBar navBar;
-	@UiField
-	MaterialSideNavPush sideNav;
+    }
 
-	@Inject
-	MenuView(Binder uiBinder) {
-		initWidget(uiBinder.createAndBindUi(this));
-	}
+    @UiField
+    MaterialNavBar navBar;
+    @UiField
+    MaterialSideNavPush sideNav;
+
+    @Inject
+    MenuView(Binder uiBinder) {
+        initWidget(uiBinder.createAndBindUi(this));
+    }
+
+    void newOptionCreator(String name) {
+        ListItem newItem = new ListItem();
+        newItem.setTitle(name);
+        sideNav.add(newItem);
+    }
+
 }

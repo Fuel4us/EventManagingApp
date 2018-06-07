@@ -1,4 +1,4 @@
-@startuml  design1.png
+@startuml  design1
 skinparam handwritten true
 skinparam monochrome true
 skinparam packageStyle rect

@@ -6,6 +6,8 @@
 package pt.isep.nsheets.shared.services;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
 import pt.isep.nsheets.shared.core.Address;
 
 /**
@@ -126,5 +128,51 @@ public class ChartDTO implements Serializable{
         return content;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ChartDTO other = (ChartDTO) obj;
+        if (this.considerFirstField != other.considerFirstField) {
+            return false;
+        }
+        if (this.isRow != other.isRow) {
+            return false;
+        }
+        if (!Objects.equals(this.graph_name, other.graph_name)) {
+            return false;
+        }
+        if (!Objects.equals(this.firstAddress, other.firstAddress)) {
+            return false;
+        }
+        if (!Objects.equals(this.lastAddress, other.lastAddress)) {
+            return false;
+        }
+        if (this.type != other.type) {
+            return false;
+        }
+        if (!Objects.equals(this.associatedCell, other.associatedCell)) {
+            return false;
+        }
+        if (!Arrays.deepEquals(this.content, other.content)) {
+            return false;
+        }
+        return true;
+    }
+
+    
     
 }

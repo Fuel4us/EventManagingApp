@@ -28,4 +28,5 @@ public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> impleme
 	public void setContentPush() {
 		ContentPushEvent.fire(this);
 	}
+        
 }

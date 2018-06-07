@@ -1,13 +1,17 @@
 package pt.isep.nsheets.client.application.extensions;
 
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialListValueBox;
+import gwt.material.design.client.ui.MaterialTextBox;
 
 import javax.inject.Inject;
 
@@ -23,7 +27,13 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
     MaterialListValueBox<Color> bgColorNeg;
     @UiField
     MaterialListValueBox<Color> fgColorNeg;
+    @UiField
+    MaterialButton menuButton;
+    @UiField
+    MaterialTextBox menuName;
 
+    interface Binder extends UiBinder<Widget, ExtensionsView> {
+    }
 
     @Inject
     ExtensionsView(Binder uiBinder) {
@@ -78,9 +88,8 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
         confirmButton.addClickHandler(ch);
     }
 
-
-    private void populateColours(){
-        for (Color c : Color.values()){
+    private void populateColours() {
+        for (Color c : Color.values()) {
             bgColorPos.addItem(c);
             fgColorPos.addItem(c);
             bgColorNeg.addItem(c);
@@ -88,7 +97,20 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
         }
     }
 
-    interface Binder extends UiBinder<Widget, ExtensionsView> {
+    /**
+     * Text area of the add row button.
+     *
+     * @param e
+     */
+    @UiHandler("menuName")
+    void getTextAdd(KeyPressEvent e) {
+        menuName.validate();
+    }
+
+    @UiHandler("menuButton")
+    void removeRowButton(ClickEvent e) {
+        String name = menuName.getText();
+
     }
 
 }
