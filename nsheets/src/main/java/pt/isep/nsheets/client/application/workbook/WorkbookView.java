@@ -52,7 +52,6 @@ import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
 
-
 import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
@@ -147,7 +146,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialDataTable<SheetCell> customTable;
 
-
     @UiField
     MaterialLink forms;
 
@@ -223,7 +221,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         Spreadsheet sh = Settings.getInstance().getWorkbook().getSpreadsheet(0);
 
         int columnNumber = 0;
-        
 
         // Add the columns...
         customTable.addColumn(new SheetWidgetColumn(-1, this));
@@ -292,7 +289,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             if (activeCell != null) {
                 String result = "";
                 if (firstBox.getText().equals("form()")) {
-                    //forms
+                    forms.setTargetHistoryToken("{form}");
+                    //CHANGE
                 }
             }
             // Window.alert("Hello");
@@ -419,7 +417,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         // methods to create elements the way you would like.
         customTable.getView().setRenderer(new SheetRenderer<SheetCell>());
 
-
         saveButton.addClickHandler(event -> {
             WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
 
@@ -493,8 +490,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 window.close();
             }
         });
-        
-        
+
         initWorkbook();
 
         customTable.getTableTitle().setText("The Future Worksheet!");
@@ -504,7 +500,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     protected void onAttach() {
         super.onAttach();
     }
-
 
 //    public ChartDTO initChartTEST() {
 //        String[][] matrix = new String[][]{
