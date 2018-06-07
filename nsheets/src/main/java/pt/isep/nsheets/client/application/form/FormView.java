@@ -18,19 +18,19 @@ import javax.inject.Inject;
  *
  * @author João Pereira <1150478@isep.ipp.pt>
  */
-class FormView extends ViewImpl implements FormPresenter.MyView {
+public class FormView extends ViewImpl implements FormPresenter.MyView {
 
     /**
      * Binder.
      */
     interface Binder extends UiBinder<Widget, FormView> {
     }
-    
+
     /**
      * UI field declarations.
      */
     @UiField
-    MaterialWindow window, windowTab;
+    static MaterialWindow window, windowTab;
 
     @UiField
     MaterialButton btnAddRow, btnRemoveRow, btnEditRow, btnPlayForm1, btnPlayForm2, btnPlayForm3;
@@ -43,10 +43,11 @@ class FormView extends ViewImpl implements FormPresenter.MyView {
 
     FlexTable table;
     int i = 0;
-    
+
     /**
      * Form view constructor.
-     * @param uiBinder 
+     *
+     * @param uiBinder
      */
     @Inject
     FormView(Binder uiBinder) {
@@ -55,28 +56,35 @@ class FormView extends ViewImpl implements FormPresenter.MyView {
         table.setWidget(0, 0, null);
         initWidget(uiBinder.createAndBindUi(this));
     }
-    
+
+    public static MaterialWindow getWindow() {
+        return window;
+    }
+
     /**
      * Open window of the form button action.
-     * @param e 
+     *
+     * @param e
      */
     @UiHandler("btnOpenWindow")
     void onOpenWindow(ClickEvent e) {
         window.open();
     }
-    
+
     /**
      * Open window of the form editor button action.
-     * @param e 
+     *
+     * @param e
      */
     @UiHandler("btnOpenWindowEditor")
     void onOpenWindowWithTab(ClickEvent e) {
         windowTab.open();
-    }   
-    
+    }
+
     /**
      * Add Row button action.
-     * @param e 
+     *
+     * @param e
      */
     @UiHandler("btnAddRow")
     void addRowButton(ClickEvent e) {
@@ -123,28 +131,31 @@ class FormView extends ViewImpl implements FormPresenter.MyView {
         window.add(table);
 
     }
-    
+
     /**
      * Combo box with the name of the existing widgets.
-     * @param e 
+     *
+     * @param e
      */
     @UiHandler("comboWidgets")
     void comboWidgets(ClickEvent e) {
         comboWidgets.validate();
     }
-    
+
     /**
      * Text area of the add row button.
-     * @param e 
+     *
+     * @param e
      */
     @UiHandler("txtAreaAdd")
     void getTextAdd(KeyPressEvent e) {
         txtAreaAdd.validate();
     }
-    
+
     /**
      * Text area of the remove row button.
-     * @param e 
+     *
+     * @param e
      */
     @UiHandler("txtAreaRemove")
     void getTextRemove(KeyPressEvent e) {
@@ -156,10 +167,11 @@ class FormView extends ViewImpl implements FormPresenter.MyView {
         int index = Integer.parseInt(txtAreaRemove.getValue());
         table.removeRow(index);
     }
-    
+
     /**
      * Actions of the edit row button.
-     * @param e 
+     *
+     * @param e
      */
     @UiHandler("btnEditRow")
     void editRowButton(ClickEvent e) {
@@ -174,37 +186,41 @@ class FormView extends ViewImpl implements FormPresenter.MyView {
             table.setWidget(index, 2, writeLabel);
         }
     }
-    
+
     /**
      * Text area of the edit row button.
-     * @param e 
+     *
+     * @param e
      */
     @UiHandler("txtAreaEdit")
     void getTextEdit(KeyPressEvent e) {
         txtAreaEdit.validate();
     }
-    
+
     /**
      * Actions of the play form button on the add row tab.
-     * @param e 
+     *
+     * @param e
      */
     @UiHandler("btnPlayForm1")
     void playFormButton1(ClickEvent e) {
         window.open();
     }
-    
+
     /**
      * Actions of the play form button on the add row tab.
-     * @param e 
+     *
+     * @param e
      */
     @UiHandler("btnPlayForm2")
     void playFormButton2(ClickEvent e) {
         window.open();
     }
-    
+
     /**
      * Actions of the play form button on the add row tab.
-     * @param e 
+     *
+     * @param e
      */
     @UiHandler("btnPlayForm3")
     void playFormButton3(ClickEvent e) {
