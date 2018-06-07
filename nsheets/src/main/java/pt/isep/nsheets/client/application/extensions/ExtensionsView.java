@@ -10,8 +10,10 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialListValueBox;
 import gwt.material.design.client.ui.MaterialTextBox;
+import gwt.material.design.client.ui.html.ListItem;
 
 import javax.inject.Inject;
 
@@ -41,6 +43,16 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
 
         populateColours();
 
+    }
+
+    @Override
+    public MaterialTextBox getMenuName() {
+        return menuName;
+    }
+
+    @Override
+    public MaterialButton getMenuButton() {
+        return menuButton;
     }
 
     @Override
@@ -96,21 +108,4 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
             fgColorNeg.addItem(c);
         }
     }
-
-    /**
-     * Text area of the add row button.
-     *
-     * @param e
-     */
-    @UiHandler("menuName")
-    void getTextAdd(KeyPressEvent e) {
-        menuName.validate();
-    }
-
-    @UiHandler("menuButton")
-    void removeRowButton(ClickEvent e) {
-        String name = menuName.getText();
-
-    }
-
 }

@@ -30,9 +30,8 @@
                     <m:MaterialDivider marginTop="10"/>
                     <m:MaterialButton waves="LIGHT" size="LARGE" iconType="DONE" backgroundColor="BLUE" iconColor="WHITE" ui:field="confirmButton" text="CONFIRM" marginTop="25"/>
                 </m:MaterialCollapsibleBody>
-                
-                <!-- Core 02.2 Implementation -> @author João Pereira_1150478@isep.ipp.pt -->
             </m:MaterialCollapsibleItem>
+            <!-- Core 02.2 Implementation -> @author João Pereira_1150478@isep.ipp.pt -->
             <!-- Add Menu Option -->
             <m:MaterialCollapsibleItem>
                 <m:MaterialCollapsibleHeader>
@@ -68,10 +67,12 @@
                     <m:MaterialLink text="Add Side Bar" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
                 </m:MaterialCollapsibleHeader>
                 <m:MaterialCollapsibleBody backgroundColor="GREY_LIGHTEN_2">
-                    <m:MaterialButton text="Create Side Bar" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED"/>
-                                    
+                    <m:MaterialLabel text="Add Side Bar" fontSize="3em"/>
+                    <m:MaterialLabel text="Press the button to create a side bar."/>
+                    <m:MaterialButton text="Create Side Bar" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED"/>            
                 </m:MaterialCollapsibleBody>
             </m:MaterialCollapsibleItem>
+            
         </m:MaterialCollapsible>
        
     </g:HTMLPanel>
