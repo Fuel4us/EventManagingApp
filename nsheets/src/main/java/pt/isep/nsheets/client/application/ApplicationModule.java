@@ -34,6 +34,7 @@ import pt.isep.nsheets.client.application.login.LoginModule;
 import pt.isep.nsheets.client.application.menu.MenuModule;
 import pt.isep.nsheets.client.application.workbook.WorkbookModule;
 import pt.isep.nsheets.client.application.notes.NotesModule;
+import pt.isep.nsheets.client.lapr4.red.s2.ipc.n1161292.signup.SignupModule;
 
 public class ApplicationModule extends AbstractPresenterModule {
 
@@ -47,6 +48,7 @@ public class ApplicationModule extends AbstractPresenterModule {
         install(new WorkbookModule());
         install(new NotesModule());
         install(new LoginModule());
+        install(new SignupModule());
         install(new ChartModule());
         install(new ExportModule());
         install(new ChatModule());
