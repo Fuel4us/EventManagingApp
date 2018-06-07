@@ -1,0 +1,27 @@
+@startuml  domain.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+hide empty methods
+
+interface Chart
+class name << ValueObject >>
+class content  << ValueObject >>
+class firstCell  << ValueObject >>
+class lastCell  << ValueObject >>
+class associatedCell  << ValueObject >>
+
+class BarChart << (E,yellow) >> 
+
+Chart <|.. BarChart
+BarChart --> name
+BarChart --> content
+BarChart --> firstCell
+BarChart --> lastCell
+BarChart --> associatedCell
+
+
+@enduml

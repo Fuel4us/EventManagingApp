@@ -46,9 +46,14 @@ public class NameTokens {
     public static final String extensions = "extensions";
 
     public static final String search ="search";
+    
+    public static final String SIGNUP = "signup";
+    
     public static final String macro ="macro";
 
-    
+    public static String getSignup(){
+        return SIGNUP;
+    }
     
     public static String getSearch(){return search;}
 

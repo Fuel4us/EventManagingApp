@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1140317.ExportXML.application.ExportXMLController;
 //import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1140317.ExportXML.application.ExportXMLController;
 
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1150503.ExportPDF.ExportPdfController;
@@ -22,7 +23,7 @@ public class ExportServiceImpl extends RemoteServiceServlet implements ExportSer
    @Override
    public WorkbookDTO exportWorkbook(WorkbookDTO workbookDTO, String type){
 
-       //ExportXMLController ctrl = new ExportXMLController();
+       ExportXMLController ctrl = new ExportXMLController();
        ExportCSVController csvController = new ExportCSVController();
        ExportPdfController pdfController = new ExportPdfController();
 
@@ -32,9 +33,9 @@ public class ExportServiceImpl extends RemoteServiceServlet implements ExportSer
            csvController.exportWorkbook(workbook);
        }
 
-       /*if(type.equalsIgnoreCase("XML")) {
-           ctrl.exportWorkbook(workbookDTO);
-       }*/
+       if(type.equalsIgnoreCase("XML")) {
+           ctrl.exportWorkbook(workbook);
+       }
 
        if(type.equalsIgnoreCase("PDF")) {
            pdfController.exportWorkbook(workbook);

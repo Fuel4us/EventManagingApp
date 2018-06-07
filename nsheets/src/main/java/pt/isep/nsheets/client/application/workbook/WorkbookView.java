@@ -296,7 +296,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             if (activeCell != null) {
                 String result = "";
                 if (firstBox.getText().equals("form()")) {
-                    //forms
+                    forms.setTargetHistoryToken("{form}");
+                    //CHANGE
                 }
             }
             // Window.alert("Hello");
@@ -422,8 +423,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         // When you use the BaseRenderer you can override certain draw
         // methods to create elements the way you would like.
         customTable.getView().setRenderer(new SheetRenderer<SheetCell>());
-
-        initWorkbook();
 
         saveButton.addClickHandler(event -> {
             WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);

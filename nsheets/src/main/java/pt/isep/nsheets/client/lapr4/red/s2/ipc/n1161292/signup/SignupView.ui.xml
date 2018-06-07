@@ -1,0 +1,43 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+    xmlns:g="urn:import:com.google.gwt.user.client.ui"
+    xmlns:m="urn:import:gwt.material.design.client.ui"
+    xmlns:ma="urn:import:gwt.material.design.addins.client">
+    
+    <m:MaterialPanel>
+        <m:MaterialRow>
+            <ma:fileuploader.MaterialFileUploader ui:field="cardUploader" acceptedFiles="image/*" grid="s12 m6 l5"  url="/fileupload" preview="false" maxFileSize="20" shadow="0" clickable="cardUpload">
+                <m:MaterialCard>
+                    <m:MaterialCardImage>
+                        <m:MaterialImage ui:field="imgPreview" url="http://demo.geekslabs.com/materialize/v3.1/images/gallary/33.jpg" />
+                    </m:MaterialCardImage>
+                    <m:MaterialCardContent layoutPosition="RELATIVE">
+                        <m:MaterialProgress ui:field="progress" layoutPosition="ABSOLUTE" bottom="0" left="0" type="DETERMINATE" percent="0" />
+                        <m:MaterialButton m:id="cardUpload" layoutPosition="ABSOLUTE" top="-25" right="25" type="FLOATING" backgroundColor="BLUE" size="LARGE" iconType="CLOUD_UPLOAD" iconColor="WHITE"/>
+                    </m:MaterialCardContent>
+                </m:MaterialCard>
+            </ma:fileuploader.MaterialFileUploader>
+            
+            <m:MaterialColumn grid="s12 m6 l7">
+                <m:MaterialTextBox label="Username" iconType="ACCOUNT_CIRCLE" />
+            </m:MaterialColumn>
+
+            <m:MaterialColumn grid="s12 m6 l7" >
+                <m:MaterialTextBox label="Password" iconType="VPN_KEY" />
+            </m:MaterialColumn>
+
+            <m:MaterialColumn grid="s12 m6 l7" >
+                <m:MaterialTextBox label="Name" iconType="PERSON" />
+            </m:MaterialColumn>
+
+            <m:MaterialColumn grid="s12 m6 l7" >
+                <m:MaterialTextBox label="E-mail" iconType="EMAIL" />
+            </m:MaterialColumn>
+
+            <m:MaterialColumn grid="s12 m6 l7" textAlign="CENTER">
+                <m:MaterialButton ui:field="submitBtn" text="Submit" iconType="SEND"/>
+            </m:MaterialColumn>
+        </m:MaterialRow>
+    </m:MaterialPanel>
+</ui:UiBinder>

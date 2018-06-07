@@ -5,7 +5,9 @@
  */
 package pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.SortedSet;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -160,5 +162,49 @@ public class BarChart extends Chart {
 
         return cells;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BarChart other = (BarChart) obj;
+        if (this.considerFirstField != other.considerFirstField) {
+            return false;
+        }
+        if (this.isRow != other.isRow) {
+            return false;
+        }
+        if (!Objects.equals(this.graph_name, other.graph_name)) {
+            return false;
+        }
+        if (!Arrays.deepEquals(this.content, other.content)) {
+            return false;
+        }
+        if (!Objects.equals(this.firstCell, other.firstCell)) {
+            return false;
+        }
+        if (!Objects.equals(this.lastCell, other.lastCell)) {
+            return false;
+        }
+        if (!Objects.equals(this.associatedCell, other.associatedCell)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }
