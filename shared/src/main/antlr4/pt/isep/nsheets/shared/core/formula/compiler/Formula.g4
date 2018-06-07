@@ -40,6 +40,7 @@ atom
 	|	literal
 	|	LPAR concatenation RPAR
         |       globalreference
+        |       temporaryreference
 	;
 
 function_call
@@ -50,13 +51,13 @@ function_call
 reference
 	:	CELL_REF
 		( ( COLON ) CELL_REF )?
-		| temporaryreference
 	;
 	
 literal
 	:	NUMBER
 	|	STRING
         |       nameglobal
+        |       nameTemporary
 	;
 	
 manyexpressions
@@ -102,8 +103,11 @@ CELL_REF
 	
 
 temporaryreference
-    :	temporaryreference ASSIGN concatenation
-    |   UNDERSCORE LETTER+
+    :	nameTemporary ASSIGN concatenation
+    ;
+
+nameTemporary
+    :   UNDERSCORE ( LETTER )+
     ;
 
 globalreference

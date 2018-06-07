@@ -11,7 +11,6 @@ import pt.isep.nsheets.shared.core.formula.Literal;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.core.formula.lang.CellReference;
 import pt.isep.nsheets.shared.lapr4.blue.n1150455.s1.temporaryVariables.TemporaryVariable;
-import pt.isep.nsheets.shared.lapr4.blue.n1150455.s1.temporaryVariables.TemporaryVariablesList;
 import pt.isep.nsheets.shared.lapr4.green.n1160815.formula.lang.GlobalVariable;
 
 /**
@@ -54,9 +53,7 @@ public class Assignment implements BinaryOperator {
             if (leftOperand instanceof TemporaryVariable) {
                 Value value = rightOperand.evaluate();
                 TemporaryVariable leftOp = (TemporaryVariable) leftOperand;
-
-                leftOp.setContent(new Literal(value));
-                TemporaryVariablesList.addTempVariable(leftOp);
+                leftOp.setContent(value);
                 return value;
             } else if (leftOperand instanceof GlobalVariable) {
                 Value value = rightOperand.evaluate();

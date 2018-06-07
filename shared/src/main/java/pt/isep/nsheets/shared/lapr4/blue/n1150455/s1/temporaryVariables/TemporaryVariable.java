@@ -5,16 +5,10 @@
  */
 package pt.isep.nsheets.shared.lapr4.blue.n1150455.s1.temporaryVariables;
 
-import pt.isep.nsheets.shared.core.Cell;
+import java.util.Objects;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
-import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Value;
-import pt.isep.nsheets.shared.core.formula.Expression;
-import pt.isep.nsheets.shared.core.formula.Function;
-import pt.isep.nsheets.shared.core.formula.FunctionParameter;
 import pt.isep.nsheets.shared.core.formula.Literal;
-import pt.isep.nsheets.shared.core.formula.UnaryOperation;
-import pt.isep.nsheets.shared.core.formula.util.ExpressionVisitor;
 
 /**
  *
@@ -22,28 +16,43 @@ import pt.isep.nsheets.shared.core.formula.util.ExpressionVisitor;
  */
 public class TemporaryVariable extends Literal {
 
-    private Expression expression;
+    private Value name;
 
     public TemporaryVariable(Value value) {
         super(value);
     }
 
-    public TemporaryVariable(Value value, Expression expression) throws IllegalValueTypeException {
+    public TemporaryVariable(Value value, Value name) throws IllegalValueTypeException {
         super(value);
-        this.expression = expression;
+        this.name = name;
     }
 
-    public Expression getExpression() {
-        return expression;
+    public Value getName() {
+        return name;
     }
 
-    public void setContent(Expression expression) {
-        this.expression = expression;
+    public void setContent(Value value) {
+        super.setValue(value);
     }
 
     @Override
     public Value getValue() {
         return super.getValue();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TemporaryVariable other = (TemporaryVariable) obj;
+        return Objects.equals(this.name, other.name);
     }
 
 }
