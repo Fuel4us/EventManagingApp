@@ -8,7 +8,6 @@ package pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.applicat
 import eapli.framework.application.Controller;
 import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.domain.PDFBuilder;
 import pt.isep.nsheets.shared.core.Workbook;
-import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 /**
  *
@@ -18,7 +17,7 @@ public class ExportStyledPDFController implements Controller{
     
     public boolean buildPDF(Workbook wb){
         PDFBuilder pdfFile = new PDFBuilder(wb);
-        return pdfFile.exportWorkbook();
+        return pdfFile.createPdf();
     }
     
 }

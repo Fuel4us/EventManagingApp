@@ -5,19 +5,27 @@
  */
 package pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.domain;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chapter;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.Section;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Workbook;
 
@@ -34,6 +42,8 @@ public class PDFBuilder {
 
     public PDFBuilder(Workbook workbook) {
         this.workbook = workbook;
+        File file = new File(FILE_PATH);
+        file.getParentFile().mkdirs();
     }
     
     private void createTable(Section section) {
@@ -65,8 +75,8 @@ public class PDFBuilder {
     }
 
     public boolean exportWorkbook() {
+        
         try {
-            
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(FILE_PATH));
             document.open();
@@ -75,8 +85,8 @@ public class PDFBuilder {
             addContent(document);
             document.close();
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (DocumentException | FileNotFoundException ex) {
+            Logger.getLogger(PDFBuilder.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
     }
@@ -116,6 +126,63 @@ public class PDFBuilder {
         for (int i = 0; i < number; i++) {
             paragraph.add(new Paragraph(" "));
         }
+    }
+    
+    public boolean createPdf() {
+        try {
+            
+            Spreadsheet ss = workbook.getSpreadsheet(0);
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream(FILE_PATH));
+            document.open();
+            PdfPTable table;
+            PdfPCell cell;
+            Font font = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
+            table = new PdfPTable(ss.getColumnCount());
+            
+            for(int firstLine = 0; firstLine <ss.getColumnCount();firstLine++ ){
+                cell = new PdfPCell(new Phrase(ss.getCell(firstLine, 0).getContent(), font));
+                cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                cell.setBorder(Rectangle.BOX);
+                cell.setBorderColor(BaseColor.BLUE);
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+            }
+            
+//            for(int aw = 0; aw < ; aw++){
+//                cell = new PdfPCell(new Phrase("hi", font));
+//                cell.setBackgroundColor(BaseColor.WHITE);
+//                cell.setBorder(Rectangle.BOX);
+//                cell.setBorderColor(BaseColor.BLUE);
+//                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+//                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                table.addCell(cell);
+//            }
+            
+            for(int i = 1; i<ss.getRowCount(); i++){
+                for(int j = 0; j< ss.getColumnCount(); j++ ){
+                cell = new PdfPCell(new Phrase(ss.getCell(i, j).getContent(), font));
+                if(j == 0) {
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                }else{
+                    cell.setBackgroundColor(BaseColor.WHITE);
+                }
+                cell.setBorder(Rectangle.BOX);
+                cell.setBorderColor(BaseColor.BLUE);
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+                }
+            }
+            document.add(table);
+            document.close();
+            return true;
+        } catch (IOException|  DocumentException ex) {
+            Logger.getLogger(PDFBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        
     }
     
     

@@ -120,7 +120,7 @@
                                     <m:MaterialLink  text="Line Type" textColor="BLACK" iconType="LINE_STYLE" iconPosition="LEFT" addStyleNames="{style.label}" />
                                 </m:MaterialColumn>
                                 <m:MaterialColumn grid="s8 m6 l2" >
-                                    <m:MaterialRadioButton ui:field="dotted" formValue="dotted" name="color" text="Dotted" type="GAP" addStyleNames="{style.block}"/>
+                                    <m:MaterialRadioButton  ui:field="dotted" formValue="dotted" name="color" text="Dotted" type="GAP" addStyleNames="{style.block}"/>
                                 </m:MaterialColumn>
                                 <m:MaterialColumn grid="s8 m6 l2" >
                                     <m:MaterialRadioButton ui:field="double_" formValue="double" name="color" text="Double" type="GAP" addStyleNames="{style.block}"/>

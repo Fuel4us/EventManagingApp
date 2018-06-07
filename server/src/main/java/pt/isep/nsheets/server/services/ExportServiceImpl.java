@@ -29,6 +29,7 @@ public class ExportServiceImpl extends RemoteServiceServlet implements ExportSer
         return ctrl.exportWorkbook(workbook);
     }
 
+    @Override
     public boolean exportWorkbookAsPDF(WorkbookDTO workbookDTO) {
         ExportPdfController pdfController = new ExportPdfController();
         Workbook workbook = Workbook.fromDTO(workbookDTO);
