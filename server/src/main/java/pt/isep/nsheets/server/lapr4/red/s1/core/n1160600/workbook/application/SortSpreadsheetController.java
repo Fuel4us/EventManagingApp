@@ -8,8 +8,8 @@ import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
 
 public class SortSpreadsheetController implements Controller{
-    public void sortCells(String stringCell1, String stringCell2, Spreadsheet spreadSheet, boolean ascendant) throws IllegalValueTypeException, FormulaCompilationException {
+    public SpreadsheetDTO sortCells(String stringCell1, String stringCell2, SpreadsheetDTO spreadSheet, boolean ascendant) {
         SortSpreadsheetService s = new SortSpreadsheetService();
-        s.sortCells(stringCell1, stringCell2, spreadSheet, ascendant);
+        return s.sortCells(stringCell1, stringCell2, spreadSheet, ascendant);
     }
 }

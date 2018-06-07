@@ -8,19 +8,14 @@ import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.lapr4.red.n1160600.services.SpreadsheetService;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
 
 public class SpreadsheetServiceImpl extends RemoteServiceServlet implements SpreadsheetService {
 
     @Override
-    public void sortCells(String stringCell1, String stringCell2, Spreadsheet spreadSheet, boolean ascendant) {
+    public SpreadsheetDTO sortCells(String stringCell1, String stringCell2, SpreadsheetDTO spreadSheet, boolean ascendant) {
         SortSpreadsheetController s = new SortSpreadsheetController();
-        try {
-            s.sortCells(stringCell1, stringCell2, spreadSheet, ascendant);
-        } catch (IllegalValueTypeException ex) {
-            Logger.getLogger(SpreadsheetServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FormulaCompilationException ex) {
-            Logger.getLogger(SpreadsheetServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            return s.sortCells(stringCell1, stringCell2, spreadSheet, ascendant);
     }
     
 }
