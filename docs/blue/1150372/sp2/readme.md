@@ -22,6 +22,7 @@ The agenda view can be implemented as a simple list of events (from the calendar
 The view should display only actual and future events.
 
 Proposal:
+
 * US1 - As a User, I want to access my calendar, so I can view my current and future events .
 
 * US2 - As a User, I want to create an event, so I can .
