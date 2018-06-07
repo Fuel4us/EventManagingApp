@@ -15,6 +15,7 @@ governing permissions and limitations under the License. #L% -->
     <ui:import field="pt.isep.nsheets.client.place.NameTokens.chart"/>
     <ui:import field="pt.isep.nsheets.client.place.NameTokens.form"/>
     <ui:import field="pt.isep.nsheets.client.place.NameTokens.code"/>
+    <ui:import field="pt.isep.nsheets.client.place.NameTokens.code_js"/>
 
     <ui:style>
 
@@ -137,6 +138,9 @@ governing permissions and limitations under the License. #L% -->
             </m:MaterialColumn>
             <m:MaterialColumn>
                 <m:MaterialLink  targetHistoryToken="{code}" text="Add Visual Basic" textColor="ORANGE" iconType="CODE" iconPosition="LEFT"/>
+            </m:MaterialColumn>
+            <m:MaterialColumn>
+                <m:MaterialLink  targetHistoryToken="{code_js}" text="Add JavaScript" textColor="YELLOW" iconType="CODE" iconPosition="LEFT"/>
             </m:MaterialColumn>
             <m:MaterialColumn>
                 <m:MaterialLink  ui:field="forms" targetHistoryToken="{form}" text="Forms" textColor="BLUE" iconType="POLYMER" iconPosition="LEFT"/>

@@ -25,6 +25,7 @@ import pt.isep.nsheets.client.application.calendar.CalendarModule;
 import pt.isep.nsheets.client.application.chart.ChartModule;
 import pt.isep.nsheets.client.application.chat.ChatModule;
 import pt.isep.nsheets.client.application.code.CodeModule;
+import pt.isep.nsheets.client.application.code_js.Code_JavaScriptModule;
 import pt.isep.nsheets.client.application.export.ExportModule;
 import pt.isep.nsheets.client.application.extensions.ExtensionsModule;
 import pt.isep.nsheets.client.application.form.FormModule;
@@ -56,6 +57,7 @@ public class ApplicationModule extends AbstractPresenterModule {
         install(new ChatModule());
         install(new FormModule());
         install(new CodeModule());
+        install(new Code_JavaScriptModule());
         install(new ExtensionsModule());
         install(new MacroModule());
 

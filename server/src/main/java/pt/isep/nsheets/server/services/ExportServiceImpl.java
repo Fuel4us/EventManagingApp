@@ -5,6 +5,7 @@ import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1140317.ExportXML.application.
 
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1150503.ExportPDF.ExportPdfController;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160998.ExportCSV.ExportCSVController;
+import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.application.ExportStyledPDFController;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.ExportService;
@@ -40,6 +41,11 @@ public class ExportServiceImpl extends RemoteServiceServlet implements ExportSer
         Workbook workbook = Workbook.fromDTO(workbookDTO);
         //ctrl.exportWorkbook(workbook);
         return false;
+    }
+
+    @Override
+    public boolean exportStyledWorkbookPDF(WorkbookDTO workbookDTO) {
+        return new ExportStyledPDFController().buildPDF(Workbook.fromDTO(workbookDTO));
     }
 
 

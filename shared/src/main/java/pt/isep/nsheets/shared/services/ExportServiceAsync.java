@@ -16,6 +16,8 @@ public interface ExportServiceAsync {
     void exportWorkbookAsPDF(WorkbookDTO workbookDTO, AsyncCallback<Boolean> async);
 
     void exportWorkbookAsCSL(WorkbookDTO workbookDTO, AsyncCallback<Boolean> async);
+    
+    void exportStyledWorkbookPDF(WorkbookDTO workbookDTO, AsyncCallback<Boolean> async);
 
 //    void exportPartOfSpreadsheet(Spreadsheet spreadsheet, int beginColumn, int beginRow, int endColumn, int endRow);
 }
