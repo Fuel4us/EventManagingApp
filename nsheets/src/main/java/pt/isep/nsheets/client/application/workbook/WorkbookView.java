@@ -51,7 +51,8 @@ import pt.isep.nsheets.server.lapr4.green.s1.core.n1140302.search.Application.Se
 import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
 import pt.isep.nsheets.shared.ext.Extension;
@@ -60,8 +61,13 @@ import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalFormattingExtension;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.client.application.Settings;
+import pt.isep.nsheets.server.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetController;
+import pt.isep.nsheets.server.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetService;
+import pt.isep.nsheets.server.services.SpreadsheetServiceImpl;
 import pt.isep.nsheets.shared.lapr4.red.n1160600.services.SpreadsheetService;
 import pt.isep.nsheets.shared.lapr4.red.n1160600.services.SpreadsheetServiceAsync;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.AddressDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
 import pt.isep.nsheets.shared.services.*;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
@@ -147,7 +153,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialDataTable<SheetCell> customTable;
 
-
     @UiField
     MaterialLink forms;
 
@@ -223,7 +228,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         Spreadsheet sh = Settings.getInstance().getWorkbook().getSpreadsheet(0);
 
         int columnNumber = 0;
-        
 
         // Add the columns...
         customTable.addColumn(new SheetWidgetColumn(-1, this));
@@ -467,26 +471,57 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         sortButton.addClickHandler(event -> {
             try {
                 boolean ascending = (sortListBox.getSelectedIndex() == 0) ? true : false;
+                String cell1 = windowFirstBox.getText();
+                String cell2 = windowSecondBox.getText();
                 SpreadsheetServiceAsync spreadsheetServiceAsync = GWT.create(SpreadsheetService.class);
-                AsyncCallback<Void> asyncCallback = new AsyncCallback<Void>() {
+                AsyncCallback<SpreadsheetDTO> asyncCallback = new AsyncCallback<SpreadsheetDTO>() {
                     @Override
                     public void onFailure(Throwable throwable) {
                         MaterialToast.fireToast(throwable.getMessage());
+
                     }
 
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        MaterialToast.fireToast("Cells Sorted Sucessfully");
+                    public void onSuccess(SpreadsheetDTO sResult) {
+                        if (sResult != null) {
+                            SpreadsheetDTO dto = customTable.getRow(0).getData().sheet.toDTO();
+                            //MaterialToast.fireToast("Cells Sorted Sucessfully " + dto.columns + " " + dto.rows);
+                            Address addr1 = new Address(cell1);
+                            Address addr2 = new Address(cell2);
+                            int column1 = addr1.getColumn();
+                            int column2 = addr2.getColumn();
+                            int row1 = addr1.getRow();
+                            int row2 = addr2.getRow();
+                            int startColumn = column1 <= column2 ? column1 : column2;
+                            int endColumn = column1 <= column2 ? column2 : column1;
+                            int startRow = row1 <= row2 ? row1 : row2;
+                            int endRow = row1 <= row2 ? row2 : row1;
+                            for (int i = startRow; i <= endRow; i++) {
+                                SheetCell sheetCell = customTable.getRow(i).getData();
+                                for (int j = startColumn; j <= endColumn; j++) {
+                                    
+                                    try {
+//                                         MaterialToast.fireToast("change  " + i + " " + j + " " + sResult.getCell(i, j).content);
+                                        sheetCell.getCell(j).setContent(sResult.getCell(i, j).content);
+                                    } catch (FormulaCompilationException ex) {
+                                        Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+
+                                }
+                            }
+                        }
                     }
 
                 };
-                spreadsheetServiceAsync.sortCells(windowFirstBox.getText(), windowSecondBox.getText(), customTable.getRow(0).getData().sheet, ascending, asyncCallback);
+                spreadsheetServiceAsync.sortCells(cell1, cell2, customTable.getRow(0).getData().sheet.toDTO(), ascending, asyncCallback);
+
+//                  SortSpreadsheetService s = new SortSpreadsheetService();
+//                  s.sortCells(windowFirstBox.getText(), windowSecondBox.getText(), customTable.getRow(0).getData().sheet, ascending);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-                Window.alert(e.getMessage());
+                MaterialToast.fireToast(e.getMessage());
             } finally {
-                //resultLabel.setText(result);
 
                 // refresh the table...
                 customTable.getView().setRedraw(true);
@@ -494,8 +529,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 window.close();
             }
         });
-        
-        
+
         initWorkbook();
 
         customTable.getTableTitle().setText("The Future Worksheet!");
@@ -505,7 +539,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     protected void onAttach() {
         super.onAttach();
     }
-
 
 //    public ChartDTO initChartTEST() {
 //        String[][] matrix = new String[][]{
