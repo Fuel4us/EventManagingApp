@@ -24,7 +24,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
-import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -65,12 +64,12 @@ import pt.isep.nsheets.client.application.form.FormView;
 
 import java.util.ArrayList;
 import java.util.List;
-import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.shared.services.ChartsService;
 import pt.isep.nsheets.shared.services.ChartsServiceAsync;
 
 import java.text.ParseException;
 import pt.isep.nsheets.client.application.menu.MenuView;
+import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.services.ChartType;
 
 public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, WorkbookPresenter.MyProxy> {
