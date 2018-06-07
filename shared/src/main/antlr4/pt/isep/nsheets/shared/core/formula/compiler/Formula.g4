@@ -161,9 +161,9 @@ LBRACKET : '[' ;
 RBRACKET : ']' ;
 
 /* Coin Signs */
-EURO : 'e' ;
-DOLLAR : '$' ;
-POUND : '£' ;
+EURO : '\u20AC' ;
+DOLLAR : '\u0024' ;
+POUND : '\u00A3' ;
 
 /* Assignment Operator */
 ASSIGN 	: ':=' ;

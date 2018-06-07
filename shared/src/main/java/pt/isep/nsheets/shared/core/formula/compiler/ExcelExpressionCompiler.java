@@ -58,7 +58,7 @@ public class ExcelExpressionCompiler implements ExpressionCompiler {
      */
     public ExcelExpressionCompiler() {
         language = LanguageManager.getInstance().getLanguage("excel");
-    		//language=new ExcelLanguage();
+        //language=new ExcelLanguage();
     }
 
     public char getStarter() {
