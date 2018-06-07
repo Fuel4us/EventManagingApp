@@ -1,4 +1,4 @@
-**Pedro António de Moura Alves** (1150372) - Sprint 1 - Lang01.1
+**Pedro Alves** (1150372) - Sprint 1 - Lang01.1
 ===============================
 
 # 1. General Notes

@@ -1,0 +1,12 @@
+@startuml us
+
+skinparam monochrome true
+skinparam shadowing false
+hide footbox
+
+User -> (US4: Delete Event)
+User -> (US3: Edit Event)
+User -> (US2: Create Event)
+User -> (US1: View My Current & Future Events)
+
+@enduml
