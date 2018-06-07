@@ -50,4 +50,7 @@ public class Conditional implements Serializable {
     public ConditionalDTO toDTO(){
         return new ConditionalDTO(this.cell, this.configuration, this.condOperator,this.condValue);
     }
+    public static Conditional fromDTO(ConditionalDTO dto){
+        return new Conditional(dto.cell, dto.configuration, dto.condOperator, dto.condValue);
+    }
 }

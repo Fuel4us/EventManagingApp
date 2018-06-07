@@ -1,0 +1,15 @@
+@startuml analysis
+
+skinparam monochrome true
+skinparam shadowing false
+hide footbox
+
+actor User
+
+User -> Browser : Imports the file
+Browser ->> Server : importXmlFile()
+
+Server -->> Browser : return
+Browser -> Browser : display
+
+@enduml

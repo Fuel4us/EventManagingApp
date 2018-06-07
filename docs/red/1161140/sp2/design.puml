@@ -1,0 +1,32 @@
+@startuml design
+
+skinparam monochrome true
+skinparam shadowing false
+hide footbox
+
+actor User
+boundary ImportView
+control ImportPresenter
+control ImportXmlServices
+control ImportXmlController
+control ImportXmlService
+
+box "Client"
+participant ImportView
+participant ImportPresenter
+end box
+
+box "Server"
+participant ImportXmlServices
+participant ImportXmlController
+participant ImportXmlService
+end box
+
+User -> ImportPresenter : onReveal()
+ImportPresenter ->> ImportXmlServices : importXmlFile()
+ImportXmlServices -> ImportXmlController : importXmlFile()
+ImportXmlController -> ImportXmlService : importXmlFile()
+ImportXmlServices ->> ImportPresenter : onSuccess()
+ImportPresenter -> ImportView : setContents()
+
+@enduml

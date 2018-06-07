@@ -13,7 +13,9 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 @RemoteServiceRelativePath("ExportService")
 public interface ExportService extends RemoteService {
 
-      void exportWorkbook(WorkbookDTO workbookDTO, String type);
+      //void exportWorkbook(WorkbookDTO workbookDTO, String type);
+
+      WorkbookDTO exportWorkbook(WorkbookDTO workbookDTO, String type);
 //
 //    String[][] exportSpreadsheet(Spreadsheet spreadsheet);
 //

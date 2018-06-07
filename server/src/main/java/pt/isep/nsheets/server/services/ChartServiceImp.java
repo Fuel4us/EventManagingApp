@@ -77,7 +77,7 @@ public class ChartServiceImp extends RemoteServiceServlet implements ChartsServi
     }
 
     @Override
-    public String[][] getChartContent(ChartDTO dto, SpreadsheetDTO s) {
+    public ChartDTO getChartContent(ChartDTO dto, SpreadsheetDTO s) {
                 CreateChartController ctrl = new CreateChartController();
                 
                 return ctrl.generateChartValues(dto, s);

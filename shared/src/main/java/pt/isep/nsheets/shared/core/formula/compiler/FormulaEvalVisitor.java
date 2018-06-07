@@ -65,32 +65,34 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
     @Override
     public Expression visitComparison(FormulaParser.ComparisonContext ctx) {
         if (ctx.getChildCount() == 3) {
-            if (ctx.getChild(0).getText().equalsIgnoreCase("{")) {
-                return visit(ctx.manyexpressions());
-            } else {
-                if (ctx.getChild(0).getText().equalsIgnoreCase("FOR{")) {
-                    return visit(ctx.forexpression());
-                } else {
-                    try {
-                        BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
+            try {
+                BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
 
-                        return new BinaryOperation(
-                                visit(ctx.getChild(0)),
-                                operator,
-                                visit(ctx.getChild(2))
-                        );
-                    } catch (UnknownElementException ex) {
-                        MaterialToast.fireToast("ERRO Comparison getBinaryOperator");
-                        addVisitError(ex.getMessage());
-                    }
-                }
+                return new BinaryOperation(
+                        visit(ctx.getChild(0)),
+                        operator,
+                        visit(ctx.getChild(2))
+                );
+            } catch (UnknownElementException ex) {
+                MaterialToast.fireToast("ERRO Comparison getBinaryOperator");
+                addVisitError(ex.getMessage());
             }
         }
         return visit(ctx.getChild(0));
     }
 
     @Override
-    public Expression visitConcatenation(FormulaParser.ConcatenationContext ctx) {
+    public Expression visitBlock(FormulaParser.BlockContext ctx) {
+        if (ctx.getChildCount() == 1) {
+            return visit(ctx.manyexpressions());
+        } else {
+            return visit(ctx.forexpression());
+        }
+    }
+
+    @Override
+    public Expression visitConcatenation(FormulaParser.ConcatenationContext ctx
+    ) {
         try {
             if (ctx.getChildCount() == 2) { // Convert unary operation
                 int operatorid = 0, operand = 1;  // Assume operator on the left
@@ -123,11 +125,12 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
             addVisitError(ex.getMessage());
         }
 
-        return visitChildren(ctx);
+        return visit(ctx.getChild(0));
     }
 
     @Override
-    public Expression visitAtom(FormulaParser.AtomContext ctx) {
+    public Expression visitAtom(FormulaParser.AtomContext ctx
+    ) {
         if (ctx.getChildCount() == 3) {
             return visit(ctx.getChild(1));
         }
@@ -212,27 +215,31 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
 
     @Override
     public Expression visitManyexpressions(FormulaParser.ManyexpressionsContext ctx) {
-
-        Value value = null;
-
-        List<Expression> args = new ArrayList<>();
-
-        for (int i = 0; i < ctx.getChildCount(); i += 2) {
-            args.add(visit(ctx.getChild(i)));
-        }
-
-        Expression[] argArray = args.toArray(new Expression[args.size()]);
+        Function function = null;
         try {
-            for (int i = 0; i < argArray.length; i++) {
-                if (i == argArray.length - 1) {
-                    value = argArray[i].evaluate();
-                }
-                argArray[i].evaluate();
-            }
-        } catch (IllegalValueTypeException ex) {
-            MaterialToast.fireToast("ERRO MANY EXPRESSIONS");
+            // function = Language.getInstance().getFunction(ctx.getChild(0).getText());
+            function = this.language.getFunction(ctx.getChild(0).getText());
+        } catch (UnknownElementException ex) {
+            Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return new Literal(value);
+
+        if (function != null) {
+            try {
+                List<Expression> args = new ArrayList<>();
+                if (ctx.getChildCount() > 2) {
+                    for (int nChild = 1; nChild < ctx.getChildCount() - 1; nChild += 2) {
+                        args.add(visit(ctx.getChild(nChild)));
+                    }
+                }
+                Expression[] argArray = args.toArray(new Expression[args.size()]);
+                // return new FunctionCall(function, argArray);
+                return new Literal(function.applyTo(argArray));
+            } catch (IllegalValueTypeException ex) {
+                Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        MaterialToast.fireToast("RETURN NULL_Many expressions");
+        return null;
     }
 
     @Override
@@ -252,9 +259,12 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
 
     @Override
     public Expression visitForexpression(FormulaParser.ForexpressionContext ctx) {
-        Function function = new For();
-        Value value = null;
-        MaterialToast.fireToast("visitForexpression");
+        Function function = null;
+        try {
+            function = this.language.getFunction(ctx.getParent().getChild(0).getText());
+        } catch (UnknownElementException ex) {
+            MaterialToast.fireToast("ERROR getParent ForExpression.");
+        }
 
         List<Expression> args = new ArrayList<>();
 
@@ -264,15 +274,19 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
 
         Expression[] argArray = args.toArray(new Expression[args.size()]);
         try {
-            value = function.applyTo(argArray);
-            MaterialToast.fireToast("applyTo");
+            if (function != null) {
+                MaterialToast.fireToast("Apply To");
+                //return new FunctionCall(function, argArray);  dava
+                return new Literal(function.applyTo(argArray));
+            } else {
+                MaterialToast.fireToast("FUNCTION NULL");
+            }
         } catch (IllegalValueTypeException ex) {
-            MaterialToast.fireToast("ERRO ForExpression apply to.");
             Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         MaterialToast.fireToast("RETURN NULL FOREXPRESSION");
-        return new Literal(value);
+        return new Literal(new Value());
     }
 
     @Override

@@ -1,7 +1,8 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
-             xmlns:m="urn:import:gwt.material.design.client.ui">
+             xmlns:m="urn:import:gwt.material.design.client.ui"
+             xmlns:combobox="urn:import:gwt.material.design.addins.client.combobox">
 
     <ui:import field="pt.isep.nsheets.client.place.NameTokens.home"/>
     <ui:with field='res' type='pt.isep.nsheets.client.resources.AppResources' />
@@ -29,7 +30,46 @@
                     <m:MaterialDivider marginTop="10"/>
                     <m:MaterialButton waves="LIGHT" size="LARGE" iconType="DONE" backgroundColor="BLUE" iconColor="WHITE" ui:field="confirmButton" text="CONFIRM" marginTop="25"/>
                 </m:MaterialCollapsibleBody>
+                
+                <!-- Core 02.2 Implementation -> @author João Pereira_1150478@isep.ipp.pt -->
+            </m:MaterialCollapsibleItem>
+            <!-- Add Menu Option -->
+            <m:MaterialCollapsibleItem>
+                <m:MaterialCollapsibleHeader backgroundColor="GREY">
+                    <m:MaterialLink text="Add Menu Option" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
+                </m:MaterialCollapsibleHeader>
+                <m:MaterialCollapsibleBody backgroundColor="GREY_LIGHTEN_2">
+                    <m:MaterialLabel text="Add Menu Option" fontSize="3em"/>
+                    <m:MaterialLabel text="Choose the name of the new menu option"/>
+                    <m:MaterialTextBox ui:field="menuName"/> 
+                    
+                </m:MaterialCollapsibleBody>
+            </m:MaterialCollapsibleItem>
+            <!-- Add Popup Menu in Cells Option -->
+            <m:MaterialCollapsibleItem>
+                <m:MaterialCollapsibleHeader backgroundColor="GREY">
+                    <m:MaterialLink text="Add Popup Menu in Cells" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
+                </m:MaterialCollapsibleHeader>
+                <m:MaterialCollapsibleBody backgroundColor="GREY_LIGHTEN_2">
+                    <m:MaterialLabel text="Add Popup Menu in Cells" fontSize="3em"/>
+                    <m:MaterialLabel text="Choose the cell ID to insert the popup menu"/>
+                    <combobox:MaterialComboBox ui:field="comboCell" width="100%" placeholder="Cell ID">
+                        <m:html.Option value="1" text="A1"/>
+                        <m:html.Option value="2" text="B2"/>
+                    </combobox:MaterialComboBox> 
+                    
+                </m:MaterialCollapsibleBody>
+            </m:MaterialCollapsibleItem>
+            <!-- Add Side Bar Option -->
+            <m:MaterialCollapsibleItem>
+                <m:MaterialCollapsibleHeader backgroundColor="GREY">
+                    <m:MaterialLink text="Add Side Bar" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
+                </m:MaterialCollapsibleHeader>
+                <m:MaterialCollapsibleBody backgroundColor="GREY_LIGHTEN_2">
+                                    
+                </m:MaterialCollapsibleBody>
             </m:MaterialCollapsibleItem>
         </m:MaterialCollapsible>
+       
     </g:HTMLPanel>
 </ui:UiBinder>

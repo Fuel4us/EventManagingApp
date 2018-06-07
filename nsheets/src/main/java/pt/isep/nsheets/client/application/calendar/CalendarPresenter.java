@@ -17,7 +17,6 @@ import pt.isep.nsheets.shared.services.CalendarEventDTO;
 import pt.isep.nsheets.shared.services.CalendarEventService;
 import pt.isep.nsheets.shared.services.CalendarEventServiceAsync;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,18 +29,6 @@ public class CalendarPresenter extends Presenter<CalendarPresenter.MyView, Calen
 
     interface MyView extends View {
         void setContents(List<CalendarEventDTO> contents);
-
-//        void createEventClickHandler(ClickHandler ch);
-//
-//        void editEventClickHandler(ClickHandler ch);
-//
-//        void deleteEventClickHandler(ClickHandler ch);
-//
-//        void createButtonClickHandler(ClickHandler ch);
-//
-//        void editButtonClickHandler(ClickHandler ch);
-//
-//        void cancelButtonClickHandler(ClickHandler ch);
 
         void openModal();
 
@@ -69,141 +56,20 @@ public class CalendarPresenter extends Presenter<CalendarPresenter.MyView, Calen
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
 
         this.view = view;
-
-//        this.view.createEventClickHandler(e -> {
-//            CalendarEventServiceAsync workbooksSvc = GWT.create(CalendarEventService.class);
-//
-//            AsyncCallback<CalendarEventDTO> callback = new AsyncCallback<CalendarEventDTO>() {
-//                @Override
-//                public void onSuccess(CalendarEventDTO result) {
-//                    MaterialToast.fireToast("Event created successfully", "rounded");
-//
-//                    refreshView();
-//                }
-//
-//                @Override
-//                public void onFailure(Throwable caught) {
-//                    MaterialToast.fireToast("Error! " + caught.getMessage());
-//                }
-//            };
-//
-//            CalendarEventDTO dto = new CalendarEventDTO(this.view.title(), this.view.description(), this.view.date(), this.view.time(), this.view.duration());
-//            workbooksSvc.createCalendarEvent(dto, callback);
-//
-//            this.view.closeModal();
-//        });
-//
-//        this.view.editEventClickHandler(e -> {
-//            CalendarEventServiceAsync workbooksSvc = GWT.create(CalendarEventService.class);
-//
-//            AsyncCallback<CalendarEventDTO> callback = new AsyncCallback<CalendarEventDTO>() {
-//                @Override
-//                public void onSuccess(CalendarEventDTO result) {
-//                    MaterialToast.fireToast("Event edited successfully", "rounded");
-//
-//                    refreshView();
-//                }
-//
-//                @Override
-//                public void onFailure(Throwable caught) {
-//                    MaterialToast.fireToast("Error! " + caught.getMessage());
-//                }
-//            };
-//
-//            CalendarEventDTO dto = new CalendarEventDTO(this.view.title(), this.view.description(), this.view.date(), this.view.time(), this.view.duration());
-//            workbooksSvc.editCalendarEvent(dto, callback);
-//
-//            this.view.closeModal();
-//        });
-//
-//        this.view.deleteEventClickHandler(e -> {
-//            CalendarEventServiceAsync workbooksSvc = GWT.create(CalendarEventService.class);
-//
-//            AsyncCallback<CalendarEventDTO> callback = new AsyncCallback<CalendarEventDTO>() {
-//                @Override
-//                public void onSuccess(CalendarEventDTO result) {
-//                    MaterialToast.fireToast("Event edited successfully", "rounded");
-//
-//                    refreshView();
-//                }
-//
-//                @Override
-//                public void onFailure(Throwable caught) {
-//                    MaterialToast.fireToast("Error! " + caught.getMessage());
-//                }
-//            };
-//
-//            CalendarEventDTO dto = new CalendarEventDTO(this.view.title(), this.view.description(), this.view.date(), this.view.time(), this.view.duration());
-//            workbooksSvc.deleteCalendarEvent(dto, callback);
-//
-//            this.view.closeModal();
-//        });
-//
-//        this.view.createButtonClickHandler(e -> {
-//            GWT.create(CalendarEventService.class);
-//
-//            new AsyncCallback<CalendarEventDTO>() {
-//                @Override
-//                public void onSuccess(CalendarEventDTO result) {
-//                    refreshView();
-//                }
-//
-//                @Override
-//                public void onFailure(Throwable caught) {
-//                    MaterialToast.fireToast("Error! " + caught.getMessage());
-//                }
-//            };
-//
-//            this.view.openModal();
-//        });
-//
-//        this.view.editButtonClickHandler(e -> {
-//            GWT.create(CalendarEventService.class);
-//
-//            new AsyncCallback<CalendarEventDTO>() {
-//                @Override
-//                public void onSuccess(CalendarEventDTO result) {
-//                    refreshView();
-//                }
-//
-//                @Override
-//                public void onFailure(Throwable caught) {
-//                    MaterialToast.fireToast("Error! " + caught.getMessage());
-//                }
-//            };
-//
-//            this.view.openModal();
-//        });
-//
-//        this.view.cancelButtonClickHandler(e -> {
-//            GWT.create(CalendarEventService.class);
-//
-//            new AsyncCallback<CalendarEventDTO>() {
-//                @Override
-//                public void onSuccess(CalendarEventDTO result) {
-//                    refreshView();
-//                }
-//
-//                @Override
-//                public void onFailure(Throwable caught) {
-//                    MaterialToast.fireToast("Error! " + caught.getMessage());
-//                }
-//            };
-//
-//            this.view.closeModal();
-//        });
     }
 
     private void refreshView() {
         CalendarEventServiceAsync calendarEventServiceAsync = GWT.create(CalendarEventService.class);
 
-        AsyncCallback<ArrayList<CalendarEventDTO>> asyncCallback = new AsyncCallback<ArrayList<CalendarEventDTO>>() {
-            public void onFailure(Throwable caught) {
-                MaterialToast.fireToast("Error!", "rounded");
+        AsyncCallback<List<CalendarEventDTO>> asyncCallback = new AsyncCallback<List<CalendarEventDTO>>() {
+            @Override
+            public void onSuccess(List<CalendarEventDTO> result) {
+                view.setContents(result);
             }
 
-            public void onSuccess(ArrayList<CalendarEventDTO> result) {
-                view.setContents(result);
+            @Override
+            public void onFailure(Throwable caught) {
+                MaterialToast.fireToast("Database connection failed", "rounded");
             }
         };
 

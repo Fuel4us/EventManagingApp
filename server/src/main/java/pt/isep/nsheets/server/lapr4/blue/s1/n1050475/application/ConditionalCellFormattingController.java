@@ -35,8 +35,8 @@ public class ConditionalCellFormattingController {
         return ret;
     }
 
-    public List<Conditional> loadConditionalFromDatabase() {
-        List<Conditional> lstConditional = new ArrayList<Conditional>();
+    public ArrayList<Conditional> loadConditionalFromDatabase() {
+        ArrayList<Conditional> lstConditional = new ArrayList<Conditional>();
         final ConditionalRepository conditionalRepository = PersistenceContext.repositories().conditional();
 
         Iterator<Conditional> conditionalIterator = conditionalRepository.findAll().iterator();
