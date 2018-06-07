@@ -21,8 +21,8 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     MaterialNavBar navBar;
     @UiField
     static MaterialSideNavPush sideNav;
-    @UiField
-    MaterialButton testAddMenu;
+//    @UiField
+//    MaterialButton testAddMenu;
 
     @Inject
     MenuView(Binder uiBinder) {
