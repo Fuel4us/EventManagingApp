@@ -10,5 +10,5 @@ package pt.isep.nsheets.shared.services;
  * @author pedromonteiro
  */
 public enum ChartType {
-    BAR_CHART
+    BAR_CHART, PIE_CHART
 }

@@ -48,8 +48,18 @@ public class NameTokens {
     public static final String search ="search";
     
     public static final String SIGNUP = "signup";
+    
+    public static final String macro ="macro";
 
+    public static String getSignup(){
+        return SIGNUP;
+    }
+    
     public static String getSearch(){return search;}
+
+    public static String getMacro() {
+        return macro;
+    }
 
     public static String getWorkbook() {
         return workbook;

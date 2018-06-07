@@ -102,7 +102,7 @@ Project **Server**
 
 Project **NShests**
 - Changed: **pt.isep.nsheets.client.application.export.**
-- Changed: **pt.isep.nsheets.server.services.ExportServiceImp**
+- Changed: **pt.isep.nsheets.server.services.ExportServiceImpl**
 
 Project **Shared**
 - Created: **pt.isep.nsheets.shared.services.ExportService** and **pt.isep.nsheets.shared.services.ExportServiceAsync**

@@ -31,7 +31,7 @@ end box
 ' end box
 
 
-User -> ChartView : click new workbook
+User -> ChartView : click new chart
 ChartView -> ChartPresenter : onClick()
 ChartPresenter --> ChartView: drawChart(chartname, dto, firstcell, lastcell, considerfirst, isrow)
 ChartView -> ChartService: getChartContent(dto, spreadsheet, callback)

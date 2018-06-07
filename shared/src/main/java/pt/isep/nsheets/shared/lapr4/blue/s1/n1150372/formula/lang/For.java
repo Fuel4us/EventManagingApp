@@ -1,5 +1,6 @@
 package pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang;
 
+import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Value;
 import pt.isep.nsheets.shared.core.formula.Expression;
@@ -11,14 +12,49 @@ import pt.isep.nsheets.shared.core.formula.FunctionParameter;
  */
 public class For implements Function {
 
-    public boolean initialized = false;
-    Value value = null;
     Value boundary = new Value(true);
 
     public static final FunctionParameter[] parameters = new FunctionParameter[]{
         new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", false,
-        "The for expressions")
-    };
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", false,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", false,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),
+        new FunctionParameter(Value.Type.UNDEFINED, "ForExpression", true,
+        "The for expressions"),};
 
     public For() {
     }
@@ -32,6 +68,8 @@ public class For implements Function {
     public Value applyTo(Expression[] args) throws IllegalValueTypeException {
         args[0].evaluate();
         int i;
+        Value value = new Value();
+
         do {
             i = 2;
             while (i < args.length) {
@@ -54,7 +92,7 @@ public class For implements Function {
 
     @Override
     public boolean isVarArg() {
-        return value.isOfType(Value.Type.UNDEFINED);
+        return false;
     }
 
 }

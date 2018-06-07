@@ -187,7 +187,7 @@ The main idea for the "workflow" of this feature increment.
 **System Sequence Diagrams**
 
 **For US**
-![Use Cases](us.JPG)
+![Use Cases](us.PNG)
 
 
 # 4. Design
@@ -199,6 +199,7 @@ The main idea for the "workflow" of this feature increment.
 		- Log in;
 		- Go to the workbook section;
 		- Click on the Formula Lable and add a Expression;
+		- Show the last result in the cell select.
 		
 
 ## 4.2. Requirements Realization

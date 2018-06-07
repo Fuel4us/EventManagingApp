@@ -67,7 +67,7 @@ This is a table that should display the overall planning of the team. This is si
 | Red  | [Gonçalo Silva](red/1161140/) | [Core06.1](red/1161140/sp1) | [IPC04.2](red/1161140/sp2) |		|
 | Red  | [Pedro Vieira](red/1160634/) | [Core07.1](red/1160634/sp1) | [IPC08.2](red/1160634/sp2) |		|
 | Red  | [Tiago Babo](red/1160760/) | [Core05.1](red/1160760/sp1) |								 |		|
-| Red  | [José Santo](red/1160629/) | [Core02.1](red/1160629/sp1) |								 |		|
+| Red  | [José Santo](red/1160629/) | [Core02.1](red/1160629/sp1) |	[IPC05.2](red/1160629/sp2)						 |		|
 | Red  | [Bernardo Carreira](red/1150990/) | [Core08.1](red/1150990/sp1) |								 |		|
 | Green | [Carlos Figueiredo](green/1140317/) | [IPC06.1](green/1140317/sp1) | [Lang04.2](green/1140317/sp2) |		|
 | Green | [Diogo Monteiro](green/1140302/) | [IPC02.1](green/1140302/sp1) | [Lang05.2](green/1140302/sp2) |		|

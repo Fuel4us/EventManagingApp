@@ -1,3 +1,4 @@
+/*
 package pt.isep.nsheets.server.lapr4.green.s1.ipc.n1140317.ExportXML.application;
 
 import java.io.File;
@@ -5,80 +6,69 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.sun.tools.javac.util.List;
+import pt.isep.nsheets.server.services.ExportServiceImpl;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Workbook;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
+
+*/
 /**
  *
  * @author Carlos Figueiredo (1140317)
- */
+ *//*
+
+
 public class ExportXMLController {
 
     private final ExportXML expXML = new ExportXML();
 
-    private final String CRLF = ",\r\n";
-    private String delimiter = ",";
 
     public ExportXMLController() {
     }
 
-    public boolean exportWorkbook(Workbook activeWorkbook) throws FileNotFoundException, IOException {
+    public boolean exportWorkbook(Workbook activeWorkbook) {
+        FileOutputStream stream = null;
 
         try {
-            String xmlFile = "../XML.xml";
+            stream = new FileOutputStream("../XML.xml");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ExportXMLController.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
 
-            FileWriter writer = new FileWriter(xmlFile);
+        ArrayList<String[][]> workbook = new ArrayList<>();
 
-            writer.append(activeWorkbook.name() + CRLF + activeWorkbook.description() + CRLF);
-
-            for (int x = 0; x < activeWorkbook.getSpreadsheetCount(); x++) {
-                Spreadsheet s = activeWorkbook.getSpreadsheet(x);
+        for(int i = 0; i < activeWorkbook.getSpreadsheetCount(); i++) {
+                Spreadsheet s = activeWorkbook.getSpreadsheet(i);
 
                 int r_count = s.getRowCount();
                 int c_count = s.getColumnCount();
 
-                for (int y = 0; y < r_count; y++) {
-                    for (int z = 0; z < c_count; z++) {
-                        writer.append(s.getCell(y, z).getContent());
+                String[][] ssheet = new String[c_count][r_count];
 
-                        if (z < r_count - 1) {
-                            writer.append(delimiter);
-                        }
-                    }
+                for(int x = 0; i < c_count; x++){
+                    for(int y = 0; i < r_count; y++){
 
-                    if (y < c_count - 1) {
-                        writer.append(CRLF);
+
+                        ssheet[x][y] = s.getCell(x,y).getContent();
                     }
                 }
-            }
-
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+                workbook.add(ssheet);
         }
 
-//    public boolean exportWorkbook(Workbook activeWorkbook, File filePath) throws FileNotFoundException, IOException {
-//        FileOutputStream stream = null;
-//        WorkbookDTO w = activeWorkbook.toDTO();
-//        List<String[][]> workbook = ExportServiceImp.exportWorkbook(w,"");
-//
-//        try {
-//            stream = new FileOutputStream(filePath);
-//        } catch (FileNotFoundException ex) {
-//            Logger.getLogger(ExportXMLController.class.getName()).log(Level.SEVERE, null, ex);
-//            return false;
-//        }
-//
-//        try {
-//            expXML.write(workbook, stream);
-//            stream.close();
-//        } catch (IOException ex) {
-//            Logger.getLogger(ExportXMLController.class.getName()).log(Level.SEVERE, null, ex);
-//            return false;
-//        }
+     try {
+            expXML.write(workbook, stream);
+            stream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ExportXMLController.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
         return true;
     }
 
@@ -94,7 +84,6 @@ public class ExportXMLController {
                     .getName()).log(Level.SEVERE, null, ex);
             return false;
         }
-
         try {
             expXML.write(spreadsheet, stream);
 
@@ -134,3 +123,5 @@ public class ExportXMLController {
         return true;
     }
 }
+
+*/

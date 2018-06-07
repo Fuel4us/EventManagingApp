@@ -5,7 +5,9 @@
  */
 package pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.SortedSet;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -112,13 +114,8 @@ public class BarChart extends Chart {
         endCol++; //Incrementes because col-2 is the 3rd column
         endRow++;
 
-        if (spreadsheet == null) {
-            spreadsheet = generateSpreadsheet();
-            firstCell = new Address(0, 0);
-            lastCell = new Address(2, 2);
-        }
 
-        associatedCell = spreadsheet.getCell(endCol, startRow).getAddress();
+        associatedCell = spreadsheet.getCell(endCol-1, startRow).getAddress();
 
         Cell[] cells = cellSetToArray(spreadsheet.getCells(firstCell, lastCell));
 
@@ -150,11 +147,6 @@ public class BarChart extends Chart {
         return associatedCell;
     }
 
-    private Spreadsheet generateSpreadsheet() {
-        String[][] contents = new String[][]{{"1", "2", "3"}, {"1", "2", "3"}, {"1", "2", "3"}, {"1", "2", "3"}};
-        Workbook wb = new Workbook("graph", "desc", contents);
-        return wb.getSpreadsheet(0);
-    }
 
     private Cell[] cellSetToArray(SortedSet<Cell> setCell) {
 
@@ -170,5 +162,49 @@ public class BarChart extends Chart {
 
         return cells;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BarChart other = (BarChart) obj;
+        if (this.considerFirstField != other.considerFirstField) {
+            return false;
+        }
+        if (this.isRow != other.isRow) {
+            return false;
+        }
+        if (!Objects.equals(this.graph_name, other.graph_name)) {
+            return false;
+        }
+        if (!Arrays.deepEquals(this.content, other.content)) {
+            return false;
+        }
+        if (!Objects.equals(this.firstCell, other.firstCell)) {
+            return false;
+        }
+        if (!Objects.equals(this.lastCell, other.lastCell)) {
+            return false;
+        }
+        if (!Objects.equals(this.associatedCell, other.associatedCell)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }

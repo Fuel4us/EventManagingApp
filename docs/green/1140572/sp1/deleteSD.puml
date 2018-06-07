@@ -10,9 +10,10 @@ actor User
 User->HomePresenter : Select the workbook
 HomePresenter->HomePresenter : setFocusedWorkbookDTO()
 HomePresenter -> WorkbookServicesAsync : deleteWorkbook(workbookDTO, callback)
-WorkbookServicesAsync -> WorkbookServices: deleteWorkbook(workbookDTO)
-WorkbookServices -> DeleteWorkbookController : deleteWorkbook(workbook)
-DeleteWorkbookController->WorkbookRepositoty : workbook : findByName(workbookDTO.name())
+WorkbookServicesAsync -> WorkbookServicesImpl: deleteWorkbook(workbookDTO)
+WorkbookServicesImpl -> DeleteWorkbookController : deleteWorkbook(workbookDTO)
+DeleteWorkbookController->WorkbookRepository : workbook = findByName(workbookDTO.name())
+WorkbookRepository->JpaWorkbookRepository : findByName(workbookDTO.name())
 DeleteWorkbookController->WorkbookRepository : deleteWorkbook(workbook)
 WorkbookRepository->JpaWorkbookRepository : deleteWorkbook(workbook)
 JpaWorkbookRepository -> JpaTxlessRepository : entityManager()
