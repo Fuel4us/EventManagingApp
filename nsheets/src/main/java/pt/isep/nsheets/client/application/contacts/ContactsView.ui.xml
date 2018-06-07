@@ -1,0 +1,45 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:m="urn:import:gwt.material.design.client.ui"
+             xmlns:ma="urn:import:gwt.material.design.addins.client">
+             
+    <ui:import field="pt.isep.nsheets.client.place.NameTokens.home"/>         
+    <ui:with field='res' type='pt.isep.nsheets.client.resources.AppResources' />
+    
+    <m:MaterialPanel>
+    
+        <g:HTMLPanel ui:field="htmlPanel">
+        </g:HTMLPanel>
+        
+        <ma:emptystate.MaterialEmptyState ui:field="emptyState" height="50vh" iconType="CONTACTS" iconColor="BLUE" title="Contact list empty"
+                                          description="Add Contact" textColor="BLUE"
+                                          backgroundColor="WHITE"/>
+        
+        <m:MaterialFAB>
+            <m:MaterialButton ui:field="openModalBtn" type="FLOATING" iconType="ADD" tooltip="Add Contact" tooltipPosition="LEFT" size="LARGE"/>
+        </m:MaterialFAB>
+        
+        <m:MaterialCard ui:field="contactsCard">
+            <m:MaterialCollection ui:field="contactsCollection">
+            </m:MaterialCollection>  
+        </m:MaterialCard>
+        
+        <m:MaterialModal ui:field="modalAddContact" type="DEFAULT" dismissible="true">
+            <m:MaterialModalContent>
+                <m:MaterialRow>
+                    <m:MaterialColumn grid="s6" offset="s6" >
+                        <m:MaterialTitle title="Create your Contact"/>
+                    </m:MaterialColumn>
+                </m:MaterialRow>
+                <m:MaterialTextBox ui:field="contactName" label="Contact's Name" validateOnBlur="true" allowBlank="false"/>
+                <m:MaterialTextArea ui:field="contactEmail" placeholder="Contact's Email"/>
+            </m:MaterialModalContent>
+            <m:MaterialModalFooter>
+                <m:MaterialButton ui:field="saveBtn" text="Save Contact" type="FLAT"/>
+            </m:MaterialModalFooter>
+        </m:MaterialModal>
+        
+    </m:MaterialPanel> 
+    
+</ui:UiBinder>

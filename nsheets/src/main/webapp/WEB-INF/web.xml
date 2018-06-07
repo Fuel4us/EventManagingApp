@@ -80,6 +80,20 @@
         <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
         <url-pattern>/nsheets/notesService</url-pattern>
     </servlet-mapping>
+    
+        <!-- Servlets for the contacts -->
+    <servlet>
+        <servlet-name>contactsServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.ContactsServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>contactsServiceServlet</servlet-name>
+        <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
+        <url-pattern>/nsheets/contactsService</url-pattern>
+    </servlet-mapping>
+    
+
 
     <!-- Servlets for the charts -->
     <servlet>

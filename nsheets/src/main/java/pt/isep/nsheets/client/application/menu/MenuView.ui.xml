@@ -76,6 +76,9 @@
                 <m:MaterialLink targetHistoryToken="{tokens.getNotes}" iconPosition="LEFT" iconType="NOTE" text="Notes"/>
             </m.html:ListItem>
             <m.html:ListItem waves="DEFAULT">
+                <m:MaterialLink targetHistoryToken="{tokens.getContacts}" iconPosition="LEFT" iconType="CONTACTS" text="Contacts"/>
+            </m.html:ListItem>
+            <m.html:ListItem waves="DEFAULT">
                 <m:MaterialLink targetHistoryToken="{tokens.getCalendar}" iconPosition="LEFT" iconType="EVENT" text="Calendar"/>
             </m.html:ListItem>
             <m.html:ListItem waves="DEFAULT">

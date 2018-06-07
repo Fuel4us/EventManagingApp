@@ -45,17 +45,21 @@ public class NameTokens {
 
     public static final String extensions = "extensions";
 
-    public static final String search ="search";
-    
-    public static final String SIGNUP = "signup";
-    
-    public static final String macro ="macro";
+    public static final String search = "search";
 
-    public static String getSignup(){
+    public static final String SIGNUP = "signup";
+
+    public static final String macro = "macro";
+
+    public static final String contacts = "contacts";
+
+    public static String getSignup() {
         return SIGNUP;
     }
-    
-    public static String getSearch(){return search;}
+
+    public static String getSearch() {
+        return search;
+    }
 
     public static String getMacro() {
         return macro;
@@ -96,7 +100,7 @@ public class NameTokens {
     public static String getExport() {
         return export;
     }
-    
+
     public static String getForm() {
         return form;
     }
@@ -105,6 +109,12 @@ public class NameTokens {
         return code;
     }
 
-    public static String getExtensions(){ return extensions; }
+    public static String getExtensions() {
+        return extensions;
+    }
+
+    public static String getContacts() {
+        return contacts;
+    }
 
 }
