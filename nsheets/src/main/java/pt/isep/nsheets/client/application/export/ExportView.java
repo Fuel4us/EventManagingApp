@@ -11,36 +11,42 @@ import javax.inject.Inject;
 
 class ExportView extends ViewImpl implements ExportPresenter.MyView {
 
-	@Override
-	public void csvButtonClickHandler(ClickHandler ch) {
-		export_csv.addClickHandler(ch);
-	}
-
-        @Override
-	public void xmlButtonClickHandler(ClickHandler cHandler) {
-		export_xml.addClickHandler(cHandler);
-	}
-
-	@Override
-	public void pdfButtonClickHandler(ClickHandler clickHandler) {
-		export_pdf.addClickHandler(clickHandler);
-	}
+    @UiField
+    MaterialButton export_pdf;
+    @UiField
+    MaterialButton export_csv;
+    @UiField
+    MaterialButton export_xml;
+    @UiField
+    MaterialButton export_csl;
 
 
-	interface Binder extends UiBinder<Widget, ExportView> {}
+    @Inject
+    ExportView(Binder uiBinder) {
+        initWidget(uiBinder.createAndBindUi(this));
+    }
 
-	@UiField
-	MaterialButton export_pdf;
+    @Override
+    public void csvButtonClickHandler(ClickHandler ch) {
+        export_csv.addClickHandler(ch);
+    }
 
-	@UiField
-	MaterialButton export_csv;
-        
-        @UiField
-	MaterialButton export_xml;
+    @Override
+    public void xmlButtonClickHandler(ClickHandler cHandler) {
+        export_xml.addClickHandler(cHandler);
+    }
 
-	@Inject
-	ExportView(Binder uiBinder) {
-		initWidget(uiBinder.createAndBindUi(this));
-	}
+    @Override
+    public void pdfButtonClickHandler(ClickHandler clickHandler) {
+        export_pdf.addClickHandler(clickHandler);
+    }
+
+    @Override
+    public void cslButtonClickHandler(ClickHandler clickHandler) {
+        export_csl.addClickHandler(clickHandler);
+    }
+
+    interface Binder extends UiBinder<Widget, ExportView> {
+    }
 
 }
