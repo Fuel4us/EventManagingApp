@@ -1,4 +1,4 @@
-@startuml  analysis3
+@startuml  analysis2
 skinparam handwritten true
 skinparam monochrome true
 skinparam packageStyle rect
@@ -7,17 +7,13 @@ skinparam shadowing false
 
 
 
-alt from edit to preview
 
 actor User
+User -> Browser : Save Chart
+Browser -> Server : saveChart(chart)
+database DataBase
+Server -> DataBase: save
+Server --> Browser : return
+Browser -> Browser : display message 
 
-	User -> Browser : change to preview mode
-    Browser -> Browser : show preview page
-	
-else from preview to edit
-
-    User -> Browser : change to edit mode
-    Browser -> Browser : show edit page
-
-end
 @enduml

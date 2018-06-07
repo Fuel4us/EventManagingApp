@@ -14,11 +14,13 @@ The of LAPR4 is to take advantage of the knowledge acquired in EAPLI and apply i
 
 The application should have a new menu option to launch a wizard to help the user create a bar chart. The wizard should have 2 steps. In the first step, the user should input the name of the chart and the range of cells that contains the data for the plot of the chart. The user should also select if the data is in the rows or columns of the range and if the first row or the first column are to be considered labels. In the second step the wizard should display a preview of the chart. The wizard should allow the user to move between steps 1 and 2. If the wizard is confirmed the cell in the left upper corner of the range should have a mark (e.g., icon) that indicates that the cell has a chart associated with it. A popup menu option in the cell should provide access to the chart.
 
-We can specify this requirements in 2 User Stories:
+We can specify this requirements in 3 User Stories:
 
 * US1 - As a user I want a wizard to help me to insert the data to create the bar chart;
 
 * US2 - As a user I want to save the created chart;
+
+* US3 - As a user I want to get all the charts, so I can access it from the workbook page;
 
 # 3. Analysis
 
@@ -121,7 +123,7 @@ Based on JPA, in this project, we usually find:
 #####FOR UC1
 ![UC1](design1.png.png)
 #####FOR UC2
-![UC2](design2.png.png)
+![UC2](design2.png)
 #####FOR UC3
 ![UC3](design3png.png)
 
