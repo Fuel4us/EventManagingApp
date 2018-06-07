@@ -149,9 +149,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialDataTable<SheetCell> customTable;
 
-    @UiField
-    MaterialLink forms;
-
     @UiHandler("click_chart")
     void onclick(ClickEvent e) {
         this.activeCell = null;
@@ -291,13 +288,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
                     // refresh the active cell
                     this.setActiveCell(activeCell);
-                }
-            }
-            if (activeCell != null) {
-                String result = "";
-                if (firstBox.getText().equals("form()")) {
-                    forms.setTargetHistoryToken("{form}");
-                    //CHANGE
                 }
             }
             // Window.alert("Hello");
