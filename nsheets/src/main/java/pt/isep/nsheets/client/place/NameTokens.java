@@ -43,6 +43,8 @@ public class NameTokens {
 
     public static final String code = "code";
 
+    public static final String code_js = "code_js";
+
     public static final String extensions = "extensions";
 
     public static final String search ="search";
@@ -103,6 +105,10 @@ public class NameTokens {
 
     public static String getCode() {
         return code;
+    }
+
+    public static String getCode_js(){
+        return code_js;
     }
 
     public static String getExtensions(){ return extensions; }
