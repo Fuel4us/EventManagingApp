@@ -464,7 +464,7 @@ public class CellImpl implements Cell, Serializable {
             dependentsDTO.add(d.toDTO());
         }
         
-        return new CellDTO(address.toDTO(), content, precedentsDTO, dependentsDTO);
+        return new CellDTO(address.toDTO(), content, value, precedentsDTO, dependentsDTO);
     }
     
     public static Cell fromDTO(CellDTO dto){
