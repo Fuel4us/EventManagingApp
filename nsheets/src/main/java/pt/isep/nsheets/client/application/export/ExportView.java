@@ -1,10 +1,12 @@
 package pt.isep.nsheets.client.application.export;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.client.ui.MaterialButton;
@@ -16,6 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import pt.isep.nsheets.shared.application.Settings;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
+import pt.isep.nsheets.shared.services.ExportService;
+import pt.isep.nsheets.shared.services.ExportServiceAsync;
 
 class ExportView extends ViewImpl implements ExportPresenter.MyView {
 
@@ -54,6 +60,26 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
         color = color_line.getValue();
         style = findSelected().getFormValue();
         MaterialToast.fireToast("Line style: "+style+"Line Color: "+color);
+        
+        ExportServiceAsync exportServiceAsync = GWT.create(ExportService.class);
+
+            AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+                @Override
+                public void onFailure(Throwable throwable) {
+                    MaterialToast.fireToast("Error! " + throwable.getMessage(), "rounded");
+                }
+
+                @Override
+                public void onSuccess(Boolean result) {
+                    if (result) {
+                        MaterialToast.fireToast("PDF exported", "rounded");
+                    } else {
+                        MaterialToast.fireToast("Error exporting workbook");
+                    }
+                }
+            };
+            WorkbookDTO workbookDTO = Settings.getInstance().getWorkbook().toDTO();
+            exportServiceAsync.exportStyledWorkbookPDF(workbookDTO, callback);
     }
    
 
