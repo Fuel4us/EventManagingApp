@@ -104,7 +104,7 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
                 }
 
             };
-            chartSrv.addChart(ChartView.chartDTO, s.toDTO(), callback);
+            chartSrv.addChart(ChartView.chartDTO, callback);
         });
 
     }

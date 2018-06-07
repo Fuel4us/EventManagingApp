@@ -13,7 +13,7 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO
 public interface ChartsService extends RemoteService{
     
     ArrayList<ChartDTO> getCharts();
-    ChartDTO addChart(ChartDTO chartDTO, SpreadsheetDTO s) throws DataException;
+    ChartDTO addChart(ChartDTO chartDTO) throws DataException;
     ChartDTO getChartContent(ChartDTO dto, SpreadsheetDTO s);
     
     

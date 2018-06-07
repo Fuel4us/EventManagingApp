@@ -96,6 +96,8 @@ Based on JPA, in this project, we usually find:
 
 ## 4.1. Functional Test
 
+* Tried to make unit tests, but for some reason they are not working.
+
 ####TEST ADD A CHART SUCCEFULLY
 1. User requests a chart creation;
 2. The system shows the "Create Chart" UI;

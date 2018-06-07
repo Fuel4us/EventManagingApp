@@ -65,12 +65,12 @@ public class ChartServiceImp extends RemoteServiceServlet implements ChartsServi
     }
 
     @Override
-    public ChartDTO addChart(ChartDTO chartDTO, SpreadsheetDTO ss) throws DataException {
+    public ChartDTO addChart(ChartDTO chartDTO) throws DataException {
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
 		AddChartController ctrl = new AddChartController();
 
-		Chart chart = ctrl.addChart(chartDTO, ss);
+		Chart chart = ctrl.addChart(chartDTO);
                 
 		
 		return chart.toDTO();
