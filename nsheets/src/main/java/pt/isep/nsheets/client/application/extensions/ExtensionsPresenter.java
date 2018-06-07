@@ -11,8 +11,12 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
+import gwt.material.design.client.constants.Color;
+import gwt.material.design.client.constants.Display;
+import gwt.material.design.client.constants.IconType;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialLink;
+import gwt.material.design.client.ui.MaterialListValueBox;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.html.ListItem;
@@ -59,6 +63,10 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
         MaterialTextBox getPopName();
         
         MaterialButton getPopButton();
+        
+        IconType getIconMenuChoosed();
+        
+        IconType getIconPopChoosed();
     }
     
     @NameToken(NameTokens.extensions)
@@ -131,12 +139,20 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
             @Override
             public void onClick(ClickEvent event) {
                 String name = getView().getMenuName().getText();
+                IconType icon = getView().getIconMenuChoosed();
                 ListItem newItem = new ListItem();
                 MaterialLink ls = new MaterialLink();
                 ls.setText(name);
+                ls.setDisplay(Display.BLOCK);
+                ls.setTextColor(Color.BLACK);
+                ls.setIconType(icon);
                 newItem.add(ls);
-                MenuView.getSideNav().add(ls);
-                MaterialToast.fireToast("Menu Option created!");
+                if (name.isEmpty()) {
+                    MaterialToast.fireToast("The name of new menu option is empty! Please write one.");
+                } else {
+                    MenuView.getSideNav().add(ls);
+                    MaterialToast.fireToast("Menu Option created!");
+                }
             }
         });
         
@@ -144,10 +160,18 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
             @Override
             public void onClick(ClickEvent event) {
                 String name = getView().getPopName().getText();
+                IconType icon = getView().getIconPopChoosed();
                 MaterialLink pop = new MaterialLink();
                 pop.setText(name);
-                WorkbookView.getPopupMenu().add(pop);
-                MaterialToast.fireToast("Popup option created!");
+                pop.setDisplay(Display.BLOCK);
+                pop.setTextColor(Color.BLACK);
+                pop.setIconType(icon);
+                if (name.isEmpty()) {
+                    MaterialToast.fireToast("The name of the popup is empty! Please write one.");
+                } else {
+                    WorkbookView.getPopupMenu().add(pop);
+                    MaterialToast.fireToast("Popup menu option created!");
+                }
             }
         });
     }
