@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,6 @@
 package pt.isep.nsheets.client.application;
 
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
-
 import pt.isep.nsheets.client.application.about.AboutModule;
 import pt.isep.nsheets.client.application.calendar.CalendarModule;
 import pt.isep.nsheets.client.application.chart.ChartModule;
@@ -30,11 +29,12 @@ import pt.isep.nsheets.client.application.export.ExportModule;
 import pt.isep.nsheets.client.application.extensions.ExtensionsModule;
 import pt.isep.nsheets.client.application.form.FormModule;
 import pt.isep.nsheets.client.application.home.HomeModule;
+import pt.isep.nsheets.client.application.imports.ImportModule;
 import pt.isep.nsheets.client.application.login.LoginModule;
 import pt.isep.nsheets.client.application.macro.MacroModule;
 import pt.isep.nsheets.client.application.menu.MenuModule;
-import pt.isep.nsheets.client.application.workbook.WorkbookModule;
 import pt.isep.nsheets.client.application.notes.NotesModule;
+import pt.isep.nsheets.client.application.workbook.WorkbookModule;
 import pt.isep.nsheets.client.lapr4.red.s2.ipc.n1161292.signup.SignupModule;
 
 public class ApplicationModule extends AbstractPresenterModule {
@@ -52,6 +52,7 @@ public class ApplicationModule extends AbstractPresenterModule {
         install(new SignupModule());
         install(new ChartModule());
         install(new ExportModule());
+        install(new ImportModule());
         install(new ChatModule());
         install(new FormModule());
         install(new CodeModule());

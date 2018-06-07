@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,6 +37,8 @@ public class NameTokens {
 
     public static final String export = "export";
 
+    public static final String imports = "import";
+
     public static final String chat = "chat";
 
     public static final String form = "form";
@@ -45,17 +47,19 @@ public class NameTokens {
 
     public static final String extensions = "extensions";
 
-    public static final String search ="search";
-    
-    public static final String SIGNUP = "signup";
-    
-    public static final String macro ="macro";
+    public static final String search = "search";
 
-    public static String getSignup(){
+    public static final String SIGNUP = "signup";
+
+    public static final String macro = "macro";
+
+    public static String getSignup() {
         return SIGNUP;
     }
-    
-    public static String getSearch(){return search;}
+
+    public static String getSearch() {
+        return search;
+    }
 
     public static String getMacro() {
         return macro;
@@ -96,7 +100,11 @@ public class NameTokens {
     public static String getExport() {
         return export;
     }
-    
+
+    public static String getImports() {
+        return imports;
+    }
+
     public static String getForm() {
         return form;
     }
@@ -105,6 +113,8 @@ public class NameTokens {
         return code;
     }
 
-    public static String getExtensions(){ return extensions; }
+    public static String getExtensions() {
+        return extensions;
+    }
 
 }
