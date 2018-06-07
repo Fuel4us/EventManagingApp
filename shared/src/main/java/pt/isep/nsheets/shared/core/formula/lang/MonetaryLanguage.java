@@ -5,8 +5,6 @@
  */
 package pt.isep.nsheets.shared.core.formula.lang;
 
-import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.Assignment;
-
 /**
  *
  * @author Pedro Rodrigues - (1140572)

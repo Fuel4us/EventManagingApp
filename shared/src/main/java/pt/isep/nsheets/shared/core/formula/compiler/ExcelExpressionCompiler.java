@@ -38,7 +38,6 @@ import java.util.List;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.Recognizer;
-import pt.isep.nsheets.shared.core.formula.lang.ExcelLanguage;
 
 /**
  * A compiler that generates Excel-style formulas from strings.
