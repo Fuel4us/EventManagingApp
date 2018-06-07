@@ -3,9 +3,13 @@ package pt.isep.nsheets.server.services;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1140302.search.Application.SearchSpreadsheetController;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;
+import pt.isep.nsheets.shared.core.Spreadsheet;
+import pt.isep.nsheets.shared.core.SpreadsheetImpl;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.CellDTOAux;
 import pt.isep.nsheets.shared.services.CellsService;
 
+import java.util.List;
 import java.util.Properties;
 
 public class CellsServiceImpl extends RemoteServiceServlet implements CellsService {
@@ -29,13 +33,15 @@ public class CellsServiceImpl extends RemoteServiceServlet implements CellsServi
         return new PersistenceSettings(props);
     }
 
+
+
     @Override
-    public void getResult(String name,String expression, String result) {
+    public String getResult(String expression, WorkbookDTO workbookDTO) {
         SearchSpreadsheetController controller = new SearchSpreadsheetController();
-        controller.setSpreadsheetList(name);
+        controller.setWorkbook(workbookDTO);
         controller.setCellList();
         controller.setString(expression);
-        result =controller.getString();
+        return controller.getString();
 
     }
 }

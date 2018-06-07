@@ -6,17 +6,16 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.client.constants.Color;
+import gwt.material.design.client.constants.IconType;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialListValueBox;
 import gwt.material.design.client.ui.MaterialTextBox;
-
 import javax.inject.Inject;
 
 /**
- * 
+ *
  * João Pereira <1150478@isep.ipp.pt>
  */
-
 class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
 
     @UiField
@@ -29,6 +28,10 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
     MaterialListValueBox<Color> bgColorNeg;
     @UiField
     MaterialListValueBox<Color> fgColorNeg;
+    @UiField
+    MaterialListValueBox<IconType> iconsMenu;
+    @UiField
+    MaterialListValueBox<IconType> iconsPop;
     @UiField
     MaterialButton menuButton;
     @UiField
@@ -46,7 +49,17 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
         initWidget(uiBinder.createAndBindUi(this));
 
         populateColours();
+        populateIcons();
+    }
 
+    @Override
+    public IconType getIconMenuChoosed() {
+        return iconsMenu.getSelectedValue();
+    }
+
+    @Override
+    public IconType getIconPopChoosed() {
+        return iconsPop.getSelectedValue();
     }
 
     @Override
@@ -120,6 +133,13 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
             fgColorPos.addItem(c);
             bgColorNeg.addItem(c);
             fgColorNeg.addItem(c);
+        }
+    }
+
+    private void populateIcons() {
+        for (IconType i : IconType.values()) {
+            iconsMenu.add(i);
+            iconsPop.add(i);
         }
     }
 }

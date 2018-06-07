@@ -306,7 +306,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         searchButton.addClickHandler(event -> {
             searchModal.open();
             CellsServiceAsync cellsServiceAsync = GWT.create(CellsService.class);
-            AsyncCallback<Void> asyncCallback = new AsyncCallback<Void>() {
+            AsyncCallback<String> asyncCallback = new AsyncCallback<String>() {
                 @Override
                 public void onFailure(Throwable throwable) {
                     MaterialToast.fireToast("Error! " + throwable.getMessage());
@@ -314,18 +314,19 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 }
 
                 @Override
-                public void onSuccess(Void aVoid) {
+                public void onSuccess(String aVoid) {
                     MaterialToast.fireToast("Cells Searched Sucessfully", "rounded");
+                    setText(aVoid);
                 }
 
             };
 
-            String result = "";
+            cellsServiceAsync.getResult( searchBox.getText(),Settings.getInstance().getWorkbook().toDTO(), asyncCallback);
 
-            cellsServiceAsync.getResult(Settings.getInstance().getWorkbook().name(), searchBox.getText(), result, asyncCallback);
-            setText(result);
 
         });
+
+
 
         // It is possible to create your own custom renderer per table
         // When you use the BaseRenderer you can override certain draw
