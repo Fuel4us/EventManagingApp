@@ -43,7 +43,7 @@ import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.animate.MaterialAnimation;
 import gwt.material.design.client.ui.animate.Transition;
 import javax.inject.Inject;
-import pt.isep.nsheets.client.application.Settings;
+import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.services.ChartDTO;
@@ -121,7 +121,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     class CellValidator extends RegExValidator {
 
         public CellValidator() {
-            super("[A-Za-z]+[0-9]+", "The cell pattern should be \"[a-zA-Z]{1,}[1-9]{1}[0-9]{0,}\", i.e: \"A3\"");
+            super("[A-Za-z]+[1-9][0-9]*", "The cell pattern should be \"[a-zA-Z]{1,}[1-9]{1}[0-9]{0,}\", i.e: \"A3\"");
         }
     }
 

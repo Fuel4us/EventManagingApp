@@ -51,6 +51,8 @@ import pt.isep.nsheets.server.lapr4.green.s1.core.n1140302.search.Application.Se
 import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
 import pt.isep.nsheets.shared.ext.Extension;
@@ -58,9 +60,9 @@ import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalFormattingExtension;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
-import pt.isep.nsheets.client.application.Settings;
-import pt.isep.nsheets.shared.lapr4.red.n1160600.services.SpreadsheetService;
-import pt.isep.nsheets.shared.lapr4.red.n1160600.services.SpreadsheetServiceAsync;
+
+import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetController;
+import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.services.*;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
@@ -129,7 +131,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialDropDown chart_dropdown;
     @UiField
-    MaterialPopupMenu popupMenu, popChart;
+    MaterialPopupMenu popChart;
+    @UiField
+    static MaterialPopupMenu popupMenu;
 
     @UiField
     MaterialLink sortLink;
@@ -146,13 +150,14 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialDataTable<SheetCell> customTable;
 
-    @UiField
-    MaterialLink forms;
-
     @UiHandler("click_chart")
     void onclick(ClickEvent e) {
         this.activeCell = null;
         selectedChart = null;
+    }
+
+    public static MaterialPopupMenu getPopupMenu() {
+        return popupMenu;
     }
 
     @Override
@@ -286,20 +291,13 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                     this.setActiveCell(activeCell);
                 }
             }
-            if (activeCell != null) {
-                String result = "";
-                if (firstBox.getText().equals("form()")) {
-                    forms.setTargetHistoryToken("{form}");
-                    //CHANGE
-                }
-            }
             // Window.alert("Hello");
         });
 
         searchButton.addClickHandler(event -> {
             searchModal.open();
             CellsServiceAsync cellsServiceAsync = GWT.create(CellsService.class);
-            AsyncCallback<Void> asyncCallback = new AsyncCallback<Void>() {
+            AsyncCallback<String> asyncCallback = new AsyncCallback<String>() {
                 @Override
                 public void onFailure(Throwable throwable) {
                     MaterialToast.fireToast("Error! " + throwable.getMessage());
@@ -307,18 +305,19 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 }
 
                 @Override
-                public void onSuccess(Void aVoid) {
+                public void onSuccess(String aVoid) {
                     MaterialToast.fireToast("Cells Searched Sucessfully", "rounded");
+                    setText(aVoid);
                 }
 
             };
 
-            String result = "";
+            cellsServiceAsync.getResult( searchBox.getText(),Settings.getInstance().getWorkbook().toDTO(), asyncCallback);
 
-            cellsServiceAsync.getResult(Settings.getInstance().getWorkbook().name(), searchBox.getText(), result, asyncCallback);
-            setText(result);
 
         });
+
+
 
         // It is possible to create your own custom renderer per table
         // When you use the BaseRenderer you can override certain draw
@@ -463,20 +462,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         sortButton.addClickHandler(event -> {
             try {
                 boolean ascending = (sortListBox.getSelectedIndex() == 0) ? true : false;
-                SpreadsheetServiceAsync spreadsheetServiceAsync = GWT.create(SpreadsheetService.class);
-                AsyncCallback<Void> asyncCallback = new AsyncCallback<Void>() {
-                    @Override
-                    public void onFailure(Throwable throwable) {
-                        MaterialToast.fireToast(throwable.getMessage());
-                    }
-
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        MaterialToast.fireToast("Cells Sorted Sucessfully");
-                    }
-
-                };
-                spreadsheetServiceAsync.sortCells(windowFirstBox.getText(), windowSecondBox.getText(), customTable.getRow(0).getData().sheet, ascending, asyncCallback);
+                new SortSpreadsheetController().sortCells(windowFirstBox.getText(), windowSecondBox.getText(), this.customTable.getRow(0).getData().sheet, ascending);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

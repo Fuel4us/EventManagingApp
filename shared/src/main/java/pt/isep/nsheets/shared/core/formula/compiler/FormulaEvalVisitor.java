@@ -26,9 +26,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.v4.runtime.Token;
+import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
+import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.blue.n1150455.s1.temporaryVariables.TemporaryVariable;
-import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.For;
+import pt.isep.nsheets.shared.lapr4.green.n1160815.formula.lang.GlobalVariable;
 
 /**
  *
@@ -207,6 +209,11 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
             if (t.getType() == FormulaParser.STRING) {
                 String value = ctx.getText().substring(1, ctx.getText().length() - 1);
                 return new Literal(Value.parseValue(value, Value.Type.BOOLEAN, Value.Type.DATE));
+            } else {
+                if (t.getType() == FormulaParser.RULE_nameTemporary) {
+                    TemporaryVariable tempVariable = (TemporaryVariable) ctx.getChild(0);
+                    return new Literal(tempVariable.getValue());
+                }
             }
         }
         MaterialToast.fireToast("RETURN NULL Literal");
@@ -293,7 +300,34 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
     public Expression visitTemporaryreference(FormulaParser.TemporaryreferenceContext ctx) {
         if (ctx.getChildCount() == 3) {
             try {
-                BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(2).getText());
+                BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
+                TemporaryVariable tempVariable = new TemporaryVariable(new Value(ctx.getChild(0).getText()));
+                this.cell.addTempVariable(tempVariable);
+                return new BinaryOperation(
+                        tempVariable,
+                        operator,
+                        visit(ctx.getChild(2))
+                );
+            } catch (UnknownElementException ex) {
+                MaterialToast.fireToast("Error in Temporary Reference");
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public Expression visitGlobalreference(FormulaParser.GlobalreferenceContext ctx) {
+        Workbook currentWorkbook = Settings.getInstance().getWorkbook();
+        MaterialToast.fireToast("Entrou no visitor");
+        //Change code so it does not create a global reference here
+        GlobalVariable gv = new GlobalVariable(new Value(ctx.getChild(0).getText()));
+
+        if (currentWorkbook.checkIfGVExists(gv)) {
+            //Global variable exists
+            MaterialToast.fireToast("Global Variable ja existe");
+            try {
+                BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
                 return new BinaryOperation(
                         visit(ctx.getChild(0)),
                         operator,
@@ -303,13 +337,28 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
                 MaterialToast.fireToast("Error in Temporary Reference");
             }
         } else {
-            String name = "";
-            for (int i = 0; i < ctx.getChildCount(); i++) {
-                name = name + ctx.getChild(i);
-            }
-            return new TemporaryVariable(new Value(name));
+            //Global variable doesnt exists
+            MaterialToast.fireToast("Global Variable não existe");
+            return new GlobalVariable(new Value(ctx.getChild(2).getText()));
         }
 
+        return null;
+    }
+
+    @Override
+    public Expression visitMonetary(FormulaParser.MonetaryContext ctx) {
+        if (ctx.getChildCount() == 3) {
+            try {
+                BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(2).getText());
+                return new BinaryOperation(
+                        visit(ctx.getChild(0)),
+                        operator,
+                        visit(ctx.getChild(2))
+                );
+            } catch (UnknownElementException ex) {
+                MaterialToast.fireToast(ctx.getChild(2).getText());
+            }
+        }
         return null;
     }
 

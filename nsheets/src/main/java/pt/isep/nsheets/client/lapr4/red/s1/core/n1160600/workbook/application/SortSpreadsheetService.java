@@ -1,4 +1,4 @@
-package pt.isep.nsheets.server.lapr4.red.s1.core.n1160600.workbook.application;
+package pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.workbook.application;
 
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;

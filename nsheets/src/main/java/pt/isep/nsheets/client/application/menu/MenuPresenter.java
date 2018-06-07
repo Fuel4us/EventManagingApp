@@ -7,6 +7,7 @@ import com.gwtplatform.mvp.client.View;
 import pt.isep.nsheets.client.event.ContentPushEvent;
 
 import com.gwtplatform.mvp.client.HasUiHandlers;
+import gwt.material.design.client.ui.MaterialSideNavPush;
 
 public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> implements MenuUiHandlers {
 

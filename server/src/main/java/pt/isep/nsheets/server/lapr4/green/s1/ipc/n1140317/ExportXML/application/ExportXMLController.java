@@ -1,4 +1,4 @@
-/*
+
 package pt.isep.nsheets.server.lapr4.green.s1.ipc.n1140317.ExportXML.application;
 
 import java.io.File;
@@ -7,21 +7,21 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.tools.javac.util.List;
 import pt.isep.nsheets.server.services.ExportServiceImpl;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 
-*/
+
 /**
  *
  * @author Carlos Figueiredo (1140317)
- *//*
+ */
 
 
 public class ExportXMLController {
@@ -124,4 +124,4 @@ public class ExportXMLController {
     }
 }
 
-*/
+

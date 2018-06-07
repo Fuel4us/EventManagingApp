@@ -1,4 +1,4 @@
-package pt.isep.nsheets.client.application;
+package pt.isep.nsheets.shared.application;
 
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
@@ -10,12 +10,12 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 public class Settings {
     
     public static String[][][] SPREADSHEET_DEFAULT = {{
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
+                {"1", "2", "3", "4", "5", "6", "7"},
+                {"a", "b", "c", "d", "e", "f", "g"},
+                {"h", "i", "j", "k", "l", "m", "n"},
+                {"o", "p", "8", "9", "10", "0", "23"},
+                {"44", "67", "89", "q", "r", "s", "t"},
+                {"u", "v", "x", "y", "z", "55", "66"},
             }};
     
     private static Settings instance = null;

@@ -53,6 +53,16 @@
     <servlet-class>pt.isep.nsheets.server.services.ConfigurationServiceImpl</servlet-class>
   </servlet>
 
+
+    <servlet>
+        <servlet-name>cellsServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.CellsServiceImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>cellsServiceServlet</servlet-name>
+        <url-pattern>/nsheets/cellsService</url-pattern>
+    </servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>configurationServiceServlet</servlet-name>
     <url-pattern>/nsheets/configurationService</url-pattern>
@@ -150,4 +160,5 @@
     <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
     <url-pattern>/nsheets/spreadsheetService</url-pattern>
   </servlet-mapping>
+
 </web-app>

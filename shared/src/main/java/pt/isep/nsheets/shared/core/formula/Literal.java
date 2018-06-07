@@ -66,4 +66,8 @@ public class Literal implements Expression {
 		else
 			return value.toString();
 	}
+
+    public void setValue(Value value) {
+        this.value = value;
+    }
 }
