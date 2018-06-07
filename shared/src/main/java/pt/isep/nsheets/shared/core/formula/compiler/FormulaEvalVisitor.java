@@ -313,6 +313,23 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
         return null;
     }
 
+    @Override
+    public Expression visitMonetary(FormulaParser.MonetaryContext ctx) {
+        if (ctx.getChildCount() == 3) {
+            try {
+                BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(2).getText());
+                return new BinaryOperation(
+                        visit(ctx.getChild(0)),
+                        operator,
+                        visit(ctx.getChild(2))
+                );
+            } catch (UnknownElementException ex) {
+                MaterialToast.fireToast(ctx.getChild(2).getText());
+            }
+        }
+        return null;
+    }
+
     private void addVisitError(String msg) {
         errorBuffer.append(msg).append("\n");
         numberOfErros++;
