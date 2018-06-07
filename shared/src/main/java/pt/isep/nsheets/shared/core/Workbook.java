@@ -20,6 +20,7 @@
  */
 package pt.isep.nsheets.shared.core;
 
+import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
@@ -27,11 +28,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import pt.isep.nsheets.shared.lapr4.green.n1160815.formula.lang.GlobalVariable;
 
 /**
  * A workbook which can contain several spreadsheets.
@@ -65,6 +70,8 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         @GeneratedValue
         private Long id;
 
+        private List<GlobalVariable> globalVariables;
+        
 	/**
 	 * Creates a new empty workbook.
 	 */
@@ -82,12 +89,15 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
             for (int i = 0; i < sheets; i++)
                     spreadsheets.add(new SpreadsheetImpl(this,
                             getNextSpreadsheetTitle()));
+            
+            this.globalVariables = new ArrayList<>();
 	}
 
 	public Workbook(String name, String description, List<Spreadsheet> spreadsheets) {
             this.name = name;
             this.description = description;
             this.spreadsheets = spreadsheets;
+            this.globalVariables = new ArrayList<>();
 	}
 
 	/**
@@ -102,6 +112,8 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
             for (String[][] content : contents)
                     spreadsheets.add(new SpreadsheetImpl(this,
                             getNextSpreadsheetTitle(), content));
+            
+            this.globalVariables = new ArrayList<>();
 	}
 
 	/**
@@ -268,6 +280,23 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 
                 return new Workbook(dto.name, dto.description, spreadsheet);
             }
+    }
+    
+    public boolean checkIfGVExists(GlobalVariable gv){
+        for (GlobalVariable tempGV : this.globalVariables) {
+            if(tempGV.getValue().equals(gv.getValue()))
+                return true;
+        }
+        
+        return false;
+    }
+    
+    public void addGlobalVariable(GlobalVariable gv){
+        if (!checkIfGVExists(gv)) {
+            this.globalVariables.add(gv);
+        } else {
+            MaterialToast.fireToast("Temporary variable already exists.");
+        }
     }
 	/*
  * GENERAL

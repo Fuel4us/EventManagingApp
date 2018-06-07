@@ -1,4 +1,4 @@
-package pt.isep.nsheets.client.application;
+package pt.isep.nsheets.shared.application;
 
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;

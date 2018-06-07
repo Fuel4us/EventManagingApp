@@ -39,6 +39,7 @@ atom
         |       assignment
 	|	literal
 	|	LPAR concatenation RPAR
+        |       globalreference
 	;
 
 function_call
@@ -55,6 +56,7 @@ reference
 literal
 	:	NUMBER
 	|	STRING
+        |       nameglobal
 	;
 	
 manyexpressions
@@ -104,6 +106,14 @@ temporaryreference
     |   UNDERSCORE LETTER+
     ;
 
+globalreference
+    :	nameglobal ASSIGN concatenation
+    ;
+
+nameglobal
+    :   ARROBA ( LETTER )+
+    ;
+
 /* String literals, i.e. anything inside the delimiters */
 STRING  : QUOT ('\\"' | ~'"')* QUOT
         ;
@@ -148,6 +158,7 @@ fragment ABS : '$' ;
 fragment EXCL:  '!'  ;
 COLON	: ':' ;
 UNDERSCORE : '_' ;
+ARROBA : '@' ;
  
 /* Miscellaneous operators */
 COMMA	: ',' ;

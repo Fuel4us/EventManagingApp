@@ -43,7 +43,7 @@ import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.animate.MaterialAnimation;
 import gwt.material.design.client.ui.animate.Transition;
 import javax.inject.Inject;
-import pt.isep.nsheets.client.application.Settings;
+import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.services.ChartDTO;
