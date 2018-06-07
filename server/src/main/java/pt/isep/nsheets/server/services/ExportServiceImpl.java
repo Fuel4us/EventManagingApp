@@ -1,7 +1,7 @@
 package pt.isep.nsheets.server.services;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-//import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1140317.ExportXML.application.ExportXMLController;
+import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1140317.ExportXML.application.ExportXMLController;
 
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1150503.ExportPDF.ExportPdfController;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160998.ExportCSV.ExportCSVController;
@@ -23,8 +23,9 @@ public class ExportServiceImpl extends RemoteServiceServlet implements ExportSer
 
     @Override
     public boolean exportWorkbookAsXML(WorkbookDTO workbookDTO) {
-        //ExportXMLController ctrl = new ExportXMLController();
-        return false;
+        ExportXMLController ctrl = new ExportXMLController();
+        Workbook workbook = Workbook.fromDTO(workbookDTO);
+        return ctrl.exportWorkbook(workbook);
     }
 
     public boolean exportWorkbookAsPDF(WorkbookDTO workbookDTO) {
