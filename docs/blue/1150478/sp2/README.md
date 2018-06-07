@@ -254,3 +254,4 @@ Some Questions/Issues identified during the work in this feature increment
 # 8. Work Log
 
 * [Implementation] Lang 05.1 (Forms Edit) - Changes on formulas so forms can be displayed by them. [Implementation] Core 02.2 (Full Extension Mechanism) - ExtensionsView.ui.xml edited, added the interface for pop up menus in cells, menu items and bars (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/8ff7bfa0b8fd4209a7733f4a7892f42882e35d81)
+* [Documentation] Core02.2 - changes on readMe.md, documentation added. [Implementation] Core02.2 - changes on layout, and add menu option improvement. (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/cd4f05694b5b2500542431397aced22eab5c03c4)

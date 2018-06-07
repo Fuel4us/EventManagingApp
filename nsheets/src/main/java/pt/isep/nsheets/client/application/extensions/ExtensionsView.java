@@ -1,11 +1,8 @@
 package pt.isep.nsheets.client.application.extensions;
 
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.client.constants.Color;
@@ -14,6 +11,11 @@ import gwt.material.design.client.ui.MaterialListValueBox;
 import gwt.material.design.client.ui.MaterialTextBox;
 
 import javax.inject.Inject;
+
+/**
+ * 
+ * João Pereira <1150478@isep.ipp.pt>
+ */
 
 class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
 
@@ -31,6 +33,10 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
     MaterialButton menuButton;
     @UiField
     MaterialTextBox menuName;
+    @UiField
+    MaterialButton popButton;
+    @UiField
+    MaterialTextBox popName;
 
     interface Binder extends UiBinder<Widget, ExtensionsView> {
     }
@@ -41,6 +47,26 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
 
         populateColours();
 
+    }
+
+    @Override
+    public MaterialButton getPopButton() {
+        return popButton;
+    }
+
+    @Override
+    public MaterialTextBox getPopName() {
+        return popName;
+    }
+
+    @Override
+    public MaterialTextBox getMenuName() {
+        return menuName;
+    }
+
+    @Override
+    public MaterialButton getMenuButton() {
+        return menuButton;
     }
 
     @Override
@@ -96,21 +122,4 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
             fgColorNeg.addItem(c);
         }
     }
-
-    /**
-     * Text area of the add row button.
-     *
-     * @param e
-     */
-    @UiHandler("menuName")
-    void getTextAdd(KeyPressEvent e) {
-        menuName.validate();
-    }
-
-    @UiHandler("menuButton")
-    void removeRowButton(ClickEvent e) {
-        String name = menuName.getText();
-
-    }
-
 }

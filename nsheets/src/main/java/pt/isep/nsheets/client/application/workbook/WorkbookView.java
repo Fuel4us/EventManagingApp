@@ -61,13 +61,7 @@ import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalFormattingExtension;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.client.application.Settings;
-import pt.isep.nsheets.server.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetController;
-import pt.isep.nsheets.server.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetService;
-import pt.isep.nsheets.server.services.SpreadsheetServiceImpl;
-import pt.isep.nsheets.shared.lapr4.red.n1160600.services.SpreadsheetService;
-import pt.isep.nsheets.shared.lapr4.red.n1160600.services.SpreadsheetServiceAsync;
-import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.AddressDTO;
-import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
+import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetController;
 import pt.isep.nsheets.shared.services.*;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
@@ -136,7 +130,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialDropDown chart_dropdown;
     @UiField
-    MaterialPopupMenu popupMenu, popChart;
+    MaterialPopupMenu popChart;
+    @UiField
+    static MaterialPopupMenu popupMenu;
 
     @UiField
     MaterialLink sortLink;
@@ -160,6 +156,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     void onclick(ClickEvent e) {
         this.activeCell = null;
         selectedChart = null;
+    }
+
+    public static MaterialPopupMenu getPopupMenu() {
+        return popupMenu;
     }
 
     @Override
@@ -470,57 +470,13 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         sortButton.addClickHandler(event -> {
             try {
                 boolean ascending = (sortListBox.getSelectedIndex() == 0) ? true : false;
-                String cell1 = windowFirstBox.getText();
-                String cell2 = windowSecondBox.getText();
-                SpreadsheetServiceAsync spreadsheetServiceAsync = GWT.create(SpreadsheetService.class);
-                AsyncCallback<SpreadsheetDTO> asyncCallback = new AsyncCallback<SpreadsheetDTO>() {
-                    @Override
-                    public void onFailure(Throwable throwable) {
-                        MaterialToast.fireToast(throwable.getMessage());
-
-                    }
-
-                    @Override
-                    public void onSuccess(SpreadsheetDTO sResult) {
-                        if (sResult != null) {
-                            SpreadsheetDTO dto = customTable.getRow(0).getData().sheet.toDTO();
-                            //MaterialToast.fireToast("Cells Sorted Sucessfully " + dto.columns + " " + dto.rows);
-                            Address addr1 = new Address(cell1);
-                            Address addr2 = new Address(cell2);
-                            int column1 = addr1.getColumn();
-                            int column2 = addr2.getColumn();
-                            int row1 = addr1.getRow();
-                            int row2 = addr2.getRow();
-                            int startColumn = column1 <= column2 ? column1 : column2;
-                            int endColumn = column1 <= column2 ? column2 : column1;
-                            int startRow = row1 <= row2 ? row1 : row2;
-                            int endRow = row1 <= row2 ? row2 : row1;
-                            for (int i = startRow; i <= endRow; i++) {
-                                SheetCell sheetCell = customTable.getRow(i).getData();
-                                for (int j = startColumn; j <= endColumn; j++) {
-                                    
-                                    try {
-//                                         MaterialToast.fireToast("change  " + i + " " + j + " " + sResult.getCell(i, j).content);
-                                        sheetCell.getCell(j).setContent(sResult.getCell(i, j).content);
-                                    } catch (FormulaCompilationException ex) {
-                                        Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
-
-                                }
-                            }
-                        }
-                    }
-
-                };
-                spreadsheetServiceAsync.sortCells(cell1, cell2, customTable.getRow(0).getData().sheet.toDTO(), ascending, asyncCallback);
-
-//                  SortSpreadsheetService s = new SortSpreadsheetService();
-//                  s.sortCells(windowFirstBox.getText(), windowSecondBox.getText(), customTable.getRow(0).getData().sheet, ascending);
+                new SortSpreadsheetController().sortCells(windowFirstBox.getText(), windowSecondBox.getText(), this.customTable.getRow(0).getData().sheet, ascending);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-                MaterialToast.fireToast(e.getMessage());
+                Window.alert(e.getMessage());
             } finally {
+                //resultLabel.setText(result);
 
                 // refresh the table...
                 customTable.getView().setRedraw(true);

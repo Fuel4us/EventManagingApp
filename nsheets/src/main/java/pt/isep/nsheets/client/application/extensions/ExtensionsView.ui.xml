@@ -30,9 +30,8 @@
                     <m:MaterialDivider marginTop="10"/>
                     <m:MaterialButton waves="LIGHT" size="LARGE" iconType="DONE" backgroundColor="BLUE" iconColor="WHITE" ui:field="confirmButton" text="CONFIRM" marginTop="25"/>
                 </m:MaterialCollapsibleBody>
-                
-                <!-- Core 02.2 Implementation -> @author João Pereira_1150478@isep.ipp.pt -->
             </m:MaterialCollapsibleItem>
+            <!-- Core 02.2 Implementation -> @author João Pereira_1150478@isep.ipp.pt -->
             <!-- Add Menu Option -->
             <m:MaterialCollapsibleItem>
                 <m:MaterialCollapsibleHeader>
@@ -53,12 +52,14 @@
                 </m:MaterialCollapsibleHeader>
                 <m:MaterialCollapsibleBody backgroundColor="GREY_LIGHTEN_2">
                     <m:MaterialLabel text="Add Popup Menu in Cells" fontSize="3em"/>
+                    <m:MaterialLabel text="Choose the name of the new Popup Menu option."/>
+                    <m:MaterialTextBox ui:field="popName"/> 
                     <m:MaterialLabel text="Choose the cell ID to insert the popup menu"/>
                     <combobox:MaterialComboBox ui:field="comboCell" width="100%" placeholder="Cell ID">
                         <m:html.Option value="1" text="A1"/>
                         <m:html.Option value="2" text="B2"/>
                     </combobox:MaterialComboBox> 
-                    <m:MaterialButton text="Create PopUp" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED"/>
+                    <m:MaterialButton ui:field="popButton" text="Create PopUp" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED"/>
                     
                 </m:MaterialCollapsibleBody>
             </m:MaterialCollapsibleItem>
@@ -68,10 +69,12 @@
                     <m:MaterialLink text="Add Side Bar" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
                 </m:MaterialCollapsibleHeader>
                 <m:MaterialCollapsibleBody backgroundColor="GREY_LIGHTEN_2">
-                    <m:MaterialButton text="Create Side Bar" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED"/>
-                                    
+                    <m:MaterialLabel text="Add Side Bar" fontSize="3em"/>
+                    <m:MaterialLabel text="Press the button to create a side bar."/>
+                    <m:MaterialButton text="Create Side Bar" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED"/>            
                 </m:MaterialCollapsibleBody>
             </m:MaterialCollapsibleItem>
+            
         </m:MaterialCollapsible>
        
     </g:HTMLPanel>
