@@ -5,6 +5,8 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.NoGatekeeper;
+import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
@@ -21,6 +23,8 @@ public class SignupPresenter extends Presenter<SignupPresenter.MyView, SignupPre
     }
     
     @NameToken(NameTokens.SIGNUP)
+    @ProxyStandard
+    @NoGatekeeper
     interface MyProxy extends ProxyPlace<SignupPresenter> {
     }
     
