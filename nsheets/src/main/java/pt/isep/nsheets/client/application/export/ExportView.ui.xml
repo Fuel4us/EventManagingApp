@@ -87,22 +87,18 @@
         iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>-->
         
         <m:MaterialRow>
-            <m:MaterialColumn grid="s12 m4 l2">
-                <m:MaterialButton ui:field="export_csv" text="Export to CSV" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" />
-            </m:MaterialColumn>
-            <m:MaterialColumn grid="s12 m4 l2">
-                <m:MaterialButton ui:field="export_xml" text="Export to XML" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" />
-            </m:MaterialColumn>
-            <m:MaterialColumn grid="s12 m4 l2">
-                <m:MaterialButton ui:field="export_pdf" text="Fast Export to PDF" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" />
-            </m:MaterialColumn>
-            <m:MaterialColumn grid="s12 m4 l2">
+                <m:MaterialButton ui:field="export_csv" text="Export to CSV" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
+            
+                <m:MaterialButton ui:field="export_xml" text="Export to XML" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10" />
+            
+            
+                <m:MaterialButton ui:field="export_pdf" text="Fast Export to PDF" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
+            
                 <m:MaterialButton ui:field="export_csl" text="Export to CSL" waves="TEAL" textColor="WHITE"
                                   iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
-            </m:MaterialColumn>
-            <m:MaterialColumn grid="s12 m4 l2">
-                <m:MaterialButton ui:field="style_export_pdf" text="Styled Export to PDF" waves="LIGHT" textColor="WHITE" iconType="PICTURE_AS_PDF" iconPosition="RIGHT" />
-            </m:MaterialColumn>
+            
+                <m:MaterialButton ui:field="style_export_pdf" text="Styled Export to PDF" waves="LIGHT" textColor="WHITE" iconType="PICTURE_AS_PDF" iconPosition="RIGHT" marginRight="10"/>
+            
         </m:MaterialRow>
         
         
