@@ -1,4 +1,4 @@
-**John Doe** (s4567890) - Sprint 1 - Core00.0
+**Tiago Correia** (1140403) - Sprint 1 - Lang 06.1
 ===============================
 
 # 1. General Notes
@@ -227,11 +227,11 @@ The main idea for the "workflow" of this feature increment.
 
 **For US1**
 
-![Analysis SD](analysis.png)
+
 
 **For US2**
 
-![Analysis SD](analysis2.png)
+
 
 # 4. Design
 
@@ -345,7 +345,6 @@ Following the guidelines for JPA from EAPLI we envision a scenario like the foll
 
 **For US1**
 
-![SD US1](design1.png)
 
 Notes:  
 - The diagram only depicts the less technical details of the scenario;  
@@ -356,7 +355,6 @@ Notes:
 
 **For US2**
 
-![SD US2](design2.png)
 
 ## 4.3. Classes
 
