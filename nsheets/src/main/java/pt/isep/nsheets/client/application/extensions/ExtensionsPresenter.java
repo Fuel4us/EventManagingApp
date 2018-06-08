@@ -1,6 +1,7 @@
 package pt.isep.nsheets.client.application.extensions;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
@@ -10,14 +11,30 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
+import gwt.material.design.client.constants.Color;
+import gwt.material.design.client.constants.Display;
+import gwt.material.design.client.constants.IconType;
+import gwt.material.design.client.constants.TextAlign;
+import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialImage;
+import gwt.material.design.client.ui.MaterialLink;
+import gwt.material.design.client.ui.MaterialSideNavPush;
+import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
+import gwt.material.design.client.ui.html.ListItem;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import pt.isep.nsheets.shared.services.ConfigurationDTO;
 import pt.isep.nsheets.shared.services.ConfigurationService;
 import pt.isep.nsheets.shared.services.ConfigurationServiceAsync;
+import pt.isep.nsheets.client.application.menu.MenuView;
+import pt.isep.nsheets.client.application.workbook.WorkbookView;
+import pt.isep.nsheets.client.resources.AppResources;
 
+/**
+ * João Pereira <1150478@isep.ipp.pt>
+ */
 public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, ExtensionsPresenter.MyProxy> {
 
     private MyView view;
@@ -27,15 +44,37 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
         void addConfirmationHandler(ClickHandler ch);
 
         int getBgColorPosValue();
-        int getFgColorPosValue();
-        int getBgColorNegValue();
-        int getFgColorNegValue();
-        void setBgColorPosValue(int index);
-        void setFgColorPosValue(int index);
-        void setBgColorNegValue(int index);
-        void setFgColorNegValue(int index);
-    }
 
+        int getFgColorPosValue();
+
+        int getBgColorNegValue();
+
+        int getFgColorNegValue();
+
+        void setBgColorPosValue(int index);
+
+        void setFgColorPosValue(int index);
+
+        void setBgColorNegValue(int index);
+
+        void setFgColorNegValue(int index);
+
+        MaterialButton getMenuButton();
+
+        MaterialTextBox getMenuName();
+
+        MaterialTextBox getPopName();
+
+        MaterialButton getPopButton();
+
+        IconType getIconMenuChoosed();
+
+        IconType getIconPopChoosed();
+
+        MaterialButton getBtnSide();
+
+        MaterialTextBox getTxtSide();
+    }
 
     @NameToken(NameTokens.extensions)
     @ProxyStandard
@@ -63,10 +102,10 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
             };
 
             int[] values = new int[4];
-            values[0]=view.getBgColorPosValue();
-            values[1]=view.getFgColorPosValue();
-            values[2]=view.getBgColorNegValue();
-            values[3]=view.getFgColorNegValue();
+            values[0] = view.getBgColorPosValue();
+            values[1] = view.getFgColorPosValue();
+            values[2] = view.getBgColorNegValue();
+            values[3] = view.getFgColorNegValue();
 
             configurationSvc.saveConfiguration(new ConfigurationDTO(values), callback);
         });
@@ -91,14 +130,81 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
         configurationSvc.getConfiguration(callback);
     }
 
-
     @Override
-    protected void onReveal(){
+    protected void onReveal() {
         super.onReveal();
 
         SetPageTitleEvent.fire("Extensions", "Configure Extensions", "", "", this);
 
+    }
 
+    @Override
+    protected void onBind() {
+        super.onBind();
+
+        getView().getMenuButton().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                String name = getView().getMenuName().getText();
+                IconType icon = getView().getIconMenuChoosed();
+                ListItem newItem = new ListItem();
+                MaterialLink ls = new MaterialLink();
+                ls.setText(name);
+                ls.setTextColor(Color.BLACK);
+                ls.setTextAlign(TextAlign.CENTER);
+                ls.setIconType(icon);
+                newItem.add(ls);
+                if (name.isEmpty()) {
+                    MaterialToast.fireToast("The name of new menu option is empty! Please write one.");
+                } else {
+                    MenuView.getSideNav().add(ls);
+                    MaterialToast.fireToast("Menu Option created!");
+                }
+            }
+        });
+
+        getView().getPopButton().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                String name = getView().getPopName().getText();
+                IconType icon = getView().getIconPopChoosed();
+                MaterialLink pop = new MaterialLink();
+                pop.setText(name);
+                pop.setDisplay(Display.BLOCK);
+                pop.setTextColor(Color.BLACK);
+                pop.setIconType(icon);
+                if (name.isEmpty()) {
+                    MaterialToast.fireToast("The name of the popup is empty! Please write one.");
+                } else {
+                    WorkbookView.getPopupMenu().add(pop);
+                    MaterialToast.fireToast("Popup menu option created!");
+                }
+            }
+        });
+
+        getView().getBtnSide().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                String name = getView().getTxtSide().getText();
+                if (name.isEmpty()) {
+                    MaterialToast.fireToast("Side bar name is empty! Please choose one.");
+                }
+                MaterialSideNavPush aux = new MaterialSideNavPush();
+                ListItem temp = new ListItem();
+                MaterialImage image = new MaterialImage();
+                image.setWidth("100%");
+                image.setResource(AppResources.INSTANCE.nsheets_logo());
+                temp.add(image);
+                aux.setId(name);
+                aux.setWidth(280);
+                aux.setAllowBodyScroll(true);
+                aux.setShowOnAttach(true);
+                aux.add(temp);
+                MenuView.getNavBar().setActivates(name);
+                MenuView.getPanel().add(aux);
+                MaterialToast.fireToast("The SideBar was created successfully!", "rounded");
+            }
+        });
     }
 
 }

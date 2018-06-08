@@ -13,7 +13,7 @@ import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
-import pt.isep.nsheets.client.application.Settings;
+import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.client.application.workbook.WorkbookView;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;

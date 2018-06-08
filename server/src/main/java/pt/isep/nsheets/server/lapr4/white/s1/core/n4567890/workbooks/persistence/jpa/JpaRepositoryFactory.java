@@ -20,6 +20,7 @@ import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.WorkbookRepository;
 
 import java.util.concurrent.locks.Condition;
+import pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.persistence.ContactsRepository;
 
 /**
  *
@@ -27,10 +28,10 @@ import java.util.concurrent.locks.Condition;
  */
 public class JpaRepositoryFactory implements RepositoryFactory {
 
-    private PersistenceSettings settings=null;
+    private PersistenceSettings settings = null;
 
     public PersistenceSettings setSettings(PersistenceSettings settings) {
-        return this.settings=settings;
+        return this.settings = settings;
     }
 
     @Override
@@ -49,6 +50,11 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     }
 
     @Override
+    public ContactsRepository contacts() {
+        return new JpaContactsRepository(this.settings);
+    }
+
+    @Override
     public CalendarEventRepository calendarEvents() {
         return new JpaCalendarEventRepository(this.settings);
     }
@@ -57,7 +63,6 @@ public class JpaRepositoryFactory implements RepositoryFactory {
 //    public SpreadsheetRepository spreadsheets() {
 //        return new JpaSpreadsheetRepository(this.settings);
 //    }
-
     @Override
     public ChartRepository charts() {
         return new JpaChartRepository(this.settings);

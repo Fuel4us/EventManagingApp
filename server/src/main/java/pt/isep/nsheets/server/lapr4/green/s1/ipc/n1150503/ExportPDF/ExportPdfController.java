@@ -5,6 +5,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import pt.isep.nsheets.shared.core.Spreadsheet;
+
 import java.io.FileOutputStream;
 import java.util.Date;
 
@@ -15,15 +16,44 @@ import pt.isep.nsheets.shared.core.Workbook;
  */
 public class ExportPdfController {
 
-    private String FILE = "../PDF.pdf";;
-    private Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
     private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+    ;
+    private String FILE = "../PDF.pdf";
+    private Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
 
 
     public ExportPdfController() {
     }
 
-    public void exportWorkbook(Workbook workbook) {
+    private static void createTable(Section section, Workbook workbook) {
+
+        int size = workbook.getSpreadsheetCount();
+
+
+        for (int x = 0; x < size; x++) {
+            Spreadsheet spreadsheet = workbook.getSpreadsheet(x);
+
+            int row = spreadsheet.getRowCount();
+            int col = spreadsheet.getColumnCount();
+
+            PdfPTable table = new PdfPTable(col);
+            PdfPCell c1 = new PdfPCell(new Phrase("Table Header 1"));
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c1);
+
+            for (int y = 0; y < row; y++) {
+                for (int k = 0; k < col; k++) {
+                    table.addCell(spreadsheet.getCell(y, k).getContent());
+
+                    if (y < col - 1) section.add(table);
+                    if (k < row - 1) section.add(table);
+                }
+            }
+        }
+
+    }
+
+    public boolean exportWorkbook(Workbook workbook) {
         try {
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(FILE));
@@ -32,8 +62,10 @@ public class ExportPdfController {
             addTitlePage(workbook, document);
             addContent(document, workbook);
             document.close();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -54,38 +86,10 @@ public class ExportPdfController {
         addEmptyLine(preface, 3);
         preface.add(new Paragraph("This document is your workbook in PDF Format ", smallBold));
         addEmptyLine(preface, 8);
-        preface.add(new Paragraph("Workbook:" +workbook.name(), smallBold));
+        preface.add(new Paragraph("Workbook:" + workbook.name(), smallBold));
         addEmptyLine(preface, 9);
-        preface.add(new Paragraph("Subject:" +workbook.description(), smallBold));
+        preface.add(new Paragraph("Subject:" + workbook.description(), smallBold));
         document.add(preface);
-
-    }
-
-    private static void createTable(Section section, Workbook workbook) {
-
-        int size = workbook.getSpreadsheetCount();
-
-
-        for(int x = 0; x < size; x++) {
-            Spreadsheet spreadsheet = workbook.getSpreadsheet(x);
-
-            int row = spreadsheet.getRowCount();
-            int col = spreadsheet.getColumnCount();
-
-            PdfPTable table = new PdfPTable(col);
-            PdfPCell c1 = new PdfPCell(new Phrase("Table Header 1"));
-            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(c1);
-
-            for (int y = 0; y < row; y++) {
-                for (int k = 0; k < col; k++) {
-                    table.addCell(spreadsheet.getCell(y, k).getContent());
-
-                    if (y < col-1) section.add(table);
-                    if (k < row-1) section.add(table);
-                }
-            }
-        }
 
     }
 
@@ -101,7 +105,6 @@ public class ExportPdfController {
             paragraph.add(new Paragraph(" "));
         }
     }
-
 
 
 }

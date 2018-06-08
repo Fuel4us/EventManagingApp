@@ -24,7 +24,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
-import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -40,7 +39,9 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
 import gwt.material.design.client.constants.Color;
+import gwt.material.design.client.constants.Display;
 import gwt.material.design.client.constants.IconType;
+import gwt.material.design.client.ui.html.ListItem;
 import gwt.material.design.client.ui.table.MaterialDataTable;
 import pt.isep.nsheets.client.application.workbook.WorkbookView.SheetCell;
 import pt.isep.nsheets.client.place.ParameterTokens;
@@ -59,14 +60,16 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.ChartDTO;
 import pt.isep.nsheets.shared.services.WorkbooksService;
 import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
+import pt.isep.nsheets.client.application.form.FormView;
 
 import java.util.ArrayList;
 import java.util.List;
-import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.shared.services.ChartsService;
 import pt.isep.nsheets.shared.services.ChartsServiceAsync;
 
 import java.text.ParseException;
+import pt.isep.nsheets.client.application.menu.MenuView;
+import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.services.ChartType;
 
 public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, WorkbookPresenter.MyProxy> {
@@ -186,8 +189,6 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 //				placeManager.revealPlace(request);
             }
         });
-        
-        
 
         getView().getTable().addClickHandler(handler -> {
             getView().getChartDropDown().clear();
@@ -212,7 +213,6 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
                 WorkbookView.selectedChart = null;
             }
         });
-        
 
     }
 
@@ -252,10 +252,10 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
                 getView().getChartDropDown().clear();
                 for (ChartDTO chart : result) {
                     Cell cell = Settings.getInstance().getWorkbook().getSpreadsheet(0).getCell(chart.getAssociatedCell());
-                    
-                    if(!cell.chartList().contains(chart)){
+
+                    if (!cell.chartList().contains(chart)) {
                         cell.addChart(chart);
-                    } 
+                    }
                 }
                 getView().getTable().getView().setRedraw(true);
                 getView().getTable().getView().refresh();
@@ -266,7 +266,6 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         chartSrv.getCharts(callback);
 
     }
-
 
     protected void conditionalFormattingAction() {
 
@@ -368,6 +367,26 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
             }
         };
         t.scheduleRepeating(1000);
+    }
+
+    protected void onBind() {
+        super.onBind();
+
+        getView().getFirstButton().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (getView().getFirstBox().getText().equals("form()")) {
+                    MaterialTextBox l = new MaterialTextBox();
+                    l.setEnabled(false);
+                    l.setGrid("s12");
+                    l.setPlaceholder("Hello! Welcome to the Form!!");
+                    FormView.getWindow().add(l);
+                    FormView.getWindow().open();
+                    MaterialToast.fireToast("Window opened!");
+                }
+
+            }
+        });
     }
 
 }

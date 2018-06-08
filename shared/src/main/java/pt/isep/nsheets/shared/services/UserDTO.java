@@ -20,13 +20,7 @@ public class UserDTO implements Serializable {
     }
 
     // It is mandatory to have a default constructor with no arguments to be serializable!
-    public UserDTO() {
-        this.email = "";
-        this.name = "";
-        this.nickname = "";
-        this.password = "";
-        this.superUser = false;
-    }
+    public UserDTO() {}
 
     public String getEmail() {
         return this.email;

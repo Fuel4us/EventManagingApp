@@ -114,9 +114,11 @@ public class SpreadsheetImpl implements Spreadsheet, Serializable {
 		this.title = title;
 	}
         
-        public SpreadsheetImpl(String title, Map<Address, Cell> cells){
+        public SpreadsheetImpl(String title, Map<Address, Cell> cells, int columns, int rows){
             this.title = title;
             this.cells = cells;
+            this.columns = columns;
+            this.rows = rows;
         }
 
 	/**
@@ -333,7 +335,7 @@ public class SpreadsheetImpl implements Spreadsheet, Serializable {
         return new SpreadsheetDTO(cells, this.title, this.columns, this.rows);
     }
 
-    public static Spreadsheet fromDTO(SpreadsheetDTO dto){
+    public static Spreadsheet fromDTO(SpreadsheetDTO dto, int columns, int rows){
         Map<Address, Cell> cells = new HashMap<>();
         
         for(AddressDTO a : dto.cells.keySet()){
@@ -343,7 +345,7 @@ public class SpreadsheetImpl implements Spreadsheet, Serializable {
             cells.put(address, cellDTO);
         }
         
-        return new SpreadsheetImpl(dto.title, cells);
+        return new SpreadsheetImpl(dto.title, cells, columns, rows);
     }
 
 /*

@@ -6,6 +6,7 @@
 package pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence;
 
 import pt.isep.nsheets.server.lapr4.blue.s1.n1050475.persistence.ConditionalRepository;
+import pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.persistence.ContactsRepository;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.persistence.UserRepository;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.persistence.MessagesRepository;
 //import pt.isep.nsheets.server.lapr4.green.s1.core.n1160832.spreadsheets.persistence.jpa.SpreadsheetRepository;
@@ -25,6 +26,7 @@ public interface RepositoryFactory {
     WorkbookRepository workbooks();
     UserRepository users();
     NoteRepository notes();
+    ContactsRepository contacts();
     CalendarEventRepository calendarEvents();
 //    SpreadsheetRepository spreadsheets();
     ChartRepository charts();
