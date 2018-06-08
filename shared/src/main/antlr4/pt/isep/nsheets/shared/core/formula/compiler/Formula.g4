@@ -6,6 +6,7 @@ grammar Formula;
 	         
 expression
 	: EQ comparison /* EOF */
+        | HH monetary 
 	;
 	
 comparison
@@ -132,7 +133,7 @@ NUMBER: DIGITNOTZERO ( DIGIT )* FRACTIONALPART?
         ;
 		
 FRACTIONALPART:  COMMA  DIGIT DIGIT
-                | DOT DIGIT DIGIT
+                | DOT DIGIT DIGIT?
                 ;
 
 DIGIT : '0'..'9' ;
@@ -163,7 +164,8 @@ fragment EXCL:  '!'  ;
 COLON	: ':' ;
 UNDERSCORE : '_' ;
 ARROBA : '@' ;
- 
+HH : '#' ; 
+
 /* Miscellaneous operators */
 COMMA	: ',' ;
 DOT     : '.' ;

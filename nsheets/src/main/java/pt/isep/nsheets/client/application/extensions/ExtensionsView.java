@@ -40,6 +40,10 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
     MaterialButton popButton;
     @UiField
     MaterialTextBox popName;
+    @UiField
+    MaterialButton btnSide;
+    @UiField
+    MaterialTextBox txtSide;
 
     interface Binder extends UiBinder<Widget, ExtensionsView> {
     }
@@ -50,6 +54,15 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
 
         populateColours();
         populateIcons();
+    }
+
+    public MaterialTextBox getTxtSide() {
+        return txtSide;
+    }
+
+    @Override
+    public MaterialButton getBtnSide() {
+        return btnSide;
     }
 
     @Override

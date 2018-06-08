@@ -113,6 +113,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
                     spreadsheets.add(new SpreadsheetImpl(this,
                             getNextSpreadsheetTitle(), content));
             
+            
             this.globalVariables = new ArrayList<>();
 	}
 
@@ -276,7 +277,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
                 List<Spreadsheet> spreadsheet = new ArrayList<>();
 
                 for(SpreadsheetDTO ss : dto.spreadsheets)
-                        spreadsheet.add(SpreadsheetImpl.fromDTO(ss));
+                        spreadsheet.add(SpreadsheetImpl.fromDTO(ss, ss.columns, ss.rows));
 
                 return new Workbook(dto.name, dto.description, spreadsheet);
             }

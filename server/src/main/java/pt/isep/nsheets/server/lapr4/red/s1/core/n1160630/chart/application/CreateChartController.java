@@ -42,7 +42,7 @@ public class CreateChartController implements Controller{
     
     public ChartDTO generateChartValues(ChartDTO dto, SpreadsheetDTO ss){
         Chart c = newChart(dto, ss);
-        c.generateChartValues(SpreadsheetImpl.fromDTO(ss));
+        c.generateChartValues(SpreadsheetImpl.fromDTO(ss, ss.columns, ss.rows));
         return c.toDTO();
     }
     

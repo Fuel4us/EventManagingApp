@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Workbook;
@@ -347,16 +348,17 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
 
     @Override
     public Expression visitMonetary(FormulaParser.MonetaryContext ctx) {
-        if (ctx.getChildCount() == 3) {
+        if (ctx.getChildCount() == 4) {
             try {
-                BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(2).getText());
+                ParseTree account = ctx.getChild(2);
+                BinaryOperator operator = this.language.getBinaryOperator(account.getChild(2).getText());
                 return new BinaryOperation(
-                        visit(ctx.getChild(0)),
+                        visit(account.getChild(0)),
                         operator,
-                        visit(ctx.getChild(2))
+                        visit(account.getChild(2))
                 );
             } catch (UnknownElementException ex) {
-                MaterialToast.fireToast(ctx.getChild(2).getText());
+                MaterialToast.fireToast(ex.toString());
             }
         }
         return null;

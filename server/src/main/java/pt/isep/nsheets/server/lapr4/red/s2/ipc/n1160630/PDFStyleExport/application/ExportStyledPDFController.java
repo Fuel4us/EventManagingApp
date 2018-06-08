@@ -6,8 +6,10 @@
 package pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.application;
 
 import eapli.framework.application.Controller;
+import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.domain.CellStyle;
 import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.domain.PDFBuilder;
 import pt.isep.nsheets.shared.core.Workbook;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 /**
  *
@@ -15,9 +17,9 @@ import pt.isep.nsheets.shared.core.Workbook;
  */
 public class ExportStyledPDFController implements Controller{
     
-    public boolean buildPDF(Workbook wb){
-        PDFBuilder pdfFile = new PDFBuilder(wb);
-        return pdfFile.createPdf();
+    public boolean buildPDF(WorkbookDTO workbookDTO){
+        PDFBuilder pdfFile = new PDFBuilder(Workbook.fromDTO(workbookDTO));
+        return pdfFile.createPdf(CellStyle.DASHED);
     }
     
 }

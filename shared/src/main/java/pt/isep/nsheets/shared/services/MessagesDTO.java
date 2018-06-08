@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pt.isep.nsheets.shared.services;
 
 import java.io.Serializable;
@@ -10,7 +5,7 @@ import java.util.Date;
 
 /**
  *
- * @author Leandro
+ * @author Leandro, Pedro Vieira
  */
 @SuppressWarnings("serial")
 public class MessagesDTO implements Serializable{
@@ -18,11 +13,13 @@ public class MessagesDTO implements Serializable{
     private String text;
     private Date date;
     private String user;
+    private int chatIndex;
 
-    public MessagesDTO(String text, Date date, String user) {
+    public MessagesDTO(String text, String user, int chatIndex) {
         this.text = text;
-        this.date = date;
+        this.date = new Date();
         this.user = user;
+        this.chatIndex = chatIndex;
     }
     
     // It is mandatory to have a default constructor with no arguments to be serializable!
@@ -39,6 +36,10 @@ public class MessagesDTO implements Serializable{
 
     public String getUser() {
         return user;
+    }
+
+    public int getChatIndex() {
+        return chatIndex;
     }
     
 }
