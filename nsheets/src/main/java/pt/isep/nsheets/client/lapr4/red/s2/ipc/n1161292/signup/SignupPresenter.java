@@ -1,6 +1,8 @@
 package pt.isep.nsheets.client.lapr4.red.s2.ipc.n1161292.signup;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.Presenter;
@@ -14,6 +16,9 @@ import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
+import pt.isep.nsheets.shared.lapr4.red.s2.ipc.n1161292.services.SignupService;
+import pt.isep.nsheets.shared.lapr4.red.s2.ipc.n1161292.services.SignupServiceAsync;
+import pt.isep.nsheets.shared.services.UserDTO;
 
 /**
  *
@@ -48,12 +53,26 @@ public class SignupPresenter extends Presenter<SignupPresenter.MyView, SignupPre
     
     public void createSubmitButtonHandler(){
         this.view.submitButtonClickHandler(e -> {
+            SignupServiceAsync signupSvc = GWT.create(SignupService.class);
+
+            AsyncCallback<UserDTO> callback = new AsyncCallback<UserDTO>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error configuring Conditionalextension! " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(UserDTO result) {
+                    MaterialToast.fireToast("Conditionalextension conditional configured!" + result.getName());
+                }
+            };
+
             if(this.view.username().trim().isEmpty() || this.view.name().trim().isEmpty() || 
-                    this.view.password().trim().isEmpty() || this.view.email().trim().isEmpty())
+                this.view.password().trim().isEmpty() || this.view.email().trim().isEmpty())
                 MaterialToast.fireToast("All data is required! Please fill the form.");
             else {
-//                MaterialToast.fireToast("CHEGUEI AQUI FILHOS!");
-                
+                UserDTO dto = new UserDTO(this.view.email(), this.view.name(), this.view.username(), this.view.password(), false);
+                signupSvc.signupUser(dto, callback);
             }
         });
     }
