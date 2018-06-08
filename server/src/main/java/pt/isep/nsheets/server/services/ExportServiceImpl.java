@@ -46,7 +46,7 @@ public class ExportServiceImpl extends RemoteServiceServlet implements ExportSer
 
     @Override
     public boolean exportStyledWorkbookPDF(WorkbookDTO workbookDTO) {
-        return new ExportStyledPDFController().buildPDF(Workbook.fromDTO(workbookDTO));
+        return new ExportStyledPDFController().buildPDF(workbookDTO);
     }
 
 
