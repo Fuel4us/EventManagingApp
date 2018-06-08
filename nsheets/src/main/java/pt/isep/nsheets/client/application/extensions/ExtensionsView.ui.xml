@@ -68,7 +68,8 @@
                 <m:MaterialCollapsibleBody backgroundColor="GREY_LIGHTEN_2">
                     <m:MaterialLabel text="Add Side Bar" fontSize="3em"/>
                     <m:MaterialLabel text="Press the button to create a side bar."/>
-                    <m:MaterialButton text="Create Side Bar" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED"/>            
+                    <m:MaterialTextBox ui:field="txtSide"/> 
+                    <m:MaterialButton ui:field="btnSide" text="Create Side Bar" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED"/>            
                 </m:MaterialCollapsibleBody>
             </m:MaterialCollapsibleItem>
             
