@@ -163,7 +163,7 @@
 
     <servlet>
         <servlet-name>signupServiceServlet</servlet-name>
-        <servlet-class>pt.isep.nsheets.server.services.SignupServiceImpl</servlet-class>
+        <servlet-class>pt.isep.nsheets.server.lapr4.red.s2.ipc.n1161292.services.SignupServiceImpl</servlet-class>
     </servlet>
 
     <servlet-mapping>
