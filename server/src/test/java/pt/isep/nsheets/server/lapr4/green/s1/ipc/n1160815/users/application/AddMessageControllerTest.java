@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.application;
 
 import java.util.Date;
@@ -20,16 +15,15 @@ import pt.isep.nsheets.shared.services.MessagesDTO;
 
 /**
  *
- * @author Leandro
+ * @author Leandro, Pedro Vieira
  */
 public class AddMessageControllerTest {
 
     Message message;
     String DEFAULT_USER = "user1";
     String DEFAULT_TEXT = "Test message";
-    long DEFAULT_NUMBER_DATE = 100;
-    Date DEFAULT_DATE;
-
+    int DEFAULT_INDEX_CHAT = 0;
+    
     @BeforeClass
     public static void setUpClass() {
         // Setup the context to use a memory database for testing
@@ -59,8 +53,7 @@ public class AddMessageControllerTest {
 
     @Before
     public void setUp() {
-        DEFAULT_DATE = new Date(DEFAULT_NUMBER_DATE);
-        message = new Message(DEFAULT_TEXT, DEFAULT_DATE, DEFAULT_USER);
+        message = new Message(DEFAULT_TEXT, DEFAULT_USER, DEFAULT_INDEX_CHAT);
     }
 
     @After

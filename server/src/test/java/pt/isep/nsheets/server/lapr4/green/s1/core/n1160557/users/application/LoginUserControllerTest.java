@@ -36,7 +36,7 @@ public class LoginUserControllerTest {
 	public void testNormalBehaviour() throws Exception {
 		System.out.println("testNormalBehaviour");
                 
-                final User expected = new User("1160557@isep.ipp.pt", "Hilario", "coelho98", "123asd", true);
+                final User expected = new User("1160557@isep.ipp.pt", "Hilário", "coelho98", "123asd", true);
 
 		LoginUserController ctrl = new LoginUserController();
 
