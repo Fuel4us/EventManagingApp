@@ -46,9 +46,6 @@ public class UserBuilder {
         return this;
     }
     
-    /*
-    TODO: Refactor the DTO class to use Password VO.
-    */
     public UserDTO build(){
         return new UserDTO(this.email, this.name, this.nickname, this.password.toString(), this.superUser);
     }

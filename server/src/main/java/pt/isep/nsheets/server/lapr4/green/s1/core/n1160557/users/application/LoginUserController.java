@@ -4,6 +4,7 @@ package pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.application;
 import java.util.Arrays;
 import java.util.List;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.domain.User;
+import pt.isep.nsheets.shared.lapr4.red.s2.ipc.n1161292.users.Password;
 import pt.isep.nsheets.shared.services.UserDTO;
 
 /*
@@ -18,8 +19,8 @@ import pt.isep.nsheets.shared.services.UserDTO;
  */
 public class LoginUserController {
     private List<User> users = Arrays.asList(
-            new User("1160557@isep.ipp.pt", "Hilario", "coelho98", "123asd", true),
-            new User("1160558@isep.ipp.pt", "Hilario", "coelho98", "123asd", false)
+            new User("1160557@isep.ipp.pt", "Hilario", "coelho98", "123Assd", true),
+            new User("1160558@isep.ipp.pt", "Hilario", "coelho98", "123Assd", false)
     );
         
     public LoginUserController() {
@@ -28,7 +29,7 @@ public class LoginUserController {
     
     public UserDTO attemptLogin(String email, String password) {
         for(User u : users) {
-            if(u.getEmail().equals(email) && u.verifyPassword(password))
+            if(u.getEmail().equals(email) && u.verifyPassword(new Password(password)))
                 return u.toDTO();
         }
         return null;
