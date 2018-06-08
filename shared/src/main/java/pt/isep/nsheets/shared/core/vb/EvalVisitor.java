@@ -262,10 +262,6 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
         return Value.VOID;
     }
     
-    /*public Value visitMonetary(VbParser.MonetaryContext ctx){
-        
-    }*/
-    
     public String getOutput() {
         return output;
     }

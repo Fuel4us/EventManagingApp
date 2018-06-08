@@ -5,9 +5,12 @@
  */
 package pt.isep.nsheets.shared.core.formula.compiler;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -25,6 +28,7 @@ import pt.isep.nsheets.shared.core.formula.Literal;
 import pt.isep.nsheets.shared.core.formula.UnaryOperation;
 import pt.isep.nsheets.shared.core.formula.lang.Language;
 import pt.isep.nsheets.shared.core.formula.lang.LanguageManager;
+import pt.isep.nsheets.shared.lapr4.green.s2.n1140572.MonetaryConversion.MonetaryConversion;
 
 /**
  *
@@ -41,6 +45,11 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
 
     public MonetaryExpressionCompiler() {
         language = LanguageManager.getInstance().getLanguage("monetary");
+        try {
+            MonetaryConversion.readXML();
+        } catch (IOException ex) {
+            Logger.getLogger(MonetaryExpressionCompiler.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -62,9 +71,9 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
                     double rValue = 0;
 
                     if (source.charAt(i) == '\u00A3') {
-                        //rValue = Conversion.PoundToDollar*total;
+                        rValue = MonetaryConversion.PoundToDollar * total;
                     } else if (source.charAt(i) == '\u20AC') {
-                        //rValue = Conversion.EuroToDollar*total;
+                        rValue = MonetaryConversion.EuroToDollar * total;
                     } else {
                         rValue = total;
                     }
@@ -88,9 +97,9 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
                     double rValue = 0;
 
                     if (source.charAt(i) == '\u20AC') {
-                        //rValue = Conversion.EuroToPound*total;
+                        rValue = MonetaryConversion.EuroToPound * total;
                     } else if (source.charAt(i) == '\u0024') {
-                        //rValue = Conversion.DollarToPound*total;
+                        rValue = MonetaryConversion.DollarToPound * total;
                     } else {
                         rValue = total;
                     }
@@ -114,9 +123,9 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
                     double rValue = 0;
 
                     if (source.charAt(i) == '\u0024') {
-                        //rValue = Conversion.DollarToEuro*total;
+                        rValue = MonetaryConversion.DollarToEuro * total;
                     } else if (source.charAt(i) == '\u00A3') {
-                        //rValue = Conversion.PoundToEuro*total;
+                        rValue = MonetaryConversion.PoundToEuro * total;
                     } else {
                         rValue = total;
                     }
