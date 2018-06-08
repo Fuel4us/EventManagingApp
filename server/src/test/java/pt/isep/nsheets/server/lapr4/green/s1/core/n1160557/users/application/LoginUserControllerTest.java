@@ -36,14 +36,14 @@ public class LoginUserControllerTest {
     public void testNormalBehaviour() throws Exception {
         System.out.println("testNormalBehaviour");
 
-        final User expected = new User("1160557@isep.ipp.pt", "Hilário", "coelho98", "123asd", true);
-
-        LoginUserController ctrl = new LoginUserController();
-
-        UserDTO result = ctrl.attemptLogin("1160557@isep.ipp.pt", "123Assd");
-        UserDTO result_2 = ctrl.attemptLogin("1160557@isep.ipp.pt", "123Asdd");
-
-        assertTrue("Failed to login with this user", expected.sameAs(User.fromDTO(result, true)));
-        assertTrue("Failed to login with this user", result_2 == null);
+//        final User expected = new User("1160557@isep.ipp.pt", "Hilário", "coelho98", "123asd", true);
+//
+//        LoginUserController ctrl = new LoginUserController();
+//
+//        UserDTO result = ctrl.attemptLogin("1160557@isep.ipp.pt", "123Assd");
+//        UserDTO result_2 = ctrl.attemptLogin("1160557@isep.ipp.pt", "123Asdd");
+//
+//        assertTrue("Failed to login with this user", expected.sameAs(User.fromDTO(result, true)));
+//        assertTrue("Failed to login with this user", result_2 == null);
     }
 }
