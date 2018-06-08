@@ -5,6 +5,7 @@ import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1140317.ExportXML.application.
 
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1150503.ExportPDF.ExportPdfController;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160998.ExportCSV.ExportCSVController;
+import pt.isep.nsheets.server.lapr4.red.s1.core.n1160629.export.application.ExportCSLController;
 import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.application.ExportStyledPDFController;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
@@ -38,10 +39,9 @@ public class ExportServiceImpl extends RemoteServiceServlet implements ExportSer
 
     @Override
     public boolean exportWorkbookAsCSL(WorkbookDTO workbookDTO) {
-        //ExportCSLController ctrl = new ExportCSLController();
+        ExportCSLController ctrl = new ExportCSLController();
         Workbook workbook = Workbook.fromDTO(workbookDTO);
-        //ctrl.exportWorkbook(workbook);
-        return false;
+        return ctrl.exportWorkbook(workbook);
     }
 
     @Override
