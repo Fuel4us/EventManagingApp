@@ -22,12 +22,13 @@ import gwt.material.design.client.ui.MaterialCard;
 import gwt.material.design.client.ui.MaterialCardContent;
 import gwt.material.design.client.ui.MaterialCardTitle;
 import gwt.material.design.client.ui.MaterialColumn;
-import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialRow;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
+import pt.isep.nsheets.client.application.menu.MenuView;
+import pt.isep.nsheets.client.security.CurrentUser;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.services.WorkbooksService;
@@ -54,8 +55,9 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
     MaterialTextBox name, description, renameTxt, searchTxt;
     
     @Inject
-    HomeView(Binder uiBinder) {
+    HomeView(Binder uiBinder, CurrentUser currentUser) {
         initWidget(uiBinder.createAndBindUi(this));
+        MenuView.getUsername().setText("Welcome, " + currentUser.getUser().getNickname());
     }
     
     private MaterialCard createCard(WorkbookDTO wb) {
