@@ -44,6 +44,8 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
     MaterialButton btnSide;
     @UiField
     MaterialTextBox txtSide;
+    @UiField
+    MaterialButton btnSwitch;
 
     interface Binder extends UiBinder<Widget, ExtensionsView> {
     }
@@ -56,8 +58,14 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
         populateIcons();
     }
 
+    @Override
     public MaterialTextBox getTxtSide() {
         return txtSide;
+    }
+
+    @Override
+    public MaterialButton getBtnSwitch() {
+        return btnSwitch;
     }
 
     @Override

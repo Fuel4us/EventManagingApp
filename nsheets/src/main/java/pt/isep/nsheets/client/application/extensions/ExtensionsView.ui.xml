@@ -67,12 +67,14 @@
                 </m:MaterialCollapsibleHeader>
                 <m:MaterialCollapsibleBody backgroundColor="GREY_LIGHTEN_2">
                     <m:MaterialLabel text="Add Side Bar" fontSize="3em"/>
-                    <m:MaterialLabel text="Press the button to create a side bar."/>
+                    <m:MaterialLabel text="Insert the name of the side bar."/>
                     <m:MaterialTextBox ui:field="txtSide"/> 
-                    <m:MaterialButton ui:field="btnSide" text="Create Side Bar" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED"/>            
+                    <m:MaterialButton ui:field="btnSide" text="Create Side Bar" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED"/>                    
+                    <m:MaterialTextBox enabled="false"/> 
+                    <m:MaterialLabel text="If you want to switch side bars, press this button!" fontSize="2em"/>
+                    <m:MaterialButton ui:field="btnSwitch" text="Switch Side Bar" waves="LIGHT" textColor="WHITE" iconType="SWAP_HORIZ" iconPosition="LEFT"/>    
                 </m:MaterialCollapsibleBody>
             </m:MaterialCollapsibleItem>
-            
         </m:MaterialCollapsible>
        
     </g:HTMLPanel>

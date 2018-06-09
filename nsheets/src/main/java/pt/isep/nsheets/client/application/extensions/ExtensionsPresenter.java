@@ -17,6 +17,7 @@ import gwt.material.design.client.constants.IconType;
 import gwt.material.design.client.constants.TextAlign;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialImage;
+import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialSideNavPush;
 import gwt.material.design.client.ui.MaterialTextBox;
@@ -38,6 +39,8 @@ import pt.isep.nsheets.client.resources.AppResources;
 public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, ExtensionsPresenter.MyProxy> {
 
     private MyView view;
+
+    private MaterialSideNavPush activatedSideNav;
 
     interface MyView extends View {
 
@@ -74,11 +77,21 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
         MaterialButton getBtnSide();
 
         MaterialTextBox getTxtSide();
+
+        MaterialButton getBtnSwitch();
     }
 
     @NameToken(NameTokens.extensions)
     @ProxyStandard
     interface MyProxy extends ProxyPlace<ExtensionsPresenter> {
+    }
+
+    public MaterialSideNavPush getActivatedSideNav() {
+        return activatedSideNav;
+    }
+
+    public void setActivatedSideNav(MaterialSideNavPush activatedSideNav) {
+        this.activatedSideNav = activatedSideNav;
     }
 
     @Inject
@@ -157,8 +170,14 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
                 if (name.isEmpty()) {
                     MaterialToast.fireToast("The name of new menu option is empty! Please write one.");
                 } else {
-                    MenuView.getSideNav().add(ls);
-                    MaterialToast.fireToast("Menu Option created!");
+                    if (MenuView.getNavBar().getActivates().equals("sideBar")) {
+                        MenuView.getSideNav().add(newItem);
+                        MaterialToast.fireToast("Menu Option created on the original side bar!");
+                    } else {
+                        getActivatedSideNav().add(newItem);
+
+                        MaterialToast.fireToast("Menu Option created on the new side bar!");
+                    }
                 }
             }
         });
@@ -192,6 +211,9 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
                 MaterialSideNavPush aux = new MaterialSideNavPush();
                 ListItem temp = new ListItem();
                 MaterialImage image = new MaterialImage();
+                MaterialLabel nameBox = new MaterialLabel();
+                nameBox.setEnabled(false);
+                nameBox.setTitle(name);
                 image.setWidth("100%");
                 image.setResource(AppResources.INSTANCE.nsheets_logo());
                 temp.add(image);
@@ -200,9 +222,27 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
                 aux.setAllowBodyScroll(true);
                 aux.setShowOnAttach(true);
                 aux.add(temp);
+                aux.add(nameBox);
                 MenuView.getNavBar().setActivates(name);
                 MenuView.getPanel().add(aux);
+                setActivatedSideNav(aux);
                 MaterialToast.fireToast("The SideBar was created successfully!", "rounded");
+            }
+        });
+
+        getView().getBtnSwitch().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                String createdBar = getView().getTxtSide().getText();
+                String originalBar = "sideBar";
+                if (MenuView.getNavBar().getActivates().equals(createdBar)) {
+                    MenuView.getNavBar().setActivates(originalBar);
+                    MenuView.getPanel().add(MenuView.getSideNav());
+                } else {
+                    MenuView.getNavBar().setActivates(createdBar);
+                    MenuView.getPanel().add(getActivatedSideNav());
+                }
+                MaterialToast.fireToast("SideBar changed!", "rounded");
             }
         });
     }
