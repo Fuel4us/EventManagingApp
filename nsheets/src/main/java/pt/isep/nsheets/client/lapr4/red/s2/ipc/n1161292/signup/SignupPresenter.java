@@ -86,7 +86,7 @@ public class SignupPresenter extends Presenter<SignupPresenter.MyView, SignupPre
             validation = this.view.txtPassword().validate();
             MaterialToast.fireToast(String.valueOf(validation));
             if(validation){
-                UserDTO dto = new UserDTO(this.view.email(), this.view.name(), this.view.username(), this.view.password(), false, new ArrayList<>());
+                UserDTO dto = new UserDTO(this.view.email(), this.view.name(), this.view.username(), this.view.password(), false);
 
                 signupSvc.signupUser(dto, callback);
             }

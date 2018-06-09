@@ -87,50 +87,50 @@ public class ContactsServiceImpl extends RemoteServiceServlet implements Contact
     }
 
     @Override
-    public void acceptInvitation(Long id, ContactDTO contact, UserDTO currentUser) {
+    public void acceptInvitation(ContactDTO contact, UserDTO currentUser) {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
         ContactsController ctrl = new ContactsController();
-        ctrl.acceptInvitation(id, contact, currentUser);
+        ctrl.acceptInvitation(contact, currentUser);
 
     }
 
     @Override
-    public void denyInvitation(Long id, ContactDTO contact, UserDTO currentUser) {
+    public void denyInvitation(ContactDTO contact, UserDTO currentUser) {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
         ContactsController ctrl = new ContactsController();
-        ctrl.denyInvitation(id, contact, currentUser);
+        ctrl.denyInvitation(contact, currentUser);
     }
 
     @Override
-    public void blockUser(UserDTO user, Long id) {
+    public void blockUser(UserDTO user) {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
         ContactsController ctrl = new ContactsController();
-        ctrl.blockUser(user, id);
+        ctrl.blockUser(user);
     }
 
     @Override
-    public void unblockUser(UserDTO user, Long id) {
+    public void unblockUser(UserDTO user) {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
         ContactsController ctrl = new ContactsController();
-        ctrl.unblockUser(user, id);
+        ctrl.unblockUser(user);
     }
 
     /**
      *
-     * @param userDTO
+     * @param email
      * @param currentUser
      */
     @Override
-    public void sendInvitation(UserDTO userDTO, UserDTO currentUser, Long id) {
+    public void sendInvitation(String email, UserDTO currentUser) {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
         ContactsController ctrl = new ContactsController();
         try {
-            ctrl.sendInvitation(userDTO, currentUser, id);
+            ctrl.sendInvitation(email, currentUser);
         } catch (DataConcurrencyException ex) {
             Logger.getLogger(ContactsServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DataIntegrityViolationException ex) {
@@ -145,5 +145,4 @@ public class ContactsServiceImpl extends RemoteServiceServlet implements Contact
         ContactsController ctrl = new ContactsController();
         return ctrl.findUserByEmail(email);
     }
-
 }

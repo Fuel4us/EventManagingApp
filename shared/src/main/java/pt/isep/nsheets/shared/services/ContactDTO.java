@@ -16,6 +16,7 @@ public class ContactDTO implements Serializable {
      * @param contactOwner
      * @param waitingAcceptance
      * @param accepted
+     * @param blacklist
      * @throws IllegalArgumentException
      */
     public ContactDTO(UserDTO contact, UserDTO contactOwner, boolean waitingAcceptance, boolean accepted) throws IllegalArgumentException {
@@ -50,5 +51,4 @@ public class ContactDTO implements Serializable {
     public boolean isAccepted() {
         return accepted;
     }
-
 }

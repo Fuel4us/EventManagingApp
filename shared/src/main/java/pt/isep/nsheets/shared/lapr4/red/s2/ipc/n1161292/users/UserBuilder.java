@@ -55,6 +55,6 @@ public class UserBuilder {
     }
 
     public UserDTO build() {
-        return new UserDTO(this.email, this.name, this.nickname, this.password.toString(), this.superUser, this.blacklist);
+        return new UserDTO(this.email, this.name, this.nickname, this.password.toString(), this.superUser);
     }
 }

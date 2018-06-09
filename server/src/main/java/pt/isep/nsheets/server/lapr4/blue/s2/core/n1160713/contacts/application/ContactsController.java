@@ -9,7 +9,6 @@ import pt.isep.nsheets.shared.services.ContactDTO;
 import pt.isep.nsheets.shared.services.UserDTO;
 
 public class ContactsController implements Controller {
-
     /**
      *
      * @param currentUser
@@ -29,28 +28,27 @@ public class ContactsController implements Controller {
         return new ContactsService().allAvailableContacts(currentUser);
     }
 
-    public void acceptInvitation(Long id, ContactDTO contact, UserDTO currentUser) {
-        new ContactsService().acceptInvitation(id, contact, currentUser);
+    public void acceptInvitation( ContactDTO contact, UserDTO currentUser) {
+        new ContactsService().acceptInvitation(contact, currentUser);
     }
 
-    public void denyInvitation(Long id, ContactDTO contact, UserDTO currentUser) {
-        new ContactsService().denyInvitation(id, contact, currentUser);
+    public void denyInvitation(ContactDTO contact, UserDTO currentUser) {
+        new ContactsService().denyInvitation(contact, currentUser);
     }
 
-    public void blockUser(UserDTO user, Long id) {
-        new ContactsService().blockUser(user, id);
+    public void blockUser(UserDTO user) {
+        new ContactsService().blockUser(user);
     }
 
-    public void unblockUser(UserDTO user, Long id) {
-        new ContactsService().unblockUser(user, id);
+    public void unblockUser(UserDTO user) {
+        new ContactsService().unblockUser(user);
     }
 
-    public void sendInvitation(UserDTO userDTO, UserDTO currentUser, Long id) throws DataConcurrencyException, DataIntegrityViolationException {
-        new ContactsService().sendInvitation(userDTO, currentUser, id);
+    public void sendInvitation(String email, UserDTO currentUser) throws DataConcurrencyException, DataIntegrityViolationException {
+        new ContactsService().sendInvitation(email, currentUser);
     }
 
     public UserDTO findUserByEmail(String email) {
         return new ContactsService().findUserByEmail(email);
     }
-
 }

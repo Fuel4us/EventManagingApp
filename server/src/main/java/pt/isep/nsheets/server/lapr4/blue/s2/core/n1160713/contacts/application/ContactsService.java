@@ -4,7 +4,6 @@ import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.domain.Contact;
@@ -17,12 +16,12 @@ import pt.isep.nsheets.shared.services.UserDTO;
 
 public class ContactsService {
 
-
     /**
      *
      * @param currentUser
      * @return
      */
+    //Only for usage in other methods
     public Iterable<Contact> allContactsFromUser(UserDTO currentUser) {
 
         final ContactsRepository contactsRepository = PersistenceContext.repositories().contacts();
@@ -50,12 +49,12 @@ public class ContactsService {
         return list;
     }
 
-    public void acceptInvitation(Long contactID, ContactDTO contact, UserDTO currentUser) {
+    public void acceptInvitation(ContactDTO contact, UserDTO currentUser) {
         final ContactsRepository contactsRepository = PersistenceContext.repositories().contacts();
-        Optional<Contact> foundContact = contactsRepository.findOne(contactID);
-        foundContact.get().accept();
+        Contact foundContact = contactsRepository.findContactFromDTO(contact);
+        foundContact.accept();
         try {
-            contactsRepository.save(foundContact.get());
+            contactsRepository.save(foundContact);
         } catch (DataConcurrencyException ex) {
             Logger.getLogger(ContactsService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DataIntegrityViolationException ex) {
@@ -73,12 +72,12 @@ public class ContactsService {
         }
     }
 
-    public void denyInvitation(Long contactID, ContactDTO contact, UserDTO currentUser) {
+    public void denyInvitation(ContactDTO contact, UserDTO currentUser) {
         final ContactsRepository contactsRepository = PersistenceContext.repositories().contacts();
-        Optional<Contact> foundContact = contactsRepository.findOne(contactID);
-        foundContact.get().deny();
+        Contact foundContact = contactsRepository.findContactFromDTO(contact);
+        foundContact.deny();
         try {
-            contactsRepository.save(foundContact.get());
+            contactsRepository.save(foundContact);
         } catch (DataConcurrencyException ex) {
             Logger.getLogger(ContactsService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DataIntegrityViolationException ex) {
@@ -86,11 +85,11 @@ public class ContactsService {
         }
     }
 
-    public void blockUser(UserDTO user, Long userID) {
+    public void blockUser(UserDTO user) {
         final UserRepository userRepo = PersistenceContext.repositories().users();
 
-        User foundUser = userRepo.findOne(userID).get();
-        foundUser.getBlacklist().add(user);
+        User foundUser = userRepo.findByEmail(user.getEmail());
+        foundUser.getBlacklist().add(foundUser);
 
         try {
             userRepo.save(foundUser);
@@ -101,11 +100,11 @@ public class ContactsService {
         }
     }
 
-    public void unblockUser(UserDTO user, Long userId) {
+    public void unblockUser(UserDTO user) {
         final UserRepository userRepo = PersistenceContext.repositories().users();
 
-        User foundUser = userRepo.findOne(userId).get();
-        foundUser.getBlacklist().remove(user);
+        User foundUser = userRepo.findByEmail(user.getEmail());
+        foundUser.getBlacklist().remove(foundUser);
 
         try {
             userRepo.save(foundUser);
@@ -118,21 +117,22 @@ public class ContactsService {
 
     /**
      *
-     * @param userDTO
+     * @param email
      * @param currentUser
-     * @param userID
      * @throws DataConcurrencyException
      * @throws DataIntegrityViolationException
      */
-    public void sendInvitation(UserDTO userDTO, UserDTO currentUser, Long userID) throws DataConcurrencyException, DataIntegrityViolationException {
+    public void sendInvitation(String email, UserDTO currentUser) throws DataConcurrencyException, DataIntegrityViolationException {
 
         final ContactsRepository contactsRepository = PersistenceContext.repositories().contacts();
         final UserRepository userRepo = PersistenceContext.repositories().users();
+        User receiver = userRepo.findByEmail(email);
+        User sender = userRepo.findByEmail(currentUser.getEmail());
 
-        if (userRepo.findOne(userID).get().getBlacklist().contains(userDTO)) {
+        if (sender.getBlacklist().contains(receiver)) {
             return;
         }
-        Contact contact = new Contact(currentUser, userDTO, true, false);
+        Contact contact = new Contact(currentUser, receiver.toDTO(), true, false);
         contactsRepository.save(contact);
     }
 
@@ -145,5 +145,4 @@ public class ContactsService {
         }
         return null;
     }
-
 }
