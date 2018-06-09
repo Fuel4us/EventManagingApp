@@ -29,7 +29,7 @@ public class DashedCell implements PdfPCellEvent{
         PdfContentByte canvas = canvases[PdfPTable.LINECANVAS];
         canvas.saveState();
         canvas.setColorStroke(color);
-        canvas.setLineDash(0, 15, 4);
+        canvas.setLineDash(10, 7);
         if ((border & PdfPCell.TOP) == PdfPCell.TOP) {
             canvas.moveTo(position.getRight(), position.getTop());
             canvas.lineTo(position.getLeft(), position.getTop());
