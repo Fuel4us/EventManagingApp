@@ -32,7 +32,7 @@ public class SignupView extends ViewImpl implements SignupPresenter.MyView {
     }
     
     public void validateInput(){
-        email.addValidator(new RegExValidator("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", "Email Address is not correct"));
+        email.addValidator(new RegExValidator("^([a-zA-Z0-9_\\.\\-])+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,6})+$", "Email Address is not correct"));
         password.addValidator(new RegExValidator("^(?=.*[A-Z])(?=.*[0-9]).{6,}$", "Password doesn't fill the requirements"));
         username.addValidator(new RegExValidator("^[A-Za-z0-9]+(?:[_-][A-Za-z0-9]+)*$", "Username is empty"));
         name.addValidator(new RegExValidator("^[A-zÇ-ÑÁÀãÃÊÈÍÏÓÕÚÙ]+(?:[ ][A-zÇ-ÑÁÀãÃÊÈÍÏÓÕÚÙ]+)*$", "Name is empty"));

@@ -83,8 +83,8 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
                 }
             };
 
-            ContactDTO contactDto = new ContactDTO(this.view.contactName(), this.view.contactEmail());
-            contactsSvc.addContact(contactDto, callback);
+            //ContactDTO contactDto = new ContactDTO(this.view.contactName(), this.view.contactEmail());
+            //contactsSvc.addContact(contactDto, callback);
 
             this.view.closeModalToAddContact();
         });
@@ -176,7 +176,7 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
             }
         };
 
-        contactsSvc.getContacts(callback);
+       // contactsSvc.getContacts(callback);
     }
 
     @Override
