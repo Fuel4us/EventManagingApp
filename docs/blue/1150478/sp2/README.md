@@ -260,3 +260,4 @@ Some Questions/Issues identified during the work in this feature increment
 * [Implementation] Core02.2 - icons in menu option and popup option added. (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/c3e1e08482a5567a58cd3dafbad1fa86e27a36e9)
 * [Implementation] Core02.2 - Side bars added. (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/7e8cdfaf39d0f1f6c045e154c21d137f8857f363)
 * [Implementation] Core02.2 - Now users can select wich side bar they want. (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/8380a2db4c812e83591f3dc236cf0afb7c12bd97)
+* [Implementation] Core02.2 - Now users can create more than one side bar. (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/2785e7354b7147642d6d4fd908bbb1c1c889e677)

@@ -88,6 +88,7 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
         MaterialButton getBtnSwitch();
 
         MaterialComboBox getComboBars();
+
     }
 
     @NameToken(NameTokens.extensions)
@@ -146,6 +147,7 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
             values[3] = view.getFgColorNegValue();
 
             configurationSvc.saveConfiguration(new ConfigurationDTO(values), callback);
+
         });
 
         ConfigurationServiceAsync configurationSvc = GWT.create(ConfigurationService.class);
@@ -171,14 +173,16 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
     @Override
     protected void onReveal() {
         super.onReveal();
-
         SetPageTitleEvent.fire("Extensions", "Configure Extensions", "", "", this);
-
     }
 
     @Override
     protected void onBind() {
         super.onBind();
+
+        addSideName("sideBar");
+        addSides(MenuView.getSideNav());
+        getView().getComboBars().addItem("sideBar", MenuView.getSideNav());
 
         getView().getMenuButton().addClickHandler(new ClickHandler() {
             @Override
@@ -263,21 +267,11 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
         getView().getBtnSwitch().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-//                getView().getComboBars().add(MenuView.getSideNav());
-//                addSideName("sideBar");
-//                addSides(MenuView.getSideNav());
                 String createdBar = getNamesSides().get(getView().getComboBars().getSelectedIndex());
-                String originalBar = "sideBar";
-                if (MenuView.getNavBar().getActivates().equals(createdBar)) {
-                    MenuView.getNavBar().setActivates(originalBar);
-                    MenuView.getPanel().add(MenuView.getSideNav());
-                } else {
-                    MenuView.getNavBar().setActivates(createdBar);
-                    MenuView.getPanel().add(getSides().get(getView().getComboBars().getSelectedIndex()));
-                }
+                MenuView.getNavBar().setActivates(createdBar);
+                MenuView.getPanel().add(getSides().get(getView().getComboBars().getSelectedIndex()));
                 MaterialToast.fireToast("SideBar changed!", "rounded");
             }
         });
     }
-
 }
