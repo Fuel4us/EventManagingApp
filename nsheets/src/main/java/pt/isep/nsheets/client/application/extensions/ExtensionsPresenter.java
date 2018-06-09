@@ -11,6 +11,7 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
+import gwt.material.design.addins.client.combobox.MaterialComboBox;
 import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.constants.Display;
 import gwt.material.design.client.constants.IconType;
@@ -23,6 +24,8 @@ import gwt.material.design.client.ui.MaterialSideNavPush;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.html.ListItem;
+import java.util.LinkedList;
+import java.util.List;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
@@ -41,6 +44,10 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
     private MyView view;
 
     private MaterialSideNavPush activatedSideNav;
+
+    private List<String> namesSides = new LinkedList<>();
+
+    private List<MaterialSideNavPush> sides = new LinkedList<>();
 
     interface MyView extends View {
 
@@ -79,6 +86,8 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
         MaterialTextBox getTxtSide();
 
         MaterialButton getBtnSwitch();
+
+        MaterialComboBox getComboBars();
     }
 
     @NameToken(NameTokens.extensions)
@@ -92,6 +101,22 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
 
     public void setActivatedSideNav(MaterialSideNavPush activatedSideNav) {
         this.activatedSideNav = activatedSideNav;
+    }
+
+    void addSideName(String name) {
+        namesSides.add(name);
+    }
+
+    public List<String> getNamesSides() {
+        return namesSides;
+    }
+
+    void addSides(MaterialSideNavPush side) {
+        sides.add(side);
+    }
+
+    public List<MaterialSideNavPush> getSides() {
+        return sides;
     }
 
     @Inject
@@ -174,8 +199,7 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
                         MenuView.getSideNav().add(newItem);
                         MaterialToast.fireToast("Menu Option created on the original side bar!");
                     } else {
-                        getActivatedSideNav().add(newItem);
-
+                        getSides().get(getView().getComboBars().getSelectedIndex()).add(newItem);
                         MaterialToast.fireToast("Menu Option created on the new side bar!");
                     }
                 }
@@ -207,40 +231,49 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
                 String name = getView().getTxtSide().getText();
                 if (name.isEmpty()) {
                     MaterialToast.fireToast("Side bar name is empty! Please choose one.");
+                } else {
+                    MaterialSideNavPush aux = new MaterialSideNavPush();
+                    ListItem temp = new ListItem();
+                    MaterialImage image = new MaterialImage();
+                    MaterialLabel nameBox = new MaterialLabel();
+                    nameBox.setEnabled(false);
+                    nameBox.setText(name);
+                    nameBox.setFontSize("2em");
+                    nameBox.setTextAlign(TextAlign.CENTER);
+                    image.setWidth("100%");
+                    image.setResource(AppResources.INSTANCE.nsheets_logo());
+                    temp.add(image);
+                    aux.setId(name);
+                    aux.setWidth(280);
+                    aux.setAllowBodyScroll(true);
+                    aux.setShowOnAttach(true);
+                    aux.add(temp);
+                    aux.add(nameBox);
+                    MenuView.getNavBar().setActivates(name);
+                    MenuView.getPanel().add(aux);
+                    setActivatedSideNav(aux);
+                    getView().getComboBars().addItem(name, aux);
+                    addSideName(name);
+                    addSides(aux);
+                    MaterialToast.fireToast("The SideBar was created successfully!", "rounded");
                 }
-                MaterialSideNavPush aux = new MaterialSideNavPush();
-                ListItem temp = new ListItem();
-                MaterialImage image = new MaterialImage();
-                MaterialLabel nameBox = new MaterialLabel();
-                nameBox.setEnabled(false);
-                nameBox.setTitle(name);
-                image.setWidth("100%");
-                image.setResource(AppResources.INSTANCE.nsheets_logo());
-                temp.add(image);
-                aux.setId(name);
-                aux.setWidth(280);
-                aux.setAllowBodyScroll(true);
-                aux.setShowOnAttach(true);
-                aux.add(temp);
-                aux.add(nameBox);
-                MenuView.getNavBar().setActivates(name);
-                MenuView.getPanel().add(aux);
-                setActivatedSideNav(aux);
-                MaterialToast.fireToast("The SideBar was created successfully!", "rounded");
             }
         });
 
         getView().getBtnSwitch().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                String createdBar = getView().getTxtSide().getText();
+//                getView().getComboBars().add(MenuView.getSideNav());
+//                addSideName("sideBar");
+//                addSides(MenuView.getSideNav());
+                String createdBar = getNamesSides().get(getView().getComboBars().getSelectedIndex());
                 String originalBar = "sideBar";
                 if (MenuView.getNavBar().getActivates().equals(createdBar)) {
                     MenuView.getNavBar().setActivates(originalBar);
                     MenuView.getPanel().add(MenuView.getSideNav());
                 } else {
                     MenuView.getNavBar().setActivates(createdBar);
-                    MenuView.getPanel().add(getActivatedSideNav());
+                    MenuView.getPanel().add(getSides().get(getView().getComboBars().getSelectedIndex()));
                 }
                 MaterialToast.fireToast("SideBar changed!", "rounded");
             }

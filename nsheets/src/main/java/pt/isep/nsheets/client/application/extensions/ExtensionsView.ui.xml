@@ -71,7 +71,9 @@
                     <m:MaterialTextBox ui:field="txtSide"/> 
                     <m:MaterialButton ui:field="btnSide" text="Create Side Bar" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED"/>                    
                     <m:MaterialTextBox enabled="false"/> 
-                    <m:MaterialLabel text="If you want to switch side bars, press this button!" fontSize="2em"/>
+                    <m:MaterialLabel text="If you want to switch the side bar, choose one on the combo box!" fontSize="2em"/>
+                    <combobox:MaterialComboBox ui:field="comboBars" width="100%" placeholder="SideBars">
+                    </combobox:MaterialComboBox>
                     <m:MaterialButton ui:field="btnSwitch" text="Switch Side Bar" waves="LIGHT" textColor="WHITE" iconType="SWAP_HORIZ" iconPosition="LEFT"/>    
                 </m:MaterialCollapsibleBody>
             </m:MaterialCollapsibleItem>
