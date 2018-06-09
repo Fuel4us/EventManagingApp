@@ -38,7 +38,7 @@ public class User implements AggregateRoot<Long>, Serializable {
     private boolean superUser;
     private boolean loggedIn;
 
-    private List<UserDTO> blacklist;
+    private List<User> blacklist;
 
     public User(String email, String name, String nickname, String password, boolean superUser) throws IllegalArgumentException {
         if (email == null || name == null || nickname == null || password == null) {
@@ -67,9 +67,8 @@ public class User implements AggregateRoot<Long>, Serializable {
 
         this.blacklist = new ArrayList<>();
     }
-    
-    
-    public User(String email, String name, String nickname, String password, boolean superUser, boolean hash, List<UserDTO> blacklist) throws IllegalArgumentException {
+
+    public User(String email, String name, String nickname, String password, boolean superUser, boolean hash, List<User> blacklist) throws IllegalArgumentException {
         if (email == null || name == null || nickname == null || password == null) {
             throw new IllegalArgumentException("email or name or nickname or password must be non-null");
         }
@@ -97,7 +96,7 @@ public class User implements AggregateRoot<Long>, Serializable {
         this.blacklist = new ArrayList<>();
     }
 
-    public User(String email, String name, String nickname, Password password, boolean superUser, List<UserDTO> blacklist) throws IllegalArgumentException {
+    public User(String email, String name, String nickname, Password password, boolean superUser, List<User> blacklist) throws IllegalArgumentException {
         if (email == null || name == null || nickname == null || password == null) {
             throw new IllegalArgumentException("email or name or nickname or password must be non-null");
         }
@@ -140,7 +139,7 @@ public class User implements AggregateRoot<Long>, Serializable {
         return this.password.equals(password);
     }
 
-    public List<UserDTO> getBlacklist() {
+    public List<User> getBlacklist() {
         return blacklist;
     }
 
@@ -200,10 +199,10 @@ public class User implements AggregateRoot<Long>, Serializable {
     }
 
     public UserDTO toDTO() {
-        return new UserDTO(this.email, this.name, this.nickname, this.password.toString(), this.superUser, this.blacklist);
+        return new UserDTO(this.email, this.name, this.nickname, this.password.toString(), this.superUser);
     }
 
     public static User fromDTO(UserDTO dto, boolean hash) throws IllegalArgumentException {
-        return new User(dto.getEmail(), dto.getName(), dto.getNickname(), dto.getPassword(), dto.isSuperuser(), hash, dto.getBlacklist());
+        return new User(dto.getEmail(), dto.getName(), dto.getNickname(), dto.getPassword(), dto.isSuperuser(), hash);
     }
 }
