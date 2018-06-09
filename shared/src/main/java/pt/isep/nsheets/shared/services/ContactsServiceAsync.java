@@ -3,20 +3,26 @@ package pt.isep.nsheets.shared.services;
 import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import org.eclipse.jetty.server.Authentication.User;
 
 public interface ContactsServiceAsync {
 
-    /**
-     *
-     * @param callback
-     */
-    void getContacts(AsyncCallback<ArrayList<ContactDTO>> callback);
+    void allContactsFromUser(UserDTO currentUser, AsyncCallback<ArrayList<ContactDTO>> callback);
 
-    /**
-     *
-     * @param contactsDTO
-     * @param callback
-     */
-    void addContact(ContactDTO contactsDTO, AsyncCallback<ContactDTO> callback);
+    void allInvitations(UserDTO currentUser, AsyncCallback<ArrayList<ContactDTO>> callback);
+
+    void allAvailableContacts(UserDTO currentUser, AsyncCallback<ArrayList<ContactDTO>> callback);
+
+    void acceptInvitation(Long id, ContactDTO contact, UserDTO currentUser, AsyncCallback<Void> callback);
+
+    void denyInvitation(Long id, ContactDTO contact, UserDTO currentUser, AsyncCallback<Void> callback);
+
+    void blockUser(UserDTO user, Long id, AsyncCallback<Void> callback);
+
+    void unblockUser(UserDTO user, Long id, AsyncCallback<Void> callback);
+
+    void sendInvitation(UserDTO userDTO, UserDTO currentUser, Long id, AsyncCallback<Void> callback);
+
+    void getUserByEmail(String email, AsyncCallback<UserDTO> callback);
 
 }

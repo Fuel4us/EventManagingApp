@@ -11,17 +11,21 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
+import gwt.material.design.addins.client.combobox.MaterialComboBox;
 import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.constants.Display;
 import gwt.material.design.client.constants.IconType;
 import gwt.material.design.client.constants.TextAlign;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialImage;
+import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialSideNavPush;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.html.ListItem;
+import java.util.LinkedList;
+import java.util.List;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
@@ -38,6 +42,12 @@ import pt.isep.nsheets.client.resources.AppResources;
 public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, ExtensionsPresenter.MyProxy> {
 
     private MyView view;
+
+    private MaterialSideNavPush activatedSideNav;
+
+    private List<String> namesSides = new LinkedList<>();
+
+    private List<MaterialSideNavPush> sides = new LinkedList<>();
 
     interface MyView extends View {
 
@@ -74,11 +84,40 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
         MaterialButton getBtnSide();
 
         MaterialTextBox getTxtSide();
+
+        MaterialButton getBtnSwitch();
+
+        MaterialComboBox getComboBars();
+
     }
 
     @NameToken(NameTokens.extensions)
     @ProxyStandard
     interface MyProxy extends ProxyPlace<ExtensionsPresenter> {
+    }
+
+    public MaterialSideNavPush getActivatedSideNav() {
+        return activatedSideNav;
+    }
+
+    public void setActivatedSideNav(MaterialSideNavPush activatedSideNav) {
+        this.activatedSideNav = activatedSideNav;
+    }
+
+    void addSideName(String name) {
+        namesSides.add(name);
+    }
+
+    public List<String> getNamesSides() {
+        return namesSides;
+    }
+
+    void addSides(MaterialSideNavPush side) {
+        sides.add(side);
+    }
+
+    public List<MaterialSideNavPush> getSides() {
+        return sides;
     }
 
     @Inject
@@ -108,6 +147,7 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
             values[3] = view.getFgColorNegValue();
 
             configurationSvc.saveConfiguration(new ConfigurationDTO(values), callback);
+
         });
 
         ConfigurationServiceAsync configurationSvc = GWT.create(ConfigurationService.class);
@@ -133,14 +173,16 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
     @Override
     protected void onReveal() {
         super.onReveal();
-
         SetPageTitleEvent.fire("Extensions", "Configure Extensions", "", "", this);
-
     }
 
     @Override
     protected void onBind() {
         super.onBind();
+
+        addSideName("sideBar");
+        addSides(MenuView.getSideNav());
+        getView().getComboBars().addItem("sideBar", MenuView.getSideNav());
 
         getView().getMenuButton().addClickHandler(new ClickHandler() {
             @Override
@@ -157,8 +199,13 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
                 if (name.isEmpty()) {
                     MaterialToast.fireToast("The name of new menu option is empty! Please write one.");
                 } else {
-                    MenuView.getSideNav().add(ls);
-                    MaterialToast.fireToast("Menu Option created!");
+                    if (MenuView.getNavBar().getActivates().equals("sideBar")) {
+                        MenuView.getSideNav().add(newItem);
+                        MaterialToast.fireToast("Menu Option created on the original side bar!");
+                    } else {
+                        getSides().get(getView().getComboBars().getSelectedIndex()).add(newItem);
+                        MaterialToast.fireToast("Menu Option created on the new side bar!");
+                    }
                 }
             }
         });
@@ -188,23 +235,43 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
                 String name = getView().getTxtSide().getText();
                 if (name.isEmpty()) {
                     MaterialToast.fireToast("Side bar name is empty! Please choose one.");
+                } else {
+                    MaterialSideNavPush aux = new MaterialSideNavPush();
+                    ListItem temp = new ListItem();
+                    MaterialImage image = new MaterialImage();
+                    MaterialLabel nameBox = new MaterialLabel();
+                    nameBox.setEnabled(false);
+                    nameBox.setText(name);
+                    nameBox.setFontSize("2em");
+                    nameBox.setTextAlign(TextAlign.CENTER);
+                    image.setWidth("100%");
+                    image.setResource(AppResources.INSTANCE.nsheets_logo());
+                    temp.add(image);
+                    aux.setId(name);
+                    aux.setWidth(280);
+                    aux.setAllowBodyScroll(true);
+                    aux.setShowOnAttach(true);
+                    aux.add(temp);
+                    aux.add(nameBox);
+                    MenuView.getNavBar().setActivates(name);
+                    MenuView.getPanel().add(aux);
+                    setActivatedSideNav(aux);
+                    getView().getComboBars().addItem(name, aux);
+                    addSideName(name);
+                    addSides(aux);
+                    MaterialToast.fireToast("The SideBar was created successfully!", "rounded");
                 }
-                MaterialSideNavPush aux = new MaterialSideNavPush();
-                ListItem temp = new ListItem();
-                MaterialImage image = new MaterialImage();
-                image.setWidth("100%");
-                image.setResource(AppResources.INSTANCE.nsheets_logo());
-                temp.add(image);
-                aux.setId(name);
-                aux.setWidth(280);
-                aux.setAllowBodyScroll(true);
-                aux.setShowOnAttach(true);
-                aux.add(temp);
-                MenuView.getNavBar().setActivates(name);
-                MenuView.getPanel().add(aux);
-                MaterialToast.fireToast("The SideBar was created successfully!", "rounded");
+            }
+        });
+
+        getView().getBtnSwitch().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                String createdBar = getNamesSides().get(getView().getComboBars().getSelectedIndex());
+                MenuView.getNavBar().setActivates(createdBar);
+                MenuView.getPanel().add(getSides().get(getView().getComboBars().getSelectedIndex()));
+                MaterialToast.fireToast("SideBar changed!", "rounded");
             }
         });
     }
-
 }

@@ -1,10 +1,10 @@
 package pt.isep.nsheets.client.application.chat;
 
-import com.google.gwt.core.client.GWT;
+import java.util.ArrayList;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -12,11 +12,9 @@ import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
-
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import gwt.material.design.client.ui.MaterialToast;
-import java.util.ArrayList;
-import java.util.Date;
+
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
@@ -24,19 +22,31 @@ import pt.isep.nsheets.client.security.CurrentUser;
 import pt.isep.nsheets.shared.services.MessagesDTO;
 import pt.isep.nsheets.shared.services.MessagesService;
 import pt.isep.nsheets.shared.services.MessagesServiceAsync;
-import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
+import pt.isep.nsheets.shared.services.UserDTO;
 
 public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter.MyProxy> {
-
+    
+    private final int CHAT_INDEX_PUBLIC = 1;
+    private final int CHAT_INDEX_PRIVATE_2 = 2;
+    private final int CHAT_INDEX_PRIVATE_3 = 3;
+    
     private MyView view;
 
     interface MyView extends View {
 
-        void setContents(ArrayList<MessagesDTO> contents,String currentNickName);
+        void buttonClickHandlerPublicChat(ClickHandler ch);
 
-        void buttonClickHandler(ClickHandler ch);
-
-        String text();
+        void buttonClickHandlerPrivateChat2(ClickHandler ch);
+        
+        void buttonClickHandlerPrivateChat3(ClickHandler ch);
+        
+        void setContents(ArrayList<MessagesDTO> contents, UserDTO userDto);
+        
+        String textPublicChat();
+        
+        String textPrivateChat2();
+        
+        String textPrivateChat3();
     }
 
     @NameToken(NameTokens.chat)
@@ -53,7 +63,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
         this.user = currentUser;
         this.view = view;
 
-        this.view.buttonClickHandler(e -> {
+        this.view.buttonClickHandlerPublicChat(e -> {
             MessagesServiceAsync messagesSvc = GWT.create(MessagesService.class);
 
             // Set up the callback object.
@@ -65,15 +75,55 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 
                 @Override
                 public void onSuccess(MessagesDTO result) {
-                    MaterialToast.fireToast("New Message Created", "rounded");
 
                     refreshMessages();
                 }
 
             };
-            MessagesDTO mDTO = new MessagesDTO(view.text(), new Date(), this.user.getUser().getNickname());
+            MessagesDTO mDTO = new MessagesDTO(view.textPublicChat(), this.user.getUser().getNickname(), CHAT_INDEX_PUBLIC);
             messagesSvc.addMessage(mDTO, callback);
         });
+
+        this.view.buttonClickHandlerPrivateChat2(e -> {
+            MessagesServiceAsync messagesSvc = GWT.create(MessagesService.class);
+
+            // Set up the callback object.
+            AsyncCallback<MessagesDTO> callback = new AsyncCallback<MessagesDTO>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error! " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(MessagesDTO result) {
+                    refreshMessages();
+                }
+
+            };
+            MessagesDTO mDTO = new MessagesDTO(view.textPrivateChat2(), this.user.getUser().getNickname(), CHAT_INDEX_PRIVATE_2);
+            messagesSvc.addMessage(mDTO, callback);
+        });
+        
+        this.view.buttonClickHandlerPrivateChat3(e -> {
+            MessagesServiceAsync messagesSvc = GWT.create(MessagesService.class);
+
+            // Set up the callback object.
+            AsyncCallback<MessagesDTO> callback = new AsyncCallback<MessagesDTO>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error! " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(MessagesDTO result) {
+                    refreshMessages();
+                }
+
+            };
+            MessagesDTO mDTO = new MessagesDTO(view.textPrivateChat3(), this.user.getUser().getNickname(), CHAT_INDEX_PRIVATE_3);
+            messagesSvc.addMessage(mDTO, callback);
+        });
+        
     }
 
     private void refreshMessages() {
@@ -84,11 +134,11 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
         // Set up the callback object.
         AsyncCallback<ArrayList<MessagesDTO>> callback = new AsyncCallback<ArrayList<MessagesDTO>>() {
             public void onFailure(Throwable caught) {
-                // TODO: Do something with errors.
+                MaterialToast.fireToast("Error! " + caught.getMessage());
             }
 
             public void onSuccess(ArrayList<MessagesDTO> result) {
-                view.setContents(result,user.getUser().getNickname());
+                view.setContents(result, user.getUser());
             }
         };
 
@@ -99,13 +149,13 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
     protected void onReveal() {
         super.onReveal();
 
-        SetPageTitleEvent.fire("Chat", "Public Online Chat", "", "", this);
+        SetPageTitleEvent.fire("Chat", "Online Chat", "", "", this);
 
         this.timer();
     }
 
     private void timer() {
-        // Create a new timer that calls Window.alert().
+        // Create a new timer
         Timer t = new Timer() {
             @Override
             public void run() {

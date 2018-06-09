@@ -5,6 +5,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
+import gwt.material.design.addins.client.combobox.MaterialComboBox;
 import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.constants.IconType;
 import gwt.material.design.client.ui.MaterialButton;
@@ -44,6 +45,10 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
     MaterialButton btnSide;
     @UiField
     MaterialTextBox txtSide;
+    @UiField
+    MaterialButton btnSwitch;
+    @UiField
+    MaterialComboBox comboBars;
 
     interface Binder extends UiBinder<Widget, ExtensionsView> {
     }
@@ -56,8 +61,19 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
         populateIcons();
     }
 
+    @Override
+    public MaterialComboBox getComboBars() {
+        return comboBars;
+    }
+
+    @Override
     public MaterialTextBox getTxtSide() {
         return txtSide;
+    }
+
+    @Override
+    public MaterialButton getBtnSwitch() {
+        return btnSwitch;
     }
 
     @Override
