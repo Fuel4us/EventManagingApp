@@ -93,7 +93,7 @@ public class SignupPresenter extends Presenter<SignupPresenter.MyView, SignupPre
             validation = this.view.txtPassword().validate();
             
             if(validation){
-                UserDTO dto = new UserDTO(this.view.email(), this.view.name(), this.view.username(), this.view.password(), false, new ArrayList<>());
+                UserDTO dto = new UserDTO(this.view.email(), this.view.name(), this.view.username(), this.view.password(), false);
 
                 signupSvc.signupUser(dto, callback);
             }

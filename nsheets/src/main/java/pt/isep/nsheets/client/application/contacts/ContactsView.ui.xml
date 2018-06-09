@@ -16,6 +16,21 @@
                                           description="Add Contact" textColor="BLUE"
                                           backgroundColor="WHITE"/>
         
+        <m:MaterialCollapsible grid="s12 m6 l8" ui:field="collapsible">
+            <m:MaterialCollapsibleItem>
+                <m:MaterialCollapsibleHeader>
+                    <m:MaterialLink text="Invitations" iconType="IMPORT_CONTACTS" iconPosition="LEFT" textColor="RED"/>
+                </m:MaterialCollapsibleHeader>
+                <m:MaterialCollapsibleBody>
+                    <m:MaterialLabel ui:field="label" text="teste1" fontSize="2em"/>
+                    <m:MaterialCard ui:field="invitesCard">
+                        <m:MaterialCollection ui:field="invitesCollection">
+                        </m:MaterialCollection>  
+                    </m:MaterialCard>
+                </m:MaterialCollapsibleBody>
+            </m:MaterialCollapsibleItem>
+        </m:MaterialCollapsible>
+        
         <m:MaterialFAB>
             <m:MaterialButton ui:field="openModalBtn" type="FLOATING" iconType="ADD" tooltip="Add Contact" tooltipPosition="LEFT" size="LARGE"/>
         </m:MaterialFAB>
@@ -28,15 +43,14 @@
         <m:MaterialModal ui:field="modalAddContact" type="DEFAULT" dismissible="true">
             <m:MaterialModalContent>
                 <m:MaterialRow>
-                    <m:MaterialColumn grid="s6" offset="s6" >
-                        <m:MaterialTitle title="Create your Contact"/>
+                    <m:MaterialColumn grid="s6" offset="s9" >
+                        <m:MaterialTitle title="Send Invitation"/>
                     </m:MaterialColumn>
                 </m:MaterialRow>
-                <m:MaterialTextBox ui:field="contactName" label="Contact's Name" validateOnBlur="true" allowBlank="false"/>
-                <m:MaterialTextArea ui:field="contactEmail" placeholder="Contact's Email"/>
+                <m:MaterialTextBox ui:field="contactEmail" label="Contact's Email" validateOnBlur="true" allowBlank="false"/>
             </m:MaterialModalContent>
             <m:MaterialModalFooter>
-                <m:MaterialButton ui:field="saveBtn" text="Save Contact" type="FLAT"/>
+                <m:MaterialButton ui:field="saveBtn" text="Send" type="FLAT"/>
             </m:MaterialModalFooter>
         </m:MaterialModal>
         
