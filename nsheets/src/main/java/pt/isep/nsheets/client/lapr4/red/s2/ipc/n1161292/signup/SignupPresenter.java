@@ -13,6 +13,7 @@ import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import gwt.material.design.client.ui.MaterialToast;
+import java.util.ArrayList;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
@@ -24,34 +25,38 @@ import pt.isep.nsheets.shared.services.UserDTO;
  *
  * @author Tiago João Santos Rios, 1161292@isep.ipp.pt
  */
-public class SignupPresenter extends Presenter<SignupPresenter.MyView, SignupPresenter.MyProxy>{
-    
+public class SignupPresenter extends Presenter<SignupPresenter.MyView, SignupPresenter.MyProxy> {
+
     private MyView view;
-    
+
     interface MyView extends View {
+
         void submitButtonClickHandler(ClickHandler ch);
-        
+
         String username();
+
         String password();
+
         String email();
+
         String name();
     }
-    
+
     @NameToken(NameTokens.SIGNUP)
     @ProxyStandard
     @NoGatekeeper
     interface MyProxy extends ProxyPlace<SignupPresenter> {
     }
-    
+
     @Inject
     SignupPresenter(EventBus eventBus, SignupPresenter.MyView view, SignupPresenter.MyProxy proxy, PlaceManager placeManager) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
         this.view = view;
-        
+
         createSubmitButtonHandler();
     }
-    
-    public void createSubmitButtonHandler(){
+
+    public void createSubmitButtonHandler() {
         this.view.submitButtonClickHandler(e -> {
             SignupServiceAsync signupSvc = GWT.create(SignupService.class);
 
@@ -67,16 +72,16 @@ public class SignupPresenter extends Presenter<SignupPresenter.MyView, SignupPre
                 }
             };
 
-            if(this.view.username().trim().isEmpty() || this.view.name().trim().isEmpty() || 
-                this.view.password().trim().isEmpty() || this.view.email().trim().isEmpty())
+            if (this.view.username().trim().isEmpty() || this.view.name().trim().isEmpty()
+                    || this.view.password().trim().isEmpty() || this.view.email().trim().isEmpty()) {
                 MaterialToast.fireToast("All data is required! Please fill the form.");
-            else {
-                UserDTO dto = new UserDTO(this.view.email(), this.view.name(), this.view.username(), this.view.password(), false);
+            } else {
+                UserDTO dto = new UserDTO(this.view.email(), this.view.name(), this.view.username(), this.view.password(), false, new ArrayList<>());
                 signupSvc.signupUser(dto, callback);
             }
         });
     }
-    
+
     @Override
     protected void onReveal() {
         super.onReveal();

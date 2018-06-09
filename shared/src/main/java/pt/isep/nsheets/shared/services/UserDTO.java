@@ -1,6 +1,8 @@
 package pt.isep.nsheets.shared.services;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
 
 @SuppressWarnings("serial")
 public class UserDTO implements Serializable {
@@ -11,16 +13,21 @@ public class UserDTO implements Serializable {
     private String password;
     private boolean superUser;
 
-    public UserDTO(String email, String name, String nickname, String password, boolean superUser) {
+    private List<UserDTO> blacklist;
+
+    public UserDTO(String email, String name, String nickname, String password, boolean superUser, List<UserDTO> blacklist) {
         this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.password = password;
         this.superUser = superUser;
+
+        this.blacklist = blacklist;
     }
 
     // It is mandatory to have a default constructor with no arguments to be serializable!
-    public UserDTO() {}
+    public UserDTO() {
+    }
 
     public String getEmail() {
         return this.email;
@@ -37,34 +44,58 @@ public class UserDTO implements Serializable {
     public String getPassword() {
         return this.password;
     }
-    
+
     public boolean isSuperuser() {
         return this.superUser;
     }
+
+    public List<UserDTO> getBlacklist() {
+        return blacklist;
+    }
+
     @Override
-    public boolean equals(Object other) {
-        if (!(other instanceof UserDTO))
-            return false;
+    public int hashCode() {
+        int hash = 3;
+        hash = 29 * hash + Objects.hashCode(this.email);
+        hash = 29 * hash + Objects.hashCode(this.name);
+        hash = 29 * hash + Objects.hashCode(this.nickname);
+        hash = 29 * hash + Objects.hashCode(this.password);
+        hash = 29 * hash + (this.superUser ? 1 : 0);
+        hash = 29 * hash + Objects.hashCode(this.blacklist);
+        return hash;
+    }
 
-        final UserDTO that = (UserDTO) other;
-        if (this == that)
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
-
-        if (!this.email.equals(that.email))
+        }
+        if (obj == null) {
             return false;
-
-        if (!this.name.equals(that.name))
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-
-        if (!this.nickname.equals(that.nickname))
+        }
+        final UserDTO other = (UserDTO) obj;
+        if (this.superUser != other.superUser) {
             return false;
-
-        if (!this.password.equals(that.password))
+        }
+        if (!Objects.equals(this.email, other.email)) {
             return false;
-
-        if (this.superUser != that.superUser)
+        }
+        if (!Objects.equals(this.name, other.name)) {
             return false;
-
+        }
+        if (!Objects.equals(this.nickname, other.nickname)) {
+            return false;
+        }
+        if (!Objects.equals(this.password, other.password)) {
+            return false;
+        }
+        if (!Objects.equals(this.blacklist, other.blacklist)) {
+            return false;
+        }
         return true;
     }
+
 }
