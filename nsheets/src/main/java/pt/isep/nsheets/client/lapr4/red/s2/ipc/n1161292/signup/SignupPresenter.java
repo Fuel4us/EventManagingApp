@@ -12,6 +12,7 @@ import com.gwtplatform.mvp.client.annotations.NoGatekeeper;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
+import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
@@ -35,6 +36,11 @@ public class SignupPresenter extends Presenter<SignupPresenter.MyView, SignupPre
         String password();
         String email();
         String name();
+        
+        MaterialTextBox txtUsername();
+        MaterialTextBox txtPassword();
+        MaterialTextBox txtEmail();
+        MaterialTextBox txtName();
     }
     
     @NameToken(NameTokens.SIGNUP)
@@ -66,11 +72,15 @@ public class SignupPresenter extends Presenter<SignupPresenter.MyView, SignupPre
                     MaterialToast.fireToast("Conditionalextension conditional configured!" + result.getName());
                 }
             };
-
-            if(this.view.username().trim().isEmpty() || this.view.name().trim().isEmpty() || 
-                this.view.password().trim().isEmpty() || this.view.email().trim().isEmpty())
-                MaterialToast.fireToast("All data is required! Please fill the form.");
-            else {
+            
+            boolean validation = false;
+            
+            validation = this.view.txtEmail().validate();
+            validation = this.view.txtUsername().validate();
+            validation = this.view.txtName().validate();
+            validation = this.view.txtPassword().validate();
+            
+            if(validation){
                 UserDTO dto = new UserDTO(this.view.email(), this.view.name(), this.view.username(), this.view.password(), false);
                 signupSvc.signupUser(dto, callback);
             }
