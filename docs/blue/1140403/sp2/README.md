@@ -19,14 +19,33 @@ is the only "trace" that may eventually link to the old version.
 
 In a more brief text:
 
+The use case is pratically the same as Core07.1 . The only difference is that
+The "form" of the ListNotes should be a check box with the ability to check or 
+uncheck every line of the ListNotes.
 
+In addiction, it should be possible to edit old Notes and to convert a Note into
+a ListNotes.
 
-US1 - As a User of the Application I want to be able to...
+US1 - As a User of the Application I want to be able to edit a already existing note
 
-US2 - As a User of the Application I want to be able to ...
+US2 - As a User of the Application I want to be able to convert a already existing
+note into a ListNotes
+
+US3 - As a User I want to be able to edit the ListNotes
+
+US4 - As a User I want to be able to delete ListNotes
 
 # 3. Analysis
 
+*In this section you should describe the study/analysis/research you developed in order to design a solution.*
+
+For this feature increment I need to:  
+
+- Understand how the application works and also understand the key aspects of GWT, since it is the main technology behind the application  
+
+- Understand how the Notes Page is implemented (for instance, how the UI gets the Note that are displayed)  
+
+- Understand how to integrate a relational database into the project (Will be assuming JPA since it is studied in EAPLI)  
 
 ## 3.1 GWT and Project Structure
 
@@ -343,9 +362,7 @@ By memory we apply/use:
 
 **For US2**
 
-**UI: Button for adding a new Workbook Description**
 
-For this concern we decided to use a Material Widget called Material FAB (Floating Action Button). This is a kind of button that usually appears at the left bottom part of the screen and contains actions available for the elements of the page.  
 
 We updated the HomeView.ui.xml accordingly and declare the element with a tag *ui:field="newWorkbookButton"*. In the corresponding class View (i.e., HomeView) we bind that button to the corresponding widget class: 	
 

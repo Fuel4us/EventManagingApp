@@ -6,7 +6,7 @@
 package pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.application;
 
 import eapli.framework.application.Controller;
-import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.domain.CellStyle;
+import java.io.ByteArrayOutputStream;
 import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.domain.PDFBuilder;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
@@ -17,9 +17,9 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
  */
 public class ExportStyledPDFController implements Controller{
     
-    public boolean buildPDF(WorkbookDTO workbookDTO){
+    public boolean buildPDF(WorkbookDTO workbookDTO, String style,String color){
         PDFBuilder pdfFile = new PDFBuilder(Workbook.fromDTO(workbookDTO));
-        return pdfFile.createPdf(CellStyle.DASHED);
+        return pdfFile.createPdf(style,color);
     }
     
 }

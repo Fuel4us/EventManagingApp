@@ -16,10 +16,10 @@ import com.itextpdf.text.pdf.PdfPTable;
  *
  * @author pedromonteiro
  */
-public class DashedCell implements PdfPCellEvent{
+public class SolidCell implements PdfPCellEvent{
     private int border = 0;
     private final BaseColor color;
-    public DashedCell(int border, BaseColor color) {
+    public SolidCell(int border, BaseColor color) {
         this.border = border;
         this.color = color;
     }
@@ -29,7 +29,7 @@ public class DashedCell implements PdfPCellEvent{
         PdfContentByte canvas = canvases[PdfPTable.LINECANVAS];
         canvas.saveState();
         canvas.setColorStroke(color);
-        canvas.setLineDash(10, 7);
+        canvas.setLineWidth(2);
         if ((border & PdfPCell.TOP) == PdfPCell.TOP) {
             canvas.moveTo(position.getRight(), position.getTop());
             canvas.lineTo(position.getLeft(), position.getTop());
