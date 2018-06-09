@@ -24,29 +24,13 @@ public class EvalVisitor extends JsBaseVisitor<Value> {
     @Override
     public Value visitAssignment(JsParser.AssignmentContext ctx) {
         String id = ctx.ID().getText();
-        String type = this.visit(ctx.expr()).asString();
         Value value;
 
-        try{
-            Integer.parseInt(type);
-        }catch(Exception e1 ){
-            try{
-                Double.parseDouble(type);
-            }catch(Exception e2 ){
-                //string
-                value = new Value(type);
-                if (id.startsWith("$"))
-                    return cells.put(id.substring(1), value);
-                return memory.put(id, value);
-            }
-            //double
-            value = new Value(Double.parseDouble(type));
-            if (id.startsWith("$"))
-                return cells.put(id.substring(1), value);
-            return memory.put(id, value);
-        }
-        //int
-        value = new Value(Integer.parseInt(type));
+        if(this.visit(ctx.expr()).isDouble())
+            value = new Value(this.visit(ctx.expr()).asDouble());
+        else
+            value = new Value(this.visit(ctx.expr()).asString());
+
         if (id.startsWith("$"))
             return cells.put(id.substring(1), value);
         return memory.put(id, value);
