@@ -46,6 +46,16 @@ class Code_JavaScriptView extends ViewImpl implements Code_JavaScriptPresenter.M
 
     private void initialize() {
 
+        CodeArea.setText("var x = 1;\n"
+                + "\n"
+                + "while(x < 10){\n"
+                + "\n"
+                + "x = x * 2;\n"
+                + "\n"
+                + "}\n"
+                + "\n"
+                + "console.log(\"The variable x has the value \" + x);");
+
         runButton.addClickHandler(event -> {
 
             Map<String, Value> cells = new HashMap<>();
