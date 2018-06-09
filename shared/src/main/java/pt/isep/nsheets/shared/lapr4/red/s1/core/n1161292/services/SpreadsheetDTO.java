@@ -1,5 +1,6 @@
 package pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ import java.util.Map;
  * @author Tiago João Santos Rios, 1161292@isep.ipp.pt
  */
 @SuppressWarnings("serial")
-public class SpreadsheetDTO implements Serializable {
+public class SpreadsheetDTO implements IsSerializable {
         
     public Map<AddressDTO, CellDTO> cells;
     public String title;

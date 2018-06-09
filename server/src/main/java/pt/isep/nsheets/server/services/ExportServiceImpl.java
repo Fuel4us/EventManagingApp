@@ -1,6 +1,7 @@
 package pt.isep.nsheets.server.services;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import java.io.ByteArrayOutputStream;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1140317.ExportXML.application.ExportXMLController;
 
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1150503.ExportPDF.ExportPdfController;
@@ -45,8 +46,8 @@ public class ExportServiceImpl extends RemoteServiceServlet implements ExportSer
     }
 
     @Override
-    public boolean exportStyledWorkbookPDF(WorkbookDTO workbookDTO) {
-        return new ExportStyledPDFController().buildPDF(workbookDTO);
+    public boolean exportStyledWorkbookPDF(WorkbookDTO workbookDTO, String style,String color) {
+        return new ExportStyledPDFController().buildPDF(workbookDTO, style,color);
     }
 
 

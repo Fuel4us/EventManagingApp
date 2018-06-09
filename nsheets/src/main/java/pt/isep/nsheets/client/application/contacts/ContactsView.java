@@ -160,11 +160,11 @@ class ContactsView extends ViewImpl implements ContactsPresenter.MyView {
 
         MaterialTextBox cardTitle = new MaterialTextBox();
         cardTitle.setFontSize("1.4em");
-        cardTitle.setText(contact.getContactName());
+        cardTitle.setText(contact.getContact().getName());
         cardTitle.setReadOnly(true);
 
         MaterialTextArea cardTextArea = new MaterialTextArea();
-        cardTextArea.setText(contact.getContactEmail());
+        cardTextArea.setText(contact.getContact().getEmail());
         cardTextArea.setReadOnly(true);
 
         MaterialCardAction cardAction = new MaterialCardAction();
