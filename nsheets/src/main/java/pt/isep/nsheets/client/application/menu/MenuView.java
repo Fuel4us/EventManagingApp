@@ -24,7 +24,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     @UiField
     static MaterialSideNavPush sideNav;
     @UiField
-    static MaterialLink username;
+    static MaterialLink username, logout;
 
     @Inject
     MenuView(Binder uiBinder) {
@@ -45,5 +45,9 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
 
     public static MaterialLink getUsername() {
         return username;
+    }
+
+    public static MaterialLink getLogout() {
+        return logout;
     }
 }

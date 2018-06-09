@@ -54,8 +54,8 @@
                 <!-- <m:MaterialNavBar backgroundColor="PURPLE"> -->
                 <m:MaterialNavBrand text="NSheets" paddingLeft="20"/>
                 <m:MaterialNavSection float="RIGHT">
-                    <m:MaterialLink ui:field="username"/>
-                    <m:MaterialLink text="Logout"/>
+                    <m:MaterialLink ui:field="username" text="Login" href="#login"/>
+                    <m:MaterialLink ui:field="logout" text="Signup" href="#signup"/>
                 </m:MaterialNavSection>
             </m:MaterialNavBar>
         </m:MaterialHeader>

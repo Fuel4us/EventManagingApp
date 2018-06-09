@@ -57,6 +57,9 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
     @Inject
     HomeView(Binder uiBinder, CurrentUser currentUser) {
         initWidget(uiBinder.createAndBindUi(this));
+        MenuView.getUsername().clear();
+        MenuView.getLogout().clear();
+        MenuView.getLogout().setText("Logout");
         MenuView.getUsername().setText("Welcome, " + currentUser.getUser().getNickname());
     }
     
