@@ -188,8 +188,5 @@ public interface Cell extends Comparable<Cell>, Extensible<Cell>, Serializable {
     * Cell Style
     */
     
-    public void setStyle(StyleCell style);
-    
-    public StyleCell style();
     
 }

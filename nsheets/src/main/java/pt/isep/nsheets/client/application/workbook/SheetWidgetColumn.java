@@ -7,7 +7,6 @@ import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.table.cell.WidgetColumn;
 import pt.isep.nsheets.client.application.workbook.WorkbookView.SheetCell;
 import pt.isep.nsheets.shared.core.Cell;
-import pt.isep.nsheets.shared.core.StyleCell;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.CellStyleExtension;
@@ -83,8 +82,6 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
         if (extension != null) {
             extension.getUIExtension(btn).decorate(cell);
 
-            StyleCell style = new StyleCell(btn.getBackgroundColor(), btn.getTextColor());
-            cell.setStyle(style);
         }
 
         Extension extensionCell = ExtensionManager.getInstance().getExtension("CellStyleExtension");
@@ -102,10 +99,9 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
                 CellStyleExtension.setResult(ConditionalFormattingExtension.setOperation(cell, cond.getCondOperator(), cond.getCondValue()));
                 extensionCell.getUIExtension(btn).decorate(cell);
 
-                StyleCell style = new StyleCell(btn.getBackgroundColor(), btn.getTextColor());
-                cell.setStyle(style);
             }
         }
+        
         return btn;
     }
 

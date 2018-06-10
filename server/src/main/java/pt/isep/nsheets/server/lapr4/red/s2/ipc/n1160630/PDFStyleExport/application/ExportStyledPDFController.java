@@ -6,7 +6,6 @@
 package pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.application;
 
 import eapli.framework.application.Controller;
-import java.io.ByteArrayOutputStream;
 import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.domain.PDFBuilder;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
