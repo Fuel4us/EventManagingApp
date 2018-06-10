@@ -1,0 +1,19 @@
+@startuml  ssd.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+User -> System : asks for log in
+
+System -> User : asks for credentials
+User -> System : inserts credentials
+System -> User : login complete
+User -> System : chooses JavaScript Scription Option
+System -> User : asks for code
+User -> System : inserts code
+System -> User : Shows the output to user
+@enduml

@@ -90,7 +90,7 @@ class CalendarView extends ViewImpl implements CalendarPresenter.MyView {
 
         AsyncCallback<Void> callback = new AsyncCallback<Void>() {
             public void onSuccess(Void aVoid) {
-                MaterialToast.fireToast("Still not supported", "rounded");
+                MaterialToast.fireToast("Event edited successfully!", "rounded");
                 refreshView();
             }
 
@@ -107,7 +107,7 @@ class CalendarView extends ViewImpl implements CalendarPresenter.MyView {
 
         AsyncCallback<Void> callback = new AsyncCallback<Void>() {
             public void onSuccess(Void aVoid) {
-                MaterialToast.fireToast("Still not supported", "rounded");
+                MaterialToast.fireToast("Event deleted successfully!", "rounded");
                 refreshView();
             }
 
@@ -309,6 +309,10 @@ class CalendarView extends ViewImpl implements CalendarPresenter.MyView {
         deleteButton.setText("Delete");
         deleteButton.addClickHandler(event -> deleteEvent(calendarEvent));
         content.add(deleteButton);
+
+        //Edit and delete not implemented
+        editButton.setEnabled(false);
+        deleteButton.setEnabled(false);
 
         return card;
     }

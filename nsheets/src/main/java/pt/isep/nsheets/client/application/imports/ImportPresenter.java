@@ -29,7 +29,6 @@ public class ImportPresenter extends Presenter<ImportPresenter.MyView, ImportPre
     @Override
     protected void onReveal() {
         super.onReveal();
-
         SetPageTitleEvent.fire("Import", "Import your saved workbooks", "", "", this);
     }
 }

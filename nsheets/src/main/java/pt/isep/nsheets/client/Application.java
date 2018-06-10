@@ -32,7 +32,7 @@ public class Application implements Bootstrapper {
 
 	public static class PreApplicationImpl implements PreBootstrapper {
 		private final Logger logger = Logger.getLogger(PreApplicationImpl.class.getName());
-
+                
 		@Override
 		public void onPreBootstrap() {
 			GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {

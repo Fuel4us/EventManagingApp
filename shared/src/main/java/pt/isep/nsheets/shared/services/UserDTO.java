@@ -13,16 +13,13 @@ public class UserDTO implements Serializable {
     private String password;
     private boolean superUser;
 
-    private List<UserDTO> blacklist;
-
-    public UserDTO(String email, String name, String nickname, String password, boolean superUser, List<UserDTO> blacklist) {
+    public UserDTO(String email, String name, String nickname, String password, boolean superUser) {
         this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.password = password;
         this.superUser = superUser;
 
-        this.blacklist = blacklist;
     }
 
     // It is mandatory to have a default constructor with no arguments to be serializable!
@@ -49,9 +46,6 @@ public class UserDTO implements Serializable {
         return this.superUser;
     }
 
-    public List<UserDTO> getBlacklist() {
-        return blacklist;
-    }
 
     @Override
     public int hashCode() {
@@ -61,7 +55,6 @@ public class UserDTO implements Serializable {
         hash = 29 * hash + Objects.hashCode(this.nickname);
         hash = 29 * hash + Objects.hashCode(this.password);
         hash = 29 * hash + (this.superUser ? 1 : 0);
-        hash = 29 * hash + Objects.hashCode(this.blacklist);
         return hash;
     }
 
@@ -90,9 +83,6 @@ public class UserDTO implements Serializable {
             return false;
         }
         if (!Objects.equals(this.password, other.password)) {
-            return false;
-        }
-        if (!Objects.equals(this.blacklist, other.blacklist)) {
             return false;
         }
         return true;

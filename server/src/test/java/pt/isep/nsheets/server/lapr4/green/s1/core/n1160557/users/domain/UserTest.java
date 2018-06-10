@@ -5,7 +5,6 @@
  */
 package pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.domain;
 
-import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -159,7 +158,7 @@ public class UserTest {
     @Test
     public void testToDTO() {
         System.out.println("toDTO");
-        UserDTO expected = new UserDTO(defaultEmail, defaultName, defaultNickname, defaultPassword.toString(), defaultSuperuser, new ArrayList<>());
+        UserDTO expected = new UserDTO(defaultEmail, defaultName, defaultNickname, defaultPassword.toString(), defaultSuperuser);
         assertEquals(true, testUser.toDTO().equals(expected));
     }
 
@@ -169,7 +168,7 @@ public class UserTest {
     @Test
     public void testFromDTO() {
         System.out.println("fromDTO");
-        UserDTO dto = new UserDTO(defaultEmail, defaultName, defaultNickname, defaultPassword.toString(), defaultSuperuser, new ArrayList<>());
+        UserDTO dto = new UserDTO(defaultEmail, defaultName, defaultNickname, defaultPassword.toString(), defaultSuperuser);
         assertEquals(true, User.fromDTO(dto, true).sameAs(testUser));
     }
 

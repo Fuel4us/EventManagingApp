@@ -5,6 +5,8 @@
  */
 package pt.isep.nsheets.shared.core.formula.lang;
 
+import gwt.material.design.client.ui.MaterialToast;
+
 /**
  *
  * @author Pedro Rodrigues - (1140572)
@@ -17,6 +19,7 @@ public class MonetaryLanguage extends Language {
 
     @Override
     protected void initBinaryOperators() {
+        MaterialToast.fireToast("initBinaryOperations FINALLY!!!");
         binaryOperators.add(new Adder());
         binaryOperators.add(new Divider());
         binaryOperators.add(new Multiplier());
