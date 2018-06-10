@@ -51,20 +51,20 @@ US03
 The main idea for the "workflow" of this feature increment.
 
 **Use Cases**
-![Use Cases](us.png)
+![Use Cases](us.PNG)
 
 **Domain Model**
 
 **System Sequence Diagrams**
 
 **For US1**
-
+![US1 Analysis](analysis1.PNG)
 
 **For US2**
-
+![US2 Analysis](analysis2.PNG)
 
 **For US3**
-
+![US3 Analysis](analysis3.PNG)
 
 # 4. Design
 
@@ -88,13 +88,13 @@ The main idea for the "workflow" of this feature increment.
 *Sequence Diagrams*
 
 **For US1**
-![US1 Design](design1.png)
+![US1 Design](design1.PNG)
 
 **For US2**
-![US2 Design](design2.png)
+![US2 Design](design2.PNG)
 
 **For US3**
-![US3 Design](design3.png)
+![US3 Design](design3.PNG)
 
 ## 4.3. Classes
 
@@ -170,3 +170,4 @@ Some Questions/Issues identified during the work in this feature increment
 * [ [Implementation] Core02.2 - Now users can choose wich side bar to open. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/45d3ee8771094d9c6f118e2eafb729f1435142d7)
 * [ [Implementation] Core02.2 - Now users can't create menu options, popup options or side bars with the same name. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/0a7a0e2216a0a13a241a7398a1f784279fac42a7)
 * [ [Documentation] Core02.2 - ReadMe.md updated. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/93b1f3d8160003e8c4d6e85f3005e6878f2b6707)
+* [ [Documentation] Core02.2 - ReadMe.md updated. Added design diagrams for us1, us2 and us3, and the us diagram. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/5c6b819dd321e05114873cecb3ecf4d7938686ef?at=master)

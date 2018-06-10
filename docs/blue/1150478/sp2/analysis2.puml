@@ -1,0 +1,18 @@
+@startuml
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+User -> Browser : navigate to page 
+Browser --> User : asks for the name and icon
+User -> Browser : inserts data 
+
+Browser -> NSheetsApplication: addPopupOption(name, icon)
+
+Browser -> Browser : redirect extensions page
+
+@enduml
