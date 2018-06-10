@@ -86,7 +86,7 @@ public class ExcelExpressionCompiler implements ExpressionCompiler {
         if (parser.getNumberOfSyntaxErrors() > 0) {
             throw new FormulaCompilationException(formulaErrorListener.getErrorMessage());
         }
-
+        
         // Visit the expression and returns it
         FormulaEvalVisitor eval = new FormulaEvalVisitor(cell, language);
         Expression result = eval.visit(tree);

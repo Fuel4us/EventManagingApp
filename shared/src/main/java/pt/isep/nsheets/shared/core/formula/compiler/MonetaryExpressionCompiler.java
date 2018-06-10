@@ -48,7 +48,6 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
 
     @Override
     public Expression compile(Cell cell, String source) throws FormulaCompilationException {
-        MaterialToast.fireToast("Tamanho da Source: " + Double.toString(source.length()));
         String number = "";
         String sourceResult = "";
 
@@ -158,14 +157,17 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         FormulaParser parser = new FormulaParser(tokens);
 
-        MonetaryExpressionCompiler.FormulaErrorListener formulaErrorListener = new MonetaryExpressionCompiler.FormulaErrorListener();
+        FormulaErrorListener formulaErrorListener = new FormulaErrorListener();
+        parser.removeErrorListeners(); //Remove default ConsoleErrorListener
+        parser.addErrorListener(formulaErrorListener); //Add ours    
 
         //Attempts to match an expression
         ParseTree tree = parser.expression();
-        MaterialToast.fireToast("PARSER EXPRESSION!!!");
         if (parser.getNumberOfSyntaxErrors() > 0) {
+            MaterialToast.fireToast("FORMULA EXCEPTION: " + formulaErrorListener.getErrorMessage());
             throw new FormulaCompilationException(formulaErrorListener.getErrorMessage());
         }
+
         MaterialToast.fireToast("IF EXCEPTION!!!");
         //Visit the expression and returns it
         FormulaEvalVisitor eval = new FormulaEvalVisitor(cell, language);
