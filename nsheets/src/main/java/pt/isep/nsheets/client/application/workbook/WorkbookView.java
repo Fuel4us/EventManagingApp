@@ -256,7 +256,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
     @Override
     public void initWorkbook() {
-        Spreadsheet sh = Settings.getInstance().getWorkbook().getSpreadsheet(0);
+        Spreadsheet sh = getCurrentSpreadsheet();
 
         int columnNumber = 0;
 
@@ -655,6 +655,11 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @Override
     public MaterialModal getConditionalModal() {
         return this.conditionalModal;
+    }
+    
+    @Override
+    public Spreadsheet getCurrentSpreadsheet() {
+        return Settings.getInstance().getWorkbook().getSpreadsheet(0);
     }
 
     @UiHandler("editWorkbookButton")
