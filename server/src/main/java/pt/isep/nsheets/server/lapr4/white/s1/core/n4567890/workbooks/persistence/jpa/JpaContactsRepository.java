@@ -15,11 +15,11 @@ public class JpaContactsRepository extends NSheetsJpaRepositoryBase<Contact, Lon
     }
 
     @Override
-    public Iterable<Contact> findAllFromUser(UserDTO user) {
+    public Iterable<Contact> findAllFromUser(String email) {
         final Map<String, Object> params = new HashMap<>();
-        params.put("user", user);
+        params.put("email", email);
 
-        return match("e.contactOwner.email=:user.email", params);
+        return match("e.contactOwner.email=:email", params);
     }
 
     @Override
