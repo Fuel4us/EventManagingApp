@@ -42,14 +42,13 @@ governing permissions and limitations under the License. #L% -->
         #customTable table tbody td {
         padding-left: 0 !important;
         padding-right: 0 !important;		
-        }	
-        
+        }
 	
     </ui:style>
 
     <g:HTMLPanel>
 
-        <m:MaterialRow marginTop="60">
+        <m:MaterialRow marginTop="20">
             <m:MaterialTextBox
                 m:id="fBox" ui:field="firstBox" placeholder="Enter your formula for the active cell" label="Enter your formula for the active cell"
                 active="true" grid="s11" iconType="FUNCTIONS" />
@@ -114,7 +113,7 @@ governing permissions and limitations under the License. #L% -->
             </m:MaterialModal>
             <m:MaterialIcon ui:field="conditionalButton" iconType="SETTINGS" iconColor="RED" waves="DEFAULT" circle="true" grid="s1"/>
         </m:MaterialRow>
-        <m:MaterialRow marginTop="60">
+        <m:MaterialRow marginTop="20">
             <m:MaterialTextBox ui:field="searchBox" placeholder="Enter your regular expression" label="Enter your regular expression" title="Search Spreadsheet Cells" active="true" grid="s11" iconType="SEARCH"/>
             <m:MaterialIcon ui:field="searchButton" iconType="SEARCH" iconColor="BLUE" waves="DEFAULT" circle="true" grid="s1"/>
         </m:MaterialRow>
@@ -128,7 +127,7 @@ governing permissions and limitations under the License. #L% -->
                 </m:MaterialRow>
             </m:MaterialModalContent>
         </m:MaterialModal>
-        <m:MaterialRow marginTop="60">
+        <m:MaterialRow marginTop="20">
             <m:MaterialColumn>
                 <m:MaterialLink  ui:field="saveButton" text="Save" textColor="GREEN" iconType="SAVE" iconPosition="LEFT"/>
             </m:MaterialColumn>
@@ -142,8 +141,27 @@ governing permissions and limitations under the License. #L% -->
                 <m:MaterialLink  targetHistoryToken="{form}" text="Forms" textColor="BLUE" iconType="POLYMER" iconPosition="LEFT"/>
             </m:MaterialColumn>
         </m:MaterialRow>
+        <m:MaterialRow height="60">
+            <m:MaterialColumn>
+                <m:MaterialListValueBox ui:field="backgroundcolorLst" helperText="background color"/>
+            </m:MaterialColumn>
+            <m:MaterialColumn>
+                            <m:MaterialColumn>
+                                <m:MaterialListValueBox ui:field="fontcolorLst" helperText="font color"/>
+                            </m:MaterialColumn>
+                            <m:MaterialColumn>
+                                <m:MaterialListValueBox ui:field="fontsizeLst" helperText="font size"/>
+                            </m:MaterialColumn>
+                            <m:MaterialColumn>
+                                <m:MaterialListValueBox ui:field="textAlignLst" helperText="text align"/>
+                            </m:MaterialColumn>
+
+            </m:MaterialColumn>
+
+
+        </m:MaterialRow>
          
-        <m:MaterialRow>
+        <m:MaterialRow margin="40">
             <!-- <m:table.MaterialInfiniteDataTable shadow="1" -->
             <!-- ui:field="table" -->
             <!-- height="calc(100vh - 131px)" -->
