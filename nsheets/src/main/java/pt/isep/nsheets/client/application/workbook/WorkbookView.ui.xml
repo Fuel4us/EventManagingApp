@@ -56,6 +56,16 @@ governing permissions and limitations under the License. #L% -->
                 <m:MaterialButton ui:field="editWorkbookButton" type="FLOATING" waves="LIGHT" iconType="INSERT_DRIVE_FILE" tooltip="Edit Workbook" tooltipPosition="LEFT"/>
             </m:MaterialFABList>
         </m:MaterialFAB>
+        <m:MaterialModal ui:field="modal" type="DEFAULT">
+            <m:MaterialModalContent>
+                <m:MaterialLabel text="Edit WorkBook" fontSize="3em"/>
+                <m:MaterialTextBox ui:field="nameModal" label="NAME" grid="s12"/>
+                <m:MaterialTextBox ui:field="descriptionModal" label="DESCRIPTION" grid="s12"/>
+                <m:MaterialButton ui:field="editButtonModal" text="Edit" waves="GREEN" backgroundColor="WHITE" textColor="BLACK" iconType="EDIT" iconPosition="LEFT" iconColor="GREEN"/>
+                <m:MaterialButton ui:field="deleteButtonModal" text="Delete" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="DELETE" iconPosition="LEFT" iconColor="RED"/>
+                <m:MaterialButton ui:field="cancelButtonModal" text="Cancel" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK" iconType="CANCEL" iconPosition="LEFT" iconColor="BLUE"/>
+            </m:MaterialModalContent>
+        </m:MaterialModal>
         <m:MaterialRow marginTop="60">
             <m:MaterialTextBox
                 m:id="fBox" ui:field="firstBox" placeholder="Enter your formula for the active cell" label="Enter your formula for the active cell"
@@ -160,15 +170,15 @@ governing permissions and limitations under the License. #L% -->
                 <m:MaterialListValueBox ui:field="backgroundcolorLst" helperText="background color"/>
             </m:MaterialColumn>
             <m:MaterialColumn>
-                            <m:MaterialColumn>
-                                <m:MaterialListValueBox ui:field="fontcolorLst" helperText="font color"/>
-                            </m:MaterialColumn>
-                            <m:MaterialColumn>
-                                <m:MaterialListValueBox ui:field="fontsizeLst" helperText="font size"/>
-                            </m:MaterialColumn>
-                            <m:MaterialColumn>
-                                <m:MaterialListValueBox ui:field="textAlignLst" helperText="text align"/>
-                            </m:MaterialColumn>
+                <m:MaterialColumn>
+                    <m:MaterialListValueBox ui:field="fontcolorLst" helperText="font color"/>
+                </m:MaterialColumn>
+                <m:MaterialColumn>
+                    <m:MaterialListValueBox ui:field="fontsizeLst" helperText="font size"/>
+                </m:MaterialColumn>
+                <m:MaterialColumn>
+                    <m:MaterialListValueBox ui:field="textAlignLst" helperText="text align"/>
+                </m:MaterialColumn>
 
             </m:MaterialColumn>
 
