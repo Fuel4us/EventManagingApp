@@ -94,9 +94,9 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         public MaterialPopupMenu getPopChart();
 
         public MaterialModal getConditionalModal();
-
+        
         public void addConfirmationHandler(ClickHandler cMDB);
-
+        
         public int getBackgroudColorTrue();
 
         public int getFontColorTrue();
@@ -108,6 +108,12 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         public String getOperator();
 
         public String getConditionalValue();
+        
+        public String getConditionalCell();
+        
+        public String getConditionalRangeStart();
+        
+        public String getConditionalRangeEnd();
 
         void setText(String string);
 
@@ -315,9 +321,8 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
     }
-
+    
     /* 1050475 Hernani Gil
                Repository loading
      */
