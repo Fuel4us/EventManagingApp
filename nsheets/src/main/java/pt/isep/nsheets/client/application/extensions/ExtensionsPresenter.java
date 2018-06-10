@@ -43,11 +43,15 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
 
     private MyView view;
 
+    private final List<String> menuNames = new LinkedList<>();
+
+    private final List<String> popupNames = new LinkedList<>();
+
     private MaterialSideNavPush activatedSideNav;
 
-    private List<String> namesSides = new LinkedList<>();
+    private final List<String> namesSides = new LinkedList<>();
 
-    private List<MaterialSideNavPush> sides = new LinkedList<>();
+    private final List<MaterialSideNavPush> sides = new LinkedList<>();
 
     interface MyView extends View {
 
@@ -120,6 +124,22 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
         return sides;
     }
 
+    public List<String> getMenuNames() {
+        return menuNames;
+    }
+
+    public List<String> getPopupNames() {
+        return popupNames;
+    }
+
+    public void addMenuName(String name) {
+        menuNames.add(name);
+    }
+
+    public void addPopupName(String name) {
+        popupNames.add(name);
+    }
+
     @Inject
     ExtensionsPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
@@ -188,17 +208,21 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
             @Override
             public void onClick(ClickEvent event) {
                 String name = getView().getMenuName().getText();
-                IconType icon = getView().getIconMenuChoosed();
-                ListItem newItem = new ListItem();
-                MaterialLink ls = new MaterialLink();
-                ls.setText(name);
-                ls.setTextColor(Color.BLACK);
-                ls.setTextAlign(TextAlign.CENTER);
-                ls.setIconType(icon);
-                newItem.add(ls);
                 if (name.isEmpty()) {
                     MaterialToast.fireToast("The name of new menu option is empty! Please write one.");
+                } else if (getMenuNames().contains(name)) {
+                    MaterialToast.fireToast("This menu option already exists! Please write another name.");
                 } else {
+                    IconType icon = getView().getIconMenuChoosed();
+                    ListItem newItem = new ListItem();
+                    MaterialLink ls = new MaterialLink();
+                    ls.setText(name);
+                    ls.setTextColor(Color.BLACK);
+                    ls.setTextAlign(TextAlign.CENTER);
+                    ls.setIconType(icon);
+                    newItem.add(ls);
+                    addMenuName(name);
+
                     if (MenuView.getNavBar().getActivates().equals("sideBar")) {
                         MenuView.getSideNav().add(newItem);
                         MaterialToast.fireToast("Menu Option created on the original side bar!");
@@ -214,15 +238,18 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
             @Override
             public void onClick(ClickEvent event) {
                 String name = getView().getPopName().getText();
-                IconType icon = getView().getIconPopChoosed();
-                MaterialLink pop = new MaterialLink();
-                pop.setText(name);
-                pop.setDisplay(Display.BLOCK);
-                pop.setTextColor(Color.BLACK);
-                pop.setIconType(icon);
                 if (name.isEmpty()) {
                     MaterialToast.fireToast("The name of the popup is empty! Please write one.");
+                } else if (getPopupNames().contains(name)) {
+                    MaterialToast.fireToast("This popup option already exists! Please write another name.");
                 } else {
+                    IconType icon = getView().getIconPopChoosed();
+                    MaterialLink pop = new MaterialLink();
+                    pop.setText(name);
+                    pop.setDisplay(Display.BLOCK);
+                    pop.setTextColor(Color.BLACK);
+                    pop.setIconType(icon);
+                    addPopupName(name);
                     WorkbookView.getPopupMenu().add(pop);
                     MaterialToast.fireToast("Popup menu option created!");
                 }
@@ -235,7 +262,7 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
                 String name = getView().getTxtSide().getText();
                 if (name.isEmpty()) {
                     MaterialToast.fireToast("Side bar name is empty! Please choose one.");
-                } else {
+                } else if (!getNamesSides().contains(name)) {
                     MaterialSideNavPush aux = new MaterialSideNavPush();
                     ListItem temp = new ListItem();
                     MaterialImage image = new MaterialImage();
@@ -251,6 +278,7 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
                     aux.setWidth(280);
                     aux.setAllowBodyScroll(true);
                     aux.setShowOnAttach(true);
+
                     aux.add(temp);
                     aux.add(nameBox);
                     MenuView.getNavBar().setActivates(name);
@@ -260,6 +288,8 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
                     addSideName(name);
                     addSides(aux);
                     MaterialToast.fireToast("The SideBar was created successfully!", "rounded");
+                } else {
+                    MaterialToast.fireToast("This name already exists! Pick another please.", "rounded");
                 }
             }
         });

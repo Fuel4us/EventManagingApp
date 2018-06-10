@@ -32,4 +32,5 @@ public class CellDTOAux implements Serializable {
         this.precedents = precedents;
         this.dependents = dependents;
     }
+
 }

@@ -24,7 +24,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.RichTextArea;
 import gwt.material.design.client.constants.Color;
 import javax.inject.Inject;
 
@@ -43,6 +45,7 @@ import com.google.gwt.user.client.ui.Panel;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
 import gwt.material.design.addins.client.window.MaterialWindow;
 
+import gwt.material.design.client.constants.TextAlign;
 import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
@@ -59,6 +62,8 @@ import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalFormattingExtension;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core.CellStyle;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtension;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetController;
@@ -127,6 +132,20 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialListValueBox<Color> fontColorFalse;
     /* End of Conditional UI Objects */
+
+    /*
+    Style UI objects by 1050475
+    */
+    @UiField
+    MaterialListValueBox<Color> backgroundcolorLst;
+    @UiField
+    MaterialListValueBox<Color> fontcolorLst;
+    @UiField
+    MaterialListValueBox<Integer> fontsizeLst;
+    @UiField
+    MaterialListValueBox<TextAlign> textAlignLst;
+
+
 
     @UiField
     MaterialDropDown chart_dropdown;
@@ -258,8 +277,11 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         populateColourListBox();
 
+        populateTextAlignListBox();
+
         firstButton.addClickHandler(event -> {
             if (activeCell != null) {
+
                 String result = "";
                 try {
                     activeCell.setContent(firstBox.getText());
@@ -267,12 +289,13 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                     Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
                     if (extensionCond != null) {
 
-                        Conditional cond = ConditionalFormattingExtension.containsCondition(activeCell);
+                        Conditional cond = ConditionalFormattingExtension.containsCondition((CellImpl) activeCell);
 
                         /*1050475 Other possibility to change CellSyle but need colaboration from Core8.1*/
-                        if (cond != null) {
-                            boolean flag = ConditionalFormattingExtension.setOperation(activeCell, cond.getCondOperator(), cond.getCondValue());
-                            MaterialToast.fireToast("Update Cell. Conditional this " + activeCell.getAddress().toString() + " " + cond.getCondOperator() + " " + cond.getCondValue().toString() + " is " + flag);
+                        if(cond != null){
+                            boolean flag = ConditionalFormattingExtension.setOperation((CellImpl)activeCell, cond.getCondOperator(), cond.getCondValue());
+                            MaterialToast.fireToast("Update Cell. Conditional this "+ activeCell.getAddress().toString()+" " + cond.getCondOperator()+ " "+ cond.getCondValue().toString() + " is "+flag);
+
                         }
                     }
 //                    SpreadsheetImpl.fromDTO(Settings.getInstance().getWorkbook().spreadsheets.get(0).cells(activeCell.getAddress()).setContent(firstBox.getText());
@@ -326,87 +349,85 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         conditionalButton.addClickHandler(event -> {
             if (activeCell != null) {
+
                 conditionalModal.open();
                 conditionalTitle.setTitle("Conditional Formating of Cell " + activeCell.getAddress().toString());
             }
         });
+        backgroundcolorLst.addValueChangeHandler(event ->{
 
-        /*
-        conditionalModalDoneButton.addClickHandler(event -> {
-            if (conditionalText.getText().matches("[+-]?([0-9]*[.])?[0-9]+")) {
-                    String operator;
-                    switch (lstConditions.getSelectedIndex()) {
-                        case 0:
-                            operator = "=";
-                            break;
-                        case 1:
-                            operator = ">";
-                            break;
-                        case 2:
-                            operator = "<";
-                            break;
-                        case 3:
-                            operator = ">=";
-                            break;
-                        case 4:
-                            operator = "<=";
-                            break;
-                        case 5:
-                            operator = "<>";
-                            break;
-                        //case 6:  operator = "<<";
-                        //  break;
-                        default:
-                            operator = "Invalid";
-                            break;
-                    }
+            if(activeCell != null){
+                CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
+                if(c != null){
+                    c.setBackgroungColor(backgroundcolorLst.getSelectedValue().ordinal());
+                    MaterialToast.fireToast("existia " +  CellStyleExtension.getCellStyle(activeCell.getAddress()).getBackgroungColor());
+                }else{
+                    MaterialToast.fireToast("nao existia");
+                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), backgroundcolorLst.getSelectedValue().ordinal(), Color.BLACK.ordinal(),0,12));
 
-                    boolean result;
-                    boolean flag;
-                    try {
-                        BinaryOperationExtension binaryOperation = null;
-                        try {
-                            binaryOperation = new BinaryOperationExtension(activeCell.getValue(), operator, Value.parseNumericValue(conditionalText.getText()));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        if (result = binaryOperation.evaluate().toBoolean()) {
-                            //fire styleTRUE
-                        } else {
-                            //fire styleFALSE
-                        }
-                        flag = true;
-                        MaterialToast m = new MaterialToast();
-                        m.toast("Flag =" + flag);
-                        m.toast("Result =" + result);
-                        //m.toast("BackgroundColorTrue selected:"+backgroundColorTrue.getSelectedIndex());
+                }
+                customTable.getView().setRedraw(true);
+                customTable.getView().refresh();
 
-
-                    } catch (UnknownElementException e) {
-                        flag = false; //conditionalFormatting is off
-                        MaterialToast m = new MaterialToast();
-                        m.toast("UnknownElementException Flag =" + flag);
-                    } catch (IllegalValueTypeException e) {
-                        flag = false;
-                        MaterialToast m = new MaterialToast();
-                        m.toast("IllegalValueTypeException Flag =" + flag);
-                    }
-                    conditionalModal.close();
-
-
+                //remover depois de persistencia e extensions a funcionar. resize do label
+                customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() +1 ).setBackgroundColor(backgroundcolorLst.getSelectedValue());
             }
-            conditionalModal.close();
-		});
-         */
+        });
 
- /* BETWEEN OPTION CONDITIONAL
-        lstConditions.addValueChangeHandler(event -> {
-            if (lstConditions.getSelectedIndex() == 6) {
-                conditionalText2.setVisibility(Style.Visibility.VISIBLE);
-            } else {
-                conditionalText2.setVisibility(Style.Visibility.HIDDEN);
+        fontcolorLst.addValueChangeHandler(event -> {
+            if(activeCell != null){
+
+                CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
+                if(c != null){
+                    c.setFontColor(fontcolorLst.getSelectedValue().ordinal());
+                    MaterialToast.fireToast("existia " +  CellStyleExtension.getCellStyle(activeCell.getAddress()).getFontColor());
+                }else{
+                    MaterialToast.fireToast("nao existia");
+                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(),0,12));
+
+                }
+                customTable.getView().setRedraw(true);
+                customTable.getView().refresh();
             }
-        });*/
+
+        });
+
+        fontsizeLst.addValueChangeHandler(event ->{
+            if(activeCell != null){
+                CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
+                if(c != null){
+                    c.setFontSize(fontsizeLst.getSelectedValue());
+                    MaterialToast.fireToast("existia " +  CellStyleExtension.getCellStyle(activeCell.getAddress()).getFontSize());
+                }else{
+                    MaterialToast.fireToast("nao existia");
+                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(),0,fontsizeLst.getSelectedValue()));
+
+                }
+                customTable.getView().setRedraw(true);
+                customTable.getView().refresh();
+
+                customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() +1 ).setFontSize(fontsizeLst.getSelectedValue(), Style.Unit.PX);
+            }
+        });
+
+        textAlignLst.addValueChangeHandler(event -> {
+            if(activeCell != null){
+                CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
+                if(c != null){
+                    c.setTextALIGN(textAlignLst.getSelectedIndex()-1);
+                    MaterialToast.fireToast("existia " +  CellStyleExtension.getCellStyle(activeCell.getAddress()).getTextALIGN());
+                }else{
+                    MaterialToast.fireToast("nao existia");
+                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(),textAlignLst.getSelectedIndex()-1,12));
+
+                }
+                customTable.getView().setRedraw(true);
+                customTable.getView().refresh();
+
+                customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() +1 ).setTextAlign(TextAlign.values()[textAlignLst.getSelectedValue().ordinal()]);
+            }
+        });
+
         conditionalModalCloseButton.addClickHandler(event -> {
             conditionalModal.close();
         });
@@ -513,12 +534,28 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 //
 //        return dto;
 //    }
-    private void populateColourListBox() {
-        for (Color c : Color.values()) {
-            backgroundColorTrue.addItem(c);
-            fontColorTrue.addItem(c);
-            backgroundColorFalse.addItem(c);
-            fontColorFalse.addItem(c);
+
+
+    private void populateColourListBox(){
+
+        for (Color c : Color.values()){
+            if(!c.equals(Color.DEFAULT)) {
+                backgroundColorTrue.addItem(c);
+                fontColorTrue.addItem(c);
+                backgroundColorFalse.addItem(c);
+                fontColorFalse.addItem(c);
+                backgroundcolorLst.addItem(c);
+                fontcolorLst.addItem(c);
+            }
+        }
+    }
+
+    private void populateTextAlignListBox(){
+        textAlignLst.addItem(TextAlign.LEFT);
+        textAlignLst.addItem(TextAlign.CENTER);
+        textAlignLst.addItem(TextAlign.RIGHT);
+        for(int i = 6; i < 30; i=i+2){
+            fontsizeLst.addItem(i);
         }
     }
 

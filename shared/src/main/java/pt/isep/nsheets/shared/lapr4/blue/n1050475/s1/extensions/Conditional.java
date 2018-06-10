@@ -16,7 +16,7 @@ public class Conditional implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pk;
 
-    @OneToOne(targetEntity = CellImpl.class)
+    @OneToOne (targetEntity = CellImpl.class)
     private Cell cell;
     @OneToOne
     private Configuration configuration;
@@ -48,9 +48,9 @@ public class Conditional implements Serializable {
     }
 
     public ConditionalDTO toDTO(){
-        return new ConditionalDTO(this.cell, this.configuration, this.condOperator,this.condValue);
+        return new ConditionalDTO(this.cell.toDTO(), this.configuration, this.condOperator,this.condValue);
     }
     public static Conditional fromDTO(ConditionalDTO dto){
-        return new Conditional(dto.cell, dto.configuration, dto.condOperator, dto.condValue);
+        return new Conditional(CellImpl.fromDTO(dto.cell), dto.configuration, dto.condOperator, dto.condValue);
     }
 }

@@ -2,6 +2,7 @@ package pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions;
 
 import java.util.List;
 import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.core.CellImpl;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Value;
 import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
@@ -33,7 +34,7 @@ public class ConditionalFormattingExtension extends Extension {
         lstConditional.add(conditional);
     }
 
-    public static Conditional containsCondition(Cell cell){
+    public static Conditional containsCondition(CellImpl cell){
         for(Conditional c : lstConditional){
             if(c.getCell().compareTo(cell) == 0){
                 return c;
@@ -42,7 +43,7 @@ public class ConditionalFormattingExtension extends Extension {
         return null;
     }
 
-    public static void removeConditional(Cell cell){
+    public static void removeConditional(CellImpl cell){
         if(lstConditional != null){
             for(Conditional conditional : lstConditional){
                 if(conditional.getCell().compareTo(cell) == 0){
