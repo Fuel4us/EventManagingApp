@@ -159,7 +159,7 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialLabel> {
                 try {
                     this.view.customTable.getRow(object.getCell(this.colNumber).getAddress().getRow()).getWidget().getColumn(object.getCell(this.colNumber).getAddress().getColumn()+1).setBackgroundColor(Color.values()[CellStyleExtension.getCellStyle(object.getCell(this.colNumber).getAddress()).getBackgroungColor()]);
                 }catch (Exception e){
-                    MaterialToast.fireToast("não preenche cor");
+                    e.printStackTrace();
                 }
             }
         }
