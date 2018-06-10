@@ -8,7 +8,6 @@ import javax.persistence.Id;
 
 import eapli.framework.domain.AggregateRoot;
 import java.util.Objects;
-import javax.persistence.OneToOne;
 import pt.isep.nsheets.shared.services.ContactDTO;
 import pt.isep.nsheets.shared.services.UserDTO;
 

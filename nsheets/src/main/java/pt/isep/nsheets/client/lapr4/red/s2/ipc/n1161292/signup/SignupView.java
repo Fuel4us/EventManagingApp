@@ -82,4 +82,12 @@ public class SignupView extends ViewImpl implements SignupPresenter.MyView {
     public MaterialTextBox txtName() {
         return name;
     }
+    
+    @Override
+    public void clearFields() {
+        this.email.clear();
+        this.username.clear();
+        this.name.clear();
+        this.password.clear();
+    }
 }

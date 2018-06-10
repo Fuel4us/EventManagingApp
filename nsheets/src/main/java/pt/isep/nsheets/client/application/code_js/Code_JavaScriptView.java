@@ -14,10 +14,10 @@ import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
-import pt.isep.nsheets.shared.core.vb.EvalVisitor;
+import pt.isep.nsheets.shared.core.js.EvalVisitor;
 import pt.isep.nsheets.shared.core.vb.Value;
-import pt.isep.nsheets.shared.core.vb.VbLexer;
-import pt.isep.nsheets.shared.core.vb.VbParser;
+import pt.isep.nsheets.shared.core.js.JsLexer;
+import pt.isep.nsheets.shared.core.js.JsParser;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -46,6 +46,18 @@ class Code_JavaScriptView extends ViewImpl implements Code_JavaScriptPresenter.M
 
     private void initialize() {
 
+        CodeArea.setText("var x = 10;\n"
+                + "console.log(\"The variable x has the value \" + x);\n"
+                + "console.log(\"x + 1 = \" + (x + 1));\n"
+                + "x = \"teste\";\n"
+                + "console.log(\"x is now 'teste': \" + x);\n"
+                + "x = 1;\n"
+                + "console.log(\"x is now '1' = \" + x);\n"
+                + "while(x < 10){\n"
+                + "x = x * 2;\n"
+                + "}\n"
+                + "console.log(\"The variable x has the value \" + x);");
+
         runButton.addClickHandler(event -> {
 
             Map<String, Value> cells = new HashMap<>();
@@ -60,8 +72,8 @@ class Code_JavaScriptView extends ViewImpl implements Code_JavaScriptPresenter.M
 
             try {
 
-                VbLexer lexer = new VbLexer(new ANTLRInputStream(CodeArea.getText()));
-                VbParser parser = new VbParser(new CommonTokenStream(lexer));
+                JsLexer lexer = new JsLexer(new ANTLRInputStream(CodeArea.getText()));
+                JsParser parser = new JsParser(new CommonTokenStream(lexer));
                 ParseTree tree = parser.parse();
                 EvalVisitor visitor = new EvalVisitor(cells);
                 visitor.visit(tree);

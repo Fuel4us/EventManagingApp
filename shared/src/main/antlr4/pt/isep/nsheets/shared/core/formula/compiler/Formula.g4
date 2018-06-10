@@ -6,7 +6,7 @@ grammar Formula;
 	         
 expression
 	: EQ comparison /* EOF */
-        | HH monetary 
+        | HH monetary /* EOF */
 	;
 	
 comparison
@@ -70,24 +70,24 @@ assignment
 	;
 
 monetary    
-        : CURRENCY ICHA ACCOUNT FCHA
+        : currency ICHA account FCHA
         ;
 
-ACCOUNT: NUMBER COINSIGN (OPERATOR NUMBER COINSIGN)*
+account: numbermonetary coinsign (operator numbermonetary coinsign)*
         ;
         
-OPERATOR: PLUS 
+operator: PLUS 
         | MINUS 
         | DIV 
         | MULTI
         ;
 
-CURRENCY: 'DOLLAR'
-        | 'POUND'
-        | 'EURO'
+currency: 'dollar'
+        | 'pound'
+        | 'euro'
         ;
 
-COINSIGN: DOLLAR
+coinsign: DOLLAR
         | POUND
         | EURO
         ;
@@ -135,6 +135,14 @@ NUMBER: DIGITNOTZERO ( DIGIT )* FRACTIONALPART?
 FRACTIONALPART:  COMMA  DIGIT DIGIT
                 | DOT DIGIT DIGIT?
                 ;
+
+/*Numeric Monetary*/
+numbermonetary: DIGITNOTZERO ( DIGIT )* fractionalpartmonetary?
+                | DIGIT fractionalpartmonetary
+                ;
+
+fractionalpartmonetary: DOT DIGIT DIGIT?
+                       ;
 
 DIGIT : '0'..'9' ;
 DIGITNOTZERO : '1'..'9' ;

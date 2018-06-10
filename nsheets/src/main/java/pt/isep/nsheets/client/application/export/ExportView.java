@@ -1,19 +1,25 @@
 package pt.isep.nsheets.client.application.export;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
+import gwt.material.design.addins.client.docviewer.MaterialDocViewer;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialInput;
 import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialRadioButton;
 import gwt.material.design.client.ui.MaterialToast;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +52,9 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
     @UiField
     MaterialModal modal;
 
+    @UiField
+    MaterialDocViewer dock_viewer;
+
     private String style;
     private String color;
     private final List<MaterialRadioButton> radiolist;
@@ -65,7 +74,6 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
         MaterialToast.fireToast("Line style: " + style + "Line Color: " + color);
 
         ExportServiceAsync exportServiceAsync = GWT.create(ExportService.class);
-
         AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
             @Override
             public void onFailure(Throwable throwable) {
@@ -74,15 +82,25 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
 
             @Override
             public void onSuccess(Boolean result) {
-                if (result) {
+                if (result == true) {
+                    Cookies.setCookie("PDF EXPORT", "Accept the cookies");
+
+                    String url = GWT.getModuleBaseURL() + "downloadService";
+
+                    Window.open(url, "", "");
+
+                    dock_viewer.setUrl(GWT.getModuleBaseForStaticFiles()+"../PDF.pdf");
+
                     MaterialToast.fireToast("PDF exported", "rounded");
+
                 } else {
                     MaterialToast.fireToast("Error exporting workbook");
                 }
             }
         };
-        MaterialToast.fireToast("SS COLUMNS: "+workbookDTO.spreadsheets.get(0).columns);
-        exportServiceAsync.exportStyledWorkbookPDF(workbookDTO, callback);
+        MaterialToast.fireToast("SS COLUMNS: " + workbookDTO.spreadsheets.get(0).columns);
+        exportServiceAsync.exportStyledWorkbookPDF(workbookDTO, style, color, callback);
+
     }
 
     @Inject
@@ -147,5 +165,4 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
 
         return null;
     }
-
 }

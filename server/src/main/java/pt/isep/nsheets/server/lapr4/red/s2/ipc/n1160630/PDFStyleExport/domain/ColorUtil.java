@@ -5,11 +5,29 @@
  */
 package pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.domain;
 
+import java.awt.Color;
+
 /**
  *
  * @author pedromonteiro
  */
-public enum CellStyle {
-    DASHED, DOTTED, DOUBLE, SOLID
+public class ColorUtil {
+    
+    private Color color;
+    
+
+    
+    public ColorUtil(String hexcode) {
+        color = Color.decode(hexcode);
+       
+    }
+
+    public Color getColor() {
+        return color;
+    }
+    
+    
+    
+    
     
 }
