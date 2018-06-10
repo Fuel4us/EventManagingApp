@@ -72,10 +72,12 @@ public class BinaryOperation extends Operation<BinaryOperator> {
 		return rightOperand;
 	}
 
+        @Override
 	public Object accept(ExpressionVisitor visitor) {
 		return visitor.visitBinaryOperation(this);
 	}
 
+        @Override
 	public String toString() {
 		return leftOperand + operator.toString() + rightOperand;
 	}

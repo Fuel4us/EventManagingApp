@@ -39,19 +39,23 @@ public class Adder implements BinaryOperator {
 	 */
 	public Adder() {}
 
+        @Override
 	public Value applyTo(Expression leftOperand, Expression rightOperand) throws IllegalValueTypeException {
 		return new Value(leftOperand.evaluate().toDouble()
 				+ rightOperand.evaluate().toDouble());
 	}
 
+        @Override
 	public String getIdentifier() {
 		return "+";
 	}
 
+        @Override
 	public Value.Type getOperandValueType() {
 		return Value.Type.NUMERIC;
 	}
 
+        @Override
 	public String toString() {
 		return getIdentifier();
 	}

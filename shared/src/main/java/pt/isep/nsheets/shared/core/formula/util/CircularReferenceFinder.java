@@ -22,58 +22,81 @@ package pt.isep.nsheets.shared.core.formula.util;
 
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.formula.Formula;
+import pt.isep.nsheets.shared.core.formula.Monetary;
 import pt.isep.nsheets.shared.core.formula.Reference;
 
 /**
- * An expression visitor that looks for circular references in a formula, i.e.
- * a reference back to the cell in the formula of a cell that precedes it.
+ * An expression visitor that looks for circular references in a formula, i.e. a
+ * reference back to the cell in the formula of a cell that precedes it.
+ *
  * @author Einar Pehrson
  */
 public class CircularReferenceFinder extends AbstractExpressionVisitor {
 
-	/** The cell to search for circular references */
-	private Formula formula;
+    /**
+     * The cell to search for circular references
+     */
+    private Formula formula;
+    private Monetary monetary;
 
-	/**
-	 * Creates a new circular reference finder.
-	 */
-	public CircularReferenceFinder() {}
+    /**
+     * Creates a new circular reference finder.
+     */
+    public CircularReferenceFinder() {
+    }
 
-	/**
-	 * Checks if the given formula has any circular references.
-         * @param formula formula
-	 * @throws CircularReferenceException if the formula contains any circular references
-	 */
-	public void check(Formula formula) throws CircularReferenceException {
-		this.formula = formula;
-		formula.accept(this);
-	}
+    /**
+     * Checks if the given formula has any circular references.
+     *
+     * @param formula formula
+     * @throws CircularReferenceException if the formula contains any circular
+     * references
+     */
+    public void check(Monetary monetary) throws CircularReferenceException {
+        this.monetary = monetary;
+        monetary.accept(this);
+    }
 
-	/*
+    /**
+     * Checks if the given formula has any circular references.
+     *
+     * @param formula formula
+     * @throws CircularReferenceException if the formula contains any circular
+     * references
+     */
+    public void check(Formula formula) throws CircularReferenceException {
+        this.formula = formula;
+        formula.accept(this);
+    }
+
+    /*
 	 * Returns whether the given formula has any circular references.
 	 * @param formula the formula to check for circularities
 	 * @return true if the given formula has any circular references
-	 */
-/*	public boolean hasCircularReference(Formula formula) {} */
+     */
+ /*	public boolean hasCircularReference(Formula formula) {} */
 
-	/**
-	 * Checks if the given reference causes a circular reference.
-	 * @param reference the reference to visit
-	 * @throws CircularReferenceException if the given reference causes a circular reference
-	 */
-	public Object visitReference(Reference reference) throws CircularReferenceException, ExpressionVisitorException {
-		for (Cell precedent : reference.getCells()) {
-			// Checks for circularity
-			if (precedent.equals(formula.getCell()))
-				throw new CircularReferenceException(formula);
+    /**
+     * Checks if the given reference causes a circular reference.
+     *
+     * @param reference the reference to visit
+     * @throws CircularReferenceException if the given reference causes a
+     * circular reference
+     */
+    public Object visitReference(Reference reference) throws CircularReferenceException, ExpressionVisitorException {
+        for (Cell precedent : reference.getCells()) {
+            // Checks for circularity
+            if (precedent.equals(formula.getCell())) {
+                throw new CircularReferenceException(formula);
+            }
 
-			// Looks further
-			Formula precedentFormula = precedent.getFormula();
-			if (precedentFormula != null)
-				precedentFormula.accept(this);
-		}
-		return reference;
-	}
-
+            // Looks further
+            Formula precedentFormula = precedent.getFormula();
+            if (precedentFormula != null) {
+                precedentFormula.accept(this);
+            }
+        }
+        return reference;
+    }
 
 }

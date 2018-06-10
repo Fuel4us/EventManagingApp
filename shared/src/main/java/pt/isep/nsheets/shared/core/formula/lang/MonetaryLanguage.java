@@ -19,11 +19,18 @@ public class MonetaryLanguage extends Language {
 
     @Override
     protected void initBinaryOperators() {
-        MaterialToast.fireToast("initBinaryOperations FINALLY!!!");
         binaryOperators.add(new Adder());
         binaryOperators.add(new Divider());
         binaryOperators.add(new Multiplier());
         binaryOperators.add(new Subtracter());
+    }
+
+    @Override
+    protected void initFunctions() {
+    }
+
+    @Override
+    protected void initUnaryOperators() {
     }
 
 }

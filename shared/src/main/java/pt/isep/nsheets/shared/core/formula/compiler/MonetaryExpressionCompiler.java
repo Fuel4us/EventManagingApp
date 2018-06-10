@@ -5,10 +5,7 @@
  */
 package pt.isep.nsheets.shared.core.formula.compiler;
 
-import eapli.util.Files;
 import gwt.material.design.client.ui.MaterialToast;
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -151,38 +148,36 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
 
         //Creates the lexer and parser
         ANTLRInputStream input = new ANTLRInputStream(sourceResult);
-
+        
         //Create the buffer of tokens between the lexer and parser
-        FormulaLexer lexer = new FormulaLexer(input);
+        MonetaryLexer lexer = new MonetaryLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        FormulaParser parser = new FormulaParser(tokens);
+        MonetaryParser parser = new MonetaryParser(tokens);
 
-        FormulaErrorListener formulaErrorListener = new FormulaErrorListener();
+        MonetaryErrorListener monetaryErrorListener = new MonetaryErrorListener();
         parser.removeErrorListeners(); //Remove default ConsoleErrorListener
-        parser.addErrorListener(formulaErrorListener); //Add ours    
+        parser.addErrorListener(monetaryErrorListener); //Add ours    
 
         //Attempts to match an expression
         ParseTree tree = parser.expression();
         if (parser.getNumberOfSyntaxErrors() > 0) {
-            MaterialToast.fireToast("FORMULA EXCEPTION: " + formulaErrorListener.getErrorMessage());
-            throw new FormulaCompilationException(formulaErrorListener.getErrorMessage());
+            MaterialToast.fireToast("Syntax Error: " + monetaryErrorListener.getErrorMessage());
+            throw new FormulaCompilationException(monetaryErrorListener.getErrorMessage());
         }
 
-        MaterialToast.fireToast("IF EXCEPTION!!!");
         //Visit the expression and returns it
-        FormulaEvalVisitor eval = new FormulaEvalVisitor(cell, language);
-        MaterialToast.fireToast("INICIOU FORMULAEVALVISITOR EVAL");
+        MonetaryEvalVisitor eval = new MonetaryEvalVisitor(cell, language);
         Expression result = eval.visit(tree);
 
-        MaterialToast.fireToast("FEZ EXPRESSION RESULT = EVAL.VISIT(TREE)");
         if (eval.getNumberOfErrors() > 0) {
+            MaterialToast.fireToast("FormulaCompilationException: " + eval.getErrorsMessage());
             throw new FormulaCompilationException(eval.getErrorsMessage());
         }
-        MaterialToast.fireToast("RESULT!!!" + result.toString());
+        MaterialToast.fireToast("RESULT:" + result.toString());
         return result;
     }
 
-    public static class FormulaErrorListener extends BaseErrorListener {
+    public static class MonetaryErrorListener extends BaseErrorListener {
 
         private StringBuilder buf;
 
