@@ -178,6 +178,25 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialButton cancelButtonModal;
     @UiField
     MaterialButton deleteButtonModal;
+    
+    @UiField
+    MaterialLink rangeConditionButton;
+    @UiField
+    MaterialModal rangeConditionModal;
+    @UiField
+    MaterialTextBox rangeConditionFormula;
+    @UiField
+    MaterialListValueBox<Color> rangeBackgroundColorTrue;
+    @UiField
+    MaterialListValueBox<Color> rangeFontColorTrue;
+    @UiField
+    MaterialListValueBox<Color> rangeBackgroundColorFalse;
+    @UiField
+    MaterialListValueBox<Color> rangeFontColorFalse;
+    @UiField
+    MaterialIcon rangeConditionModalCloseButton;
+    @UiField
+    MaterialIcon rangeConditionModalDoneButton;
 
     @UiHandler("click_chart")
     void onclick(ClickEvent e) {
@@ -361,6 +380,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 conditionalTitle.setTitle("Conditional Formating of Cell " + activeCell.getAddress().toString());
             }
         });
+        rangeConditionButton.addClickHandler(event -> {
+            rangeConditionModal.open();
+        });
         backgroundcolorLst.addValueChangeHandler(event -> {
 
             if (activeCell != null) {
@@ -437,6 +459,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         conditionalModalCloseButton.addClickHandler(event -> {
             conditionalModal.close();
+        });
+
+        rangeConditionModalCloseButton.addClickHandler(event -> {
+            rangeConditionModal.close();
         });
 
         // It is possible to create your own custom renderer per table
@@ -551,6 +577,11 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 fontColorFalse.addItem(c);
                 backgroundcolorLst.addItem(c);
                 fontcolorLst.addItem(c);
+                
+                rangeBackgroundColorTrue.addItem(c);
+                rangeFontColorTrue.addItem(c);
+                rangeBackgroundColorFalse.addItem(c);
+                rangeFontColorFalse.addItem(c);
             }
         }
     }

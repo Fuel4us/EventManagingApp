@@ -164,7 +164,46 @@ governing permissions and limitations under the License. #L% -->
             <m:MaterialColumn>
                 <m:MaterialLink  ui:field="macro" text="Edit Macro" textColor="ORANGE" iconType="CODE" iconPosition="LEFT"/>
             </m:MaterialColumn>
+            <m:MaterialColumn>
+                <m:MaterialLink  ui:field="rangeConditionButton" text="Range Condition" textColor="RED" iconType="SETTINGS" iconPosition="LEFT"/>
+            </m:MaterialColumn>
         </m:MaterialRow>
+             
+        <m:MaterialModal ui:field="rangeConditionModal" type="FIXED_FOOTER" dismissible="true" inDuration="500" outDuration="500">
+            <m:MaterialModalContent>
+                <m:MaterialRow>
+                    <m:MaterialTitle title="Create a condition for a range of cells" description="Style extension selection so that it can be used for the conditional formatting of cells based on the result of the execution of formulas" />
+                </m:MaterialRow>
+                <m:MaterialRow>
+                    <m:MaterialTextBox ui:field="rangeConditionRangeStart" placeholder="Range Start" active="true" grid="s3"/>
+                    <m:MaterialTextBox ui:field="rangeConditionRangeEnd" placeholder="Range End" active="true" grid="s3"/>
+                </m:MaterialRow>
+                <m:MaterialRow>
+                    <m:MaterialTextBox ui:field="rangeConditionFormula" placeholder="Condition" active="true" grid="s3"/>
+                </m:MaterialRow>
+                <m:MaterialRow>
+                    <m:MaterialColumn>
+                        <m:MaterialLabel text="When cell value is True" fontSize="2em"/>
+                        <m:MaterialLabel text="Background Color"/>
+                        <m:MaterialListValueBox ui:field="rangeBackgroundColorTrue" grid="s12"/>
+                        <m:MaterialLabel text="Font Color"/>
+                        <m:MaterialListValueBox ui:field="rangeFontColorTrue" grid="s12"/>
+                    </m:MaterialColumn>
+                    <m:MaterialColumn grid="s6">
+                        <m:MaterialLabel text="When cell value is False" fontSize="2em"/>
+                        <m:MaterialLabel text="Background Color"/>
+                        <m:MaterialListValueBox ui:field="rangeBackgroundColorFalse" grid="s12"/>
+                        <m:MaterialLabel text="Font Color"/>
+                        <m:MaterialListValueBox ui:field="rangeFontColorFalse" grid="s12"/>
+                    </m:MaterialColumn>
+                </m:MaterialRow>
+            </m:MaterialModalContent>
+            <m:MaterialModalFooter>
+                <m:MaterialIcon ui:field="rangeConditionModalCloseButton" iconType="CLOSE" iconColor="RED" waves="DEFAULT" circle="true" grid="s1"/>
+                <m:MaterialIcon ui:field="rangeConditionModalDoneButton" iconType="DONE" iconColor="GREEN" waves="DEFAULT" circle="true" grid="s1"/>
+            </m:MaterialModalFooter>
+        </m:MaterialModal>
+        
         <m:MaterialRow height="60">
             <m:MaterialColumn>
                 <m:MaterialListValueBox ui:field="backgroundcolorLst" helperText="background color"/>
