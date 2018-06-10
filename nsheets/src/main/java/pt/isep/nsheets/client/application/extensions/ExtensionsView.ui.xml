@@ -46,13 +46,13 @@
                     <m:MaterialButton ui:field="menuButton" text="Create Menu Option" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED"/>
                 </m:MaterialCollapsibleBody>
             </m:MaterialCollapsibleItem>
-            <!-- Add Popup Menu in Cells Option -->
+            <!-- Add Popup Option in Cells Option -->
             <m:MaterialCollapsibleItem>
                 <m:MaterialCollapsibleHeader>
-                    <m:MaterialLink text="Add Popup Menu in Cells" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
+                    <m:MaterialLink text="Add Popup Option" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
                 </m:MaterialCollapsibleHeader>
                 <m:MaterialCollapsibleBody backgroundColor="GREY_LIGHTEN_2">
-                    <m:MaterialLabel text="Add Popup Menu in Cells" fontSize="3em"/>
+                    <m:MaterialLabel text="Add a Popup Option on the cells menu (on the spreadsheet). Test it by clicking the right button of the mouse on the spreadhseet." fontSize="3em"/>
                     <m:MaterialLabel text="Choose the name of the new Popup Menu option:"/>
                     <m:MaterialTextBox ui:field="popName"/> 
                     <m:MaterialLabel text="Choose the icon:"/>
