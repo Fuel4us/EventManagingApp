@@ -50,6 +50,8 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
     public Expression compile(Cell cell, String source) throws FormulaCompilationException {
         MaterialToast.fireToast("Tamanho da Source: " + Double.toString(source.length()));
         String number = "";
+        String sourceResult = "";
+
         if (source.toLowerCase().contains("dollar")) {
 
             double total;
@@ -62,23 +64,25 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
                     switch (source.charAt(i)) {
                         case '\u00A3':
                             rValue = MonetaryConversion.PoundToDollar * total;
+                            sourceResult += Double.toString(rValue) + '\u00A3';
                             break;
                         case '\u20AC':
                             rValue = MonetaryConversion.EuroToDollar * total;
+                            sourceResult += Double.toString(rValue) + '\u20AC';
                             break;
                         default:
                             rValue = total;
+                            sourceResult += Double.toString(rValue) + '\u0024';
                             break;
                     }
-
-                    String stringRealValue = Double.toString(rValue);
-                    i = i - number.length() + stringRealValue.length();
-                    source = source.replaceFirst(number, stringRealValue);
                     number = "";
+
                 } else if (Character.isDigit(source.charAt(i))) {
                     number += source.charAt(i);
                 } else if (source.charAt(i) == '.') {
                     number += '.';
+                } else {
+                    sourceResult += source.charAt(i);
                 }
             }
         } else if (source.toLowerCase().contains("pound")) {
@@ -92,23 +96,25 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
                     switch (source.charAt(i)) {
                         case '\u20AC':
                             rValue = MonetaryConversion.EuroToPound * total;
+                            sourceResult += Double.toString(rValue) + '\u20AC';
                             break;
                         case '\u0024':
                             rValue = MonetaryConversion.DollarToPound * total;
+                            sourceResult += Double.toString(rValue) + '\u0024';
                             break;
                         default:
                             rValue = total;
+                            sourceResult += Double.toString(rValue) + '\u00A3';
                             break;
                     }
-
-                    String stringRealValue = Double.toString(rValue);
-                    i = i - number.length() + stringRealValue.length();
-                    source = source.replaceFirst(number, stringRealValue);
                     number = "";
+
                 } else if (Character.isDigit(source.charAt(i))) {
                     number += source.charAt(i);
                 } else if (source.charAt(i) == '.') {
                     number += '.';
+                } else {
+                    sourceResult += source.charAt(i);
                 }
             }
         } else if (source.toLowerCase().contains("euro")) {
@@ -121,34 +127,31 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
                     switch (source.charAt(i)) {
                         case '\u0024':
                             rValue = MonetaryConversion.DollarToEuro * total;
+                            sourceResult += Double.toString(rValue) + '\u0024';
                             break;
                         case '\u00A3':
                             rValue = MonetaryConversion.PoundToEuro * total;
+                            sourceResult += Double.toString(rValue) + '\u00A3';
                             break;
                         default:
                             rValue = total;
+                            sourceResult += Double.toString(rValue) + '\u20AC';
                             break;
                     }
-
-                    String stringRealValue = Double.toString(rValue);
-                    i = i - number.length() + stringRealValue.length();
-                    source = source.replaceFirst(number, stringRealValue);
                     number = "";
+
                 } else if (Character.isDigit(source.charAt(i))) {
                     number += source.charAt(i);
                 } else if (source.charAt(i) == '.') {
                     number += '.';
+                } else {
+                    sourceResult += source.charAt(i);
                 }
             }
         }
 
-        if (source.contains("{-")) {
-            source = source.replaceFirst("-", "0\u20AC-");
-        }
-
         //Creates the lexer and parser
-        MaterialToast.fireToast(source);
-        ANTLRInputStream input = new ANTLRInputStream(source);
+        ANTLRInputStream input = new ANTLRInputStream(sourceResult);
 
         //Create the buffer of tokens between the lexer and parser
         FormulaLexer lexer = new FormulaLexer(input);
@@ -159,19 +162,21 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
 
         //Attempts to match an expression
         ParseTree tree = parser.expression();
-
+        MaterialToast.fireToast("PARSER EXPRESSION!!!");
         if (parser.getNumberOfSyntaxErrors() > 0) {
             throw new FormulaCompilationException(formulaErrorListener.getErrorMessage());
         }
-
+        MaterialToast.fireToast("IF EXCEPTION!!!");
         //Visit the expression and returns it
         FormulaEvalVisitor eval = new FormulaEvalVisitor(cell, language);
+        MaterialToast.fireToast("INICIOU FORMULAEVALVISITOR EVAL");
         Expression result = eval.visit(tree);
 
+        MaterialToast.fireToast("FEZ EXPRESSION RESULT = EVAL.VISIT(TREE)");
         if (eval.getNumberOfErrors() > 0) {
             throw new FormulaCompilationException(eval.getErrorsMessage());
         }
-
+        MaterialToast.fireToast("RESULT!!!" + result.toString());
         return result;
     }
 
