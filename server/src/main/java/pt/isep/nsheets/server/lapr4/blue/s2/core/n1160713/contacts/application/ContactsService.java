@@ -22,16 +22,16 @@ public class ContactsService {
      * @return
      */
     //Only for usage in other methods
-    public Iterable<Contact> allContactsFromUser(UserDTO currentUser) {
+    public Iterable<Contact> allContactsFromUser(String email) {
 
         final ContactsRepository contactsRepository = PersistenceContext.repositories().contacts();
-        return contactsRepository.findAllFromUser(currentUser);
+        return contactsRepository.findAllFromUser(email);
         //return contactsRepository.findAll();
     }
 
-    public Iterable<Contact> allInvitations(UserDTO currentUser) {
+    public Iterable<Contact> allInvitations(String email) {
         List<Contact> list = new ArrayList<>();
-        for (Contact c : allContactsFromUser(currentUser)) {
+        for (Contact c : allContactsFromUser(email)) {
             if (c.isWaitingAcception()) {
                 list.add(c);
             }
@@ -39,9 +39,9 @@ public class ContactsService {
         return list;
     }
 
-    public Iterable<Contact> allAvailableContacts(UserDTO currentUser) {
+    public Iterable<Contact> allAvailableContacts(String email) {
         List<Contact> list = new ArrayList<>();
-        for (Contact c : allContactsFromUser(currentUser)) {
+        for (Contact c : allContactsFromUser(email)) {
             if (!c.isWaitingAcception() && c.isAccepted()) {
                 list.add(c);
             }
@@ -117,22 +117,22 @@ public class ContactsService {
 
     /**
      *
-     * @param email
-     * @param currentUser
+     * @param emailReceiver
+     * @param emailSender
      * @throws DataConcurrencyException
      * @throws DataIntegrityViolationException
      */
-    public void sendInvitation(String email, UserDTO currentUser) throws DataConcurrencyException, DataIntegrityViolationException {
+    public void sendInvitation(String emailReceiver, String emailSender) throws DataConcurrencyException, DataIntegrityViolationException {
 
         final ContactsRepository contactsRepository = PersistenceContext.repositories().contacts();
         final UserRepository userRepo = PersistenceContext.repositories().users();
-        User receiver = userRepo.findByEmail(email);
-        User sender = userRepo.findByEmail(currentUser.getEmail());
+        User receiver = userRepo.findByEmail(emailReceiver);
+        User sender = userRepo.findByEmail(emailSender);
 
         if (sender.getBlacklist().contains(receiver)) {
             return;
         }
-        Contact contact = new Contact(currentUser, receiver.toDTO(), true, false);
+        Contact contact = new Contact(sender.toDTO(), receiver.toDTO(), true, false);
         contactsRepository.save(contact);
     }
 

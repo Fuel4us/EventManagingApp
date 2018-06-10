@@ -46,8 +46,10 @@ import gwt.material.design.client.ui.table.MaterialDataTable;
 import pt.isep.nsheets.client.application.workbook.WorkbookView.SheetCell;
 import pt.isep.nsheets.client.place.ParameterTokens;
 import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.core.CellImpl;
 import pt.isep.nsheets.shared.core.CellListener;
 import pt.isep.nsheets.shared.core.Value;
+import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629.Configuration;
@@ -280,6 +282,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
             Configuration configuration = new Configuration(values);
 
             Conditional conditional = new Conditional(this.view.getActiveCell(), configuration, view.getOperator(), conditionalValue);
+            ConditionalFormattingExtension.addConditional(conditional);
 
             /*1050475 lang03.1 persistencia com erro no Conditional service*/
             ConditionalServiceAsync conditionalSvc = GWT.create(ConditionalService.class);
@@ -295,7 +298,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
                     MaterialToast.fireToast("Conditionalextension conditional configured!");
                 }
             };
-            conditionalSvc.saveConditional(conditional.toDTO(), callback);
+            //conditionalSvc.saveConditional(conditional.toDTO(), callback);
 
 
             /* LANG03.1 NOT WORKING

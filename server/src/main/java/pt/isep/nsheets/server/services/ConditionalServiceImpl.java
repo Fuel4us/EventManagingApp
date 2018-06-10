@@ -2,9 +2,10 @@ package pt.isep.nsheets.server.services;
 
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import pt.isep.nsheets.server.lapr4.blue.s1.n1050475.application.ConditionalCellFormattingController;
+import pt.isep.nsheets.server.lapr4.blue.n1050475.s1.application.ConditionalCellFormattingController;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;
+import pt.isep.nsheets.shared.core.CellImpl;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.services.ConditionalDTO;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.services.ConditionalService;
@@ -54,6 +55,6 @@ public class ConditionalServiceImpl  extends RemoteServiceServlet implements Con
     @Override
     public ConditionalDTO saveConditional(ConditionalDTO conditionalDTO) throws DataException {
         ConditionalCellFormattingController ctrl = new ConditionalCellFormattingController();
-        return ctrl.addConditional(conditionalDTO.getCell(), conditionalDTO.getConfiguration(), conditionalDTO.getCondOperator(), conditionalDTO.getCondValue()).toDTO();
+        return ctrl.addConditional((CellImpl) CellImpl.fromDTO(conditionalDTO.getCell()), conditionalDTO.getConfiguration(), conditionalDTO.getCondOperator(), conditionalDTO.getCondValue()).toDTO();
     }
 }

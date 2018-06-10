@@ -6,11 +6,11 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("contactsService")
 public interface ContactsService extends RemoteService {
 
-    public Iterable<ContactDTO> allContactsFromUser(UserDTO currentUser);
+    public Iterable<ContactDTO> allContactsFromUser(String email);
 
-    public Iterable<ContactDTO> allInvitations(UserDTO currentUser);
+    public Iterable<ContactDTO> allInvitations(String email);
 
-    public Iterable<ContactDTO> allAvailableContacts(UserDTO currentUser);
+    public Iterable<ContactDTO> allAvailableContacts(String email);
 
     public void acceptInvitation(ContactDTO contact, UserDTO currentUser);
 
@@ -20,7 +20,7 @@ public interface ContactsService extends RemoteService {
 
     public void unblockUser(UserDTO user);
 
-    public void sendInvitation(String email, UserDTO currentUser);
+    public void sendInvitation(String emailReceiver, String emailSender);
 
     public UserDTO getUserByEmail(String email);
 }

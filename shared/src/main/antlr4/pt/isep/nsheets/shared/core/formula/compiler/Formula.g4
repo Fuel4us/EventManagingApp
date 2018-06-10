@@ -6,7 +6,6 @@ grammar Formula;
 	         
 expression
 	: EQ comparison /* EOF */
-        | HH monetary /* EOF */
 	;
 	
 comparison
@@ -69,28 +68,6 @@ assignment
 	:	reference ASSIGN concatenation
 	;
 
-monetary    
-        : currency ICHA account FCHA
-        ;
-
-account: numbermonetary coinsign (operator numbermonetary coinsign)*
-        ;
-        
-operator: PLUS 
-        | MINUS 
-        | DIV 
-        | MULTI
-        ;
-
-currency: 'dollar'
-        | 'pound'
-        | 'euro'
-        ;
-
-coinsign: DOLLAR
-        | POUND
-        | EURO
-        ;
 
 LETTER: ('a'..'z'|'A'..'Z') ;
   
@@ -136,13 +113,6 @@ FRACTIONALPART:  COMMA  DIGIT DIGIT
                 | DOT DIGIT DIGIT?
                 ;
 
-/*Numeric Monetary*/
-numbermonetary: DIGITNOTZERO ( DIGIT )* fractionalpartmonetary?
-                | DIGIT fractionalpartmonetary
-                ;
-
-fractionalpartmonetary: DOT DIGIT DIGIT?
-                       ;
 
 DIGIT : '0'..'9' ;
 DIGITNOTZERO : '1'..'9' ;
@@ -172,7 +142,6 @@ fragment EXCL:  '!'  ;
 COLON	: ':' ;
 UNDERSCORE : '_' ;
 ARROBA : '@' ;
-HH : '#' ; 
 
 /* Miscellaneous operators */
 COMMA	: ',' ;
@@ -184,11 +153,6 @@ ICHA	: '{' ;
 FCHA	: '}' ;
 LBRACKET : '[' ;
 RBRACKET : ']' ;
-
-/* Coin Signs */
-EURO : '\u20AC' ;
-DOLLAR : '\u0024' ;
-POUND : '\u00A3' ;
 
 /* Assignment Operator */
 ASSIGN 	: ':=' ;

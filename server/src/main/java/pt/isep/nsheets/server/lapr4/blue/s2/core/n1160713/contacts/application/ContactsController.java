@@ -14,18 +14,18 @@ public class ContactsController implements Controller {
      * @param currentUser
      * @return
      */
-    public Iterable<Contact> allContactsFromUser(UserDTO currentUser) {
+    public Iterable<Contact> allContactsFromUser(String email) {
 
-        return new ContactsService().allContactsFromUser(currentUser);
+        return new ContactsService().allContactsFromUser(email);
         //return contactsRepository.findAll();
     }
 
-    public Iterable<Contact> allInvitations(UserDTO currentUser) {
-        return new ContactsService().allInvitations(currentUser);
+    public Iterable<Contact> allInvitations(String email) {
+        return new ContactsService().allInvitations(email);
     }
 
-    public Iterable<Contact> allAvailableContacts(UserDTO currentUser) {
-        return new ContactsService().allAvailableContacts(currentUser);
+    public Iterable<Contact> allAvailableContacts(String email) {
+        return new ContactsService().allAvailableContacts(email);
     }
 
     public void acceptInvitation( ContactDTO contact, UserDTO currentUser) {
@@ -44,8 +44,8 @@ public class ContactsController implements Controller {
         new ContactsService().unblockUser(user);
     }
 
-    public void sendInvitation(String email, UserDTO currentUser) throws DataConcurrencyException, DataIntegrityViolationException {
-        new ContactsService().sendInvitation(email, currentUser);
+    public void sendInvitation(String emailReceiver, String emailSender) throws DataConcurrencyException, DataIntegrityViolationException {
+        new ContactsService().sendInvitation(emailReceiver, emailSender);
     }
 
     public UserDTO findUserByEmail(String email) {

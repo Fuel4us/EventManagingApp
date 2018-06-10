@@ -21,7 +21,7 @@
 package pt.isep.nsheets.shared.ext;
 
 
-import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.CellStyleExtension;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtension;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalFormattingExtension;
 import pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629.ValueColorExtension;
 
@@ -85,7 +85,7 @@ public class ExtensionManager {
 		Extension extension3 = new CellStyleExtension("CellStyleExtension");
 		extensionMap.put(extension.getName(), extension);
 		extensionMap.put(extension2.getName(), extension2);
-		extensionMap.put(extension2.getName(), extension3);
+		extensionMap.put(extension3.getName(), extension3);
 	}
 
 }

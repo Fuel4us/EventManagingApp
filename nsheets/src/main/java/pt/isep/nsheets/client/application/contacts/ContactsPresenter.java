@@ -18,7 +18,6 @@ import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
-import pt.isep.nsheets.client.security.CurrentUser;
 import pt.isep.nsheets.shared.services.ContactDTO;
 import pt.isep.nsheets.shared.services.ContactsService;
 import pt.isep.nsheets.shared.services.ContactsServiceAsync;
@@ -31,7 +30,7 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
 
         void addClickHandlerOpenModal(ClickHandler ch);
 
-        void buttonClickHandlerSendInvite(ClickHandler ch);
+        void buttonClickHandlerSaveContact(ClickHandler ch);
 
 //        void buttonClickHandlerCheckEditNote(ClickHandler ch);
 //        void buttonClickHandlerEditNote(ClickHandler ch);
@@ -40,7 +39,9 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
 
         void setContents(ArrayList<ContactDTO> contents);
 
-        String contactEmail();
+        String titleContact();
+
+        String textContact();
 
         void closeModalToAddContact();
     }
@@ -51,7 +52,7 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
     }
 
     @Inject
-    ContactsPresenter(EventBus eventBus, MyView view, MyProxy proxy, CurrentUser currentUser) {
+    ContactsPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
 
         this.view = view;
@@ -61,7 +62,7 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
             this.view.openModalToAddContact();
         });
 
-        this.view.buttonClickHandlerSendInvite(event -> {
+        this.view.buttonClickHandlerSaveContact(event -> {
             ContactsServiceAsync contactsSvc = GWT.create(ContactsService.class);
 
             // Set up the callback object.
@@ -73,13 +74,14 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
 
                 @Override
                 public void onSuccess(Void result) {
-                    MaterialToast.fireToast("Invitation sent!");
+                    MaterialToast.fireToast("New Contact Created");
 
                     refreshView();
                 }
             };
 
-            contactsSvc.sendInvitation(this.view.contactEmail(), currentUser.getUser(), callback);
+            contactsSvc.sendInvitation("1160557@isep.ipp.pt", "1160557@isep.ipp.pt", callback);
+
             this.view.closeModalToAddContact();
         });
 
@@ -169,14 +171,15 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
             }
         };
 
-        // contactsSvc.getContacts(callback);
+        //receção
+        contactsSvc.allAvailableContacts("1160557@isep.ipp.pt", callback);
     }
 
     @Override
     protected void onReveal() {
         super.onReveal();
 
-        SetPageTitleEvent.fire("Contacts", "Manage your contacts", "", "", this);
+        SetPageTitleEvent.fire("Contacts", "Make your Contacts", "", "", this);
 
         refreshView();
     }

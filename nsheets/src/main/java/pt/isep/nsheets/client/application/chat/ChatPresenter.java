@@ -25,11 +25,11 @@ import pt.isep.nsheets.shared.services.MessagesServiceAsync;
 import pt.isep.nsheets.shared.services.UserDTO;
 
 public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter.MyProxy> {
-    
+
     private final int CHAT_INDEX_PUBLIC = 1;
     private final int CHAT_INDEX_PRIVATE_2 = 2;
     private final int CHAT_INDEX_PRIVATE_3 = 3;
-    
+
     private MyView view;
 
     interface MyView extends View {
@@ -37,15 +37,15 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
         void buttonClickHandlerPublicChat(ClickHandler ch);
 
         void buttonClickHandlerPrivateChat2(ClickHandler ch);
-        
+
         void buttonClickHandlerPrivateChat3(ClickHandler ch);
-        
+
         void setContents(ArrayList<MessagesDTO> contents, UserDTO userDto);
-        
+
         String textPublicChat();
-        
+
         String textPrivateChat2();
-        
+
         String textPrivateChat3();
     }
 
@@ -75,7 +75,6 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 
                 @Override
                 public void onSuccess(MessagesDTO result) {
-
                     refreshMessages();
                 }
 
@@ -103,7 +102,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
             MessagesDTO mDTO = new MessagesDTO(view.textPrivateChat2(), this.user.getUser().getNickname(), CHAT_INDEX_PRIVATE_2);
             messagesSvc.addMessage(mDTO, callback);
         });
-        
+
         this.view.buttonClickHandlerPrivateChat3(e -> {
             MessagesServiceAsync messagesSvc = GWT.create(MessagesService.class);
 

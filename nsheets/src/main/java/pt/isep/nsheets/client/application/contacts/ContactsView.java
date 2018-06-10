@@ -29,6 +29,7 @@ import gwt.material.design.client.ui.MaterialTextArea;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.shared.services.ContactDTO;
+import pt.isep.nsheets.shared.services.UserDTO;
 
 class ContactsView extends ViewImpl implements ContactsPresenter.MyView {
 
@@ -45,16 +46,16 @@ class ContactsView extends ViewImpl implements ContactsPresenter.MyView {
     MaterialCollection contactsCollection;
 
     @UiField
-    MaterialCollection invitesCollection;
-
-    @UiField
     MaterialButton openModalBtn, saveBtn;
 
     @UiField
     MaterialModal modalAddContact;
 
     @UiField
-    MaterialTextBox contactEmail;
+    MaterialTextBox titleContact;
+
+    @UiField
+    MaterialTextArea textContact;
 
     MaterialButton checkBtn, editBtn, removeBtn;
 
@@ -70,7 +71,7 @@ class ContactsView extends ViewImpl implements ContactsPresenter.MyView {
     }
 
     @Override
-    public void buttonClickHandlerSendInvite(ClickHandler ch) {
+    public void buttonClickHandlerSaveContact(ClickHandler ch) {
 
         saveBtn.addClickHandler(ch);
     }
@@ -135,9 +136,15 @@ class ContactsView extends ViewImpl implements ContactsPresenter.MyView {
     }
 
     @Override
-    public String contactEmail() {
+    public String titleContact() {
 
-        return this.contactEmail.getValue();
+        return this.titleContact.getValue();
+    }
+
+    @Override
+    public String textContact() {
+
+        return this.textContact.getValue();
     }
 
     @Override
@@ -155,13 +162,16 @@ class ContactsView extends ViewImpl implements ContactsPresenter.MyView {
 
         MaterialTextBox cardTitle = new MaterialTextBox();
         cardTitle.setFontSize("1.4em");
-        cardTitle.setText(contact.getContact().getName());
+        cardTitle.setText(contact.getContact().getEmail());
         cardTitle.setReadOnly(true);
 
         MaterialTextArea cardTextArea = new MaterialTextArea();
-        cardTextArea.setText(contact.getContact().getEmail());
+        cardTextArea.setText(contact.getContactOwner().getEmail());
         cardTextArea.setReadOnly(true);
 
+//        MaterialTextBox cardHistory = new MaterialTextBox();
+//        cardHistory.setText(note.getDateContact().toString());
+//        cardHistory.setReadOnly(true);
         MaterialCardAction cardAction = new MaterialCardAction();
         cardAction.setTextAlign(TextAlign.RIGHT);
 
@@ -172,13 +182,14 @@ class ContactsView extends ViewImpl implements ContactsPresenter.MyView {
         checkBtn.addStyleName("margin-right: 10px");
         checkBtn.setVisible(false);
 
-//        checkBtn.addClickHandler(e -> {
-//            MaterialToast.fireToast("The check button was clicked!");
-//            cardTitle.setReadOnly(true);
-//            cardTextArea.setReadOnly(true);
-//            checkBtn.setVisible(false);
-//            cardHistory.setText(contact.getDateNote().toString());
-//        });
+        checkBtn.addClickHandler(e -> {
+            MaterialToast.fireToast("The check button was clicked!");
+            cardTitle.setReadOnly(true);
+            cardTextArea.setReadOnly(true);
+            checkBtn.setVisible(false);
+//            cardHistory.setText(note.getDateNote().toString());
+        });
+
         editBtn = new MaterialButton("Edit", IconType.EDIT, ButtonType.FLOATING);
         editBtn.setWaves(WavesType.LIGHT);
         editBtn.setBackgroundColor(Color.GREY);
@@ -186,7 +197,7 @@ class ContactsView extends ViewImpl implements ContactsPresenter.MyView {
         editBtn.addStyleName("margin-right: 10px");
 
         editBtn.addClickHandler(e -> {
-            MaterialToast.fireToast("Contact Edited!");
+            MaterialToast.fireToast("The edit button was clicked!");
             cardTitle.setReadOnly(false);
             cardTextArea.setReadOnly(false);
             checkBtn.setVisible(true);
@@ -199,13 +210,13 @@ class ContactsView extends ViewImpl implements ContactsPresenter.MyView {
         removeBtn.addStyleName("margin-right: 10px");
 
         removeBtn.addClickHandler(e -> {
-            MaterialToast.fireToast("Contact Removed!");
+            MaterialToast.fireToast("The remove button was clicked!");
             card.setVisible(false);
         });
 
         cardContent.add(cardTitle);
         cardContent.add(cardTextArea);
-        //cardContent.add(cardHistory);
+//        cardContent.add(cardHistory);
 
         cardAction.add(checkBtn);
         cardAction.add(editBtn);
@@ -216,4 +227,5 @@ class ContactsView extends ViewImpl implements ContactsPresenter.MyView {
 
         return card;
     }
+
 }
