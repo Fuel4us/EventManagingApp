@@ -20,7 +20,7 @@ Questions made to the Product Owner (PRP):
 *Core02.2 - Full Extension Mechanism - Description:*
 "The extensions should now contribute also with popup menus in cells, menu options in the navigator and side bars."
 
-*Specification of the user stories:* 
+*Specification of the User Stories:* 
 
 ```
 US01
@@ -43,14 +43,18 @@ US03
 # 3. Analysis
 
 ## 3.1 Analysis Plan
-**Extension** - It's an option that allows the user to create new functional 
-
+**Extension** - It's an option that allows the user to create new functionalities;
+**Menu Option** - A new option that is created on the side bar;
+**Side Bar** - It's an bar, in this case, on the left side of the screen, wich has options inside linked to other functions and windows on the program;
+**Popup option** - An option, in this case, on the menu of the spreadsheet, that is launched by pressing the right button of the mouse on the spreadsheet;
+**Spreadsheet** - The table with cells (set of rows and columns), that exists on the workbook.
 
 ## 3.2 Analysis Diagrams
 
 The main idea for the "workflow" of this feature increment.
 
 **Use Cases**
+
 ![Use Cases](us.PNG)
 
 **Domain Model**
@@ -58,12 +62,15 @@ The main idea for the "workflow" of this feature increment.
 **System Sequence Diagrams**
 
 **For US1**
+
 ![US1 Analysis](analysis1.PNG)
 
 **For US2**
+
 ![US2 Analysis](analysis2.PNG)
 
 **For US3**
+
 ![US3 Analysis](analysis3.PNG)
 
 # 4. Design
@@ -88,12 +95,15 @@ The main idea for the "workflow" of this feature increment.
 *Sequence Diagrams*
 
 **For US1**
+
 ![US1 Design](design1.PNG)
 
 **For US2**
+
 ![US2 Design](design2.PNG)
 
 **For US3**
+
 ![US3 Design](design3.PNG)
 
 ## 4.3. Classes
@@ -135,20 +145,20 @@ By memory we apply/use:
 *If required you should present in this section more details about the implementation. For instance, configuration files, grammar files, etc. You may also explain the organization of you code. You may reference important commits.*
 
 **For US1**
-```
-	- Was implemented the collapsible menu to insert the new menu options, with a text box to insert the name of the new menu option, and a combo box so the user could choose the icon to the menu option.
-	- It was also needed to discover wich side bar was activated, so the new menu option could be inserted on.
-```
+
+		- Was implemented the collapsible menu to insert the new menu options, with a text box to insert the name of the new menu option, and a combo box so the user could choose the icon to the menu option.
+		- It was also needed to discover wich side bar was activated, so the new menu option could be inserted on.
+
 **For US2**
-```
-	- For this user storie, it was needed to implement the collapsible menu with a text box to insert the name of the new popup option on the spreadsheet, and also the icon.
-	- It was also needed to insert the popup option on the menu of the spreadsheet, that can be activated by pressing the right button of the mouse on it.
-```	
+
+		- For this user storie, it was needed to implement the collapsible menu with a text box to insert the name of the new popup option on the spreadsheet, and also the icon.
+		- It was also needed to insert the popup option on the menu of the spreadsheet, that can be activated by pressing the right button of the mouse on it.
+	
 **For US3** 
-```
-	- For the user storie 3, it was needed to implement also the collapsible menu with a field to insert the name of the new side bar, and also a combo box that shows all the side bars existing on the project, so the user could switch the activated side bar.
-	- It was also needed to discover wich side bar was the activated one, so when the button to switch side bars is pressed, it switch with the side bar choosed by the user.
-```
+
+		- For the user storie 3, it was needed to implement also the collapsible menu with a field to insert the name of the new side bar, and also a combo box that shows all the side bars existing on the project, so the user could switch the activated side bar.
+		- It was also needed to discover wich side bar was the activated one, so when the button to switch side bars is pressed, it switch with the side bar choosed by the user.
+
 # 6. Integration/Demonstration
 
 --
@@ -171,3 +181,4 @@ Some Questions/Issues identified during the work in this feature increment
 * [ [Implementation] Core02.2 - Now users can't create menu options, popup options or side bars with the same name. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/0a7a0e2216a0a13a241a7398a1f784279fac42a7)
 * [ [Documentation] Core02.2 - ReadMe.md updated. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/93b1f3d8160003e8c4d6e85f3005e6878f2b6707)
 * [ [Documentation] Core02.2 - ReadMe.md updated. Added design diagrams for us1, us2 and us3, and the us diagram. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/5c6b819dd321e05114873cecb3ecf4d7938686ef?at=master)
+* [ [Documentation] Core02.2 - ReadMe.md updated. Added analysis diagrams for the us1 us2 and us3. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/174bc7843786af1bc4bf25b63be39ddf3e0b9f54)
