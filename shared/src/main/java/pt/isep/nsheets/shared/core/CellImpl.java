@@ -119,6 +119,10 @@ public class CellImpl implements Cell, Serializable {
 
     @Transient
     private List<ChartDTO> chartList = new ArrayList<>();
+    
+    @Transient
+    private StyleCell style;
+    
 
     private Set<TemporaryVariable> tempVariableList = new HashSet<>();
 
@@ -169,10 +173,12 @@ public class CellImpl implements Cell, Serializable {
     /*
  * LOCATION
      */
+    @Override
     public Spreadsheet getSpreadsheet() {
         return spreadsheet;
     }
 
+    @Override
     public Address getAddress() {
         return address;
     }
@@ -545,6 +551,19 @@ public class CellImpl implements Cell, Serializable {
         }
         return tempVariableList.add(tempVariable);
     }
+
+    @Override
+    public void setStyle(StyleCell style) {
+        this.style = style;
+    }
+
+    @Override
+    public StyleCell style() {
+        return style;
+    }
+    
+    
+
 
 //    @Override
 //    public boolean hasChart() {

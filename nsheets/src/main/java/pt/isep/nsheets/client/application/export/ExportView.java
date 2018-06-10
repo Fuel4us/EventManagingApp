@@ -1,7 +1,6 @@
 package pt.isep.nsheets.client.application.export;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -12,14 +11,13 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
-import gwt.material.design.addins.client.docviewer.MaterialDocViewer;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialInput;
 import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialRadioButton;
+import gwt.material.design.client.ui.MaterialRange;
+import gwt.material.design.client.ui.MaterialRow;
 import gwt.material.design.client.ui.MaterialToast;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,19 +42,21 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
     MaterialInput color_line;
 
     @UiField
-    MaterialButton style_export_pdf, close, save, save_pdf;
+    MaterialButton style_export_pdf, close, save;
 
     @UiField
     MaterialRadioButton dotted, double_, solid, dashed;
 
     @UiField
     MaterialModal modal;
-
+    
     @UiField
-    MaterialDocViewer dock_viewer;
+    MaterialRange rangeSetValue;
+    
 
     private String style;
     private String color;
+    private int range;
     private final List<MaterialRadioButton> radiolist;
 
     @UiHandler("style_export_pdf")
@@ -71,7 +71,7 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
 
         color = color_line.getValue();
         style = findSelected().getFormValue();
-        MaterialToast.fireToast("Line style: " + style + "Line Color: " + color);
+        range = rangeSetValue.getValue();
 
         ExportServiceAsync exportServiceAsync = GWT.create(ExportService.class);
         AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
@@ -86,11 +86,7 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
                     Cookies.setCookie("PDF EXPORT", "Accept the cookies");
 
                     String url = GWT.getModuleBaseURL() + "downloadService";
-
                     Window.open(url, "", "");
-
-                    dock_viewer.setUrl(GWT.getModuleBaseForStaticFiles()+"../PDF.pdf");
-
                     MaterialToast.fireToast("PDF exported", "rounded");
 
                 } else {
@@ -98,8 +94,7 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
                 }
             }
         };
-        MaterialToast.fireToast("SS COLUMNS: " + workbookDTO.spreadsheets.get(0).columns);
-        exportServiceAsync.exportStyledWorkbookPDF(workbookDTO, style, color, callback);
+        exportServiceAsync.exportStyledWorkbookPDF(workbookDTO, style, color,range, callback);
 
     }
 

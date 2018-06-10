@@ -13,7 +13,7 @@ import java.awt.Color;
  */
 public class ColorUtil {
     
-    private Color color;
+    private final Color color;
     
 
     

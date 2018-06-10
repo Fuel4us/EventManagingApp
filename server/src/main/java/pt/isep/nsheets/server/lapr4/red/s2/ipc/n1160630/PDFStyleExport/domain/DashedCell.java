@@ -19,9 +19,11 @@ import com.itextpdf.text.pdf.PdfPTable;
 public class DashedCell implements PdfPCellEvent{
     private int border = 0;
     private final BaseColor color;
-    public DashedCell(int border, BaseColor color) {
+    private final int size;
+    public DashedCell(int border, BaseColor color, int size) {
         this.border = border;
         this.color = color;
+        this.size=size;
     }
     @Override
     public void cellLayout(PdfPCell cell, Rectangle position,
@@ -30,6 +32,7 @@ public class DashedCell implements PdfPCellEvent{
         canvas.saveState();
         canvas.setColorStroke(color);
         canvas.setLineDash(10, 7);
+        canvas.setLineWidth(size);
         if ((border & PdfPCell.TOP) == PdfPCell.TOP) {
             canvas.moveTo(position.getRight(), position.getTop());
             canvas.lineTo(position.getLeft(), position.getTop());

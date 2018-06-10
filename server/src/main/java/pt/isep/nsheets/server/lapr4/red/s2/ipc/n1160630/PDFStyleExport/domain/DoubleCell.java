@@ -20,10 +20,12 @@ public class DoubleCell implements PdfPCellEvent {
 
     private int border = 0;
     private final BaseColor color;
+    private final int size;
 
-    public DoubleCell(int border, BaseColor color) {
+    public DoubleCell(int border, BaseColor color, int size) {
         this.border = border;
         this.color = color;
+        this.size=size;
     }
 
     @Override
@@ -32,7 +34,7 @@ public class DoubleCell implements PdfPCellEvent {
         PdfContentByte canvas = canvases[PdfPTable.LINECANVAS];
         canvas.saveState();
         canvas.setColorStroke(color);
-        canvas.setLineWidth(1);
+        canvas.setLineWidth(size);
         if ((border & PdfPCell.TOP) == PdfPCell.TOP) {
             canvas.moveTo(position.getRight(), position.getTop());
             canvas.lineTo(position.getLeft(), position.getTop());
