@@ -1,0 +1,28 @@
+@startuml
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+box "Connection user - browser"
+User -> Browser : navigate to page 
+Browser --> User : asks for the name and icon
+User -> Browser : inserts data 
+end box
+
+box "Extensions"
+Browser -> ExtensionsView : name
+Browser -> ExtensionsView : selectedIcon
+ExtensionsView -> ExtensionsPresenter : String name = getPopupName().getText()
+ExtensionsView -> ExtensionsPresenter : IconType selectedIcon = getIconPopupChoosed()
+end box
+
+box "Workbook"
+ExtensionsPresenter -> WorkbookView : getPopupMenu().add(name, selectedIcon)
+end box
+
+Browser -> Browser : redirect extensions page
+@enduml
