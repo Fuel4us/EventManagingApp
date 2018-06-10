@@ -183,4 +183,13 @@ public interface Cell extends Comparable<Cell>, Extensible<Cell>, Serializable {
     public List<TemporaryVariable> tempVariableList();
     
     public boolean addTempVariable(TemporaryVariable tempVariable);
+    
+    /*
+    * Cell Style
+    */
+    
+    public void setStyle(StyleCell style);
+    
+    public StyleCell style();
+    
 }

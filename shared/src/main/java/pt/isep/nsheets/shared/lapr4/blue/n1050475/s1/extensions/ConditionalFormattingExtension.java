@@ -13,6 +13,7 @@ import pt.isep.nsheets.shared.services.ChartDTO;
 
 import java.util.ArrayList;
 import java.util.List;
+import pt.isep.nsheets.shared.core.StyleCell;
 import pt.isep.nsheets.shared.lapr4.blue.n1150455.s1.temporaryVariables.TemporaryVariable;
 
 public class ConditionalFormattingExtension extends Extension {
@@ -113,6 +114,17 @@ public class ConditionalFormattingExtension extends Extension {
         public boolean addTempVariable(TemporaryVariable tempVariable) {
             return tempVariableList().add(tempVariable);
         }
+
+        @Override
+        public void setStyle(StyleCell style) {
+            this.getDelegate().setStyle(style);
+        }
+
+        @Override
+        public StyleCell style() {
+            return this.getDelegate().style();
+        }
+
 
     }
 }

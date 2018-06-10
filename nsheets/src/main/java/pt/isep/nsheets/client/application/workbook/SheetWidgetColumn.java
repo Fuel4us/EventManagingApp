@@ -7,12 +7,12 @@ import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.table.cell.WidgetColumn;
 import pt.isep.nsheets.client.application.workbook.WorkbookView.SheetCell;
 import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.core.StyleCell;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.CellStyleExtension;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalFormattingExtension;
-
 
 public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
 
@@ -56,48 +56,56 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
     }
 
     @Override
-        public MaterialButton getValue(SheetCell object) {
+    public MaterialButton getValue(SheetCell object) {
         MaterialButton btn = new MaterialButton();
+
+        Cell cell_;
         if (this.colNumber == -1) {
-            btn.setText("" + (object.getCell(0).getAddress().getRow() + 1));
+            cell_ = object.getCell(0);
+            btn.setText("" + (cell_.getAddress().getRow() + 1));
         } else {
-            
-            Cell cell = object.getCell(this.colNumber);
-            String value = cell.getValue().toString();
-            if(cell.hasChart()) {
+            cell_ = object.getCell(this.colNumber);
+            String value = cell_.getValue().toString();
+            if (cell_.hasChart()) {
                 btn.setIconType(IconType.INSERT_CHART);
                 btn.setIconPosition(IconPosition.LEFT);
             }
-            
-           
+
             btn.setText(value);
         }
-        
-            btn.setTextColor(Color.BLACK);
-            btn.setType(ButtonType.FLAT);
 
+        btn.setTextColor(Color.BLACK);
+        btn.setType(ButtonType.FLAT);
 
-            Extension extension = ExtensionManager.getInstance().getExtension("Value Colour Extension");
-            if(extension!=null){
-                extension.getUIExtension(btn).decorate(object.getCell(this.colNumber));
+        Cell cell = object.getCell(this.colNumber);
+
+        Extension extension = ExtensionManager.getInstance().getExtension("Value Colour Extension");
+        if (extension != null) {
+            extension.getUIExtension(btn).decorate(cell);
+
+            StyleCell style = new StyleCell(btn.getBackgroundColor(), btn.getTextColor());
+            cell.setStyle(style);
+        }
+
+        Extension extensionCell = ExtensionManager.getInstance().getExtension("CellStyleExtension");
+        Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
+        if (extensionCell != null && extensionCond != null) {
+
+            Conditional cond = ConditionalFormattingExtension.containsCondition(cell);
+
+            /*1050475 Other possibility to change CellSyle but need colaboration from Core8.1*/
+            if (cond != null) {
+                boolean flag = ConditionalFormattingExtension.setOperation(cell, cond.getCondOperator(), cond.getCondValue());
+                MaterialToast.fireToast("Cell" + cell.getAddress().toString() + "Conditional equals " + flag);
+
+                CellStyleExtension.setConfig(cond.getConfiguration());
+                CellStyleExtension.setResult(ConditionalFormattingExtension.setOperation(cell, cond.getCondOperator(), cond.getCondValue()));
+                extensionCell.getUIExtension(btn).decorate(cell);
+
+                StyleCell style = new StyleCell(btn.getBackgroundColor(), btn.getTextColor());
+                cell.setStyle(style);
             }
-
-            Extension extensionCell = ExtensionManager.getInstance().getExtension("CellStyleExtension");
-            Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
-            if(extensionCell!=null && extensionCond !=null){
-
-                Conditional cond = ConditionalFormattingExtension.containsCondition(object.getCell(this.colNumber));
-
-                 /*1050475 Other possibility to change CellSyle but need colaboration from Core8.1*/
-                if(cond != null){
-                    boolean flag = ConditionalFormattingExtension.setOperation(object.getCell(this.colNumber), cond.getCondOperator(), cond.getCondValue());
-                    MaterialToast.fireToast("Cell"+ object.getCell(this.colNumber).getAddress().toString()+"Conditional equals "+flag);
-
-                    CellStyleExtension.setConfig(cond.getConfiguration());
-                    CellStyleExtension.setResult(ConditionalFormattingExtension.setOperation(object.getCell(this.colNumber), cond.getCondOperator(), cond.getCondValue()));
-                    extensionCell.getUIExtension(btn).decorate(object.getCell(this.colNumber));
-                }
-            }
+        }
         return btn;
     }
 
@@ -113,7 +121,6 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
 //
 //        return badge;
 //    }
-
 //    @Override
 //    public MaterialLabel render(Context context, SheetCell object) {
 //        MaterialLabel widget = getValue(object);
@@ -139,8 +146,7 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
 //
 //        return widget;
 //    }
-    
-          @Override
+    @Override
     public MaterialButton render(Context context, SheetCell object) {
         MaterialButton widget = getValue(object);
 
@@ -160,5 +166,3 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialButton> {
         return widget;
     }
 }
-    
-

@@ -20,7 +20,7 @@ public interface ExportServiceAsync {
 
     void exportWorkbookAsCSL(WorkbookDTO workbookDTO, AsyncCallback<Boolean> async);
     
-    void exportStyledWorkbookPDF(WorkbookDTO workbookDTO,String style,String color, AsyncCallback<Boolean> async);
+    void exportStyledWorkbookPDF(WorkbookDTO workbookDTO,String style,String color, int range, AsyncCallback<Boolean> async);
 
 //    void exportPartOfSpreadsheet(Spreadsheet spreadsheet, int beginColumn, int beginRow, int endColumn, int endRow);
 }

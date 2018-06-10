@@ -17,9 +17,9 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
  */
 public class ExportStyledPDFController implements Controller{
     
-    public boolean buildPDF(WorkbookDTO workbookDTO, String style,String color){
+    public boolean buildPDF(WorkbookDTO workbookDTO, String style,String color, int range){
         PDFBuilder pdfFile = new PDFBuilder(Workbook.fromDTO(workbookDTO));
-        return pdfFile.createPdf(style,color);
+        return pdfFile.createPdf(style,color, range);
     }
     
 }

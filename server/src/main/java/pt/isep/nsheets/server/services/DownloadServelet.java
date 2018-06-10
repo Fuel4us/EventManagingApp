@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class DownloadServelet extends HttpServlet {
 
-    private final String FILE_PATH = "../PDF.pdf";
+    private final String FILE_PATH = "nsheets/src/main/webapp/resources/PDF.pdf";
 
 //    @Override
 //    protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {

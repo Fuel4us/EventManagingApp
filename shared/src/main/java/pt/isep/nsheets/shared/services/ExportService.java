@@ -20,7 +20,7 @@ public interface ExportService extends RemoteService {
       boolean exportWorkbookAsXML(WorkbookDTO workbookDTO);
       boolean exportWorkbookAsPDF(WorkbookDTO workbookDTO);
       boolean exportWorkbookAsCSL(WorkbookDTO workbookDTO);
-      boolean exportStyledWorkbookPDF(WorkbookDTO workbookDTO, String style,String color);
+      boolean exportStyledWorkbookPDF(WorkbookDTO workbookDTO, String style,String color, int range);
 
 //    String[][] exportPartOfSpreadsheet(Spreadsheet spreadsheet, int beginColumn, int beginRow, int endColumn, int endRow);
 }
