@@ -26,9 +26,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
+import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
+import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.blue.n1150455.s1.temporaryVariables.TemporaryVariable;
-import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.For;
+import pt.isep.nsheets.shared.lapr4.green.n1160815.formula.lang.GlobalVariable;
 
 /**
  *
@@ -65,32 +68,34 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
     @Override
     public Expression visitComparison(FormulaParser.ComparisonContext ctx) {
         if (ctx.getChildCount() == 3) {
-            if (ctx.getChild(0).getText().equalsIgnoreCase("{")) {
-                return visit(ctx.manyexpressions());
-            } else {
-                if (ctx.getChild(0).getText().equalsIgnoreCase("FOR{")) {
-                    return visit(ctx.forexpression());
-                } else {
-                    try {
-                        BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
+            try {
+                BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
 
-                        return new BinaryOperation(
-                                visit(ctx.getChild(0)),
-                                operator,
-                                visit(ctx.getChild(2))
-                        );
-                    } catch (UnknownElementException ex) {
-                        MaterialToast.fireToast("ERRO Comparison getBinaryOperator");
-                        addVisitError(ex.getMessage());
-                    }
-                }
+                return new BinaryOperation(
+                        visit(ctx.getChild(0)),
+                        operator,
+                        visit(ctx.getChild(2))
+                );
+            } catch (UnknownElementException ex) {
+                MaterialToast.fireToast("ERRO Comparison getBinaryOperator");
+                addVisitError(ex.getMessage());
             }
         }
         return visit(ctx.getChild(0));
     }
 
     @Override
-    public Expression visitConcatenation(FormulaParser.ConcatenationContext ctx) {
+    public Expression visitBlock(FormulaParser.BlockContext ctx) {
+        if (ctx.getChildCount() == 1) {
+            return visit(ctx.manyexpressions());
+        } else {
+            return visit(ctx.forexpression());
+        }
+    }
+
+    @Override
+    public Expression visitConcatenation(FormulaParser.ConcatenationContext ctx
+    ) {
         try {
             if (ctx.getChildCount() == 2) { // Convert unary operation
                 int operatorid = 0, operand = 1;  // Assume operator on the left
@@ -123,11 +128,12 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
             addVisitError(ex.getMessage());
         }
 
-        return visitChildren(ctx);
+        return visit(ctx.getChild(0));
     }
 
     @Override
-    public Expression visitAtom(FormulaParser.AtomContext ctx) {
+    public Expression visitAtom(FormulaParser.AtomContext ctx
+    ) {
         if (ctx.getChildCount() == 3) {
             return visit(ctx.getChild(1));
         }
@@ -204,6 +210,11 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
             if (t.getType() == FormulaParser.STRING) {
                 String value = ctx.getText().substring(1, ctx.getText().length() - 1);
                 return new Literal(Value.parseValue(value, Value.Type.BOOLEAN, Value.Type.DATE));
+            } else {
+                if (t.getType() == FormulaParser.RULE_nameTemporary) {
+                    TemporaryVariable tempVariable = (TemporaryVariable) ctx.getChild(0);
+                    return new Literal(tempVariable.getValue());
+                }
             }
         }
         MaterialToast.fireToast("RETURN NULL Literal");
@@ -212,27 +223,31 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
 
     @Override
     public Expression visitManyexpressions(FormulaParser.ManyexpressionsContext ctx) {
-
-        Value value = null;
-
-        List<Expression> args = new ArrayList<>();
-
-        for (int i = 0; i < ctx.getChildCount(); i += 2) {
-            args.add(visit(ctx.getChild(i)));
-        }
-
-        Expression[] argArray = args.toArray(new Expression[args.size()]);
+        Function function = null;
         try {
-            for (int i = 0; i < argArray.length; i++) {
-                if (i == argArray.length - 1) {
-                    value = argArray[i].evaluate();
-                }
-                argArray[i].evaluate();
-            }
-        } catch (IllegalValueTypeException ex) {
-            MaterialToast.fireToast("ERRO MANY EXPRESSIONS");
+            // function = Language.getInstance().getFunction(ctx.getChild(0).getText());
+            function = this.language.getFunction(ctx.getChild(0).getText());
+        } catch (UnknownElementException ex) {
+            Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return new Literal(value);
+
+        if (function != null) {
+            try {
+                List<Expression> args = new ArrayList<>();
+                if (ctx.getChildCount() > 2) {
+                    for (int nChild = 1; nChild < ctx.getChildCount() - 1; nChild += 2) {
+                        args.add(visit(ctx.getChild(nChild)));
+                    }
+                }
+                Expression[] argArray = args.toArray(new Expression[args.size()]);
+                // return new FunctionCall(function, argArray);
+                return new Literal(function.applyTo(argArray));
+            } catch (IllegalValueTypeException ex) {
+                Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        MaterialToast.fireToast("RETURN NULL_Many expressions");
+        return null;
     }
 
     @Override
@@ -252,9 +267,12 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
 
     @Override
     public Expression visitForexpression(FormulaParser.ForexpressionContext ctx) {
-        Function function = new For();
-        Value value = null;
-        MaterialToast.fireToast("visitForexpression");
+        Function function = null;
+        try {
+            function = this.language.getFunction(ctx.getParent().getChild(0).getText());
+        } catch (UnknownElementException ex) {
+            MaterialToast.fireToast("ERROR getParent ForExpression.");
+        }
 
         List<Expression> args = new ArrayList<>();
 
@@ -264,22 +282,53 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
 
         Expression[] argArray = args.toArray(new Expression[args.size()]);
         try {
-            value = function.applyTo(argArray);
-            MaterialToast.fireToast("applyTo");
+            if (function != null) {
+                MaterialToast.fireToast("Apply To");
+                //return new FunctionCall(function, argArray);  dava
+                return new Literal(function.applyTo(argArray));
+            } else {
+                MaterialToast.fireToast("FUNCTION NULL");
+            }
         } catch (IllegalValueTypeException ex) {
-            MaterialToast.fireToast("ERRO ForExpression apply to.");
             Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         MaterialToast.fireToast("RETURN NULL FOREXPRESSION");
-        return new Literal(value);
+        return new Literal(new Value());
     }
 
     @Override
     public Expression visitTemporaryreference(FormulaParser.TemporaryreferenceContext ctx) {
         if (ctx.getChildCount() == 3) {
             try {
-                BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(2).getText());
+                BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
+                TemporaryVariable tempVariable = new TemporaryVariable(new Value(ctx.getChild(0).getText()));
+                this.cell.addTempVariable(tempVariable);
+                return new BinaryOperation(
+                        tempVariable,
+                        operator,
+                        visit(ctx.getChild(2))
+                );
+            } catch (UnknownElementException ex) {
+                MaterialToast.fireToast("Error in Temporary Reference");
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public Expression visitGlobalreference(FormulaParser.GlobalreferenceContext ctx) {
+        Workbook currentWorkbook = Settings.getInstance().getWorkbook();
+        MaterialToast.fireToast("Entrou no visitor");
+        //Change code so it does not create a global reference here
+        GlobalVariable gv = new GlobalVariable(new Value(ctx.getChild(0).getText()));
+
+        if (currentWorkbook.checkIfGVExists(gv)) {
+            //Global variable exists
+            MaterialToast.fireToast("Global Variable ja existe");
+            try {
+                BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
                 return new BinaryOperation(
                         visit(ctx.getChild(0)),
                         operator,
@@ -289,13 +338,30 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
                 MaterialToast.fireToast("Error in Temporary Reference");
             }
         } else {
-            String name = "";
-            for (int i = 0; i < ctx.getChildCount(); i++) {
-                name = name + ctx.getChild(i);
-            }
-            return new TemporaryVariable(new Value(name));
+            //Global variable doesnt exists
+            MaterialToast.fireToast("Global Variable não existe");
+            return new GlobalVariable(new Value(ctx.getChild(2).getText()));
         }
 
+        return null;
+    }
+
+    @Override
+    public Expression visitMonetary(FormulaParser.MonetaryContext ctx) {
+        MaterialToast.fireToast("ENTROU NO VISITMONETARY!!!");
+        if (ctx.getChildCount() == 4) {
+            try {
+                ParseTree account = ctx.getChild(2);
+                BinaryOperator operator = this.language.getBinaryOperator(account.getChild(2).getText());
+                return new BinaryOperation(
+                        visit(account.getChild(0)),
+                        operator,
+                        visit(account.getChild(3))
+                );
+            } catch (UnknownElementException ex) {
+                MaterialToast.fireToast(ex.toString());
+            }
+        }
         return null;
     }
 

@@ -10,14 +10,13 @@ import gwt.material.design.client.ui.table.cell.WidgetColumn;
 import org.eclipse.jdt.internal.core.util.ExceptionTableEntry;
 import pt.isep.nsheets.client.application.workbook.WorkbookView.SheetCell;
 import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.core.StyleCell;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core.CellStyle;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtension;
 
-
 public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialLabel> {
-
     /**
      * The lowest character to be used in a column name
      */
@@ -59,16 +58,21 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialLabel> {
 
    /* @Override
         public MaterialButton getValue(SheetCell object) {
+
         MaterialButton btn = new MaterialButton();
+
+        Cell cell_;
         if (this.colNumber == -1) {
-            btn.setText("" + (object.getCell(0).getAddress().getRow() + 1));
+            cell_ = object.getCell(0);
+            btn.setText("" + (cell_.getAddress().getRow() + 1));
         } else {
-            Cell cell = object.getCell(this.colNumber);
-            String value = cell.getValue().toString();
-            if(cell.hasChart()) {
+            cell_ = object.getCell(this.colNumber);
+            String value = cell_.getValue().toString();
+            if (cell_.hasChart()) {
                 btn.setIconType(IconType.INSERT_CHART);
                 btn.setIconPosition(IconPosition.LEFT);
             }
+
             btn.setText(value);
             Extension extension = ExtensionManager.getInstance().getExtension("CellStyleExtension");
             if(extension != null){
@@ -94,8 +98,6 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialLabel> {
 
             //btn.setTextColor(Color.BLACK);
             btn.setType(ButtonType.FLAT);
-
-            //btn.setPixelSize(220,30);
 
            /* Extension extension = ExtensionManager.getInstance().getExtension("Value Colour Extension");
             if(extension!=null){
@@ -188,5 +190,3 @@ public class SheetWidgetColumn extends WidgetColumn<SheetCell, MaterialLabel> {
    }
 
 }
-    
-

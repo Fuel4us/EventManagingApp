@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import pt.isep.nsheets.shared.lapr4.red.s2.ipc.n1161292.users.Password;
 import pt.isep.nsheets.shared.services.UserDTO;
 
 /**
@@ -18,30 +19,30 @@ import pt.isep.nsheets.shared.services.UserDTO;
  * @author Hilario Coelho
  */
 public class UserTest {
-    
+
     User testUser;
     String defaultEmail = "1160557@isep.ipp.pt";
     String defaultName = "Hilario";
     String defaultNickname = "coelho98";
-    String defaultPassword = "123asd";
+    Password defaultPassword = new Password("123Asd");
     boolean defaultSuperuser = true;
-    
+
     public UserTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
         testUser = new User(defaultEmail, defaultName, defaultNickname, defaultPassword, defaultSuperuser);
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -98,7 +99,7 @@ public class UserTest {
     public void testVerifyPassword() {
         System.out.println("verifyPassword");
         assertEquals(true, testUser.verifyPassword(defaultPassword));
-        assertEquals(false, testUser.verifyPassword(defaultPassword + "a"));
+        assertEquals(false, testUser.verifyPassword(new Password("1234Aasd")));
     }
 
     /**
@@ -120,9 +121,9 @@ public class UserTest {
         User user_2 = new User("", defaultName, defaultNickname, defaultPassword, defaultSuperuser);
         User user_3 = new User(defaultEmail, "", defaultNickname, defaultPassword, defaultSuperuser);
         User user_4 = new User(defaultEmail, defaultName, "", defaultPassword, defaultSuperuser);
-        User user_5 = new User(defaultEmail, defaultName, defaultNickname, "", defaultSuperuser);
+        User user_5 = new User(defaultEmail, defaultName, defaultNickname, new Password("Mnb12345"), defaultSuperuser);
         User user_6 = new User(defaultEmail, defaultName, defaultNickname, defaultPassword, false);
-        
+
         assertEquals(false, testUser.sameAs(new String()));
         assertEquals(true, testUser.sameAs(testUser));
         assertEquals(true, testUser.sameAs(user_1));
@@ -157,7 +158,7 @@ public class UserTest {
     @Test
     public void testToDTO() {
         System.out.println("toDTO");
-        UserDTO expected = new UserDTO(defaultEmail, defaultName, defaultNickname, defaultPassword, defaultSuperuser);
+        UserDTO expected = new UserDTO(defaultEmail, defaultName, defaultNickname, defaultPassword.toString(), defaultSuperuser);
         assertEquals(true, testUser.toDTO().equals(expected));
     }
 
@@ -167,8 +168,8 @@ public class UserTest {
     @Test
     public void testFromDTO() {
         System.out.println("fromDTO");
-        UserDTO dto = new UserDTO(defaultEmail, defaultName, defaultNickname, defaultPassword, defaultSuperuser);
-        assertEquals(true, User.fromDTO(dto).sameAs(testUser));
+        UserDTO dto = new UserDTO(defaultEmail, defaultName, defaultNickname, defaultPassword.toString(), defaultSuperuser);
+        assertEquals(true, User.fromDTO(dto, true).sameAs(testUser));
     }
-    
+
 }

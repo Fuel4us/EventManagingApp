@@ -7,7 +7,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- *
  * @author Rúben (1160998)
  */
 public class ExportCSVController {
@@ -17,7 +16,7 @@ public class ExportCSVController {
     public ExportCSVController() {
     }
 
-    public void exportWorkbook(Workbook workbook) {
+    public boolean exportWorkbook(Workbook workbook) {
         try {
             String csvFile = "../CSV.csv";
 
@@ -46,8 +45,10 @@ public class ExportCSVController {
 
             writer.flush();
             writer.close();
-        }catch (IOException e){
+            return true;
+        } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
     }
 }

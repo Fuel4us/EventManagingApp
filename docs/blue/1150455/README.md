@@ -6,5 +6,5 @@
 
 |Sprint  | Area | Documentation for the Sprint |
 |--------|------|------------------------------|
-| **1**  | Lang | [Lang02.1](sp1)         |
-																		
+| **1**  | Lang | [Lang02.1](sp1)         |											
+| **2**  | Core  | [Core01.2](sp2)         |

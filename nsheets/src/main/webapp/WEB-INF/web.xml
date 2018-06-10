@@ -18,45 +18,56 @@
   limitations under the License.
   #L%
   -->
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-  </welcome-file-list>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
 
+    <!-- Servlets for the workbooks -->
+    <servlet>
+        <servlet-name>workbooksServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.WorkbooksServiceImpl</servlet-class>
+    </servlet>
 
-  <!-- Servlets for the workbooks -->
-  <servlet>
-    <servlet-name>workbooksServiceServlet</servlet-name>
-    <servlet-class>pt.isep.nsheets.server.services.WorkbooksServiceImpl</servlet-class>
-  </servlet>
+    <servlet-mapping>
+        <servlet-name>workbooksServiceServlet</servlet-name>
+        <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
+        <url-pattern>/nsheets/workbooksService</url-pattern>
+    </servlet-mapping>
 
-  <servlet-mapping>
-    <servlet-name>workbooksServiceServlet</servlet-name>
-    <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
-    <url-pattern>/nsheets/workbooksService</url-pattern>
-  </servlet-mapping>
-  <!-- Servlets for the workbooks -->
-  <servlet>
-    <servlet-name>usersServiceServlet</servlet-name>
-    <servlet-class>pt.isep.nsheets.server.services.UsersServiceImpl</servlet-class>
-  </servlet>
+    <!-- Servlets for the workbooks -->
+    <servlet>
+        <servlet-name>usersServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.UsersServiceImpl</servlet-class>
+    </servlet>
 
-  <servlet-mapping>
-    <servlet-name>usersServiceServlet</servlet-name>
-    <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
-    <url-pattern>/nsheets/usersService</url-pattern>
-  </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>usersServiceServlet</servlet-name>
+        <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
+        <url-pattern>/nsheets/usersService</url-pattern>
+    </servlet-mapping>
 
     <!-- Servlet for Extension Configuration -->
-  <servlet>
-    <servlet-name>configurationServiceServlet</servlet-name>
-    <servlet-class>pt.isep.nsheets.server.services.ConfigurationServiceImpl</servlet-class>
-  </servlet>
+    <servlet>
+        <servlet-name>configurationServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.ConfigurationServiceImpl</servlet-class>
+    </servlet>
 
-  <servlet-mapping>
-    <servlet-name>configurationServiceServlet</servlet-name>
-    <url-pattern>/nsheets/configurationService</url-pattern>
-  </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>configurationServiceServlet</servlet-name>
+        <url-pattern>/nsheets/configurationService</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>cellsServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.CellsServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>cellsServiceServlet</servlet-name>
+        <url-pattern>/nsheets/cellsService</url-pattern>
+    </servlet-mapping>
 
     <!-- Servlet for Extension Conditional -->
     <servlet>
@@ -81,6 +92,18 @@
         <url-pattern>/nsheets/notesService</url-pattern>
     </servlet-mapping>
 
+    <!-- Servlets for the contacts -->
+    <servlet>
+        <servlet-name>contactsServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.ContactsServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>contactsServiceServlet</servlet-name>
+        <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
+        <url-pattern>/nsheets/contactsService</url-pattern>
+    </servlet-mapping>
+
     <!-- Servlets for the charts -->
     <servlet>
         <servlet-name>pt.isep.nsheets.nsheets ChartsService</servlet-name>
@@ -95,7 +118,7 @@
 
     <servlet>
         <servlet-name>exportServiceServlet</servlet-name>
-        <servlet-class>pt.isep.nsheets.server.services.ExportServiceImp</servlet-class>
+        <servlet-class>pt.isep.nsheets.server.services.ExportServiceImpl</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -103,15 +126,10 @@
         <url-pattern>/nsheets/ExportService</url-pattern>
     </servlet-mapping>
 
-    	<!-- Servlets for the notes -->
+    <!-- Servlets for the notes -->
     <servlet>
         <servlet-name>messagesServiceServlet</servlet-name>
         <servlet-class>pt.isep.nsheets.server.services.MessagesServiceImpl</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>pt.isep.nsheets.nsheets CalendarEventService</servlet-name>
-        <servlet-class>pt.isep.nsheets.server.services.CalendarEventImpl</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -120,8 +138,58 @@
         <url-pattern>/nsheets/messagesService</url-pattern>
     </servlet-mapping>
 
+    <!-- Servlet for Calendar Events-->
+    <servlet>
+        <servlet-name>pt.isep.nsheets.nsheets CalendarEventService</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.CalendarEventImpl</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>pt.isep.nsheets.nsheets CalendarEventService</servlet-name>
         <url-pattern>/nsheets/calendarEventsService</url-pattern>
+    </servlet-mapping>
+
+    <!-- Servlets for the spreadsheet -->
+    <servlet>
+        <servlet-name>spreadsheetServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.SpreadsheetServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>spreadsheetServiceServlet</servlet-name>
+        <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
+        <url-pattern>/nsheets/spreadsheetService</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>signupServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.lapr4.red.s2.ipc.n1161292.services.SignupServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>signupServiceServlet</servlet-name>
+        <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
+        <url-pattern>/nsheets/signupService</url-pattern>
+    </servlet-mapping>
+
+    <!-- Servlet for Import -->
+    <servlet>
+        <servlet-name>pt.isep.nsheets.nsheets ImportService</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.ImportServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>pt.isep.nsheets.nsheets ImportService</servlet-name>
+        <url-pattern>/nsheets/importService</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>downloadService</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.DownloadServelet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>downloadService</servlet-name>
+        <url-pattern>/nsheets/downloadService</url-pattern>
     </servlet-mapping>
 </web-app>

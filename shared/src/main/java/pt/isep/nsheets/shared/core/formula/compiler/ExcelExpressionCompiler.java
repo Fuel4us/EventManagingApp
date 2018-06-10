@@ -57,15 +57,16 @@ public class ExcelExpressionCompiler implements ExpressionCompiler {
      * Creates the Excel expression compiler.
      */
     public ExcelExpressionCompiler() {
-        // (ATB) Instantiate the language
         language = LanguageManager.getInstance().getLanguage("excel");
-//    		language=new ExcelLanguage();
+        //language=new ExcelLanguage();
     }
 
+    @Override
     public char getStarter() {
         return FORMULA_STARTER;
     }
 
+    @Override
     public Expression compile(Cell cell, String source) throws FormulaCompilationException {
         // Creates the lexer and parser
         ANTLRInputStream input = new ANTLRInputStream(source);
@@ -85,7 +86,7 @@ public class ExcelExpressionCompiler implements ExpressionCompiler {
         if (parser.getNumberOfSyntaxErrors() > 0) {
             throw new FormulaCompilationException(formulaErrorListener.getErrorMessage());
         }
-
+        
         // Visit the expression and returns it
         FormulaEvalVisitor eval = new FormulaEvalVisitor(cell, language);
         Expression result = eval.visit(tree);

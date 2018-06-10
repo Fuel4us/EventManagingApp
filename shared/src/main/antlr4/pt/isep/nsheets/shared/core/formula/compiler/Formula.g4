@@ -6,17 +6,21 @@ grammar Formula;
 	         
 expression
 	: EQ comparison /* EOF */
+        | HH monetary /* EOF */
 	;
 	
 comparison
 	: concatenation
 		( ( EQ | NEQ | GT | LT | LTEQ | GTEQ ) concatenation )?
-        | ICHA manyexpressions FCHA
-        | FOR forexpression FCHA
 	;
 
+block
+        : manyexpressions
+        | FOR forexpression
+        ;
+
 forexpression
-        : concatenation SEMI comparison SEMI manyexpressions
+        : assignment SEMI comparison (SEMI concatenation)+ FCHA
         ;
 
 concatenation
@@ -26,6 +30,7 @@ concatenation
         | concatenation ( MULTI | DIV ) concatenation
         | concatenation ( PLUS | MINUS ) concatenation
         | concatenation AMP concatenation
+        | block
         ;
 		
 
@@ -35,6 +40,8 @@ atom
         |       assignment
 	|	literal
 	|	LPAR concatenation RPAR
+        |       globalreference
+        |       temporaryreference
 	;
 
 function_call
@@ -45,26 +52,49 @@ function_call
 reference
 	:	CELL_REF
 		( ( COLON ) CELL_REF )?
-		| temporaryreference
 	;
 	
 literal
 	:	NUMBER
 	|	STRING
+        |       nameglobal
+        |       nameTemporary
 	;
 	
 manyexpressions
-	:	comparison (SEMI comparison)*
+	:	ICHA comparison (SEMI comparison)* FCHA
 	;
 	
 assignment
 	:	reference ASSIGN concatenation
 	;
 
+monetary    
+        : currency ICHA account FCHA
+        ;
+
+account: numbermonetary coinsign (operator numbermonetary coinsign)*
+        ;
+        
+operator: PLUS 
+        | MINUS 
+        | DIV 
+        | MULTI
+        ;
+
+currency: 'dollar'
+        | 'pound'
+        | 'euro'
+        ;
+
+coinsign: DOLLAR
+        | POUND
+        | EURO
+        ;
+
 LETTER: ('a'..'z'|'A'..'Z') ;
   
-FUNCTION : 
-	  ( LETTER )+
+FUNCTION : ( LETTER )+
 	;	
 	 
 CELL_REF
@@ -74,8 +104,19 @@ CELL_REF
 	
 
 temporaryreference
-    :	temporaryreference ASSIGN concatenation
-    |   UNDERSCORE LETTER+
+    :	nameTemporary ASSIGN concatenation
+    ;
+
+nameTemporary
+    :   UNDERSCORE ( LETTER )+
+    ;
+
+globalreference
+    :	nameglobal ASSIGN concatenation
+    ;
+
+nameglobal
+    :   ARROBA ( LETTER )+
     ;
 
 /* String literals, i.e. anything inside the delimiters */
@@ -88,29 +129,40 @@ QUOT: '"'
 
 /* Numeric literals */
 NUMBER: DIGITNOTZERO ( DIGIT )* FRACTIONALPART? 
-		| DIGIT FRACTIONALPART;
+        | DIGIT FRACTIONALPART
+        ;
 		
-FRACTIONALPART: ( COMMA ( DIGIT )+ );
+FRACTIONALPART:  COMMA  DIGIT DIGIT
+                | DOT DIGIT DIGIT?
+                ;
+
+/*Numeric Monetary*/
+numbermonetary: DIGITNOTZERO ( DIGIT )* fractionalpartmonetary?
+                | DIGIT fractionalpartmonetary
+                ;
+
+fractionalpartmonetary: DOT DIGIT DIGIT?
+                       ;
 
 DIGIT : '0'..'9' ;
 DIGITNOTZERO : '1'..'9' ;
 
 /* Comparison operators */
-EQ		: '=' ;
-NEQ		: '<>' ;
+EQ	: '=' ;
+NEQ	: '<>' ;
 LTEQ	: '<=' ;
 GTEQ	: '>=' ;
-GT		: '>' ;
-LT		: '<' ;
+GT	: '>' ;
+LT	: '<' ;
 
 /* Text operators */
-AMP		: '&' ;
+AMP	: '&' ;
 
 /* Arithmetic operators */
 PLUS	: '+' ;
 MINUS	: '-' ;
 MULTI	: '*' ;
-DIV		: '/' ;
+DIV	: '/' ;
 POWER	: '^' ;
 PERCENT : '%' ;
 
@@ -119,9 +171,12 @@ fragment ABS : '$' ;
 fragment EXCL:  '!'  ;
 COLON	: ':' ;
 UNDERSCORE : '_' ;
- 
+ARROBA : '@' ;
+HH : '#' ; 
+
 /* Miscellaneous operators */
 COMMA	: ',' ;
+DOT     : '.' ;
 SEMI	: ';' ;
 LPAR	: '(' ;
 RPAR	: ')' ;
@@ -129,6 +184,11 @@ ICHA	: '{' ;
 FCHA	: '}' ;
 LBRACKET : '[' ;
 RBRACKET : ']' ;
+
+/* Coin Signs */
+EURO : '\u20AC' ;
+DOLLAR : '\u0024' ;
+POUND : '\u00A3' ;
 
 /* Assignment Operator */
 ASSIGN 	: ':=' ;

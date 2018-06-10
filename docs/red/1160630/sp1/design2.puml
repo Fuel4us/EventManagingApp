@@ -1,4 +1,4 @@
-@startuml  design2.png
+@startuml  design2
 skinparam handwritten true
 skinparam monochrome true
 skinparam packageStyle rect
@@ -32,7 +32,7 @@ box "Database"
 participant Database
 end box
 
-User -> HomeView : click new workbook
+User -> HomeView : click new chart
 HomeView -> HomePresenter : onClick()
 HomePresenter ->> WorkbookServices : newWorkbookDescription(DTO)
 WorkbookServices -> AddWorkbookDescriptionController : addWorbookDescription(DTO)

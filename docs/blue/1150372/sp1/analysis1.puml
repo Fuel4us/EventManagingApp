@@ -1,0 +1,16 @@
+@startuml  analysis1
+
+skinparam monochrome true
+skinparam shadowing false
+hide footbox
+
+actor User
+
+User -> Browser : Add formula with many expressions
+Browser ->> Shared : visitExpression()
+Shared ->> CellImpl : setContent()
+
+Shared --> Browser : return result
+Browser -> User : display
+
+@enduml

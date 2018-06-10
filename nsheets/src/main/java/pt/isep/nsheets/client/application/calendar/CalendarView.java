@@ -69,34 +69,33 @@ class CalendarView extends ViewImpl implements CalendarPresenter.MyView {
 
         CalendarEventServiceAsync service = GWT.create(CalendarEventService.class);
 
-        AsyncCallback<CalendarEventDTO> callback = new AsyncCallback<CalendarEventDTO>() {
-            public void onSuccess(CalendarEventDTO calendarEventDTO) {
+        AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+            public void onSuccess(Void aVoid) {
                 MaterialToast.fireToast("Event created successfully!", "rounded");
+                refreshView();
             }
 
             public void onFailure(Throwable caught) {
-                MaterialToast.fireToast("Error!", "rounded");
+                MaterialToast.fireToast("There was an error creating the event", "rounded");
             }
         };
 
         service.createCalendarEvent(calendarEvent, callback);
-
-        emptyState.setVisible(false);
-        createCard(calendarEvent);
     }
 
-    public void editEvent() {
-        CalendarEventDTO calendarEvent = new CalendarEventDTO(title(), description(), date(), time(), duration());
+    public void editEvent(CalendarEventDTO calendarEvent) {
+        closeModal();
 
         CalendarEventServiceAsync service = GWT.create(CalendarEventService.class);
 
-        AsyncCallback<CalendarEventDTO> callback = new AsyncCallback<CalendarEventDTO>() {
-            public void onSuccess(CalendarEventDTO aVoid) {
+        AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+            public void onSuccess(Void aVoid) {
                 MaterialToast.fireToast("Event edited successfully!", "rounded");
+                refreshView();
             }
 
             public void onFailure(Throwable caught) {
-                MaterialToast.fireToast("Error!", "rounded");
+                MaterialToast.fireToast("There was an error editing the event", "rounded");
             }
         };
 
@@ -106,13 +105,14 @@ class CalendarView extends ViewImpl implements CalendarPresenter.MyView {
     public void deleteEvent(CalendarEventDTO calendarEvent) {
         CalendarEventServiceAsync service = GWT.create(CalendarEventService.class);
 
-        AsyncCallback<CalendarEventDTO> callback = new AsyncCallback<CalendarEventDTO>() {
-            public void onSuccess(CalendarEventDTO aVoid) {
+        AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+            public void onSuccess(Void aVoid) {
                 MaterialToast.fireToast("Event deleted successfully!", "rounded");
+                refreshView();
             }
 
             public void onFailure(Throwable caught) {
-                MaterialToast.fireToast("Error!", "rounded");
+                MaterialToast.fireToast("There was an error deleting the event", "rounded");
             }
         };
 
@@ -190,7 +190,7 @@ class CalendarView extends ViewImpl implements CalendarPresenter.MyView {
         openModal();
     }
 
-    public void createEditModal(CalendarEventDTO calendarEventDTO) {
+    public void createEditModal(CalendarEventDTO calendarEvent) {
         modal = new MaterialModal();
         modal.setType(ModalType.FIXED_FOOTER);
         modal.setDismissible(false);
@@ -205,12 +205,12 @@ class CalendarView extends ViewImpl implements CalendarPresenter.MyView {
 
         calendarEventNameTextBox = new MaterialTextBox();
         calendarEventNameTextBox.setLabel("Name");
-        calendarEventNameTextBox.setValue(calendarEventDTO.getName());
+        calendarEventNameTextBox.setValue(calendarEvent.getName());
         content.add(calendarEventNameTextBox);
 
         calendarEventDescriptionTextArea = new MaterialTextArea();
         calendarEventDescriptionTextArea.setLabel("Description");
-        calendarEventDescriptionTextArea.setValue(calendarEventDTO.getDescription());
+        calendarEventDescriptionTextArea.setValue(calendarEvent.getDescription());
         content.add(calendarEventDescriptionTextArea);
 
         MaterialRow row = new MaterialRow();
@@ -228,24 +228,24 @@ class CalendarView extends ViewImpl implements CalendarPresenter.MyView {
         calendarEventDatePicker.setPlaceholder("Date");
         calendarEventDatePicker.setDateMin(new Date());
         calendarEventDatePicker.setContainer(DatePickerContainer.BODY);
-        calendarEventDatePicker.setValue(calendarEventDTO.getDate());
+        calendarEventDatePicker.setValue(calendarEvent.getDate());
         aColumn.add(calendarEventDatePicker);
 
         calendarEventTimePicker = new MaterialTimePicker();
         calendarEventTimePicker.setPlaceholder("Time");
         calendarEventTimePicker.setHour24(true);
-        calendarEventTimePicker.setValue(calendarEventDTO.getTime());
+        calendarEventTimePicker.setValue(calendarEvent.getTime());
         anotherColumn.add(calendarEventTimePicker);
 
         MaterialLabel durationLabel = new MaterialLabel();
         durationLabel.setText("Duration in minutes");
-        durationLabel.setValue(calendarEventDTO.getDuration().toString());
         content.add(durationLabel);
 
         calendarEventDuration = new MaterialRange();
         calendarEventDuration.setMin(1);
         calendarEventDuration.setMax(60);
         calendarEventDuration.setValue(15);
+        calendarEventDuration.setValue(calendarEvent.getDuration());
         content.add(calendarEventDuration);
 
         MaterialModalFooter modalFooter = new MaterialModalFooter();
@@ -260,7 +260,7 @@ class CalendarView extends ViewImpl implements CalendarPresenter.MyView {
         MaterialButton confirmCalendarEventButton = new MaterialButton();
         confirmCalendarEventButton.setText("Edit");
         confirmCalendarEventButton.setType(ButtonType.FLAT);
-        confirmCalendarEventButton.addClickHandler(event -> editEvent());
+        confirmCalendarEventButton.addClickHandler(event -> editEvent(calendarEvent));
         modalFooter.add(confirmCalendarEventButton);
 
         openModal();
@@ -285,8 +285,12 @@ class CalendarView extends ViewImpl implements CalendarPresenter.MyView {
         DateTimeFormat timeFormat = DateTimeFormat.getFormat("HH:mm");
 
         MaterialLabel dateLabel = new MaterialLabel();
-        dateLabel.setText(dateFormat.format(calendarEvent.getDate()) + " at " + timeFormat.format(calendarEvent.getTime()));
+        dateLabel.setText(dateFormat.format(calendarEvent.getDate()));
         content.add(dateLabel);
+
+        MaterialLabel timeLabel = new MaterialLabel();
+        timeLabel.setText(timeFormat.format(calendarEvent.getTime()));
+        content.add(timeLabel);
 
         MaterialLabel durationLabel = new MaterialLabel();
         durationLabel.setText(calendarEvent.getDuration().toString() + " minutes");
@@ -305,6 +309,10 @@ class CalendarView extends ViewImpl implements CalendarPresenter.MyView {
         deleteButton.setText("Delete");
         deleteButton.addClickHandler(event -> deleteEvent(calendarEvent));
         content.add(deleteButton);
+
+        //Edit and delete not implemented
+        editButton.setEnabled(false);
+        deleteButton.setEnabled(false);
 
         return card;
     }
@@ -336,35 +344,23 @@ class CalendarView extends ViewImpl implements CalendarPresenter.MyView {
         }
     }
 
-//    @Override
-//    public void createEventClickHandler(ClickHandler ch) {
-//        createCalendarEventButton.addClickHandler(ch);
-//    }
-//
-//    @Override
-//    public void editEventClickHandler(ClickHandler ch) {
-//        editCalendarEventButton.addClickHandler(ch);
-//    }
-//
-//    @Override
-//    public void deleteEventClickHandler(ClickHandler ch) {
-//        deleteButton.addClickHandler(ch);
-//    }
-//
-//    @Override
-//    public void createButtonClickHandler(ClickHandler ch) {
-//        createButton.addClickHandler(ch);
-//    }
-//
-//    @Override
-//    public void editButtonClickHandler(ClickHandler ch) {
-//        editButton.addClickHandler(ch);
-//    }
-//
-//    @Override
-//    public void cancelButtonClickHandler(ClickHandler ch) {
-//        cancelButton.addClickHandler(ch);
-//    }
+    private void refreshView() {
+        CalendarEventServiceAsync calendarEventServiceAsync = GWT.create(CalendarEventService.class);
+
+        AsyncCallback<List<CalendarEventDTO>> asyncCallback = new AsyncCallback<List<CalendarEventDTO>>() {
+            @Override
+            public void onSuccess(List<CalendarEventDTO> result) {
+                setContents(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                MaterialToast.fireToast("Database connection failed", "rounded");
+            }
+        };
+
+        calendarEventServiceAsync.getCalendarEvents(asyncCallback);
+    }
 
     @Override
     public void openModal() {
@@ -400,5 +396,4 @@ class CalendarView extends ViewImpl implements CalendarPresenter.MyView {
     public int duration() {
         return this.calendarEventDuration.getValue();
     }
-
 }

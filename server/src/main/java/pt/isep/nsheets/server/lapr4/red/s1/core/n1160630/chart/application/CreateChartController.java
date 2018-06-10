@@ -40,10 +40,10 @@ public class CreateChartController implements Controller{
         return chart;
     }
     
-    public String[][] generateChartValues(ChartDTO dto, SpreadsheetDTO ss){
+    public ChartDTO generateChartValues(ChartDTO dto, SpreadsheetDTO ss){
         Chart c = newChart(dto, ss);
-        c.generateChartValues(SpreadsheetImpl.fromDTO(ss));
-        return c.toDTO().getContent();
+        c.generateChartValues(SpreadsheetImpl.fromDTO(ss, ss.columns, ss.rows));
+        return c.toDTO();
     }
     
 }

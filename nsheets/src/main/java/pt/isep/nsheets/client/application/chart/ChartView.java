@@ -13,7 +13,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.gwt.charts.client.ChartLoader;
@@ -44,7 +43,7 @@ import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.animate.MaterialAnimation;
 import gwt.material.design.client.ui.animate.Transition;
 import javax.inject.Inject;
-import pt.isep.nsheets.client.application.Settings;
+import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.services.ChartDTO;
@@ -62,6 +61,8 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     private static final int EXIT_TIME = 500;
     private ColumnChart chart;
     private boolean edit = false;
+    public static ChartDTO chartDTO;
+    Spreadsheet s = Settings.getInstance().getWorkbook().getSpreadsheet(0);
     
 
     @Override
@@ -98,11 +99,21 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     public void saveChart(ClickHandler click) {
         save_chart_btn.addClickHandler(click);
     }
+    
+    @Override
+    public void click_edit(ClickHandler e) {
+        edit_card.setVisible(false);
+        chart_card.setVisible(true);
+
+        enterEditCard(false);
+    }
 
     @Override
     public boolean isEditMode() {
         return this.edit;
     }
+
+    
 
     interface Binder extends UiBinder<Widget, ChartView> {
     }
@@ -110,7 +121,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     class CellValidator extends RegExValidator {
 
         public CellValidator() {
-            super("[a-zA-Z]*[0-9]*", "The cell pattern should be \"[a-zA-Z][0-9]*\", i.e: \"A3\"");
+            super("[A-Za-z]+[1-9][0-9]*", "The cell pattern should be \"[a-zA-Z]{1,}[1-9]{1}[0-9]{0,}\", i.e: \"A3\"");
         }
     }
 
@@ -151,11 +162,8 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     }
 
     @UiHandler("edit_button")
-    void click_edit(ClickEvent e) {
-        edit_card.setVisible(false);
-        chart_card.setVisible(true);
-
-        enterEditCard(false);
+    void edit_button(ClickEvent e){
+        click_edit(event->{});
     }
 
     @UiHandler("start_textbox")
@@ -173,7 +181,6 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         if (!edit) {
             if (enableElements(false)) {
                 edit = true;
-//                drawChart(chartName(), , isRow(), isConsiderFirstField());
             }
 
         } else {
@@ -202,7 +209,6 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
             public void run() {
                 chart = new ColumnChart();
                 cardContent.add(chart);
-//                setLoop();
             }
         });
     }
@@ -226,10 +232,9 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
 
         // Prepare the data
         
-        MaterialToast.fireToast("DRAW CHART");
         
         ChartsServiceAsync chartSrv = GWT.create(ChartsService.class);
-            AsyncCallback<String[][]> callback = new AsyncCallback<String[][]>() {
+            AsyncCallback<ChartDTO> callback = new AsyncCallback<ChartDTO>() {
                 @Override
                 public void onFailure(Throwable caught) {
                     MaterialToast.fireToast("Error draw chart --> " + caught.getMessage());
@@ -238,14 +243,14 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
                         {"1", "2", "3"},
                         {"1", "2", "A"}};
                     draw(chart_name, matrix, dto.isRow(), dto.isConsiderFirstField());
-                    MaterialToast.fireToast("UNSUCESS draw chart!");
+                    MaterialToast.fireToast("UNSUCESS drawing chart!");
                 }
 
                 @Override
-                public void onSuccess(String[][] result) {
-                    String[][] matrix = result;
-                    draw(chart_name, matrix, dto.isRow(), dto.isConsiderFirstField());
-                    MaterialToast.fireToast("SUCESS draw chart!");
+                public void onSuccess(ChartDTO result) {
+                    chartDTO = result;
+                    draw(chart_name, result.getContent(), dto.isRow(), dto.isConsiderFirstField());
+                    MaterialToast.fireToast("SUCESS drawing chart!");
                 }
 
             };
@@ -255,6 +260,8 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
             if(spreadsheet.toDTO() != null && dto !=null) {
                 chartSrv.getChartContent(dto, spreadsheet.toDTO(), callback);
             }
+            
+            
            
     }
     
@@ -266,12 +273,11 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         int start;
 
         if (isRow) {
-
+            
             char letter = 'A';
-            for (int i = 1; i <= matrix.length; i++) {
+            for (int i = 0; i < matrix[0].length; i++) {
                 dataTable.addColumn(ColumnType.NUMBER, String.valueOf(i));
             }
-
             dataTable.addRows(matrix.length);
 
             if (considerFirstLine) {
@@ -286,7 +292,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
                     letter++;
                 }
             }
-
+            
             for (int row = 0; row < matrix.length; row++) {
                 for (int col = start; col < matrix[row].length; col++) {
                     if (canAddColumn(matrix[row][col])) {
@@ -299,7 +305,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
             fieldName = "Column";
             char letter = 'A';
             matrix = transposeMatrix(matrix);
-            for (int i = 0; i < matrix.length; i++) {
+            for (int i = 0; i < matrix[0].length; i++) {
                 dataTable.addColumn(ColumnType.NUMBER, String.valueOf(letter));
                 letter++;
             }
@@ -318,6 +324,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
                     dataTable.setValue(i, 0, String.valueOf(i + 1));
                 }
             }
+            
 
             for (int row = 0; row < matrix.length; row++) {
                 for (int col = start; col < matrix[row].length; col++) {
@@ -368,7 +375,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         return options;
     }
 
-    private void enterEditCard(boolean firstTime) {
+    public void enterEditCard(boolean firstTime) {
         animate(chart_card, Transition.SLIDEOUTRIGHT, chart_button, edit_button, false, firstTime, EXIT_TIME);
         animate(edit_card, Transition.SLIDEINLEFT, chart_button, edit_button, true, firstTime, ENTER_TIME);
 
@@ -451,6 +458,20 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
                 return false;
             } else if (start_textbox.getValue().length() == 0) {
                 MaterialToast.fireToast("Invalid Start");
+                return false;
+            }
+            
+            Address firstCell = new Address(start_textbox.getValue());
+            Address lastCell = new Address(end_textbox.getValue());
+            
+            if(firstCell.compareTo(lastCell)>= 0){
+                MaterialToast.fireToast("The first cell is should be shorter than the last");
+                return false;
+            }else if(firstCell.getColumn() >= s.getColumnCount() || firstCell.getRow()>=s.getRowCount() ||firstCell.getRow() < 0 || firstCell.getColumn()<0){
+                MaterialToast.fireToast("The first cell is too big");
+                return false;
+            }else if(lastCell.getColumn() >= s.getColumnCount() || lastCell.getRow()>=s.getRowCount()||lastCell.getRow() < 0 || lastCell.getColumn()<0){
+                MaterialToast.fireToast("The second cell is too big");
                 return false;
             }
 

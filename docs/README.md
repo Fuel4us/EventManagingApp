@@ -67,7 +67,7 @@ This is a table that should display the overall planning of the team. This is si
 | Red  | [Gonçalo Silva](red/1161140/) | [Core06.1](red/1161140/sp1) | [IPC04.2](red/1161140/sp2) |		|
 | Red  | [Pedro Vieira](red/1160634/) | [Core07.1](red/1160634/sp1) | [IPC08.2](red/1160634/sp2) |		|
 | Red  | [Tiago Babo](red/1160760/) | [Core05.1](red/1160760/sp1) |								 |		|
-| Red  | [José Santo](red/1160629/) | [Core02.1](red/1160629/sp1) |								 |		|
+| Red  | [José Santo](red/1160629/) | [Core02.1](red/1160629/sp1) |	[IPC05.2](red/1160629/sp2)						 |		|
 | Red  | [Bernardo Carreira](red/1150990/) | [Core08.1](red/1150990/sp1) |								 |		|
 | Green | [Carlos Figueiredo](green/1140317/) | [IPC06.1](green/1140317/sp1) | [Lang04.2](green/1140317/sp2) |		|
 | Green | [Diogo Monteiro](green/1140302/) | [IPC02.1](green/1140302/sp1) | [Lang05.2](green/1140302/sp2) |		|
@@ -76,12 +76,12 @@ This is a table that should display the overall planning of the team. This is si
 | Green | [Mário Vaz](green/1160832/) | [IPC07.1](green/1160832/sp1) | [Lang08.1](green/1160832/sp2) |		|
 | Green | [Leandro Pinto](green/1160815/) | [IPC08.1](green/1160815/sp1) | [Lang02.2](green/1160815/sp2) |		|
 | Green | [Pedro Rodrigues](green/1140572/) | [IPC06.1](green/1140572/sp1) | [Lang01.2](green/1140572/sp2) |		|
-| Green | [Rúben Ribeiro](green/1160998/) | [IPC05.1](green/1160998/sp1) | [Lang06.2](green/1160998/sp2) |		|
+| Green | [Rúben Ribeiro](green/1160998/) | [IPC05.1](green/1160998/sp1) | [Lang06.1](green/1160998/sp2) |		|
 | Blue | [Ana Mafalda](blue/1161611/) | [Lang04.1](blue/1161611/sp1) | [Core03.2](blue/1161611/sp2) |		|
-| Blue | [Hernâni Gil](blue/1050475/) | [Lang03.1](blue/1050475/sp1) | [Core08.2](blue/1050475/sp2) |		|
+| Blue | [Hernâni Gil](blue/1050475/) | [Lang03.1](blue/1050475/sp1) | [Core08.1](blue/1050475/sp2) |		|
 | Blue | [João Pires](blue/1150455/) | [Lang02.1](blue/1150455/sp1) | [Core01.2](blue/1150455/sp2) |		|
 | Blue | [João Pereira](blue/1150478/) | [Lang05.1](blue/1150478/sp1) | [Core02.2](blue/1150478/sp2) |		|
-| Blue | [Josué Lapa](blue/1160713/) | [Lang07.1](blue/1160713/sp1) | [Core05.2](blue/1160713/sp2) |		|
+| Blue | [Josué Lapa](blue/1160713/) | [Lang07.1](blue/1160713/sp1) | [Core05.1](blue/1160713/sp2) |		|
 | Blue | [Pedro Alves](blue/1150372/) | [Lang01.1](blue/1150372/sp1) | [Core06.2](blue/1150372/sp2) |		|
 | Blue | [Tiago Correia](blue/1140403/) | [Lang06.1](blue/1150372/sp1) | [Core07.2](blue/1150372/sp2) |		|
 

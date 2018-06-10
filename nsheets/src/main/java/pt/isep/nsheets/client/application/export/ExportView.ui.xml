@@ -1,18 +1,185 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-			 xmlns:g="urn:import:com.google.gwt.user.client.ui"
-			 xmlns:m="urn:import:gwt.material.design.client.ui">
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:m="urn:import:gwt.material.design.client.ui"
+             xmlns:ma="urn:import:gwt.material.design.addins.client">
 
-	<m:MaterialPanel>
-		<g:HTMLPanel ui:field="htmlPanel">
-			<br/>
-			Export the current workbook:
-			<br>
-			</br>
-			<br/>
-		</g:HTMLPanel>
-		<m:MaterialButton ui:field="export_csv" text="Export to CSV" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
-                <m:MaterialButton ui:field="export_xml" text="Export to XML" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
-                <m:MaterialButton ui:field="export_pdf" text="Export to PDF" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
-	</m:MaterialPanel>
+    <ui:with field='res' type='pt.isep.nsheets.client.resources.AppResources' />
+    
+    <ui:style>
+        .overlay{
+        background-color: rgba(63, 184, 232, 0.65);
+        background-color: transparent;
+        max-height: 100%!important;
+        border-top-left-radius: 1rem!important;
+        border-top-right-radius: 1rem!important;
+        
+        }
+        
+        .modal{
+        display: grid;
+        justify-content:center;
+        }
+        
+        .range{
+        width: 30vw;
+        }
+        
+        .footer{
+        background-color: transparent!important;
+        }
+        
+        .footer_btn{
+        color: white!important;
+        }
+        
+        .block{
+        display: block;
+        margin-bottom: 10px;
+        }
+        
+        .row{
+        }
+        
+        .radio_btn{
+        margin-rigth: 2rem;
+        }
+        
+        .label-title{
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 3rem;
+        margin-right: 1rem;
+        }
+        
+        .label{
+        color: rgb(62, 68, 79);
+        font-weight: bold;
+        display: inline-block!important;
+        margin-right: 2rem;
+        margin-bottom: 2rem;
+        }
+        
+        .card{
+        padding: 10px;
+        border-radius: 1rem!important;
+        width: 70vw;
+        }
+        
+        .doc-view{
+        border-radius: 1rem!important;
+        border: none;
+        border-style: none;
+        }
+        
+        .title{
+        padding-left: 10px;
+        font-size: 1.5rem;
+        }
+        
+        .save_btn{
+        text-align: middle;
+        justify-content: center; 
+        }
+        
+        .btn{
+        border-radius: 1.5rem!important;
+        }
+        
+        .input{
+        border: none;
+        border-radius: 10px;
+        padding: 0;
+        width: 40px;
+        height: 20px;
+        margin-left: 1rem;
+        }
+        
+        
+    </ui:style>
+     
+     
+    <m:MaterialPanel>
+        <g:HTMLPanel>
+            <br/>
+            Export the current workbook:
+            <br>
+            </br>
+            <br/>
+        </g:HTMLPanel>
+        <!--        <m:MaterialButton ui:field="export_csv" text="Export to CSV" waves="TEAL" textColor="WHITE"
+        iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
+<m:MaterialButton ui:field="export_xml" text="Export to XML" waves="TEAL" textColor="WHITE"
+        iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
+<m:MaterialButton ui:field="export_pdf" text="Export to PDF" waves="TEAL" textColor="WHITE"
+        iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>
+<m:MaterialButton ui:field="export_csl" text="Export to CSL" waves="TEAL" textColor="WHITE"
+        iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10"/>-->
+        
+        <m:MaterialRow>
+            <m:MaterialButton ui:field="export_csv" text="Export to CSV" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10" marginTop="10"/>
+            
+            <m:MaterialButton ui:field="export_xml" text="Export to XML" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10" marginTop="10" />
+            
+            
+            <m:MaterialButton ui:field="export_pdf" text="Fast Export to PDF" waves="TEAL" textColor="WHITE" iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10" marginTop="10"/>
+            
+            <m:MaterialButton ui:field="export_csl" text="Export to CSL" waves="TEAL" textColor="WHITE"
+                              iconType="FILE_DOWNLOAD" iconPosition="RIGHT" marginRight="10" marginTop="10"/>
+            
+            <m:MaterialButton ui:field="style_export_pdf" text="Styled Export to PDF" waves="LIGHT" textColor="WHITE" iconType="PICTURE_AS_PDF" iconPosition="RIGHT" marginRight="10" marginTop="10"/>
+            
+        </m:MaterialRow>
+        
+        
+        <m:MaterialModal ui:field="modal"  type="BOTTOM_SHEET"  textColor="WHITE" addStyleNames="{style.overlay}">
+            <m:MaterialModalContent addStyleNames="{style.modal}">
+                <m:MaterialCard addStyleNames="{style.card} {style.row}" >
+                    <m:MaterialCardTitle  text="PDF STYLER"  textColor="BLACK" addStyleNames="{style.title}" />
+                    <m:MaterialRow grid="s12 m12 l6">
+                        <m:MaterialColumn grid="s12">
+                            <m:MaterialLabel text="Line Configuration" addStyleNames="{style.label-title} {style.label}"/>
+                        </m:MaterialColumn>
+                        <m:MaterialColumn grid="s12">
+                            <m:MaterialLink  text="Line Type" textColor="BLACK" iconType="LINE_STYLE" iconPosition="LEFT" addStyleNames="{style.label}" />
+                                
+                            <m:MaterialRadioButton  ui:field="dotted" formValue="dotted" name="color" text="Dotted" type="GAP" addStyleNames="{style.label} {style.radio_btn}"/>
+                               
+                            <m:MaterialRadioButton ui:field="double_" formValue="double" name="color" text="Double" type="GAP" addStyleNames="{style.label} {style.radio_btn}"/>
+                               
+                            <m:MaterialRadioButton ui:field="solid" formValue="solid" name="color" text="Solid" type="GAP"  addStyleNames="{style.label} {style.radio_btn}"/>
+                               
+                            <m:MaterialRadioButton ui:field="dashed" formValue="dashed" name="color" text="Dashed" type="GAP"  addStyleNames="{style.label} {style.radio_btn}"/>
+                        </m:MaterialColumn>
+                        <m:MaterialColumn grid="s12">
+                            <m:MaterialLink  text="Line Size" textColor="BLACK" iconType="VIEW_DAY" iconPosition="LEFT" addStyleNames="{style.label}" />
+                            <m:MaterialRange ui:field="rangeSetValue" min="1" max="10" value="1"  addStyleNames="{style.label} {style.range}"/>
+                        </m:MaterialColumn>
+                        <m:MaterialColumn grid="s12">
+                            <m:MaterialLink  text="Line Color" textColor="BLACK" iconType="COLOR_LENS" addStyleNames="{style.label}" iconPosition="LEFT"/>
+                            <m:MaterialInput ui:field="color_line" type="COLOR" addStyleNames="{style.input} {style.label}"/>
+                        </m:MaterialColumn >
+                        <m:MaterialColumn textAlign="CENTER" grid="s12">
+                            <m:MaterialButton ui:field="save" text="Generate PDF" waves="LIGHT" addStyleNames="{style.btn}" iconType="SAVE"/>
+                        </m:MaterialColumn>
+                    </m:MaterialRow>
+                </m:MaterialCard>
+                            
+                <!--                    <m:MaterialColumn grid="s12 m12 l6">
+                    <m:MaterialCard addStyleNames="{style.card}">
+                        <m:MaterialCardTitle  text="PDF PREVIEW"  textColor="BLACK" addStyleNames="{style.title}" />
+                        <ma:docviewer.MaterialDocViewer ui:field="dock_viewer" width="100%" height="90%" url="" addStyleNames="{style.doc-view}"/>
+                        <m:MaterialRow textAlign="CENTER">
+                            <m:MaterialButton ui:field="save_pdf" text="Save PDF" waves="LIGHT" addStyleNames="{style.btn}" iconType="PICTURE_AS_PDF "/>
+                        </m:MaterialRow>
+                    </m:MaterialCard>
+                </m:MaterialColumn>-->
+                    
+            </m:MaterialModalContent>
+            <m:MaterialModalFooter addStyleNames="{style.footer}">
+                <m:MaterialButton ui:field="close" text="Close PDF Styler" iconType="CLOSE" type="FLAT" addStyleNames="{style.footer_btn}"/>
+            </m:MaterialModalFooter>
+        </m:MaterialModal>
+        
+    </m:MaterialPanel>
 </ui:UiBinder>

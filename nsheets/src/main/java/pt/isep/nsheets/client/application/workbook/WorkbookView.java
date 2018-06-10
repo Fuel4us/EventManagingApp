@@ -54,20 +54,20 @@ import pt.isep.nsheets.server.lapr4.green.s1.core.n1140302.search.Application.Se
 import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
-import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.Formula.BinaryOperationExtension;
-
-import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.application.SortSpreadsheetController;
-import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalFormattingExtension;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core.CellStyle;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtension;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
-import pt.isep.nsheets.client.application.Settings;
+
+import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetController;
+import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.services.*;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
@@ -75,7 +75,7 @@ import pt.isep.nsheets.shared.services.*;
 public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
     public static ChartDTO selectedChart;
-    
+
     @Override
     public MaterialTextBox getFirstBox() {
         return firstBox;
@@ -101,7 +101,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTitle searchTitle;
     @UiField
     MaterialTextArea searchTextArea;
-    
+
     @UiField
     MaterialLink saveButton, click_chart;
     /*
@@ -150,8 +150,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialDropDown chart_dropdown;
     @UiField
-    MaterialPopupMenu popupMenu, popChart;
-
+    MaterialPopupMenu popChart;
+    @UiField
+    static MaterialPopupMenu popupMenu;
 
     @UiField
     MaterialLink sortLink;
@@ -167,11 +168,15 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialListBox sortListBox;
     @UiField
     MaterialDataTable<SheetCell> customTable;
-    
+
     @UiHandler("click_chart")
-    void onclick(ClickEvent e){
+    void onclick(ClickEvent e) {
         this.activeCell = null;
         selectedChart = null;
+    }
+
+    public static MaterialPopupMenu getPopupMenu() {
+        return popupMenu;
     }
 
     @Override
@@ -183,7 +188,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     public MaterialPopupMenu getPopChart() {
         return popChart;
     }
-    
+
     @Override
     public void setText(String string) {
         searchTextArea.setText(string);
@@ -235,8 +240,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
     }
 
-    void initWorkbook() {
-
+    @Override
+    public void initWorkbook() {
         Spreadsheet sh = Settings.getInstance().getWorkbook().getSpreadsheet(0);
 
         int columnNumber = 0;
@@ -260,7 +265,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 //            if (k == 1) {
 //                cell.getCell(4).addChart(initChartTEST());
 //            }
-
             rows.add(cell);
         }
         customTable.setRowData(0, rows);
@@ -283,7 +287,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                     activeCell.setContent(firstBox.getText());
 //                    SpreadsheetImpl.fromDTO(Settings.getInstance().getWorkbook().spreadsheets.get(0).cells(activeCell.getAddress()).setContent(firstBox.getText());
                     Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
-                    if(extensionCond !=null){
+                    if (extensionCond != null) {
 
                         Conditional cond = ConditionalFormattingExtension.containsCondition((CellImpl) activeCell);
 
@@ -291,6 +295,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                         if(cond != null){
                             boolean flag = ConditionalFormattingExtension.setOperation((CellImpl)activeCell, cond.getCondOperator(), cond.getCondValue());
                             MaterialToast.fireToast("Update Cell. Conditional this "+ activeCell.getAddress().toString()+" " + cond.getCondOperator()+ " "+ cond.getCondValue().toString() + " is "+flag);
+
                         }
                     }
 //                    SpreadsheetImpl.fromDTO(Settings.getInstance().getWorkbook().spreadsheets.get(0).cells(activeCell.getAddress()).setContent(firstBox.getText());
@@ -312,10 +317,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             // Window.alert("Hello");
         });
 
-        searchButton.addClickHandler(event ->{
+        searchButton.addClickHandler(event -> {
             searchModal.open();
             CellsServiceAsync cellsServiceAsync = GWT.create(CellsService.class);
-            AsyncCallback<Void> asyncCallback = new AsyncCallback<Void>() {
+            AsyncCallback<String> asyncCallback = new AsyncCallback<String>() {
                 @Override
                 public void onFailure(Throwable throwable) {
                     MaterialToast.fireToast("Error! " + throwable.getMessage());
@@ -323,19 +328,19 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 }
 
                 @Override
-                public void onSuccess(Void aVoid) {
+                public void onSuccess(String aVoid) {
                     MaterialToast.fireToast("Cells Searched Sucessfully", "rounded");
+                    setText(aVoid);
                 }
 
             };
 
+            cellsServiceAsync.getResult( searchBox.getText(),Settings.getInstance().getWorkbook().toDTO(), asyncCallback);
 
-            String result="";
-
-            cellsServiceAsync.getResult(Settings.getInstance().getWorkbook().name(),searchBox.getText(),result,asyncCallback);
-            setText(result);
 
         });
+
+
 
         // It is possible to create your own custom renderer per table
         // When you use the BaseRenderer you can override certain draw
@@ -432,25 +437,23 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         // methods to create elements the way you would like.
         customTable.getView().setRenderer(new SheetRenderer<SheetCell>());
 
-        initWorkbook();
-        
         saveButton.addClickHandler(event -> {
             WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
 
             // Set up the callback object.
             AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
                 public void onFailure(Throwable caught) {
-                    
+
                 }
-                
+
                 public void onSuccess(WorkbookDTO result) {
                     MaterialToast.fireToast(result.name);
                 }
             };
-            
+
             workbooksSvc.addWorkbookDescription(Settings.getInstance().getWorkbook().toDTO(), callback);
         });
-        
+
         // Set the visible range of the table for pager (later)
         customTable.setVisibleRange(0, 2001);
 
@@ -468,8 +471,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             popupMenu.setPopupPosition(event.getMouseEvent().getPageX(), event.getMouseEvent().getPageY());
             popupMenu.open();
         });
-        
-        
 
         // Added access to ToolPanel to add icon widget
         Panel panel = customTable.getScaffolding().getToolPanel();
@@ -481,8 +482,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         });
         sortButton.addClickHandler(event -> {
             try {
-                boolean ascending = (sortListBox.getSelectedIndex() == 0)?true:false;
-                SortSpreadsheetController.sortCells(windowFirstBox.getText(), windowSecondBox.getText(), this.customTable.getRow(0).getData().sheet, ascending);
+                boolean ascending = (sortListBox.getSelectedIndex() == 0) ? true : false;
+                new SortSpreadsheetController().sortCells(windowFirstBox.getText(), windowSecondBox.getText(), this.customTable.getRow(0).getData().sheet, ascending);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -497,14 +498,14 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             }
         });
 
+        initWorkbook();
+
         customTable.getTableTitle().setText("The Future Worksheet!");
     }
 
     @Override
     protected void onAttach() {
         super.onAttach();
-
-        // table.getTableTitle().setText("The Future Worksheet!");
     }
 
 //    public ChartDTO initChartTEST() {
@@ -534,6 +535,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 //        return dto;
 //    }
 
+
     private void populateColourListBox(){
 
         for (Color c : Color.values()){
@@ -559,7 +561,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
     @Override
     public void addConfirmationHandler(ClickHandler cMDB) {
-            conditionalModalDoneButton.addClickHandler(cMDB);
+        conditionalModalDoneButton.addClickHandler(cMDB);
     }
 
     @Override

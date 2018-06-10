@@ -10,13 +10,16 @@ import java.awt.Font;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.NumberFormat;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.core.StyleCell;
 import pt.isep.nsheets.shared.core.Value;
 import pt.isep.nsheets.shared.ext.CellExtension;
+import pt.isep.nsheets.shared.lapr4.blue.n1150455.s1.temporaryVariables.TemporaryVariable;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.CellDTO;
 
 /**
@@ -319,6 +322,27 @@ public class StylableCell extends CellExtension {
 
     @Override
     public CellDTO toDTO() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.getDelegate().toDTO();
     }
+
+     @Override
+        public List<TemporaryVariable> tempVariableList() {
+            return this.tempVariableList();
+        }
+
+        @Override
+        public boolean addTempVariable(TemporaryVariable tempVariable) {
+            return tempVariableList().add(tempVariable);
+        }
+
+    @Override
+    public void setStyle(StyleCell style) {
+        this.getDelegate().setStyle(style);
+    }
+
+    @Override
+    public StyleCell style() {
+        return this.getDelegate().style();
+    }
+
 }

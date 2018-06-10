@@ -27,145 +27,169 @@ import java.util.SortedSet;
 import pt.isep.nsheets.shared.core.formula.Formula;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.ext.Extensible;
+import pt.isep.nsheets.shared.lapr4.blue.n1150455.s1.temporaryVariables.TemporaryVariable;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.CellDTO;
 import pt.isep.nsheets.shared.services.ChartDTO;
 
 /**
  * A cell in a spreadsheet.
- * <p>The cell has content, which can be interpreted in
- * different ways: <ul>
+ * <p>
+ * The cell has content, which can be interpreted in different ways: <ul>
  * <li>As a formula - The content should consitute a syntactically correct
  * expression, and begin with an assignment.
  * <li>As a value - If the cell contains a formula, the formula is evaluated to
  * produce a value, provided that the cell does not contain calculation errors
  * (e.g. division by 0). Otherwise, the content is interpreted as the value.
  * </ul>
+ *
  * @author Einar Pehrson
  */
 public interface Cell extends Comparable<Cell>, Extensible<Cell>, Serializable {
 
-/*
+    /*
  * LOCATION
- */
+     */
+    /**
+     * Returns the spreadsheet to which the cell belongs.
+     *
+     * @return the spreadsheet to which the cell belongs
+     */
+    public Spreadsheet getSpreadsheet();
 
-	/**
-	 * Returns the spreadsheet to which the cell belongs.
-	 * @return the spreadsheet to which the cell belongs
-	 */
-	public Spreadsheet getSpreadsheet();
+    /**
+     * Returns the address of the cell.
+     *
+     * @return the address of the cell
+     */
+    public Address getAddress();
 
-	/**
-	 * Returns the address of the cell.
-	 * @return the address of the cell
-	 */
-	public Address getAddress();
-
-/*
+    /*
  * VALUE
- */
+     */
+    /**
+     * Returns the value of the cell.
+     *
+     * @return the value of the cell
+     */
+    public Value getValue();
 
-	/**
-	 * Returns the value of the cell.
-	 * @return the value of the cell
-	 */
-	public Value getValue();
-
-/*
+    /*
  * CONTENT
- */
+     */
+    /**
+     * Returns the content of the cell, as entered by the user.
+     *
+     * @return the content of the cell
+     */
+    public String getContent();
 
-	/**
-	 * Returns the content of the cell, as entered by the user.
-	 * @return the content of the cell
-	 */
-	public String getContent();
+    /**
+     * Returns an expression representing the cell's formula.
+     *
+     * @return the cell's formula, or null if the cell does not contain one
+     */
+    public Formula getFormula();
 
-	/**
-	 * Returns an expression representing the cell's formula.
-	 * @return the cell's formula, or null if the cell does not contain one
-	 */
-	public Formula getFormula();
+    /**
+     * Sets the content of the cell and if it starts with the assignment
+     * operator attempts to parse a formula from it.
+     *
+     * @param content content
+     * @throws FormulaCompilationException if an incorrectly formatted formula
+     * was entered
+     */
+    public void setContent(String content) throws FormulaCompilationException;
 
-	/**
-	 * Sets the content of the cell and if it starts with the assignment operator
-	 * attempts to parse a formula from it.
-         * @param content content
-	 * @throws FormulaCompilationException if an incorrectly formatted formula was entered
-	 */
-	public void setContent(String content) throws FormulaCompilationException;
+    /**
+     * Clears the content of the cell.
+     */
+    public void clear();
 
-	/**
-	 * Clears the content of the cell.
-	 */
-	public void clear();
-
-/*
+    /*
  * DEPENDENCIES
- */
+     */
+    /**
+     * Returns the precedents of the cell, i.e. the cells that the formula in
+     * the cell references.
+     *
+     * @return a set of the cell's precedents
+     */
+    public SortedSet<Cell> getPrecedents();
 
-	/**
-	 * Returns the precedents of the cell, i.e. the cells that the
-	 * formula in the cell references.
-	 * @return a set of the cell's precedents
-	 */
-	public SortedSet<Cell> getPrecedents();
+    /**
+     * Returns the dependents of the cell, i.e. the cells that contain a
+     * reference to the cell in their formula.
+     *
+     * @return a set of the cells which depend on the cell
+     */
+    public SortedSet<Cell> getDependents();
 
-	/**
-	 * Returns the dependents of the cell, i.e. the cells that contain a reference
-	 * to the cell in their formula.
-	 * @return a set of the cells which depend on the cell
-	 */
-	public SortedSet<Cell> getDependents() ;
-
-/*
+    /*
  * CLIPBOARD
- */
+     */
+    /**
+     * Copies all data from the source cell to this one.
+     *
+     * @param source the cell from which data should be copied
+     */
+    public void copyFrom(Cell source);
 
-	/**
-	 * Copies all data from the source cell to this one.
-	 * @param source the cell from which data should be copied
-	 */
-	public void copyFrom(Cell source);
+    /**
+     * Moves all data from the source cell to this one.
+     *
+     * @param source the cell from which data should be moved
+     */
+    public void moveFrom(Cell source);
 
-	/**
-	 * Moves all data from the source cell to this one.
-	 * @param source the cell from which data should be moved
-	 */
-	public void moveFrom(Cell source);
-
-/*
+    /*
  * EVENT HANDLING
- */
+     */
+    /**
+     * Registers the given listener on the cell.
+     *
+     * @param listener the listener to be added
+     */
+    public void addCellListener(CellListener listener);
 
-	/**
-	 * Registers the given listener on the cell.
-	 * @param listener the listener to be added
-	 */
-	public void addCellListener(CellListener listener);
+    /**
+     * Removes the given listener from the cell.
+     *
+     * @param listener the listener to be removed
+     */
+    public void removeCellListener(CellListener listener);
 
-	/**
-	 * Removes the given listener from the cell.
-	 * @param listener the listener to be removed
-	 */
-	public void removeCellListener(CellListener listener);
-	
-	/**
-	 * Returns the listeners that have been registered on the cell.
-	 * @return the listeners that have been registered on the cell
-	 */
-	public CellListener[] getCellListeners();
-        
+    /**
+     * Returns the listeners that have been registered on the cell.
+     *
+     * @return the listeners that have been registered on the cell
+     */
+    public CellListener[] getCellListeners();
 
-        
-        public CellDTO toDTO();
-        
-         /*
+    public CellDTO toDTO();
+
+    /*
   * CHARTS
-  */   
+     */
+    public boolean hasChart();
+
+    public List<ChartDTO> chartList();
+
+    public boolean addChart(ChartDTO chart);
+
+    /*
+        TEMPORARY REFERENCE
+     */
         
-        public boolean hasChart();
-        
-        public List<ChartDTO> chartList();
-        
-        public boolean addChart(ChartDTO chart);
+    public List<TemporaryVariable> tempVariableList();
+    
+    public boolean addTempVariable(TemporaryVariable tempVariable);
+    
+    /*
+    * Cell Style
+    */
+    
+    public void setStyle(StyleCell style);
+    
+    public StyleCell style();
+    
 }

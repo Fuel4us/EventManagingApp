@@ -1,6 +1,6 @@
 package pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services;
 
-import java.io.Serializable;
+import com.google.gwt.user.client.rpc.IsSerializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,14 +9,14 @@ import java.util.List;
  * @author Tiago João Santos Rios, 1161292@isep.ipp.pt
  */
 @SuppressWarnings("serial")
-public class WorkbookDTO implements Serializable {
+public class WorkbookDTO implements IsSerializable {
     
     public String name;
     public String description;
     public List<SpreadsheetDTO> spreadsheets = new ArrayList<>();
     public int createdSpreadsheets;
     
-    private WorkbookDTO() {};
+    public WorkbookDTO() {};
     
     public WorkbookDTO(String name, String description, List<SpreadsheetDTO> spreadsheets){
         this.name = name;

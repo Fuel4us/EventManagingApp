@@ -24,7 +24,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
-import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -40,7 +39,9 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
 import gwt.material.design.client.constants.Color;
+import gwt.material.design.client.constants.Display;
 import gwt.material.design.client.constants.IconType;
+import gwt.material.design.client.ui.html.ListItem;
 import gwt.material.design.client.ui.table.MaterialDataTable;
 import pt.isep.nsheets.client.application.workbook.WorkbookView.SheetCell;
 import pt.isep.nsheets.client.place.ParameterTokens;
@@ -61,18 +62,22 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.ChartDTO;
 import pt.isep.nsheets.shared.services.WorkbooksService;
 import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
+import pt.isep.nsheets.client.application.form.FormView;
 
 import java.util.ArrayList;
 import java.util.List;
-import pt.isep.nsheets.client.application.Settings;
 import pt.isep.nsheets.shared.services.ChartsService;
 import pt.isep.nsheets.shared.services.ChartsServiceAsync;
 
 import java.text.ParseException;
+import pt.isep.nsheets.client.application.menu.MenuView;
+import pt.isep.nsheets.shared.application.Settings;
+import pt.isep.nsheets.shared.services.ChartType;
 
 public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, WorkbookPresenter.MyProxy> {
 
     private MyView view;
+    private static int chart_number = 0;
 
     interface MyView extends View {
 
@@ -107,6 +112,8 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         void setText(String string);
 
         void setContents(WorkbookDTO contents);
+
+        void initWorkbook();
     }
 
     private WorkbookDTO wDTO;
@@ -185,27 +192,43 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
             }
         });
 
-//        getView().getTable().addClickHandler(handler -> {
-//            if (getView().getActiveCell().hasChart()) {
-//                updateCellCharts(getView().getActiveCell());
-//                getView().getPopChart().setPopupPosition(handler.getClientX(), handler.getClientY());
-//                getView().getPopChart().open();
-//            } else {
-//                WorkbookView.selectedChart = null;
-//            }
-//        });
-        updateCellCharts();
+        getView().getTable().addClickHandler(handler -> {
+            getView().getChartDropDown().clear();
+            if (getView().getActiveCell().hasChart()) {
+                for (ChartDTO chart : getView().getActiveCell().chartList()) {
+                    MaterialLink link = new MaterialLink(chart.getGraph_name(), null, IconType.CHECK);
+                    if (chart.getType() == ChartType.BAR_CHART) {
+                        link.setIconType(IconType.INSERT_CHART);
+                    } else if (chart.getType() == ChartType.PIE_CHART) {
+                        link.setIconType(IconType.PIE_CHART);
+                    }
+                    link.setTextColor(Color.BLACK);
+                    link.addClickHandler(event -> {
+                        WorkbookView.selectedChart = chart;
+                        redirectToChartPage();
+                    });
+                    getView().getChartDropDown().add(link);
+                }
+                getView().getPopChart().setPopupPosition(handler.getClientX(), handler.getClientY());
+                getView().getPopChart().open();
+            } else {
+                WorkbookView.selectedChart = null;
+            }
+        });
+
     }
 
     @Override
     protected void onReveal() {
         super.onReveal();
 
-        updateCellCharts();
         SetPageTitleEvent.fire("Workbook", "The current Workbook", "", "", this);
-        
 
-        this.timer();
+        refreshWorkbooks();
+        updateCellCharts();
+
+        MaterialToast.fireToast("Workbook page updated");
+
     }
 
     private void redirectToChartPage() {
@@ -223,46 +246,26 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         AsyncCallback<ArrayList<ChartDTO>> callback = new AsyncCallback<ArrayList<ChartDTO>>() {
             @Override
             public void onFailure(Throwable caught) {
-                MaterialToast.fireToast("Error draw chart --> " + caught.getMessage());
+                MaterialToast.fireToast("Error getting charts --> " + caught.getMessage());
             }
 
             @Override
             public void onSuccess(ArrayList<ChartDTO> result) {
                 getView().getChartDropDown().clear();
                 for (ChartDTO chart : result) {
-                    Settings.getInstance().getWorkbook().getSpreadsheet(0).getCell(chart.getAssociatedCell()).addChart(chart);
+                    Cell cell = Settings.getInstance().getWorkbook().getSpreadsheet(0).getCell(chart.getAssociatedCell());
+
+                    if (!cell.chartList().contains(chart)) {
+                        cell.addChart(chart);
+                    }
                 }
-                addPopUptoCell();
-                MaterialToast.fireToast("Chart Information successfully updated ");
+                getView().getTable().getView().setRedraw(true);
+                getView().getTable().getView().refresh();
+                MaterialToast.fireToast(result.size() + " charts found!");
             }
 
         };
         chartSrv.getCharts(callback);
-
-    }
-
-    private void addPopUptoCell() {
-
-        getView().getChartDropDown().clear();
-
-        getView().getTable().addClickHandler(handler -> {
-            if (getView().getActiveCell().hasChart()) {
-                for (ChartDTO chart : getView().getActiveCell().chartList()) {
-                    MaterialLink link = new MaterialLink(chart.getGraph_name(), null, IconType.INSERT_CHART);
-                    link.setTextColor(Color.BLACK);
-                    link.addClickHandler(event -> {
-                        WorkbookView.selectedChart = chart;
-                        MaterialToast.fireToast(WorkbookView.selectedChart.getGraph_name());
-                        redirectToChartPage();
-                    });
-                    getView().getChartDropDown().add(link);
-                }
-                getView().getPopChart().setPopupPosition(handler.getClientX(), handler.getClientY());
-                getView().getPopChart().open();
-            } else {
-                WorkbookView.selectedChart = null;
-            }
-        });
 
     }
 
@@ -308,7 +311,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
             for (CellListener l : this.view.getActiveCell().getCellListeners()) {
                 l.valueChanged(this.view.getActiveCell());
             }
-            */
+             */
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -367,6 +370,26 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
             }
         };
         t.scheduleRepeating(1000);
+    }
+
+    protected void onBind() {
+        super.onBind();
+
+        getView().getFirstButton().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (getView().getFirstBox().getText().equals("form()")) {
+                    MaterialTextBox l = new MaterialTextBox();
+                    l.setEnabled(false);
+                    l.setGrid("s12");
+                    l.setPlaceholder("Hello! Welcome to the Form!!");
+                    FormView.getWindow().add(l);
+                    FormView.getWindow().open();
+                    MaterialToast.fireToast("Window opened!");
+                }
+
+            }
+        });
     }
 
 }
