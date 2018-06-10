@@ -61,10 +61,12 @@ public class ExcelExpressionCompiler implements ExpressionCompiler {
         //language=new ExcelLanguage();
     }
 
+    @Override
     public char getStarter() {
         return FORMULA_STARTER;
     }
 
+    @Override
     public Expression compile(Cell cell, String source) throws FormulaCompilationException {
         // Creates the lexer and parser
         ANTLRInputStream input = new ANTLRInputStream(source);
