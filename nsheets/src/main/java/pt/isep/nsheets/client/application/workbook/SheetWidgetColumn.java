@@ -10,7 +10,6 @@ import gwt.material.design.client.ui.table.cell.WidgetColumn;
 import org.eclipse.jdt.internal.core.util.ExceptionTableEntry;
 import pt.isep.nsheets.client.application.workbook.WorkbookView.SheetCell;
 import pt.isep.nsheets.shared.core.Cell;
-import pt.isep.nsheets.shared.core.StyleCell;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core.CellStyle;

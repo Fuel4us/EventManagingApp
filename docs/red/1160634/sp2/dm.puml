@@ -1,0 +1,17 @@
+@startuml  dm.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+hide empty methods
+
+class Message << (E,yellow) >> {
+	String text
+    Date date
+    String user
+    int chatIndex
+}
+
+@enduml

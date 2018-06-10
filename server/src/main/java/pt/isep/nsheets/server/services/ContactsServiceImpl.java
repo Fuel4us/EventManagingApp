@@ -39,7 +39,7 @@ public class ContactsServiceImpl extends RemoteServiceServlet implements Contact
     }
 
     @Override
-    public Iterable<ContactDTO> allContactsFromUser(UserDTO currentUser) {
+    public Iterable<ContactDTO> allContactsFromUser(String email) {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
@@ -47,7 +47,7 @@ public class ContactsServiceImpl extends RemoteServiceServlet implements Contact
 
         ContactsController ctrl = new ContactsController();
 
-        Iterable<Contact> contactsAux = ctrl.allContactsFromUser(currentUser);
+        Iterable<Contact> contactsAux = ctrl.allContactsFromUser(email);
 
         contactsAux.forEach(n -> contacts.add(n.toDTO()));
 
@@ -55,7 +55,7 @@ public class ContactsServiceImpl extends RemoteServiceServlet implements Contact
     }
 
     @Override
-    public Iterable<ContactDTO> allInvitations(UserDTO currentUser) {
+    public Iterable<ContactDTO> allInvitations(String email) {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
@@ -63,7 +63,7 @@ public class ContactsServiceImpl extends RemoteServiceServlet implements Contact
 
         ContactsController ctrl = new ContactsController();
 
-        Iterable<Contact> contactsAux = ctrl.allInvitations(currentUser);
+        Iterable<Contact> contactsAux = ctrl.allInvitations(email);
 
         contactsAux.forEach(n -> contacts.add(n.toDTO()));
 
@@ -71,7 +71,7 @@ public class ContactsServiceImpl extends RemoteServiceServlet implements Contact
     }
 
     @Override
-    public Iterable<ContactDTO> allAvailableContacts(UserDTO currentUser) {
+    public Iterable<ContactDTO> allAvailableContacts(String email) {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
@@ -79,7 +79,7 @@ public class ContactsServiceImpl extends RemoteServiceServlet implements Contact
 
         ContactsController ctrl = new ContactsController();
 
-        Iterable<Contact> contactsAux = ctrl.allAvailableContacts(currentUser);
+        Iterable<Contact> contactsAux = ctrl.allAvailableContacts(email);
 
         contactsAux.forEach(n -> contacts.add(n.toDTO()));
 
@@ -121,16 +121,16 @@ public class ContactsServiceImpl extends RemoteServiceServlet implements Contact
 
     /**
      *
-     * @param email
-     * @param currentUser
+     * @param emailReceiver
+     * @param emailSender
      */
     @Override
-    public void sendInvitation(String email, UserDTO currentUser) {
+    public void sendInvitation(String emailReceiver, String emailSender) {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
         ContactsController ctrl = new ContactsController();
         try {
-            ctrl.sendInvitation(email, currentUser);
+            ctrl.sendInvitation(emailReceiver, emailSender);
         } catch (DataConcurrencyException ex) {
             Logger.getLogger(ContactsServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DataIntegrityViolationException ex) {

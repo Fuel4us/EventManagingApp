@@ -1,0 +1,39 @@
+@startuml  analysis.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+User -> Browser : navigate to Chat page 
+Browser ->> Server : getMessages()
+
+database Database 
+
+Server -> Database : fetch
+
+Server -->> Browser : return
+
+Browser -> Browser : display messages
+
+User -> Browser : choose a channel
+
+Browser -> Browser : verify that the user belongs to the \n channel to see the messages
+
+User -> Browser : write a message
+
+Browser -> Server : addMessage(message)
+
+Server -> Database : saveMessage(message)
+
+Browser ->> Server : getMessages()
+
+Server -> Database : fetch
+
+Server -->> Browser : return
+
+Browser -> Browser : display messages
+
+@enduml

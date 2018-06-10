@@ -7,7 +7,7 @@ import pt.isep.nsheets.shared.services.UserDTO;
 
 public interface ContactsRepository extends Repository<Contact, Long> {
 
-    public Iterable<Contact> findAllFromUser(UserDTO user);
+    public Iterable<Contact> findAllFromUser(String email);
 
     public Contact findContactFromDTO(ContactDTO contact);
 }

@@ -142,9 +142,31 @@ public class PDFBuilder {
 
                         Cell spread_cell = ss.getCell(j, i);
 
-                        cell.setBackgroundColor(BaseColor.WHITE);
-                        
-                        cell = new PdfPCell(new Phrase(spread_cell.getContent().toUpperCase(), TABLE_FONT));
+                        Font text_font = new Font(TABLE_FONT);
+
+//                        StyleCell style_cell = spread_cell.style();
+//
+//                        if (style_cell != null) {
+//                            String hex_back_color = ColorTranformer.getHexColorByGWTColor(style_cell.getBack_color());
+//                            String hex_text_color = ColorTranformer.getHexColorByGWTColor(style_cell.getFont_color());
+//
+//                            if (hex_back_color != null && hex_back_color.length() > 0) {
+//                                ColorUtil util_color = new ColorUtil(hex_back_color);
+//                                cell.setBackgroundColor(new BaseColor(util_color.getColor().getRed(), util_color.getColor().getGreen(), util_color.getColor().getBlue()));
+//                            } else {
+//                                cell.setBackgroundColor(BaseColor.WHITE);
+//                            }
+//
+//                            if (hex_text_color != null && hex_text_color.length() > 0) {
+//                                ColorUtil util_color = new ColorUtil(hex_text_color);
+//                                text_font.setColor(util_color.getColor().getRed(), util_color.getColor().getGreen(), util_color.getColor().getBlue());
+//                            }
+//                            
+//                        }else{
+                            cell.setBackgroundColor(BaseColor.WHITE);
+//                        }
+
+                        cell = new PdfPCell(new Phrase(spread_cell.getContent().toUpperCase(), text_font));
                         cell.setBorder(Rectangle.NO_BORDER);
                         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
