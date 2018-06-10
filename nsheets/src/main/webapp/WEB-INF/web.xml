@@ -165,10 +165,18 @@
         <servlet-name>signupServiceServlet</servlet-name>
         <servlet-class>pt.isep.nsheets.server.lapr4.red.s2.ipc.n1161292.services.SignupServiceImpl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>pt.isep.nsheets.nsheets ImportService</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.ImportServiceImpl</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>signupServiceServlet</servlet-name>
         <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
         <url-pattern>/nsheets/signupService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>pt.isep.nsheets.nsheets ImportService</servlet-name>
+        <url-pattern>/nsheets/importService</url-pattern>
     </servlet-mapping>
 </web-app>
