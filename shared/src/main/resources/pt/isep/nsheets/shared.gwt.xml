@@ -3,7 +3,8 @@
     <inherits name="com.google.gwt.user.User"/>
     <inherits name="gwt.material.design.Resources"/>
     <inherits name="gwt.material.design.Resources"/>
-
+    
     <source path="client"/>
     <source path="shared"/>
+
 </module>

@@ -5,12 +5,12 @@
  */
 package pt.isep.nsheets.shared.core.formula.compiler;
 
+import eapli.util.Files;
+import gwt.material.design.client.ui.MaterialToast;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -18,14 +18,8 @@ import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.Tree;
 import pt.isep.nsheets.shared.core.Cell;
-import pt.isep.nsheets.shared.core.Value;
-import pt.isep.nsheets.shared.core.formula.BinaryOperation;
-import pt.isep.nsheets.shared.core.formula.BinaryOperator;
 import pt.isep.nsheets.shared.core.formula.Expression;
-import pt.isep.nsheets.shared.core.formula.Literal;
-import pt.isep.nsheets.shared.core.formula.UnaryOperation;
 import pt.isep.nsheets.shared.core.formula.lang.Language;
 import pt.isep.nsheets.shared.core.formula.lang.LanguageManager;
 import pt.isep.nsheets.shared.lapr4.green.s2.n1140572.MonetaryConversion.MonetaryConversion;
@@ -45,11 +39,6 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
 
     public MonetaryExpressionCompiler() {
         language = LanguageManager.getInstance().getLanguage("monetary");
-        try {
-            MonetaryConversion.readXML();
-        } catch (IOException ex) {
-            Logger.getLogger(MonetaryExpressionCompiler.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     @Override
@@ -59,7 +48,7 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
 
     @Override
     public Expression compile(Cell cell, String source) throws FormulaCompilationException {
-
+        MaterialToast.fireToast("Tamanho da Source: " + Double.toString(source.length()));
         String number = "";
         if (source.toLowerCase().contains("dollar")) {
 
@@ -70,12 +59,16 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
                     total = Double.parseDouble(number);
                     double rValue = 0;
 
-                    if (source.charAt(i) == '\u00A3') {
-                        rValue = MonetaryConversion.PoundToDollar * total;
-                    } else if (source.charAt(i) == '\u20AC') {
-                        rValue = MonetaryConversion.EuroToDollar * total;
-                    } else {
-                        rValue = total;
+                    switch (source.charAt(i)) {
+                        case '\u00A3':
+                            rValue = MonetaryConversion.PoundToDollar * total;
+                            break;
+                        case '\u20AC':
+                            rValue = MonetaryConversion.EuroToDollar * total;
+                            break;
+                        default:
+                            rValue = total;
+                            break;
                     }
 
                     String stringRealValue = Double.toString(rValue);
@@ -96,12 +89,16 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
                     total = Double.parseDouble(number);
                     double rValue = 0;
 
-                    if (source.charAt(i) == '\u20AC') {
-                        rValue = MonetaryConversion.EuroToPound * total;
-                    } else if (source.charAt(i) == '\u0024') {
-                        rValue = MonetaryConversion.DollarToPound * total;
-                    } else {
-                        rValue = total;
+                    switch (source.charAt(i)) {
+                        case '\u20AC':
+                            rValue = MonetaryConversion.EuroToPound * total;
+                            break;
+                        case '\u0024':
+                            rValue = MonetaryConversion.DollarToPound * total;
+                            break;
+                        default:
+                            rValue = total;
+                            break;
                     }
 
                     String stringRealValue = Double.toString(rValue);
@@ -116,18 +113,21 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
             }
         } else if (source.toLowerCase().contains("euro")) {
             double total;
-
             for (int i = 0; i < source.length(); i++) {
                 if (source.charAt(i) == '\u20AC' || source.charAt(i) == '\u00A3' || source.charAt(i) == '\u0024') {
                     total = Double.parseDouble(number);
                     double rValue = 0;
 
-                    if (source.charAt(i) == '\u0024') {
-                        rValue = MonetaryConversion.DollarToEuro * total;
-                    } else if (source.charAt(i) == '\u00A3') {
-                        rValue = MonetaryConversion.PoundToEuro * total;
-                    } else {
-                        rValue = total;
+                    switch (source.charAt(i)) {
+                        case '\u0024':
+                            rValue = MonetaryConversion.DollarToEuro * total;
+                            break;
+                        case '\u00A3':
+                            rValue = MonetaryConversion.PoundToEuro * total;
+                            break;
+                        default:
+                            rValue = total;
+                            break;
                     }
 
                     String stringRealValue = Double.toString(rValue);
@@ -147,6 +147,7 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
         }
 
         //Creates the lexer and parser
+        MaterialToast.fireToast(source);
         ANTLRInputStream input = new ANTLRInputStream(source);
 
         //Create the buffer of tokens between the lexer and parser
