@@ -346,24 +346,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
         return null;
     }
 
-    @Override
-    public Expression visitMonetary(FormulaParser.MonetaryContext ctx) {
-        MaterialToast.fireToast("ENTROU NO VISITMONETARY!!!");
-        if (ctx.getChildCount() == 4) {
-            try {
-                ParseTree account = ctx.getChild(2);
-                BinaryOperator operator = this.language.getBinaryOperator(account.getChild(2).getText());
-                return new BinaryOperation(
-                        visit(account.getChild(0)),
-                        operator,
-                        visit(account.getChild(3))
-                );
-            } catch (UnknownElementException ex) {
-                MaterialToast.fireToast(ex.toString());
-            }
-        }
-        return null;
-    }
+   
 
     private void addVisitError(String msg) {
         errorBuffer.append(msg).append("\n");
