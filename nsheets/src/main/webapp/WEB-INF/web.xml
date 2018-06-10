@@ -18,7 +18,8 @@
   limitations under the License.
   #L%
   -->
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
@@ -163,12 +164,23 @@
 
     <servlet>
         <servlet-name>signupServiceServlet</servlet-name>
-        <servlet-class>pt.isep.nsheets.server.services.SignupServiceImpl</servlet-class>
+        <servlet-class>pt.isep.nsheets.server.lapr4.red.s2.ipc.n1161292.services.SignupServiceImpl</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>signupServiceServlet</servlet-name>
         <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
         <url-pattern>/nsheets/signupService</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>downloadService</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.DownloadServelet</servlet-class>
+        
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>downloadService</servlet-name>
+        <url-pattern>/nsheets/downloadService</url-pattern>
     </servlet-mapping>
 </web-app>

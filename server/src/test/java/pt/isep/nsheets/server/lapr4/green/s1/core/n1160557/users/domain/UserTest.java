@@ -19,30 +19,30 @@ import pt.isep.nsheets.shared.services.UserDTO;
  * @author Hilario Coelho
  */
 public class UserTest {
-    
+
     User testUser;
     String defaultEmail = "1160557@isep.ipp.pt";
     String defaultName = "Hilario";
     String defaultNickname = "coelho98";
     Password defaultPassword = new Password("123Asd");
     boolean defaultSuperuser = true;
-    
+
     public UserTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
         testUser = new User(defaultEmail, defaultName, defaultNickname, defaultPassword, defaultSuperuser);
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -123,7 +123,7 @@ public class UserTest {
         User user_4 = new User(defaultEmail, defaultName, "", defaultPassword, defaultSuperuser);
         User user_5 = new User(defaultEmail, defaultName, defaultNickname, new Password("Mnb12345"), defaultSuperuser);
         User user_6 = new User(defaultEmail, defaultName, defaultNickname, defaultPassword, false);
-        
+
         assertEquals(false, testUser.sameAs(new String()));
         assertEquals(true, testUser.sameAs(testUser));
         assertEquals(true, testUser.sameAs(user_1));
@@ -171,5 +171,5 @@ public class UserTest {
         UserDTO dto = new UserDTO(defaultEmail, defaultName, defaultNickname, defaultPassword.toString(), defaultSuperuser);
         assertEquals(true, User.fromDTO(dto, true).sameAs(testUser));
     }
-    
+
 }

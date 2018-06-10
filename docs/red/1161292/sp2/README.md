@@ -5,15 +5,15 @@
 
 Questions made to Product Owner (LMN):
 
-'''
+```
 Q: Should I add security measures, for instance, password hash?
-A: 
-'''
+A: Yes.
+```
 
-'''
+```
 Q: Can I create business rules, like Password with minimum requirements?
-A: 
-'''
+A: Yes.
+```
 
 # 2. Requirements
 
@@ -94,4 +94,20 @@ Some Questions/Issues identified during the work in this feature increment:
 
 # 7. Work Log
 
+* [Fixed Login issues](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/282185efe8e19ae2a70534c074c6edbacab24a1b)
+* [Fixed servlet location](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/399c1744d15985a0b35e9fea3433e1091b3afbce)
+* [Created add user to database service](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/c40c22cca5b829c8aed4ec50d57f9f3885a77e66)
+* [Fixed Signup UI](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/fcbf0a808cf999aea8e759183aaeffec49b8d9f3)
+* [Added SignupServices in server module](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/593ef2c0a1ab0b70d24b4c4a31d0ed30e4a86df6)
+* [Added SignupServlet](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/f562e3202dfb6be554235726113288c59262ff59)
+* [Added all Signup Services](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/c20281b2aff243b68faa289b17c98b3f4638dbf3)
+* [Added SignupController](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/e5550b84772240362e8ce65d563dc14bdd3ce120)
+* [Fixed User Implementation and Login](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/3944d1cea73d739f6e8f6f28ea72c57cbed78fbb)
+* [Implemented ValueObject pattern and Password class; Started Builder pattern implementation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/f357f501be2867aae9f22d78e3db6060b09558c9)
+* [Solved NameTokens merge conflict](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/4d4db65cc9a4d60abf76e0de56dfbff40de02a1e)
+* [Implemented IPC01.2 UI](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/bd6b477286f62a5875b3e0f081106d9cb4aae202)
+* [Application installs SignupModule](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/64fa94c53a63774e43aca54e3a7be7d2d6764c16)
+* [Updated IPC01.2 Documentation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/dd252ec54d2fb8dfee088d0b91eca52df2b25305)
+* [Added all IPC01.2 diagrams](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/df682bd5185781fcef3730ac35917ebf20ed13c1)
+* [Added IPC01.2 US analysis](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/b2ab8171bcb22fd2e1e19954af3a4a60d14dfc21)
 * [Started IPC01.2 analysis](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/f3867671478948778f5b260af24a603b0a29ab35)

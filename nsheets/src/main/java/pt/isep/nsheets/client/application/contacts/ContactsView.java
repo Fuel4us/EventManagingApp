@@ -22,6 +22,7 @@ import gwt.material.design.client.ui.MaterialCardAction;
 import gwt.material.design.client.ui.MaterialCardContent;
 import gwt.material.design.client.ui.MaterialCollection;
 import gwt.material.design.client.ui.MaterialColumn;
+import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialRow;
 import gwt.material.design.client.ui.MaterialTextArea;
@@ -44,16 +45,16 @@ class ContactsView extends ViewImpl implements ContactsPresenter.MyView {
     MaterialCollection contactsCollection;
 
     @UiField
+    MaterialCollection invitesCollection;
+
+    @UiField
     MaterialButton openModalBtn, saveBtn;
 
     @UiField
     MaterialModal modalAddContact;
 
     @UiField
-    MaterialTextBox contactName;
-
-    @UiField
-    MaterialTextArea contactEmail;
+    MaterialTextBox contactEmail;
 
     MaterialButton checkBtn, editBtn, removeBtn;
 
@@ -69,7 +70,7 @@ class ContactsView extends ViewImpl implements ContactsPresenter.MyView {
     }
 
     @Override
-    public void buttonClickHandlerSaveContact(ClickHandler ch) {
+    public void buttonClickHandlerSendInvite(ClickHandler ch) {
 
         saveBtn.addClickHandler(ch);
     }
@@ -134,12 +135,6 @@ class ContactsView extends ViewImpl implements ContactsPresenter.MyView {
     }
 
     @Override
-    public String contactName() {
-
-        return this.contactName.getValue();
-    }
-
-    @Override
     public String contactEmail() {
 
         return this.contactEmail.getValue();
@@ -160,11 +155,11 @@ class ContactsView extends ViewImpl implements ContactsPresenter.MyView {
 
         MaterialTextBox cardTitle = new MaterialTextBox();
         cardTitle.setFontSize("1.4em");
-        cardTitle.setText(contact.getContactName());
+        cardTitle.setText(contact.getContact().getName());
         cardTitle.setReadOnly(true);
 
         MaterialTextArea cardTextArea = new MaterialTextArea();
-        cardTextArea.setText(contact.getContactEmail());
+        cardTextArea.setText(contact.getContact().getEmail());
         cardTextArea.setReadOnly(true);
 
         MaterialCardAction cardAction = new MaterialCardAction();
@@ -221,5 +216,4 @@ class ContactsView extends ViewImpl implements ContactsPresenter.MyView {
 
         return card;
     }
-
 }

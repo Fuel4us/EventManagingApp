@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.domain;
 
-import java.util.Date;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -16,15 +10,14 @@ import pt.isep.nsheets.shared.services.MessagesDTO;
 
 /**
  *
- * @author Leandro
+ * @author Leandro, Pedro Vieira
  */
 public class MessageTest {
     
     Message message;
     String DEFAULT_USER = "user1";
     String DEFAULT_TEXT = "Test message";
-    long DEFAULT_NUMBER_DATE = 100;
-    Date DEFAULT_DATE;
+    int DEFAULT_INDEX_CHAT = 0;
     
     @BeforeClass
     public static void setUpClass() {
@@ -36,8 +29,7 @@ public class MessageTest {
     
     @Before
     public void setUp() {
-        DEFAULT_DATE = new Date(DEFAULT_NUMBER_DATE);
-        message = new Message(DEFAULT_TEXT, DEFAULT_DATE, DEFAULT_USER);
+        message = new Message(DEFAULT_TEXT, DEFAULT_USER, DEFAULT_INDEX_CHAT);
     }
     
     @After
@@ -71,13 +63,14 @@ public class MessageTest {
     public void testToDTO() {
         System.out.println("toDTO");
         
-        Message instance = new Message(DEFAULT_TEXT, DEFAULT_DATE, DEFAULT_USER);
-        MessagesDTO expResult = new MessagesDTO(DEFAULT_TEXT, DEFAULT_DATE, DEFAULT_USER);
+        Message instance = new Message(DEFAULT_TEXT, DEFAULT_USER, DEFAULT_INDEX_CHAT);
+        MessagesDTO expResult = new MessagesDTO(DEFAULT_TEXT, DEFAULT_USER, DEFAULT_INDEX_CHAT);
         MessagesDTO result = instance.toDTO();
         
         assertEquals(expResult.getText(), result.getText());
         assertEquals(expResult.getUser(), result.getUser());
         assertEquals(expResult.getDate(), result.getDate());
+        assertEquals(expResult.getChatIndex(), result.getChatIndex());
     }
 
     /**
@@ -87,13 +80,14 @@ public class MessageTest {
     public void testFromDTO() {
         System.out.println("fromDTO");
         
-        MessagesDTO dto = new MessagesDTO(DEFAULT_TEXT, DEFAULT_DATE, DEFAULT_USER);;
+        MessagesDTO dto = new MessagesDTO(DEFAULT_TEXT, DEFAULT_USER, DEFAULT_INDEX_CHAT);
         Message expResult = message;
         Message result = Message.fromDTO(dto);
         
         assertEquals(expResult.toDTO().getText(), result.toDTO().getText());
         assertEquals(expResult.toDTO().getUser(), result.toDTO().getUser());
         assertEquals(expResult.toDTO().getDate(), result.toDTO().getDate());
+        assertEquals(expResult.toDTO().getChatIndex(), result.toDTO().getChatIndex());
     }
 
     /**
@@ -103,7 +97,7 @@ public class MessageTest {
     public void testSameAs() {
         System.out.println("sameAs");
         
-        Message instance = new Message(DEFAULT_TEXT, DEFAULT_DATE, DEFAULT_USER);
+        Message instance = new Message(DEFAULT_TEXT, DEFAULT_USER, DEFAULT_INDEX_CHAT);
         boolean expResult = true;
         boolean result = instance.sameAs(instance);
         

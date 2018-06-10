@@ -10,52 +10,52 @@
     <ui:style>
         @external .sidebar, .nav-wrapper;
         .sidebar {
-            padding: 10% !important;
-            font-size: 1em;
-            margin-left: -20px;
-            margin-right: -20px;
+        padding: 10% !important;
+        font-size: 1em;
+        margin-left: -20px;
+        margin-right: -20px;
         }
 
         .sidebar a {
-            padding: 0 !important;
+        padding: 0 !important;
         }
 
         .sidebar a, .sidebar i {
-            line-height: 1 !important;
-            height: 0 !important;
+        line-height: 1 !important;
+        height: 0 !important;
         }
 
         .sidebar i {
-            line-height: 0.5 !important;
+        line-height: 0.5 !important;
         }
 
         nav {
-            box-shadow: none;
+        box-shadow: none;
         }
 
         .nav-wrapper {
-            margin: 0;
+        margin: 0;
         }
 
         .logo {
-            padding: 10px;
-            border-bottom: 1px solid #E9E9E9;
+        padding: 10px;
+        border-bottom: 1px solid #E9E9E9;
         }
 
         .btnGettingStarted {
-            font-size: 1em !important;
-            margin-top: 20px;
+        font-size: 1em !important;
+        margin-top: 20px;
         }
     </ui:style>
 
-    <m:MaterialPanel>
+    <m:MaterialPanel ui:field="panel">
         <m:MaterialHeader>
             <m:MaterialNavBar ui:field="navBar" width="100%" backgroundColor="BLUE" activates="sideBar" textColor="WHITE">
                 <!-- <m:MaterialNavBar backgroundColor="PURPLE"> -->
                 <m:MaterialNavBrand text="NSheets" paddingLeft="20"/>
                 <m:MaterialNavSection float="RIGHT">
-                    <m:MaterialLink text="Login" href="#login"/>
-                    <m:MaterialLink text="Signup" href="#signup"/>
+                    <m:MaterialLink ui:field="username" text="Login" href="#login"/>
+                    <m:MaterialLink ui:field="logout" text="Signup" href="#signup"/>
                 </m:MaterialNavSection>
             </m:MaterialNavBar>
         </m:MaterialHeader>

@@ -6,17 +6,21 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface ContactsServiceAsync {
 
-    /**
-     *
-     * @param callback
-     */
-    void getContacts(AsyncCallback<ArrayList<ContactDTO>> callback);
+    void allContactsFromUser(UserDTO currentUser, AsyncCallback<ArrayList<ContactDTO>> callback);
 
-    /**
-     *
-     * @param contactsDTO
-     * @param callback
-     */
-    void addContact(ContactDTO contactsDTO, AsyncCallback<ContactDTO> callback);
+    void allInvitations(UserDTO currentUser, AsyncCallback<ArrayList<ContactDTO>> callback);
 
+    void allAvailableContacts(UserDTO currentUser, AsyncCallback<ArrayList<ContactDTO>> callback);
+
+    void acceptInvitation(ContactDTO contact, UserDTO currentUser, AsyncCallback<Void> callback);
+
+    void denyInvitation(ContactDTO contact, UserDTO currentUser, AsyncCallback<Void> callback);
+
+    void blockUser(UserDTO user, AsyncCallback<Void> callback);
+
+    void unblockUser(UserDTO user, AsyncCallback<Void> callback);
+
+    void sendInvitation(String email, UserDTO currentUser, AsyncCallback<Void> callback);
+
+    void getUserByEmail(String email, AsyncCallback<UserDTO> callback);
 }

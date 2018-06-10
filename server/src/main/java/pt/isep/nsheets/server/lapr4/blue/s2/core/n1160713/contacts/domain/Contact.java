@@ -9,35 +9,48 @@ import javax.persistence.Id;
 import eapli.framework.domain.AggregateRoot;
 import java.util.Objects;
 import pt.isep.nsheets.shared.services.ContactDTO;
+import pt.isep.nsheets.shared.services.UserDTO;
 
 @Entity
 public class Contact implements AggregateRoot<Long>, Serializable {
-
     // ORM primary key
+
     @Id
     @GeneratedValue
     private Long id = null;
-
-    private String contactName;
-    private String contactEmail;
+    private UserDTO contact;
+    private UserDTO contactOwner;
+    private boolean waitingAcceptance;
+    private boolean accepted;
 
     /**
      *
-     * @param contactName must be non-null
-     * @param contactEmail
+     * @param contact
+     * @param contactOwner
      * @throws IllegalArgumentException
      */
-    public Contact(String contactName, String contactEmail) throws IllegalArgumentException {
-        if (contactName == null) {
-            throw new IllegalArgumentException("Name of Contact is Null");
+    public Contact(UserDTO contact, UserDTO contactOwner) throws IllegalArgumentException {
+        if (contact == null) {
+            throw new IllegalArgumentException("Contact is Null");
         }
-        this.contactName = contactName;
+        this.contact = contact;
 
-        if (contactEmail == null) {
-            this.contactEmail = "";
-        } else {
-            this.contactEmail = contactEmail;
+        this.contactOwner = contactOwner;
+        this.waitingAcceptance = true;
+        this.accepted = false;
+
+    }
+
+    public Contact(UserDTO contact, UserDTO contactOwner, boolean waitingAcception, boolean accepted) throws IllegalArgumentException {
+        if (contact == null) {
+            throw new IllegalArgumentException("Contact is Null");
         }
+        this.contact = contact;
+
+        this.contactOwner = contactOwner;
+        this.waitingAcceptance = waitingAcception;
+        this.accepted = accepted;
+
     }
 
     /**
@@ -51,12 +64,30 @@ public class Contact implements AggregateRoot<Long>, Serializable {
         return this.id;
     }
 
-    public String getContactName() {
-        return contactName;
+    public UserDTO getContact() {
+        return contact;
     }
 
-    public String getContactEmail() {
-        return contactEmail;
+    public UserDTO getContactOwner() {
+        return contactOwner;
+    }
+
+    public boolean isWaitingAcception() {
+        return waitingAcceptance;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void accept() {
+        accepted = true;
+        waitingAcceptance = false;
+    }
+
+    public void deny() {
+        accepted = false;
+        waitingAcceptance = false;
     }
 
     @Override
@@ -69,13 +100,22 @@ public class Contact implements AggregateRoot<Long>, Serializable {
         if (this == that) {
             return true;
         }
-        if (!this.contactName.equals(that.contactName)) {
+        if (!this.contact.equals(that.contact)) {
             return false;
         }
 
-        if (!this.contactEmail.equals(that.contactEmail)) {
+        if (!this.contactOwner.equals(that.contactOwner)) {
             return false;
         }
+
+        if (this.accepted != that.accepted) {
+            return false;
+        }
+
+        if (this.waitingAcceptance != that.waitingAcceptance) {
+            return false;
+        }
+
         return true;
     }
 
@@ -85,16 +125,12 @@ public class Contact implements AggregateRoot<Long>, Serializable {
     }
 
     @Override
-    public String toString() {
-        return "Contact{" + "id=" + id + ", contactName=" + contactName + ", contactEmail=" + contactEmail + '}';
-    }
-
-    @Override
     public int hashCode() {
         int hash = 7;
-        hash = 41 * hash + Objects.hashCode(this.id);
-        hash = 41 * hash + Objects.hashCode(this.contactName);
-        hash = 41 * hash + Objects.hashCode(this.contactEmail);
+        hash = 71 * hash + Objects.hashCode(this.id);
+        hash = 71 * hash + Objects.hashCode(this.contactOwner);
+        hash = 71 * hash + (this.waitingAcceptance ? 1 : 0);
+        hash = 71 * hash + (this.accepted ? 1 : 0);
         return hash;
     }
 
@@ -110,16 +146,24 @@ public class Contact implements AggregateRoot<Long>, Serializable {
             return false;
         }
         final Contact other = (Contact) obj;
-        if (!Objects.equals(this.contactName, other.contactName)) {
+        if (this.waitingAcceptance != other.waitingAcceptance) {
             return false;
         }
-        if (!Objects.equals(this.contactEmail, other.contactEmail)) {
+        if (this.accepted != other.accepted) {
             return false;
         }
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
+        if (!Objects.equals(this.contactOwner, other.contactOwner)) {
+            return false;
+        }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Contact{" + "id=" + id + ", contact=" + contact + ", contactOwner=" + contactOwner + ", waitingAcceptance=" + waitingAcceptance + ", accepted=" + accepted + '}';
     }
 
     /**
@@ -127,7 +171,7 @@ public class Contact implements AggregateRoot<Long>, Serializable {
      * @return
      */
     public ContactDTO toDTO() {
-        return new ContactDTO(this.contactName, this.contactEmail);
+        return new ContactDTO(this.contact, this.contactOwner, this.waitingAcceptance, this.accepted);
     }
 
     /**
@@ -137,7 +181,7 @@ public class Contact implements AggregateRoot<Long>, Serializable {
      * @throws IllegalArgumentException
      */
     public static Contact fromDTO(ContactDTO contactDTO) throws IllegalArgumentException {
-        return new Contact(contactDTO.getContactName(), contactDTO.getContactEmail());
+        return new Contact(contactDTO.getContact(), contactDTO.getContactOwner(), contactDTO.isWaitingAcceptance(), contactDTO.isWaitingAcceptance());
     }
 
 }

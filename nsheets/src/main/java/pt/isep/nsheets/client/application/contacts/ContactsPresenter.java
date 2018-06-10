@@ -18,6 +18,7 @@ import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
+import pt.isep.nsheets.client.security.CurrentUser;
 import pt.isep.nsheets.shared.services.ContactDTO;
 import pt.isep.nsheets.shared.services.ContactsService;
 import pt.isep.nsheets.shared.services.ContactsServiceAsync;
@@ -30,19 +31,14 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
 
         void addClickHandlerOpenModal(ClickHandler ch);
 
-        void buttonClickHandlerSaveContact(ClickHandler ch);
-        
+        void buttonClickHandlerSendInvite(ClickHandler ch);
+
 //        void buttonClickHandlerCheckEditNote(ClickHandler ch);
-        
 //        void buttonClickHandlerEditNote(ClickHandler ch);
-        
 //        void buttonClickHandlerRemoveNote(ClickHandler ch);
-        
         void openModalToAddContact();
 
         void setContents(ArrayList<ContactDTO> contents);
-
-        String contactName();
 
         String contactEmail();
 
@@ -55,7 +51,7 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
     }
 
     @Inject
-    ContactsPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+    ContactsPresenter(EventBus eventBus, MyView view, MyProxy proxy, CurrentUser currentUser) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
 
         this.view = view;
@@ -65,30 +61,28 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
             this.view.openModalToAddContact();
         });
 
-        this.view.buttonClickHandlerSaveContact(event -> {
+        this.view.buttonClickHandlerSendInvite(event -> {
             ContactsServiceAsync contactsSvc = GWT.create(ContactsService.class);
 
             // Set up the callback object.
-            AsyncCallback<ContactDTO> callback = new AsyncCallback<ContactDTO>() {
+            AsyncCallback<Void> callback = new AsyncCallback<Void>() {
                 @Override
                 public void onFailure(Throwable caught) {
                     MaterialToast.fireToast("Error! " + caught.getMessage());
                 }
 
                 @Override
-                public void onSuccess(ContactDTO result) {
-                    MaterialToast.fireToast("Contact Created");
+                public void onSuccess(Void result) {
+                    MaterialToast.fireToast("Invitation sent!");
 
                     refreshView();
                 }
             };
 
-            ContactDTO contactDto = new ContactDTO(this.view.contactName(), this.view.contactEmail());
-            contactsSvc.addContact(contactDto, callback);
-
+            contactsSvc.sendInvitation(this.view.contactEmail(), currentUser.getUser(), callback);
             this.view.closeModalToAddContact();
         });
-        
+
 //        this.view.buttonClickHandlerCheckEditNote(event -> {
 //            NotesServiceAsync notesSvc = GWT.create(NotesService.class);
 //
@@ -157,7 +151,6 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
 //            notesSvc.addNote(notesDto, callback);
 //
 //        });
-
     }
 
     private void refreshView() {
@@ -176,7 +169,7 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
             }
         };
 
-        contactsSvc.getContacts(callback);
+        // contactsSvc.getContacts(callback);
     }
 
     @Override
@@ -187,5 +180,4 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
 
         refreshView();
     }
-
 }

@@ -1,25 +1,26 @@
 package pt.isep.nsheets.shared.services;
 
-import java.util.ArrayList;
-
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-
 
 @RemoteServiceRelativePath("contactsService")
 public interface ContactsService extends RemoteService {
 
-    /**
-     *
-     * @return
-     */
-    ArrayList<ContactDTO> getContacts();
+    public Iterable<ContactDTO> allContactsFromUser(UserDTO currentUser);
 
-    /**
-     *
-     * @param contactsDTO
-     * @return
-     * @throws DataException
-     */
-    ContactDTO addContact(ContactDTO contactsDTO) throws DataException;
+    public Iterable<ContactDTO> allInvitations(UserDTO currentUser);
+
+    public Iterable<ContactDTO> allAvailableContacts(UserDTO currentUser);
+
+    public void acceptInvitation(ContactDTO contact, UserDTO currentUser);
+
+    public void denyInvitation(ContactDTO contact, UserDTO currentUser);
+
+    public void blockUser(UserDTO user);
+
+    public void unblockUser(UserDTO user);
+
+    public void sendInvitation(String email, UserDTO currentUser);
+
+    public UserDTO getUserByEmail(String email);
 }

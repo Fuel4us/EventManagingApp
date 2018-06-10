@@ -1,5 +1,6 @@
 package pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 import pt.isep.nsheets.shared.core.Value;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.util.SortedSet;
  * @author Tiago João Santos Rios, 1161292@isep.ipp.pt
  */
 @SuppressWarnings("serial")
-public class CellDTO implements Serializable {
+public class CellDTO implements IsSerializable {
     
     public AddressDTO address;
     public String content;
