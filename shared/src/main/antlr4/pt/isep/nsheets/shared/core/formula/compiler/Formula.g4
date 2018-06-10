@@ -70,19 +70,19 @@ assignment
 	;
 
 monetary    
-        : CURRENCY ICHA ACCOUNT FCHA
+        : currency ICHA account FCHA
         ;
 
-ACCOUNT: NUMBER COINSIGN (OPERATOR NUMBER COINSIGN)*
+account: numbermonetary COINSIGN (operator numbermonetary COINSIGN)*
         ;
         
-OPERATOR: PLUS 
+operator: PLUS 
         | MINUS 
         | DIV 
         | MULTI
         ;
 
-CURRENCY: 'DOLLAR'
+currency: 'DOLLAR'
         | 'POUND'
         | 'EURO'
         ;
@@ -134,6 +134,11 @@ NUMBER: DIGITNOTZERO ( DIGIT )* FRACTIONALPART?
 		
 FRACTIONALPART:  COMMA  DIGIT DIGIT
                 | DOT DIGIT DIGIT?
+                ;
+
+/*Numeric Monetary*/
+numbermonetary: DIGITNOTZERO ( DIGIT )* FRACTIONALPART?
+                | DIGIT FRACTIONALPART
                 ;
 
 DIGIT : '0'..'9' ;
