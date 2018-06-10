@@ -2,6 +2,7 @@ package pt.isep.nsheets.client.application.chat;
 
 import com.google.gwt.core.client.GWT;
 import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 
 import com.google.gwt.dom.client.Style;
@@ -13,24 +14,20 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
+import gwt.material.design.addins.client.bubble.MaterialBubble;
 import gwt.material.design.addins.client.combobox.MaterialComboBox;
+import gwt.material.design.addins.client.emptystate.MaterialEmptyState;
 
-import gwt.material.design.client.constants.CollectionType;
 import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.constants.ImageType;
-import gwt.material.design.client.constants.WavesType;
+import gwt.material.design.client.constants.Position;
 import gwt.material.design.client.ui.MaterialButton;
-import gwt.material.design.client.ui.MaterialCollection;
-import gwt.material.design.client.ui.MaterialCollectionItem;
+import gwt.material.design.client.ui.MaterialCard;
 import gwt.material.design.client.ui.MaterialImage;
 import gwt.material.design.client.ui.MaterialLabel;
-import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialRow;
-import gwt.material.design.client.ui.MaterialTab;
-import gwt.material.design.client.ui.MaterialTabItem;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
-import java.util.List;
 
 import pt.isep.nsheets.shared.services.MessagesDTO;
 import pt.isep.nsheets.shared.services.UserDTO;
@@ -42,8 +39,10 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
     private final int CHAT_INDEX_PUBLIC = 1;
     private final int CHAT_INDEX_PRIVATE_2 = 2;
     private final int CHAT_INDEX_PRIVATE_3 = 3;
-    private boolean flag = true;
-
+    private boolean FLAG = true, FLAG1 = true, FLAG2 = true, FLAG3 = true, FLAG_S2 = true,
+            FLAG_S3 = true, HAS_ACCESS_2 = true, HAS_ACCESS_3 = true, SHOW_ONLY_ONCE_2 = true, SHOW_ONLY_ONCE_3 = true;
+    private List<String> selectedEmailUsers2 = new ArrayList<>(), selectedEmailUsers3 = new ArrayList<>();
+    
     interface Binder extends UiBinder<Widget, ChatView> {
     }
 
@@ -57,14 +56,56 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
     MaterialComboBox comboBox2, comboBox3;
 
     @UiField
-    MaterialButton sendButton1, sendButton2, sendButton3;
+    MaterialEmptyState emptyState1, emptyState2, emptyState3;
+    
+    @UiField
+    MaterialButton searchBtn2, searchBtn3, sendButton1, sendButton2, sendButton3;
 
     @UiField
-    MaterialCollection messagesCollection1, messagesCollection2, messagesCollection3;
-
+    MaterialCard messageCard1, messageCard2, messageCard3;
+    
     @UiField
     MaterialTextBox txtMessage1, txtMessage2, txtMessage3;
+    
+    
+    @UiHandler("searchBtn2")
+    public void onTagMultiGetValue2(ClickEvent e) {
+        if(FLAG_S2){
+            if(comboBox2.getSelectedValues().isEmpty()){
+                MaterialToast.fireToast("Users not selected!");
+            }
+            else{
+                comboBox2.setEnabled(false);
+                for (String value : ((List<String>)comboBox2.getSelectedValues())) {
+                    selectedEmailUsers2.add(value);
+                }
+                FLAG_S2 = false;
+                HAS_ACCESS_2 = false;
+                searchBtn2.setVisible(false);
+                MaterialToast.fireToast("Users selected in private chat 1 saved!");
+            }
+        }
+    }
 
+    @UiHandler("searchBtn3")
+    public void onTagMultiGetValue3(ClickEvent e) {
+        if(FLAG_S3){
+            if(comboBox3.getSelectedValues().isEmpty()){
+                MaterialToast.fireToast("Users not selected!");
+            }
+            else{
+                comboBox3.setEnabled(false);
+                for (String value : ((List<String>) comboBox3.getSelectedValues())) {
+                    selectedEmailUsers3.add(value);
+                }
+                FLAG_S3 = false;
+                HAS_ACCESS_3 = false;
+                searchBtn3.setVisible(false);
+                MaterialToast.fireToast("Users selected in private chat 2 saved!");
+            }
+        }
+    }
+    
 //    private int index = 0;
     @Inject
     ChatView(Binder uiBinder) {
@@ -79,18 +120,18 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
 //        dynamicTabs.add(newTabItem(index));
 //        dynamicTabs.setTabIndex(index - 1);
 //    }
+    
     @Override
     public void setContents(ArrayList<MessagesDTO> contents, UserDTO userDto) {
 
 //        dynamicTabs.reload();
         
-        messagesCollection1.clear();
-        messagesCollection2.clear();
-        messagesCollection3.clear();
+        messageCard1.clear();
+        messageCard2.clear();
+        messageCard3.clear();
         
         //add items to the comboboxes
-        //only enter at the first time
-//        if (flag) {
+//        if (FLAG) {
 //            UsersServiceAsync usersSvc = GWT.create(UsersService.class);
 //            // Set up the callback object.
 //            AsyncCallback<ArrayList<UserDTO>> callback = new AsyncCallback<ArrayList<UserDTO>>() {
@@ -111,28 +152,91 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
 //
 //            usersSvc.getUsers(callback);
 //            
-//            flag = false;
+//            FLAG = false;
 //        }
         
-        //FIX-ME só pra testar
-        //see the selected itens
-//        comboBox2.addItem(userDto.getEmail(), userDto);
-//        List<UserDTO> listSelectedUsers = comboBox2.getSelectedValues();
-        // combobox.setEnabled(false);
+
+        //FIX-ME hardcoded to add the "users"
+        if(FLAG){
+            
+            comboBox2.addItem("1160557@isep.ipp.pt", "1160557@isep.ipp.pt");
+            comboBox2.addItem("1160634@isep.ipp.pt", "1160634@isep.ipp.pt");
+            comboBox2.addItem("1161140@isep.ipp.pt", "1161140@isep.ipp.pt");
+            comboBox2.addItem("1160630@isep.ipp.pt", "1160630@isep.ipp.pt");
+            comboBox2.addItem("1160600@isep.ipp.pt", "1160600@isep.ipp.pt");
+            comboBox2.addItem("1160629@isep.ipp.pt", "1160629@isep.ipp.pt");
+            
+            comboBox3.addItem("1160557@isep.ipp.pt", "1160557@isep.ipp.pt");
+            comboBox3.addItem("1160634@isep.ipp.pt", "1160634@isep.ipp.pt");
+            comboBox3.addItem("1161140@isep.ipp.pt", "1161140@isep.ipp.pt");
+            comboBox3.addItem("1160630@isep.ipp.pt", "1160630@isep.ipp.pt");
+            comboBox3.addItem("1160600@isep.ipp.pt", "1160600@isep.ipp.pt");
+            comboBox3.addItem("1160629@isep.ipp.pt", "1160629@isep.ipp.pt");
+            
+            FLAG = false;
+        }
+        
+        
+        
+        boolean isOnPrivateList2 = false, isOnPrivateList3 = false;
+        
+        if(!selectedEmailUsers2.isEmpty()){
+            for(String email : selectedEmailUsers2){
+                if(email.equals(userDto.getEmail()))
+                    isOnPrivateList2 = true;
+            }
+        }
+        
+        if(!selectedEmailUsers3.isEmpty()){
+            for(String email : selectedEmailUsers3){
+                if(email.equals(userDto.getEmail()))
+                    isOnPrivateList3 = true;
+            }
+        }
         
         for (MessagesDTO m : contents) {
-            MaterialCollectionItem card = createCard(m, userDto.getNickname());
 
             if (m.getChatIndex() == CHAT_INDEX_PUBLIC) {
-                messagesCollection1.add(card);
+                if(FLAG1){
+                    emptyState1.setVisible(false);
+                    FLAG1 = false;
+                }
+                createBubble(m, userDto.getNickname(), CHAT_INDEX_PUBLIC);
             }
 
-            if (m.getChatIndex() == CHAT_INDEX_PRIVATE_2) {
-                messagesCollection2.add(card);
-            }
+            if ( (m.getChatIndex() == CHAT_INDEX_PRIVATE_2) && (isOnPrivateList2 || HAS_ACCESS_2) ) {
+//            if (m.getChatIndex() == CHAT_INDEX_PRIVATE_2){
+                
+                if(FLAG2){
+                    emptyState2.setVisible(false);
+                    FLAG2 = false;
+                }
 
-            if (m.getChatIndex() == CHAT_INDEX_PRIVATE_3) {
-                messagesCollection3.add(card);
+                createBubble(m, userDto.getNickname(), CHAT_INDEX_PRIVATE_2);
+
+            }
+            else if((m.getChatIndex() == CHAT_INDEX_PRIVATE_2) && (!isOnPrivateList2 || HAS_ACCESS_2)){
+                if(SHOW_ONLY_ONCE_2){
+                    MaterialToast.fireToast("You don't have access to this chat");
+                    SHOW_ONLY_ONCE_2 = false;
+                }
+            }
+                
+
+            if ( (m.getChatIndex() == CHAT_INDEX_PRIVATE_3) && (isOnPrivateList3 || HAS_ACCESS_3) ) {
+//            if (m.getChatIndex() == CHAT_INDEX_PRIVATE_3) {
+                if(FLAG3){
+                    emptyState3.setVisible(false);
+                    FLAG3 = false;
+                }
+                
+                createBubble(m, userDto.getNickname(), CHAT_INDEX_PRIVATE_3);
+            }
+            else if((m.getChatIndex() == CHAT_INDEX_PRIVATE_3) && (!isOnPrivateList3 || HAS_ACCESS_3)){
+                if(SHOW_ONLY_ONCE_3){
+                    MaterialToast.fireToast("You don't have access to this chat");
+                    SHOW_ONLY_ONCE_3 = false;
+                }
             }
 
         }
@@ -158,23 +262,30 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
 //        dynamicTabsRow.add(content);
 //        return item;
 //    }
-    private MaterialCollectionItem createCard(MessagesDTO m, String currentNickName) {
-        MaterialCollectionItem card = new MaterialCollectionItem();
-        card.setType(CollectionType.AVATAR);
-
+    
+    private void createBubble(MessagesDTO m, String currentNickName, int index_chat) {
+        
         MaterialImage avatar = new MaterialImage();
-
         avatar.setUrl("https://cdn1.iconfinder.com/data/icons/fs-icons-ubuntu-by-franksouza-/512/goa-account-msn.png");
         avatar.setType(ImageType.CIRCLE);
-
+        avatar.setMarginTop(8);
+        avatar.setWidth("40px");
+        avatar.setHeight("40px");
+        avatar.setShadow(1);
+        
         String messageuser = m.getUser();
 
+        MaterialRow row = new MaterialRow();
+        row.setMarginBottom(0);
+        
+        MaterialBubble bubble = new MaterialBubble(Color.WHITE, Color.GREY);
+        
         MaterialLabel userLabel = new MaterialLabel();
         userLabel.setText(messageuser);
-        userLabel.setFontSize("1.2em");
 
         MaterialLabel textLabel = new MaterialLabel();
         textLabel.setText(m.getText());
+        textLabel.setFontSize("1.4em");
 
         MaterialLabel dateLabel = new MaterialLabel();
         dateLabel.setText(m.getDate().toString());
@@ -182,15 +293,40 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
         dateLabel.setFloat(Style.Float.RIGHT);
 
         if (messageuser.equals(currentNickName)) {
-            card.setBackgroundColor(Color.GREY);
+            avatar.setFloat(Style.Float.LEFT);
+            avatar.setMarginLeft(12);
+            bubble.setTextColor(Color.GREY_DARKEN_2);
+            bubble.setBackgroundColor(Color.WHITE);
+            bubble.setPosition(Position.LEFT);
+            bubble.setFloat(Style.Float.LEFT);
+        }
+        else{
+            avatar.setFloat(Style.Float.RIGHT);
+            avatar.setMarginRight(12);
+            bubble.setPosition(Position.RIGHT);
+            bubble.setFloat(Style.Float.RIGHT);
         }
 
-        card.add(avatar);
-        card.add(userLabel);
-        card.add(textLabel);
-        card.add(dateLabel);
-
-        return card;
+        
+        bubble.add(userLabel);
+        bubble.add(textLabel);
+        bubble.add(dateLabel);
+        
+        row.add(avatar);
+        row.add(bubble);
+        
+        if(index_chat == CHAT_INDEX_PUBLIC){
+            messageCard1.add(row);
+        }
+        
+        if(index_chat == CHAT_INDEX_PRIVATE_2){
+            messageCard2.add(row);
+        }
+        
+        if(index_chat == CHAT_INDEX_PRIVATE_3){
+            messageCard3.add(row);
+        }
+        
     }
 
     @Override

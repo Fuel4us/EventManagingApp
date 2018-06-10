@@ -2,6 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:m="urn:import:gwt.material.design.client.ui"
+             xmlns:ma="urn:import:gwt.material.design.addins.client"
              xmlns:combobox="urn:import:gwt.material.design.addins.client.combobox">
     
     
@@ -9,27 +10,24 @@
  	
         <g:HTMLPanel ui:field="htmlPanel">
             
-            <m:MaterialColumn grid="s12">
+            <m:MaterialColumn grid="s9">
                 <m:MaterialTab ui:field="tab" indicatorColor="YELLOW" shadow="1">
-                    <m:MaterialTabItem waves="YELLOW" grid="s4">
+                    <m:MaterialTabItem waves="YELLOW" grid="s3">
                         <m:MaterialLink text="Public Chat" href="#tab1" textColor="WHITE"/>
                     </m:MaterialTabItem>
-                    <m:MaterialTabItem waves="YELLOW" grid="s4">
-                        <m:MaterialLink text="Tab 2" href="#tab2" textColor="WHITE"/>
+                    <m:MaterialTabItem waves="YELLOW" grid="s3">
+                        <m:MaterialLink text="Private chat n1" href="#tab2" textColor="WHITE"/>
                     </m:MaterialTabItem>
-                    <m:MaterialTabItem waves="YELLOW" grid="s4">
-                        <m:MaterialLink text="Tab 3" href="#tab3" textColor="WHITE"/>
+                    <m:MaterialTabItem waves="YELLOW" grid="s3">
+                        <m:MaterialLink text="Private chat n2" href="#tab3" textColor="WHITE"/>
                     </m:MaterialTabItem>
                 </m:MaterialTab>
             </m:MaterialColumn>
             
-            <m:MaterialColumn m:id="tab1" grid="s12">
-                <m:MaterialCard ui:field="messageCard1">
-                    <!-->Message Colection<!-->
-                    <m:MaterialCollection ui:field="messagesCollection1">
-                    </m:MaterialCollection>  
-                </m:MaterialCard>
-                <m:MaterialRow grid="s6 m10">
+            <m:MaterialColumn m:id="tab1" grid="s9">
+                <ma:emptystate.MaterialEmptyState ui:field="emptyState1" height="50vh" iconType="CHAT_BUBBLE_OUTLINE" iconColor="BLUE" title="Chat is empty" textColor="BLUE" backgroundColor="WHITE"/>
+                <m:MaterialCard ui:field="messageCard1"></m:MaterialCard>
+                <m:MaterialRow grid="s8 m9">
                     <m:MaterialTextBox ui:field="txtMessage1" label="Write a message!"/>
                 </m:MaterialRow>
                 <m:MaterialRow grid="s6 m2">
@@ -37,14 +35,12 @@
                 </m:MaterialRow>
             </m:MaterialColumn>
             
-            <m:MaterialColumn m:id="tab2" grid="s12">
+            <m:MaterialColumn m:id="tab2" grid="s9">
                 <combobox:MaterialComboBox ui:field="comboBox2" closeOnSelect="false" multiple="true" placeholder="Choose the users"/>
-                <m:MaterialCard ui:field="messageCard2">
-                    <!-->Message Colection<!-->
-                    <m:MaterialCollection ui:field="messagesCollection2">
-                    </m:MaterialCollection>  
-                </m:MaterialCard>
-                <m:MaterialRow grid="s6 m10">
+                <m:MaterialButton ui:field="searchBtn2" text="save" waves="LIGHT"/>
+                <ma:emptystate.MaterialEmptyState ui:field="emptyState2" height="50vh" iconType="CHAT_BUBBLE_OUTLINE" iconColor="BLUE" title="Chat is empty" textColor="BLUE" backgroundColor="WHITE"/>
+                <m:MaterialCard ui:field="messageCard2"></m:MaterialCard>
+                <m:MaterialRow grid="s8 m9">
                     <m:MaterialTextBox ui:field="txtMessage2" label="Write a message!"/>
                 </m:MaterialRow>
                 <m:MaterialRow grid="s6 m2">
@@ -52,14 +48,12 @@
                 </m:MaterialRow>
             </m:MaterialColumn>
             
-            <m:MaterialColumn m:id="tab3" grid="s12">
+            <m:MaterialColumn m:id="tab3" grid="s9">
                 <combobox:MaterialComboBox ui:field="comboBox3" closeOnSelect="false" multiple="true" placeholder="Choose the users"/>
-                <m:MaterialCard ui:field="messageCard3">
-                    <!-->Message Colection<!-->
-                    <m:MaterialCollection ui:field="messagesCollection3">
-                    </m:MaterialCollection>  
-                </m:MaterialCard>
-                <m:MaterialRow grid="s6 m10">
+                <m:MaterialButton ui:field="searchBtn3" text="save" waves="LIGHT"/>
+                <ma:emptystate.MaterialEmptyState ui:field="emptyState3" height="50vh" iconType="CHAT_BUBBLE_OUTLINE" iconColor="BLUE" title="Chat is empty" textColor="BLUE" backgroundColor="WHITE"/>
+                <m:MaterialCard ui:field="messageCard3"></m:MaterialCard>
+                <m:MaterialRow grid="s8 m9">
                     <m:MaterialTextBox ui:field="txtMessage3" label="Write a message!"/>
                 </m:MaterialRow>
                 <m:MaterialRow grid="s6 m2">
