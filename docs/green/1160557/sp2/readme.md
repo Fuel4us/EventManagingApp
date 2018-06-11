@@ -1,4 +1,4 @@
-**Hernâni Gil** (1050475) - Sprint 1 - Lang03.1
+**Hilário Coelho** (1160557) - Sprint 2 - Lang03.2
 ===============================
 
 # 1. General Notes
@@ -70,4 +70,6 @@ Commits:
 [Conditions and Range Conditions persistence, DB store and retrieve](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/df2a910b21840a86d159926ede94e53345449780)
 
 [Documentation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/47a41cfbbc07db38c915b8bcb3bc5a1322e91cfb)
+
+[Cell Style Changing](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/c8b84dc879c2a0d97b024e1327d93042dcdcbe1f)
 
