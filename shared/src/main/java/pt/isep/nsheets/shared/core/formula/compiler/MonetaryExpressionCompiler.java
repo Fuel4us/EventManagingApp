@@ -51,7 +51,6 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
     @Override
     public Expression compile(Cell cell, String source) throws FormulaCompilationException {
 
-
         String number = "";
         String sourceResult = "";
 
@@ -67,16 +66,16 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
                     switch (source.charAt(i)) {
                         case '\u00A3':
                             rValue = MonetaryConversion.PoundToDollar * total;
-                            sourceResult += Double.toString(rValue) + '\u00A3';
+                            sourceResult += NumberFormat.getFormat("0.00").format(rValue) + '\u00A3';
                             break;
                         case '\u20AC':
                             rValue = MonetaryConversion.EuroToDollar * total;
-                            sourceResult += Double.toString(rValue) + '\u20AC';
+                            sourceResult += NumberFormat.getFormat("0.00").format(rValue) + '\u20AC';
                             break;
-                            
+
                         default:
                             rValue = total;
-                            sourceResult += Double.toString(rValue) + '\u0024';
+                            sourceResult += NumberFormat.getFormat("0.00").format(rValue) + '\u0024';
                             break;
                     }
                     number = "";
@@ -100,15 +99,15 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
                     switch (source.charAt(i)) {
                         case '\u20AC':
                             rValue = MonetaryConversion.EuroToPound * total;
-                            sourceResult += Double.toString(rValue)  + '\u20AC';
+                            sourceResult += NumberFormat.getFormat("0.00").format(rValue) + '\u20AC';
                             break;
                         case '\u0024':
                             rValue = MonetaryConversion.DollarToPound * total;
-                            sourceResult += Double.toString(rValue)  + '\u0024';
+                            sourceResult += NumberFormat.getFormat("0.00").format(rValue) + '\u0024';
                             break;
                         case '\u00A3':
                             rValue = total;
-                            sourceResult += Double.toString(rValue) + '\u00A3';
+                            sourceResult += NumberFormat.getFormat("0.00").format(rValue) + '\u00A3';
                             break;
                     }
                     number = "";
@@ -131,15 +130,15 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
                     switch (source.charAt(i)) {
                         case '\u0024':
                             rValue = MonetaryConversion.DollarToEuro * total;
-                            sourceResult += Double.toString(rValue)  + '\u0024';
+                            sourceResult += NumberFormat.getFormat("0.00").format(rValue) + '\u0024';
                             break;
                         case '\u00A3':
                             rValue = MonetaryConversion.PoundToEuro * total;
-                            sourceResult += Double.toString(rValue)  + '\u00A3';
+                            sourceResult += NumberFormat.getFormat("0.00").format(rValue) + '\u00A3';
                             break;
                         case '\u20AC':
                             rValue = total;
-                            sourceResult += Double.toString(rValue) + '\u20AC';
+                            sourceResult += NumberFormat.getFormat("0.00").format(rValue) + '\u20AC';
                             break;
                     }
                     number = "";
@@ -172,7 +171,7 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
             MaterialToast.fireToast("Syntax Error Number: " + parser.getNumberOfSyntaxErrors());
             throw new FormulaCompilationException(monetaryErrorListener.getErrorMessage());
         }
-        
+
         MaterialToast.fireToast(tree.toStringTree());
         //Visit the expression and returns it
         MonetaryEvalVisitor eval = new MonetaryEvalVisitor(cell, language);
@@ -181,7 +180,7 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
             MaterialToast.fireToast("FormulaCompilationException: " + eval.getErrorsMessage());
             throw new FormulaCompilationException(eval.getErrorsMessage());
         }
-        
+
         return result;
     }
 

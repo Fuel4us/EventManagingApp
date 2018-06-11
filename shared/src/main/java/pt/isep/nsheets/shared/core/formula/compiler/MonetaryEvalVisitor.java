@@ -75,11 +75,9 @@ public class MonetaryEvalVisitor extends MonetaryBaseVisitor<Expression> {
                 );
 
             } catch (UnknownElementException ex) {
-                MaterialToast.fireToast("ERRO NO RETURN!!!");
                 Logger.getLogger(MonetaryEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            MaterialToast.fireToast("Tamanho < 2: " + ctx.getChild(0).getText());
             return visit(ctx.getChild(0));
         }
 
@@ -88,8 +86,6 @@ public class MonetaryEvalVisitor extends MonetaryBaseVisitor<Expression> {
 
     @Override
     public Expression visitNumber(MonetaryParser.NumberContext ctx) {
-        MaterialToast.fireToast("Entrou no visit number!");
-        MaterialToast.fireToast("CTX VALUE: " + ctx.getText());
         return new Literal(Value.parseValue(ctx.getText()));
     }
 
