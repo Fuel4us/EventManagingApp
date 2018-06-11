@@ -3,17 +3,14 @@ grammar Monetary;
 @header {
 	//package pt.isep.nsheets.shared.core.formula.compiler;
 }
+start: expression EOF
+     ;
 	         
-expression
-        : HH monetary /* EOF */
-	;
+expression: HH currency ICHA account FCHA 
+	  ;
 
-monetary    
-        : currency ICHA account FCHA
-        ;
-
-account: number coinsign (operator number coinsign)*
-        ;
+account: number coinsign ( operator number coinsign )*
+       ;
         
 operator: PLUS 
         | MINUS 
@@ -26,22 +23,21 @@ currency: 'dollar'
         | 'euro'
         ;
 
-coinsign: DOLLAR
-        | POUND
-        | EURO
+coinsign: SIGNDOLLAR
+        | SIGNPOUND
+        | SIGNEURO
         ;
 
 /* Numeric Monetary */
-number: DIGITNOTZERO ( DIGIT )* fractionalpart? 
-        | DIGIT fractionalpart
-        ;
-		
-fractionalpart: 
-                DOT DIGIT DIGIT?
-                ;
+number: DIGIT (DIGIT)* fractionalpart?
+      ;
+	
+fractionalpart: DOT DIGIT 
+              | DOT DIGIT DIGIT 
+              ;  
 
+/* Numerics */
 DIGIT : '0'..'9' ;
-DIGITNOTZERO : '1'..'9' ;
 
 
 /* Arithmetic operators */
@@ -59,9 +55,9 @@ ICHA	: '{' ;
 FCHA	: '}' ;
 
 /* Coin Signs */
-EURO : '\u20AC' ;
-DOLLAR : '\u0024' ;
-POUND : '\u00A3' ;
+SIGNEURO : '\u20AC' ;
+SIGNDOLLAR : '\u0024' ;
+SIGNPOUND : '\u00A3' ;
 
 /* White-space (ignored) */
-WS: ( ' ' | '\r' '\n' | '\n' | '\t' ) -> skip ;
+WS : ( ' ' | '\r' '\n' | '\n' | '\t' ) -> skip ;
