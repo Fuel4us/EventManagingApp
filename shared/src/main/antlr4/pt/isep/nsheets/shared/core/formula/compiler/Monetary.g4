@@ -29,13 +29,10 @@ coinsign: SIGNDOLLAR
         ;
 
 /* Numeric Monetary */
-number: DIGIT (DIGIT)* fractionalpart?
+number: DIGIT (DIGIT)*
+      | DIGIT (DIGIT)* DOT DIGIT DIGIT?
       ;
 	
-fractionalpart: DOT DIGIT 
-              | DOT DIGIT DIGIT 
-              ;  
-
 /* Numerics */
 DIGIT : '0'..'9' ;
 
