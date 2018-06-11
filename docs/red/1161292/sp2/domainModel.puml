@@ -1,4 +1,4 @@
-@startuml domainModel
+@startuml
 skinparam handwritten true
 skinparam monochrome true
 skinparam packageStyle rect
@@ -8,9 +8,5 @@ skinparam shadowing false
 hide empty methods
 
 class User << (E,yellow) >> {
-        EmailAddress email
-        String name
-        String nickname
-        Password password
 }
 @enduml
