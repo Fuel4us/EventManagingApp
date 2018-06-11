@@ -106,4 +106,9 @@ public class Do implements Function {
 	public boolean isVarArg() {
 		return false;
 	}
+
+    @Override
+    public String getInformativeText() {
+        return "emulates a looping statement";
+    }
 }

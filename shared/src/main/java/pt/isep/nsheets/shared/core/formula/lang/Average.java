@@ -76,4 +76,9 @@ public class Average implements Function {
 	public boolean isVarArg() {
 		return true;
 	}
+
+    @Override
+    public String getInformativeText() {
+        return "returns the numeric average of its arguments.";
+    }
 }

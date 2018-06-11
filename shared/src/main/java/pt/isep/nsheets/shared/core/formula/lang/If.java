@@ -67,4 +67,9 @@ public class If implements Function {
 	public boolean isVarArg() {
 		return false;
 	}
+
+    @Override
+    public String getInformativeText() {
+        return "emulates the if-then-else statement.";
+    }
 }

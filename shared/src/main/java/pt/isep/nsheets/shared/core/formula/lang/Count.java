@@ -67,4 +67,9 @@ public class Count implements Function {
 	public boolean isVarArg() {
 		return true;
 	}
+
+    @Override
+    public String getInformativeText() {
+        return "counts those of its arguments that yield numeric values.";
+    }
 }
