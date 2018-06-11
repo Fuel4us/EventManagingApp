@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import pt.isep.nsheets.shared.application.Settings;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtension;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.ExportService;
 import pt.isep.nsheets.shared.services.ExportServiceAsync;
@@ -86,7 +87,7 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
                     Cookies.setCookie("PDF EXPORT", "Accept the cookies");
 
                     String url = GWT.getModuleBaseURL() + "downloadService";
-                    Window.open(url, "", "");
+                    Window.open(url, "_blank", "status=0,toolbar=0,menubar=0,location=0");
                     MaterialToast.fireToast("PDF exported", "rounded");
 
                 } else {
@@ -94,7 +95,8 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
                 }
             }
         };
-        exportServiceAsync.exportStyledWorkbookPDF(workbookDTO, style, color,range, callback);
+        
+        exportServiceAsync.exportStyledWorkbookPDF( workbookDTO, style, color,range, callback);
 
     }
 

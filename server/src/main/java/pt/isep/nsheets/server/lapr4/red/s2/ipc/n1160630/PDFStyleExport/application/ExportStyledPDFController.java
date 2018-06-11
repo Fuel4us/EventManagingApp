@@ -6,8 +6,11 @@
 package pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.application;
 
 import eapli.framework.application.Controller;
+import java.util.List;
+import java.util.Set;
 import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.domain.PDFBuilder;
 import pt.isep.nsheets.shared.core.Workbook;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core.CellStyle;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 /**
@@ -19,6 +22,11 @@ public class ExportStyledPDFController implements Controller{
     public boolean buildPDF(WorkbookDTO workbookDTO, String style,String color, int range){
         PDFBuilder pdfFile = new PDFBuilder(Workbook.fromDTO(workbookDTO));
         return pdfFile.createPdf(style,color, range);
+    }
+    
+    public Iterable<CellStyle> getCellStyles(){
+//        new CellStyle.all();
+        return null;
     }
     
 }

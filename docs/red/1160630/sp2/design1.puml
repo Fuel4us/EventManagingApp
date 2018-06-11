@@ -1,0 +1,36 @@
+@startuml  design1
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+boundary ExportView
+boundary ExportPresenter
+entity DownloadServelet
+control ExportStyledPDFController
+entity ExportService
+entity PDFBuilder
+
+box "NSheets Client"
+participant ExportView
+participant ExportPresenter 
+end box
+
+box "Server"
+participant DownloadServelet
+participant ExportService
+participant ExportStyledPDFController
+participant PDFBuilder
+end box
+
+
+User -> ExportPresenter : onReveal() / navigate to page / set the data
+ExportPresenter -> ExportView: save()
+ExportView -> ExportService: exportStyledWorkbookPDF(workbookDTO, style, color,range, callback)
+ExportService -> ExportStyledPDFController: buildPDF(workbookDTO,  style, color,  range)
+ExportStyledPDFController -> PDFBuilder: createPDF(style, color, line_size) :boolean
+PDFBuilder --> ExportView: success()
+ExportView -> DownloadServelet: doGet()
+@enduml

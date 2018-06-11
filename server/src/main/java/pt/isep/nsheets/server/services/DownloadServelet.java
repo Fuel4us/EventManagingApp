@@ -22,9 +22,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtension;
 
 /**
- * from https://stackoverflow.com/questions/13725198/how-can-a-user-download-a-file-in-client-side-google-web-toolkit
+ * Based on https://stackoverflow.com/questions/13725198/how-can-a-user-download-a-file-in-client-side-google-web-toolkit
  *
  * @author pedromonteiro
  */
@@ -32,41 +33,6 @@ public class DownloadServelet extends HttpServlet {
 
     private final String FILE_PATH = "nsheets/src/main/webapp/resources/PDF.pdf";
 
-//    @Override
-//    protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
-//        try {
-//            ByteArrayOutputStream b= req.getInputStream();
-//        ServletOutputStream out = resp.getOutputStream();
-//        int BUFFER = 1024 * 100;
-//        String reportContents = getServletContext().getServerInfo();
-////for PDF
-//        resp.setContentType("application/pdf");
-//        resp.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".pdf");
-//for CVS files
-//resp.setContentType("text/cvs"); 
-//resp.setHeader(“Content-Disposition”, “attachment; filename=”+ fileName + “.csv”);
-//for Word Document
-//resp.setContentType(“text/doc”); 
-//resp.setHeader(“Content-Disposition”, “attachment; filename=”+ fileName + “.doc”);
-//        resp.setContentLength(Long.valueOf(reportContents.length()).intValue());
-//        resp.setBufferSize(BUFFER);
-//        out.write(reportContents.getBytes());
-//        out.flush();
-//        out.close();
-//PDF Creation with iText
-//            response.setHeader("Expires", "0");
-//            response.setHeader("Cache-Control","must-revalidate, post-check=0, pre-check=0");
-//            response.setHeader("Pragma", "public");
-//            response.setContentType("application/pdf");
-//
-//            response.setContentLength(byteArraysIZE.size());
-//            OutputStream os = response.getOutputStream();
-//            b.writeTo(os);
-//            os.flush();
-//            os.close();
-//        } catch (DocumentException ex) {
-//            Logger.getLogger(DownloadServelet.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -113,6 +79,14 @@ public class DownloadServelet extends HttpServlet {
         stream = response.getOutputStream();
         response.setContentType("application/pdf");
         response.addHeader("Content-Type", "application/pdf");
+
+        //for CVS files
+        //resp.setContentType("text/cvs"); 
+        //resp.setHeader(“Content-Disposition”, “attachment; filename=”+ fileName + “.csv”);
+        //for Word Document
+        //resp.setContentType(“text/doc”); 
+        //resp.setHeader(“Content-Disposition”, “attachment; filename=”+ fileName + “.doc”);
+
         response.addHeader("Content-Disposition", "attachment;filename=" + "Workbook.pdf");
         response.setContentLength((int) bytes.length);
         stream.write(bytes);

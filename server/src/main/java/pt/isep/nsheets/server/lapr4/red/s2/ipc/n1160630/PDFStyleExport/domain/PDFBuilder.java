@@ -26,11 +26,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.application.ExportStyledPDFController;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core.CellStyle;
-import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtension;
 
 /**
  *
@@ -43,7 +43,7 @@ public class PDFBuilder {
     private final Font SUB_FONT = FontFactory.getFont(FontFactory.HELVETICA, 14, Font.NORMAL, BaseColor.BLACK);
     private final Font SUB_FONT_WORK = FontFactory.getFont(FontFactory.HELVETICA, 18, Font.NORMAL, BaseColor.BLACK);
     private final String FILE_PATH = "nsheets/src/main/webapp/resources/PDF.pdf";
-    private final Font catFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
+    private final Font catFont = new Font(Font.FontFamily.HELVETICA, 22, Font.BOLD);
     private final BaseColor TITLE_COLOR = new BaseColor(224, 224, 224);
     private BaseColor color;
 
@@ -82,6 +82,7 @@ public class PDFBuilder {
         CellStyleLine cellStyle = CellStyleLine.getCellStyleByValue(style);
         Color c = new ColorUtil(s_color).getColor();
         color = new BaseColor(c.getRed(), c.getGreen(), c.getBlue());
+        Iterable<CellStyle> styles = new ExportStyledPDFController().getCellStyles();
 
         try {
 
@@ -146,7 +147,7 @@ public class PDFBuilder {
 
                         Font text_font = new Font(TABLE_FONT);
 
-                        CellStyle style_cell = CellStyleExtension.getCellStyle(spread_cell.getAddress());
+                         CellStyle style_cell = cellStyle(spread_cell, styles);
 
                         if (style_cell != null) {
                             
@@ -205,6 +206,19 @@ public class PDFBuilder {
         }
 
         return null;
+    }
+    
+    private CellStyle cellStyle(Cell cell, Iterable<CellStyle> iterable){
+        
+        if(iterable == null) return null;
+        
+        while(iterable.iterator().hasNext()){
+            CellStyle style = iterable.iterator().next();
+            if(style.getAddress().equals(cell.getAddress())) return  style;
+        }
+        
+        return null;
+        
     }
 
 }
