@@ -1,9 +1,9 @@
-**JosuÃ© Lapa** (1160713) - Sprint 2 - Core05.1
+**Josué Lapa** (1160713) - Sprint 2 - Core05.1
 ===============================
 
 # 1. General Notes
 
-Questions made to the Product Owner (PRP):
+Questions made to the Product Owner:
 
 ```
 
@@ -11,37 +11,30 @@ Questions made to the Product Owner (PRP):
 
 # 2. Requirements
 
-*Core05.2 - Contacts - Description:*
-"The extensions should now contribute also with popup menus in cells, menu options in the navigator and side bars."
+*Core05.1 - Contacts - Description:*
+"Each user of the applications should have a list of contacts. A contact is another user of the application that has established a contact with the user of the application. A user of the application may establish a contact with another user by sending an invitation if he/she knows the email of the other user. A user may or not accept an invitation. A user can block/unblock invitations from other users."
 
 *Specification of the User Stories:* 
 
 ```
 US01
 	As an user,
-	I want to add an extension of a menu option, by choosing the side bar to put it, the name and the icon of the option.
+	I want to send an invitation to another user
 ```
 
 ```
 US02
 	As an user,
-	I want to add an extension of a popup option on the menu of the spreadsheet, by choosing the name and icon.
+	I want to be able to accept/deny/block/unblock invitations from other users
 ```
 
-```
-US03
-	As an user,
-	I want to add an extension of a side bar, where I can create new side bars by inserting its names, and choose wich one is opened.
-```
-                                                                                    
+```                                                                          
 # 3. Analysis
 
 ## 3.1 Analysis Plan
-**Extension** - It's an option that allows the user to create new functionalities;
-**Menu Option** - A new option that is created on the side bar;
-**Side Bar** - It's an bar, in this case, on the left side of the screen, wich has options inside linked to other functions and windows on the program;
-**Popup option** - An option, in this case, on the menu of the spreadsheet, that is launched by pressing the right button of the mouse on the spreadsheet;
-**Spreadsheet** - The table with cells (set of rows and columns), that exists on the workbook.
+**Contact** - Registry owned by an user containing information from another other
+**Invite** - Contact waiting for acception/denial by the end user
+
 
 ## 3.2 Analysis Diagrams
 
@@ -49,23 +42,15 @@ The main idea for the "workflow" of this feature increment.
 
 **Use Cases**
 
-![Use Cases](us.PNG)
+User: 
+US1: Send Invitation
+US2: Accept/Deny/Block/Unblock Invitations from User
 
 **Domain Model**
 
 **System Sequence Diagrams**
 
-**For US1**
 
-![US1 Analysis](analysis1.PNG)
-
-**For US2**
-
-![US2 Analysis](analysis2.PNG)
-
-**For US3**
-
-![US3 Analysis](analysis3.PNG)
 
 # 4. Design
 
@@ -73,15 +58,19 @@ The main idea for the "workflow" of this feature increment.
 
 ### 4.1.1 Testing the use case:
 
-		- Log in;
-		- Go to the extensions section;
-		- Go to the 'Add Side Bar' menu;
-		- Create 2 side bars, with different names;
-		- Switch the activated side bar to one recently created;
-		- Go to the 'Add Menu' option, and insert a name and an icon to the new menu options;
-		- Add menu options on each of the side bars (recently created ones, and the originial one);
-		- Go to the 'Add Popup Menu' and choose an name and icon for the new popup option.
-		- Go to the workbook and right click the spreadsheet to see the result.
+	1. User1 selects Contacts tab
+
+	2. System redirects user1 to the correct module
+
+	3. User1 sends an invitation to User2 by inserting the correspondent email address
+
+	4. System informs User2 of the invitation and asks for an action (Acception or Denial)
+
+	5.1 User2 accepts or denies invitation from User1
+
+	5.2 User2 blocks invitations from User1 (Ends Use Case) (User1 is added to User1 blacklist)
+
+	6. System saves contact (Acception) or dismisses it (Denial)
 		
 
 ## 4.2. Requirements Realization
@@ -96,35 +85,29 @@ The main idea for the "workflow" of this feature increment.
 
 ![US2 Design](design2.PNG)
 
-**For US3**
-
-![US3 Design](design3.PNG)
 
 ## 4.3. Classes
 
 **Used classes**
-* For this use case, it was needed to use the classes on the module *NSheets - A Web version of CleanSheets*, of the packages:
 
-**Extensions** and its classes:
+**Contacts** and its classes:
 ```
-	- ExtensionsModule;
-	- ExtensionsPresenter;
-	- ExtensionsView;
-	- ExtensionsView.ui.xml.
+	- ContactsModule;
+	- ContactsPresenter;
+	- ContactsView;
+	- ContactsView.ui.xml.
+	- Contact
+	- ContactsController
+	- ContactsService
+	- ContactsServiceImpl
+	- ContactsRepository
+	- JpaContactsRepositoryImpl
 ```
-**Menu** and its classes:
+**User** and its classes:
 ```
-	- MenuModule;
-	- MenuPresenter;
-	- MenuView;
-	- MenuView.ui.xml.
-```
-**Workbook** and its classes:
-```
-	- WorkbookModule;
-	- WorkbookPresenter;
-	- WorkbookView;
-	- WorkbookView.ui.xml.
+	- User;
+	- UserRepository;
+	- JpaUserRepositoryImpl;
 ```
 ## 4.4. Design Patterns and Best Practices
 
@@ -140,18 +123,12 @@ By memory we apply/use:
 
 **For US1**
 
-		- Was implemented the collapsible menu to insert the new menu options, with a text box to insert the name of the new menu option, and a combo box so the user could choose the icon to the menu option.
-		- It was also needed to discover wich side bar was activated, so the new menu option could be inserted on.
+		- In order that a user was able to send an invitation to another user, a button was placed in the Contacts User Interface Module allowing an user to send a invitation only if the end user's email is known by the sender. After the button is clicked the System creates a Contact waiting for approval and sends it to the end user. The contact will only be available for the end user after further acception.
 
 **For US2**
 
-		- For this user storie, it was needed to implement the collapsible menu with a text box to insert the name of the new popup option on the spreadsheet, and also the icon.
-		- It was also needed to insert the popup option on the menu of the spreadsheet, that can be activated by pressing the right button of the mouse on it.
+		- When an invitation is sent, the receiver will see the it in a collapsible menu items that only shows the invitations sent by other users. The user could choose to accept the invitation (a new contact is added), deny it (the invitation is dismissed and not added to the contact list), block invitations from the other user or unblock invitations from the other user.
 	
-**For US3** 
-
-		- For the user storie 3, it was needed to implement also the collapsible menu with a field to insert the name of the new side bar, and also a combo box that shows all the side bars existing on the project, so the user could switch the activated side bar.
-		- It was also needed to discover wich side bar was the activated one, so when the button to switch side bars is pressed, it switch with the side bar choosed by the user.
 
 # 6. Integration/Demonstration
 
@@ -162,17 +139,3 @@ By memory we apply/use:
 Some Questions/Issues identified during the work in this feature increment
 
 # 8. Work Log
-
-* [ [Implementation] Lang 05.1 (Forms Edit) - Changes on formulas so forms can be displayed by them. [Implementation] Core 02.2 (Full Extension Mechanism) - ExtensionsView.ui.xml edited, added the interface for pop up menus in cells, menu items and bars ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/8ff7bfa0b8fd4209a7733f4a7892f42882e35d81)
-* [ [Documentation] Core02.2 - changes on readMe.md, documentation added. [Implementation] Core02.2 - changes on layout, and add menu option improvement. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/cd4f05694b5b2500542431397aced22eab5c03c4)
-* [ [Implementation] Core02.2 - add menu option functional. [Documentation] Core02.2 - changes on readMe.md, documentation added. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/be469eb981073937e7d9dc35d4e5910aa460a66e)
-* [ [Implementation] Core02.2 - add popup menu functional. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/f02a3435352524ee7bc9fdfb861ae61645bfbb2a)
-* [ [Implementation] Core02.2 - icons in menu option and popup option added. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/c3e1e08482a5567a58cd3dafbad1fa86e27a36e9)
-* [ [Implementation] Core02.2 - Side bars added. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/7e8cdfaf39d0f1f6c045e154c21d137f8857f363)
-* [ [Implementation] Core02.2 - Now users can select wich side bar they want. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/8380a2db4c812e83591f3dc236cf0afb7c12bd97)
-* [ [Implementation] Core02.2 - Now users can create more than one side bar. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/2785e7354b7147642d6d4fd908bbb1c1c889e677)
-* [ [Implementation] Core02.2 - Now users can choose wich side bar to open. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/45d3ee8771094d9c6f118e2eafb729f1435142d7)
-* [ [Implementation] Core02.2 - Now users can't create menu options, popup options or side bars with the same name. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/0a7a0e2216a0a13a241a7398a1f784279fac42a7)
-* [ [Documentation] Core02.2 - ReadMe.md updated. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/93b1f3d8160003e8c4d6e85f3005e6878f2b6707)
-* [ [Documentation] Core02.2 - ReadMe.md updated. Added design diagrams for us1, us2 and us3, and the us diagram. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/5c6b819dd321e05114873cecb3ecf4d7938686ef?at=master)
-* [ [Documentation] Core02.2 - ReadMe.md updated. Added analysis diagrams for the us1 us2 and us3. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/174bc7843786af1bc4bf25b63be39ddf3e0b9f54)
