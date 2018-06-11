@@ -4,6 +4,7 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.AddressDTO;
 
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public class CellStyleDTO implements Serializable {
     public AddressDTO address;
     public int backgroungColor;
@@ -28,5 +29,14 @@ public class CellStyleDTO implements Serializable {
      * serializable!
      */
     public CellStyleDTO() {
+    }
+
+    public int[] getValues(){
+        int[] values = new int[4];
+        values[0] = backgroungColor;
+        values[1] = fontColor;
+        values[2] = textALIGN;
+        values[3] = fontSize;
+        return values;
     }
 }

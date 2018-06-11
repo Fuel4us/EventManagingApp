@@ -5,7 +5,7 @@
  */
 package pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.domain;
 
-import pt.isep.nsheets.shared.lapr4.red.s2.ipc.n1160630.services.CellStyle;
+import pt.isep.nsheets.shared.lapr4.red.s2.ipc.n1160630.services.CellStylePDF;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -77,7 +77,7 @@ public class PDFBuilder {
 
     public boolean createPdf(String style, String s_color, int size) {
 
-        CellStyle cellStyle = CellStyle.getCellStyleByValue(style);
+        CellStylePDF cellStyle = CellStylePDF.getCellStyleByValue(style);
         Color c = new ColorUtil(s_color).getColor();
         color = new BaseColor(c.getRed(), c.getGreen(), c.getBlue());
 
@@ -188,7 +188,7 @@ public class PDFBuilder {
 
     }
 
-    private PdfPCellEvent chooseCellEvent(CellStyle style, BaseColor color, int size) {
+    private PdfPCellEvent chooseCellEvent(CellStylePDF style, BaseColor color, int size) {
         switch (style) {
             case DASHED:
                 return new DashedCell(PdfPCell.RIGHT | PdfPCell.BOTTOM, color, size);

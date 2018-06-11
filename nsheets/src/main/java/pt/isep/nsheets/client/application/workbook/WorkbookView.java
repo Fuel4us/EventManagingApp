@@ -50,6 +50,7 @@ import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.table.MaterialDataTable;
+import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1140302.search.Application.SearchSpreadsheetController;
 import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
@@ -62,8 +63,12 @@ import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalFormattingExtension;
+
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core.CellStyle;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtension;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleDTO;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleService;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleServiceAsync;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetController;
@@ -279,6 +284,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         populateTextAlignListBox();
 
+        loadCellStyles();
+
         firstButton.addClickHandler(event -> {
             if (activeCell != null) {
 
@@ -354,16 +361,20 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 conditionalTitle.setTitle("Conditional Formating of Cell " + activeCell.getAddress().toString());
             }
         });
+
+        /* ALTERADA PARA TESTE */
         backgroundcolorLst.addValueChangeHandler(event ->{
 
             if(activeCell != null){
                 CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
                 if(c != null){
                     c.setBackgroungColor(backgroundcolorLst.getSelectedValue().ordinal());
+                    this.updateCellStyles(c);
                     MaterialToast.fireToast("existia " +  CellStyleExtension.getCellStyle(activeCell.getAddress()).getBackgroungColor());
                 }else{
                     MaterialToast.fireToast("nao existia");
-                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), backgroundcolorLst.getSelectedValue().ordinal(), Color.BLACK.ordinal(),0,12));
+                    //CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), backgroundcolorLst.getSelectedValue().ordinal(), Color.BLACK.ordinal(),0,12));
+                    this.updateCellStyles(new CellStyle(activeCell.getAddress(), backgroundcolorLst.getSelectedValue().ordinal(), Color.BLACK.ordinal(),0,12));
 
                 }
                 customTable.getView().setRedraw(true);
@@ -384,8 +395,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 }else{
                     MaterialToast.fireToast("nao existia");
                     CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(),0,12));
-
                 }
+                MaterialToast.fireToast("list CellStyle is empty? "+CellStyleExtension.lstCellStyle.isEmpty());
+
                 customTable.getView().setRedraw(true);
                 customTable.getView().refresh();
             }
@@ -624,5 +636,67 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @Override
     public MaterialModal getConditionalModal() {
         return this.conditionalModal;
+    }
+
+    public void updateCellStyles(CellStyle cellStyle){
+        CellStyleServiceAsync cellStyleServiceAsync = GWT.create(CellStyleService.class);
+
+        AsyncCallback<CellStyleDTO> callback = new AsyncCallback<CellStyleDTO>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                MaterialToast.fireToast("Error saving cellStyle! " + caught.getMessage());
+            }
+
+            @Override
+            public void onSuccess(CellStyleDTO result) {
+                MaterialToast.fireToast("CellStyle repository updated!");
+                CellStyleExtension.addCellStyle(CellStyle.fromDTO(result));
+            }
+        };
+
+        cellStyleServiceAsync.saveCellStyle(cellStyle.toDTO(), callback);
+
+        MaterialToast.fireToast("now doing redraw");
+        customTable.getView().setRedraw(true);
+        MaterialToast.fireToast("now doing redraw");
+        customTable.getView().refresh();
+
+        //loadCellStyles();
+    }
+
+    public void loadCellStyles(){
+        //End of extension CellStyle loading
+
+        /* 1050475 Hernani Gil
+           Repository loading
+         */
+
+        /* Core08.1 */
+
+        CellStyleServiceAsync cellStyleServiceAsync = GWT.create(CellStyleService.class);
+        AsyncCallback<ArrayList<CellStyleDTO>> callbackCStyle = new AsyncCallback<ArrayList<CellStyleDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                MaterialToast.fireToast("Error loading cellStyles! " + caught.getMessage());
+            }
+
+            @Override
+            public void onSuccess(ArrayList<CellStyleDTO> result) {
+                ArrayList<CellStyle> lstResultFromDTO = new ArrayList<CellStyle>();
+                for (CellStyleDTO cellStyleDTO : result) {
+                    lstResultFromDTO.add(CellStyle.fromDTO(cellStyleDTO));
+                }
+
+                CellStyleExtension.lstCellStyle = lstResultFromDTO;
+                MaterialToast.fireToast("Sucess loading cellStyles with " + result.size() + "cellStyles");
+            }
+        };
+
+        cellStyleServiceAsync.getListCellStyle(callbackCStyle);
+
+        /*End of extension cellSTyle loading*/
+        MaterialToast.fireToast("now doing redraw");
+        customTable.getView().setRedraw(true);
+        customTable.getView().refresh();
     }
 }

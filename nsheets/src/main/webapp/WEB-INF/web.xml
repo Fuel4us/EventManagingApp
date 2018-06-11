@@ -80,6 +80,17 @@
         <url-pattern>/nsheets/conditionalService</url-pattern>
     </servlet-mapping>
 
+    <!-- Servlet for Extension CellStyle -->
+    <servlet>
+        <servlet-name>cellStyleServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.CellStyleServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>cellStyleServiceServlet</servlet-name>
+        <url-pattern>/nsheets/cellStyleService</url-pattern>
+    </servlet-mapping>
+
     <!-- Servlets for the notes -->
     <servlet>
         <servlet-name>notesServiceServlet</servlet-name>

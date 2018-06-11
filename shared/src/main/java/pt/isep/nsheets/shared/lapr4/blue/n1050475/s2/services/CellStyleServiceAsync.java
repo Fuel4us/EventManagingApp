@@ -7,5 +7,5 @@ import java.util.ArrayList;
 public interface CellStyleServiceAsync {
     void getListCellStyle(AsyncCallback<ArrayList<CellStyleDTO>> async);
 
-    void saveCellStyle(CellStyleDTO conditionalDTO, AsyncCallback<CellStyleDTO> async);
+    void saveCellStyle(CellStyleDTO cellStyleDTO, AsyncCallback<CellStyleDTO> async);
 }

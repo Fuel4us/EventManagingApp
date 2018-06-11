@@ -1,15 +1,15 @@
 package pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core;
 
 import gwt.material.design.client.constants.Color;
-import gwt.material.design.client.constants.TextAlign;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleDTO;
+import eapli.framework.domain.AggregateRoot;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class CellStyle implements Serializable {
+public class CellStyle implements /*AggregateRoot<Long>,*/ Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -95,7 +95,7 @@ public class CellStyle implements Serializable {
 
 
     public CellStyleDTO toDTO(){
-        int[] values =new int[2];
+        int[] values =new int[4];
         values[0]=backgroungColor;
         values[1]=fontColor;
         values[2]=textALIGN;
@@ -105,11 +105,37 @@ public class CellStyle implements Serializable {
     }
 
     public static CellStyle fromDTO(CellStyleDTO dto){
-        int[] values =new int[2];
+        int[] values =new int[4];
         values[0]=dto.backgroungColor;
         values[1]=dto.fontColor;
         values[2]=dto.textALIGN;
         values[3]=dto.fontSize;
         return new CellStyle(Address.fromDTO(dto.address), values);
+    }
+
+    //@Override
+    public boolean sameAs(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CellStyle other = (CellStyle) obj;
+        if (!this.address.equals(other.getAddress())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    //@Override
+    public boolean is(Long id) {
+        return (this.pk.compareTo(id) == 0);
+    }
+
+    //@Override
+    public Long id() {
+        return this.pk;
     }
 }
