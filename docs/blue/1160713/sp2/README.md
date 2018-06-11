@@ -27,8 +27,7 @@ US02
 	As an user,
 	I want to be able to accept/deny/block/unblock invitations from other users
 ```
-
-```                                                                          
+                                                                       
 # 3. Analysis
 
 ## 3.1 Analysis Plan
@@ -77,13 +76,13 @@ US2: Accept/Deny/Block/Unblock Invitations from User
 
 *Sequence Diagrams*
 
-**For US1**
+**For US1 - Invitation Dispatch**
 
-![US1 Design](design1.PNG)
+![US1 Design](Core05.1 - Contacts (Invitation Dispatch).png)
 
-**For US2**
+**For US2 - Invitation Reception**
 
-![US2 Design](design2.PNG)
+![US2 Design](Core05.1 - Contacts (Invitation Reception).png)
 
 
 ## 4.3. Classes
