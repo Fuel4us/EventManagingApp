@@ -19,7 +19,6 @@ public class UserDTO implements Serializable {
         this.nickname = nickname;
         this.password = password;
         this.superUser = superUser;
-
     }
 
     // It is mandatory to have a default constructor with no arguments to be serializable!

@@ -12,7 +12,7 @@ public class UserBuilder {
     private String email;
     private String name;
     private String nickname;
-    private Password password;
+    private String password;
     private boolean superUser;
     private List<UserDTO> blacklist;
 
@@ -35,11 +35,6 @@ public class UserBuilder {
     }
 
     public UserBuilder withPassword(String password) {
-        this.password = new Password(password);
-        return this;
-    }
-
-    public UserBuilder withPassword(Password password) {
         this.password = password;
         return this;
     }
@@ -55,6 +50,6 @@ public class UserBuilder {
     }
 
     public UserDTO build() {
-        return new UserDTO(this.email, this.name, this.nickname, this.password.toString(), this.superUser);
+        return new UserDTO(this.email, this.name, this.nickname, this.password, this.superUser);
     }
 }
