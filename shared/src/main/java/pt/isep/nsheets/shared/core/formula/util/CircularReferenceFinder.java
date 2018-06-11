@@ -22,7 +22,6 @@ package pt.isep.nsheets.shared.core.formula.util;
 
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.formula.Formula;
-import pt.isep.nsheets.shared.core.formula.Monetary;
 import pt.isep.nsheets.shared.core.formula.Reference;
 
 /**
@@ -37,7 +36,6 @@ public class CircularReferenceFinder extends AbstractExpressionVisitor {
      * The cell to search for circular references
      */
     private Formula formula;
-    private Monetary monetary;
 
     /**
      * Creates a new circular reference finder.
@@ -45,17 +43,6 @@ public class CircularReferenceFinder extends AbstractExpressionVisitor {
     public CircularReferenceFinder() {
     }
 
-    /**
-     * Checks if the given formula has any circular references.
-     *
-     * @param formula formula
-     * @throws CircularReferenceException if the formula contains any circular
-     * references
-     */
-    public void check(Monetary monetary) throws CircularReferenceException {
-        this.monetary = monetary;
-        monetary.accept(this);
-    }
 
     /**
      * Checks if the given formula has any circular references.

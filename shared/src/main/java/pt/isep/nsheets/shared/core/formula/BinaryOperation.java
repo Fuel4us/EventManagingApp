@@ -20,65 +20,77 @@
  */
 package pt.isep.nsheets.shared.core.formula;
 
+import com.google.gwt.i18n.client.NumberFormat;
+import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Value;
 import pt.isep.nsheets.shared.core.formula.util.ExpressionVisitor;
 
 /**
  * A binary operation in a formula.
+ *
  * @author Einar Pehrson
  */
 public class BinaryOperation extends Operation<BinaryOperator> {
 
-	/** The unique version identifier used for serialization */
-	private static final long serialVersionUID = 2326739272985753461L;
+    /**
+     * The unique version identifier used for serialization
+     */
+    private static final long serialVersionUID = 2326739272985753461L;
 
-	/** The left(first) operand */
-	private Expression leftOperand;
+    /**
+     * The left(first) operand
+     */
+    private Expression leftOperand;
 
-	/** The right(second) operand */
-	private Expression rightOperand;
+    /**
+     * The right(second) operand
+     */
+    private Expression rightOperand;
 
-	/**
-	 * Creates a new binary operation.
-	 * @param leftOperand the left(first) operand
-	 * @param operator the binary operator
-	 * @param rightOperand the right(second) operand
-	 */
-	public BinaryOperation(Expression leftOperand, BinaryOperator operator, Expression rightOperand) {
-		super(operator);
-		this.leftOperand = leftOperand;
-		this.rightOperand = rightOperand;
-	}
+    /**
+     * Creates a new binary operation.
+     *
+     * @param leftOperand the left(first) operand
+     * @param operator the binary operator
+     * @param rightOperand the right(second) operand
+     */
+    public BinaryOperation(Expression leftOperand, BinaryOperator operator, Expression rightOperand) {
+        super(operator);
+        this.leftOperand = leftOperand;
+        this.rightOperand = rightOperand;
+    }
 
-        @Override
-	public Value evaluate() throws IllegalValueTypeException {
-		return operator.applyTo(leftOperand, rightOperand);
-	}
+    @Override
+    public Value evaluate() throws IllegalValueTypeException {
+        return operator.applyTo(leftOperand, rightOperand);
+    }
 
-	/** 
-	 * Returns the left(first) operand.
-	 * @return an expression tree representing the operand
-	 */
-	public Expression getLeftOperand() {
-		return leftOperand;
-	}
+    /**
+     * Returns the left(first) operand.
+     *
+     * @return an expression tree representing the operand
+     */
+    public Expression getLeftOperand() {
+        return leftOperand;
+    }
 
-	/** 
-	 * Returns the right(second) operand.
-	 * @return an expression tree representing the operand
-	 */
-	public Expression getRightOperand() {
-		return rightOperand;
-	}
+    /**
+     * Returns the right(second) operand.
+     *
+     * @return an expression tree representing the operand
+     */
+    public Expression getRightOperand() {
+        return rightOperand;
+    }
 
-        @Override
-	public Object accept(ExpressionVisitor visitor) {
-		return visitor.visitBinaryOperation(this);
-	}
+    @Override
+    public Object accept(ExpressionVisitor visitor) {
+        return visitor.visitBinaryOperation(this);
+    }
 
-        @Override
-	public String toString() {
-		return leftOperand + operator.toString() + rightOperand;
-	}
+    @Override
+    public String toString() {
+        return leftOperand + operator.toString() + rightOperand;
+    }
 }

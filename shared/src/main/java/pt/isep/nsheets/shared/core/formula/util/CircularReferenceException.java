@@ -21,7 +21,6 @@
 package pt.isep.nsheets.shared.core.formula.util;
 
 import pt.isep.nsheets.shared.core.formula.Formula;
-import pt.isep.nsheets.shared.core.formula.Monetary;
 
 /**
  * An exception that is thrown if a formula contains a reference (directly or
@@ -40,7 +39,6 @@ public class CircularReferenceException extends ExpressionVisitorException {
      * The formula in which the circularity exists
      */
     private Formula formula;
-    private Monetary monetary;
 
     /**
      * Creates a new circular reference exception.
@@ -52,15 +50,6 @@ public class CircularReferenceException extends ExpressionVisitorException {
         this.formula = formula;
     }
 
-    /**
-     * Creates a new circular reference exception.
-     *
-     * @param formula the formula that caused the exception
-     */
-    public CircularReferenceException(Monetary monetary) {
-        super("A circular reference was encountered in the monetary " + monetary + ".");
-        this.monetary = monetary;
-    }
 
     /**
      * Returns the formula in which the circularity exists.
@@ -69,15 +58,6 @@ public class CircularReferenceException extends ExpressionVisitorException {
      */
     public Formula getFormula() {
         return formula;
-    }
-
-    /**
-     * Returns the formula in which the circularity exists.
-     *
-     * @return the formula in which the circularity exists
-     */
-    public Monetary getMonetary() {
-        return monetary;
     }
 
     /**
