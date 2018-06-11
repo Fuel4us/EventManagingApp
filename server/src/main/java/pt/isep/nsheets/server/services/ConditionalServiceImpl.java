@@ -14,6 +14,7 @@ import pt.isep.nsheets.shared.services.DataException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import pt.isep.nsheets.shared.lapr4.green.n1160557.s2.services.ConditionalRangeDTO;
 
 public class ConditionalServiceImpl  extends RemoteServiceServlet implements ConditionalService {
 
@@ -56,5 +57,21 @@ public class ConditionalServiceImpl  extends RemoteServiceServlet implements Con
     public ConditionalDTO saveConditional(ConditionalDTO conditionalDTO) throws DataException {
         ConditionalCellFormattingController ctrl = new ConditionalCellFormattingController();
         return ctrl.addConditional((CellImpl) CellImpl.fromDTO(conditionalDTO.getCell()), conditionalDTO.getConfiguration(), conditionalDTO.getCondOperator(), conditionalDTO.getCondValue()).toDTO();
+    }
+    
+    @Override
+    public List<ConditionalDTO> saveRangeConditional(ConditionalRangeDTO listCond) throws DataException {
+        ConditionalCellFormattingController ctrl = new ConditionalCellFormattingController();
+        List<ConditionalDTO> list = new ArrayList<>();
+        
+        List<Conditional> listConditionals = new ArrayList<>();
+        for(ConditionalDTO cond : listCond.getConditionals())
+            listConditionals.add(Conditional.fromDTO(cond));
+        
+        List<Conditional> conditionalsStored = ctrl.addRangeConditional(listConditionals);
+        for(Conditional cond : conditionalsStored)
+            list.add(cond.toDTO());
+        
+        return list;
     }
 }
