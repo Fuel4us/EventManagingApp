@@ -21,7 +21,6 @@
 package pt.isep.nsheets.shared.core.formula;
 
 import com.google.gwt.i18n.client.NumberFormat;
-import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Value;
 import pt.isep.nsheets.shared.core.formula.util.ExpressionVisitor;
@@ -63,7 +62,9 @@ public class BinaryOperation extends Operation<BinaryOperator> {
 
     @Override
     public Value evaluate() throws IllegalValueTypeException {
-        return operator.applyTo(leftOperand, rightOperand);
+        Value newValue = operator.applyTo(leftOperand, rightOperand);
+        String decimalFormat = NumberFormat.getFormat("0.00").format(newValue.toDouble());
+        return Value.parseValue(decimalFormat);
     }
 
     /**
