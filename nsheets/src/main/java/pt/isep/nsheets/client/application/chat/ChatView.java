@@ -158,9 +158,9 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
                     if(result.isEmpty())
                         MaterialToast.fireToast("The Database don't have users!");
 
-                    for(UserDTO userdto : result){
-                        comboBox2.addItem(userDto.getEmail());
-                        comboBox3.addItem(userDto.getEmail());
+                    for(UserDTO udto : result){
+                        comboBox2.addItem(udto.getEmail());
+                        comboBox3.addItem(udto.getEmail());
                     }
 
                 }
@@ -226,6 +226,7 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
             else if((m.getChatIndex() == CHAT_INDEX_PRIVATE_2) && (!isOnPrivateList2 || HAS_ACCESS_2)){
                 if(SHOW_ONLY_ONCE_2){
                     MaterialToast.fireToast("You don't have access to this chat");
+                    emptyState2.setVisible(true);
                     SHOW_ONLY_ONCE_2 = false;
                 }
             }
@@ -242,12 +243,17 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
             else if((m.getChatIndex() == CHAT_INDEX_PRIVATE_3) && (!isOnPrivateList3 || HAS_ACCESS_3)){
                 if(SHOW_ONLY_ONCE_3){
                     MaterialToast.fireToast("You don't have access to this chat");
+                    emptyState3.setVisible(true);
                     SHOW_ONLY_ONCE_3 = false;
                 }
             }
 
         }
-
+        
+//        refreshPrivateChat_2();
+//        refreshPrivateChat_3();
+        
+        
     }
 
 //    private void buildDynamicTab() {
@@ -377,6 +383,48 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
 //        privateChatsSvc.addPrivateChat(privateChatDTO_3, callback);
 //        
 //    }
+//    
+//    
+//    private void refreshPrivateChat_2(){
+//        PrivateChatsServiceAsync privateChatsSvc = GWT.create(PrivateChat.class);
+//        // Set up the callback object.
+//        AsyncCallback<PrivateChatDTO> callback = new AsyncCallback<PrivateChatDTO>() {
+//            @Override
+//            public void onFailure(Throwable caught) {
+//                MaterialToast.fireToast("Error! " + caught.getMessage());
+//            }
+//
+//            @Override
+//            public void onSuccess(PrivateChatDTO result) {
+//                
+//            }
+//
+//        };
+//        
+//        privateChatsSvc.addPrivateChat(privateChatDTO_2, callback);
+//        
+//    }
+//    
+//    private void refreshPrivateChat_3(){
+//        PrivateChatsServiceAsync privateChatsSvc = GWT.create(PrivateChat.class);
+//        // Set up the callback object.
+//        AsyncCallback<PrivateChatDTO> callback = new AsyncCallback<PrivateChatDTO>() {
+//            @Override
+//            public void onFailure(Throwable caught) {
+//                MaterialToast.fireToast("Error! " + caught.getMessage());
+//            }
+//
+//            @Override
+//            public void onSuccess(PrivateChatDTO result) {
+//                
+//            }
+//
+//        };
+//        
+//        privateChatsSvc.addPrivateChat(privateChatDTO_3, callback);
+//        
+//    }
+    
     
     @Override
     public void buttonClickHandlerPublicChat(ClickHandler ch) {
