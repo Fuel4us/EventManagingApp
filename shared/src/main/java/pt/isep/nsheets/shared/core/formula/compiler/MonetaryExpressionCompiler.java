@@ -10,8 +10,6 @@ import gwt.material.design.client.ui.MaterialToast;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -20,7 +18,6 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.tree.ParseTree;
 import pt.isep.nsheets.shared.core.Cell;
-import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.formula.Expression;
 import pt.isep.nsheets.shared.core.formula.lang.Language;
 import pt.isep.nsheets.shared.core.formula.lang.LanguageManager;
@@ -172,7 +169,6 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
             throw new FormulaCompilationException(monetaryErrorListener.getErrorMessage());
         }
 
-        MaterialToast.fireToast(tree.toStringTree());
         //Visit the expression and returns it
         MonetaryEvalVisitor eval = new MonetaryEvalVisitor(cell, language);
         Expression result = eval.visit(tree);
