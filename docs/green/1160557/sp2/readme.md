@@ -3,7 +3,6 @@
 
 # 1. General Notes
 
-Tried to Implement the Cell"Style"Extension that might be the Core08.1 to apply and me to use. But no success, however, the CellStyleExtension was created.
 Fixed an issue retrieving multiple conditions from Persistence
 
 # 2. Requirements
@@ -58,8 +57,6 @@ Para o US2 o processo é idêntico.
 
 # 7. Final Remarks 
 
-I couldn't get the cell style changing considering the boolean value of the condition, but the condition is being properly calculated.
-
 # 8. Work Log
 
 Commits:
@@ -71,4 +68,6 @@ Commits:
 [Range Condition Apply](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/7df4e9879275eae1cca0300ffe3157d47949883c)
 
 [Conditions and Range Conditions persistence, DB store and retrieve](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/df2a910b21840a86d159926ede94e53345449780)
+
+[Documentation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/47a41cfbbc07db38c915b8bcb3bc5a1322e91cfb)
 
