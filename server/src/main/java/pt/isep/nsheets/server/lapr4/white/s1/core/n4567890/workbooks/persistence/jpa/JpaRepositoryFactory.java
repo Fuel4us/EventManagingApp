@@ -19,6 +19,7 @@ import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.RepositoryFactory;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.WorkbookRepository;
 import java.util.concurrent.locks.Condition;
+import pt.isep.nsheets.server.lapr4.blue.n1150372.s2.persistence.AgendaRepository;
 import pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.persistence.ContactsRepository;
 import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160634.users.persistance.PrivateChatsRepository;
 
@@ -57,6 +58,11 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     @Override
     public CalendarEventRepository calendarEvents() {
         return new JpaCalendarEventRepository(this.settings);
+    }
+    
+    @Override
+    public AgendaRepository agenda() {
+        return new JpaAgendaRepository(this.settings);
     }
 
 //    @Override
