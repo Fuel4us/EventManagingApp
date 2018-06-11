@@ -20,13 +20,11 @@
 package pt.isep.nsheets.client.application.workbook;
 
 import com.google.gwt.core.client.GWT;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.RichTextArea;
 import gwt.material.design.client.constants.Color;
 import javax.inject.Inject;
 
@@ -50,14 +48,9 @@ import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.table.MaterialDataTable;
-import pt.isep.nsheets.server.lapr4.green.s1.core.n1140302.search.Application.SearchSpreadsheetController;
 import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
@@ -133,9 +126,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialListValueBox<Color> fontColorFalse;
     /* End of Conditional UI Objects */
 
-    /*
+ /*
     Style UI objects by 1050475
-    */
+     */
     @UiField
     MaterialListValueBox<Color> backgroundcolorLst;
     @UiField
@@ -144,8 +137,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialListValueBox<Integer> fontsizeLst;
     @UiField
     MaterialListValueBox<TextAlign> textAlignLst;
-
-
 
     @UiField
     MaterialDropDown chart_dropdown;
@@ -168,6 +159,29 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialListBox sortListBox;
     @UiField
     MaterialDataTable<SheetCell> customTable;
+    @UiField
+    MaterialButton newSpreadSheetButton;
+    @UiField
+    MaterialButton editWorkbookButton;
+    @UiField
+    MaterialModal modal;
+    @UiField
+    MaterialButton editButtonModal;
+    @UiField
+    MaterialButton cancelButtonModal;
+    @UiField
+    MaterialButton deleteButtonModal;
+    
+    @UiField
+    MaterialLink rangeConditionButton;
+    @UiField
+    MaterialTextBox conditionalCell;
+    @UiField
+    MaterialRow conditionalRange;
+    @UiField
+    MaterialTextBox rangeConditionalStart;
+    @UiField
+    MaterialTextBox rangeConditionalEnd;
 
     @UiHandler("click_chart")
     void onclick(ClickEvent e) {
@@ -242,7 +256,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
     @Override
     public void initWorkbook() {
-        Spreadsheet sh = Settings.getInstance().getWorkbook().getSpreadsheet(0);
+        Spreadsheet sh = getCurrentSpreadsheet();
 
         int columnNumber = 0;
 
@@ -292,9 +306,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                         Conditional cond = ConditionalFormattingExtension.containsCondition((CellImpl) activeCell);
 
                         /*1050475 Other possibility to change CellSyle but need colaboration from Core8.1*/
-                        if(cond != null){
-                            boolean flag = ConditionalFormattingExtension.setOperation((CellImpl)activeCell, cond.getCondOperator(), cond.getCondValue());
-                            MaterialToast.fireToast("Update Cell. Conditional this "+ activeCell.getAddress().toString()+" " + cond.getCondOperator()+ " "+ cond.getCondValue().toString() + " is "+flag);
+                        if (cond != null) {
+                            boolean flag = ConditionalFormattingExtension.setOperation((CellImpl) activeCell, cond.getCondOperator(), cond.getCondValue());
+                            MaterialToast.fireToast("Update Cell. Conditional this " + activeCell.getAddress().toString() + " " + cond.getCondOperator() + " " + cond.getCondValue().toString() + " is " + flag);
 
                         }
                     }
@@ -335,12 +349,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
             };
 
-            cellsServiceAsync.getResult( searchBox.getText(),Settings.getInstance().getWorkbook().toDTO(), asyncCallback);
-
+            cellsServiceAsync.getResult(searchBox.getText(), Settings.getInstance().getWorkbook().toDTO(), asyncCallback);
 
         });
-
-
 
         // It is possible to create your own custom renderer per table
         // When you use the BaseRenderer you can override certain draw
@@ -349,41 +360,48 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         conditionalButton.addClickHandler(event -> {
             if (activeCell != null) {
-
-                conditionalModal.open();
                 conditionalTitle.setTitle("Conditional Formating of Cell " + activeCell.getAddress().toString());
+                conditionalCell.setValue(activeCell.getAddress().toString());
+                conditionalRange.setVisibility(Style.Visibility.HIDDEN);
+                conditionalModal.open();
             }
         });
-        backgroundcolorLst.addValueChangeHandler(event ->{
+        rangeConditionButton.addClickHandler(event -> {
+            conditionalTitle.setTitle("Conditional Formatting of a range of Cells");
+            conditionalCell.setValue("_cell");
+            conditionalRange.setVisibility(Style.Visibility.VISIBLE);
+            conditionalModal.open();
+        });
+        backgroundcolorLst.addValueChangeHandler(event -> {
 
-            if(activeCell != null){
+            if (activeCell != null) {
                 CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
-                if(c != null){
+                if (c != null) {
                     c.setBackgroungColor(backgroundcolorLst.getSelectedValue().ordinal());
-                    MaterialToast.fireToast("existia " +  CellStyleExtension.getCellStyle(activeCell.getAddress()).getBackgroungColor());
-                }else{
+                    MaterialToast.fireToast("existia " + CellStyleExtension.getCellStyle(activeCell.getAddress()).getBackgroungColor());
+                } else {
                     MaterialToast.fireToast("nao existia");
-                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), backgroundcolorLst.getSelectedValue().ordinal(), Color.BLACK.ordinal(),0,12));
+                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), backgroundcolorLst.getSelectedValue().ordinal(), Color.BLACK.ordinal(), 0, 12));
 
                 }
                 customTable.getView().setRedraw(true);
                 customTable.getView().refresh();
 
                 //remover depois de persistencia e extensions a funcionar. resize do label
-                customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() +1 ).setBackgroundColor(backgroundcolorLst.getSelectedValue());
+                customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() + 1).setBackgroundColor(backgroundcolorLst.getSelectedValue());
             }
         });
 
         fontcolorLst.addValueChangeHandler(event -> {
-            if(activeCell != null){
+            if (activeCell != null) {
 
                 CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
-                if(c != null){
+                if (c != null) {
                     c.setFontColor(fontcolorLst.getSelectedValue().ordinal());
-                    MaterialToast.fireToast("existia " +  CellStyleExtension.getCellStyle(activeCell.getAddress()).getFontColor());
-                }else{
+                    MaterialToast.fireToast("existia " + CellStyleExtension.getCellStyle(activeCell.getAddress()).getFontColor());
+                } else {
                     MaterialToast.fireToast("nao existia");
-                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(),0,12));
+                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(), 0, 12));
 
                 }
                 customTable.getView().setRedraw(true);
@@ -392,39 +410,39 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         });
 
-        fontsizeLst.addValueChangeHandler(event ->{
-            if(activeCell != null){
+        fontsizeLst.addValueChangeHandler(event -> {
+            if (activeCell != null) {
                 CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
-                if(c != null){
+                if (c != null) {
                     c.setFontSize(fontsizeLst.getSelectedValue());
-                    MaterialToast.fireToast("existia " +  CellStyleExtension.getCellStyle(activeCell.getAddress()).getFontSize());
-                }else{
+                    MaterialToast.fireToast("existia " + CellStyleExtension.getCellStyle(activeCell.getAddress()).getFontSize());
+                } else {
                     MaterialToast.fireToast("nao existia");
-                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(),0,fontsizeLst.getSelectedValue()));
+                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(), 0, fontsizeLst.getSelectedValue()));
 
                 }
                 customTable.getView().setRedraw(true);
                 customTable.getView().refresh();
 
-                customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() +1 ).setFontSize(fontsizeLst.getSelectedValue(), Style.Unit.PX);
+                customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() + 1).setFontSize(fontsizeLst.getSelectedValue(), Style.Unit.PX);
             }
         });
 
         textAlignLst.addValueChangeHandler(event -> {
-            if(activeCell != null){
+            if (activeCell != null) {
                 CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
-                if(c != null){
-                    c.setTextALIGN(textAlignLst.getSelectedIndex()-1);
-                    MaterialToast.fireToast("existia " +  CellStyleExtension.getCellStyle(activeCell.getAddress()).getTextALIGN());
-                }else{
+                if (c != null) {
+                    c.setTextALIGN(textAlignLst.getSelectedIndex() - 1);
+                    MaterialToast.fireToast("existia " + CellStyleExtension.getCellStyle(activeCell.getAddress()).getTextALIGN());
+                } else {
                     MaterialToast.fireToast("nao existia");
-                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(),textAlignLst.getSelectedIndex()-1,12));
+                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(), textAlignLst.getSelectedIndex() - 1, 12));
 
                 }
                 customTable.getView().setRedraw(true);
                 customTable.getView().refresh();
 
-                customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() +1 ).setTextAlign(TextAlign.values()[textAlignLst.getSelectedValue().ordinal()]);
+                customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() + 1).setTextAlign(TextAlign.values()[textAlignLst.getSelectedValue().ordinal()]);
             }
         });
 
@@ -534,12 +552,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 //
 //        return dto;
 //    }
+    private void populateColourListBox() {
 
-
-    private void populateColourListBox(){
-
-        for (Color c : Color.values()){
-            if(!c.equals(Color.DEFAULT)) {
+        for (Color c : Color.values()) {
+            if (!c.equals(Color.DEFAULT)) {
                 backgroundColorTrue.addItem(c);
                 fontColorTrue.addItem(c);
                 backgroundColorFalse.addItem(c);
@@ -550,11 +566,11 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         }
     }
 
-    private void populateTextAlignListBox(){
+    private void populateTextAlignListBox() {
         textAlignLst.addItem(TextAlign.LEFT);
         textAlignLst.addItem(TextAlign.CENTER);
         textAlignLst.addItem(TextAlign.RIGHT);
-        for(int i = 6; i < 30; i=i+2){
+        for (int i = 6; i < 30; i = i + 2) {
             fontsizeLst.addItem(i);
         }
     }
@@ -620,9 +636,40 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     public String getConditionalValue() {
         return conditionalText.getText();
     }
+    
+    @Override
+    public String getConditionalCell() {
+        return conditionalCell.getText();
+    }
+    
+    @Override
+    public String getConditionalRangeStart() {
+        return rangeConditionalStart.getText();
+    }
+    
+    @Override
+    public String getConditionalRangeEnd() {
+        return rangeConditionalEnd.getText();
+    }
 
     @Override
     public MaterialModal getConditionalModal() {
         return this.conditionalModal;
     }
+    
+    @Override
+    public Spreadsheet getCurrentSpreadsheet() {
+        return Settings.getInstance().getWorkbook().getSpreadsheet(0);
+    }
+
+    @UiHandler("editWorkbookButton")
+    void editWorkBook(ClickEvent e) {
+        modal.open();
+    }
+
+    @UiHandler("cancelButtonModal")
+    void cancelModal(ClickEvent e) {
+        modal.close();
+    }
+
 }

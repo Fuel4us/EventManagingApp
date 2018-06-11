@@ -70,8 +70,13 @@ import pt.isep.nsheets.shared.services.ChartsService;
 import pt.isep.nsheets.shared.services.ChartsServiceAsync;
 
 import java.text.ParseException;
+import java.util.concurrent.locks.Condition;
 import pt.isep.nsheets.client.application.menu.MenuView;
 import pt.isep.nsheets.shared.application.Settings;
+import pt.isep.nsheets.shared.core.Address;
+import pt.isep.nsheets.shared.core.Spreadsheet;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core.CellStyle;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtension;
 import pt.isep.nsheets.shared.services.ChartType;
 
 public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, WorkbookPresenter.MyProxy> {
@@ -94,9 +99,9 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         public MaterialPopupMenu getPopChart();
 
         public MaterialModal getConditionalModal();
-
+        
         public void addConfirmationHandler(ClickHandler cMDB);
-
+        
         public int getBackgroudColorTrue();
 
         public int getFontColorTrue();
@@ -108,6 +113,14 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         public String getOperator();
 
         public String getConditionalValue();
+        
+        public String getConditionalCell();
+        
+        public String getConditionalRangeStart();
+        
+        public String getConditionalRangeEnd();
+        
+        public Spreadsheet getCurrentSpreadsheet();
 
         void setText(String string);
 
@@ -268,6 +281,45 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         chartSrv.getCharts(callback);
 
     }
+    
+    private void applyConditionToCell(Cell cell, Conditional conditional) {
+        ConditionalFormattingExtension.addConditional(conditional);
+        
+        int bgColor = 0;
+        int fgColor = 0;
+        if(ConditionalFormattingExtension.setOperation(cell, conditional.getCondOperator(), conditional.getCondValue())) {
+            bgColor = conditional.getConfiguration().getBgColorPos();
+            fgColor = conditional.getConfiguration().getFgColorPos();
+        } else {
+            bgColor = conditional.getConfiguration().getBgColorNeg();
+            fgColor = conditional.getConfiguration().getFgColorNeg();
+        }
+        
+        ConditionalServiceAsync conditionalSvc = GWT.create(ConditionalService.class);
+        AsyncCallback<ConditionalDTO> callback = new AsyncCallback<ConditionalDTO>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                MaterialToast.fireToast("Error configuring Conditionalextension! " + caught.getMessage());
+            }
+
+            @Override
+            public void onSuccess(ConditionalDTO result) {
+                MaterialToast.fireToast("Conditionalextension conditional configured!");
+            }
+        };
+        conditionalSvc.saveConditional(conditional.toDTO(), callback);
+
+        /*CellStyle cs = CellStyleExtension.getCellStyle(cell.getAddress());
+        if (cs == null) {
+            cs = new CellStyle(cell.getAddress(), bgColor, fgColor, 0, 12);
+            CellStyleExtension.addCellStyle(cs);
+        } else {
+            cs.setBackgroungColor(bgColor);
+            cs.setFontColor(fgColor);
+        }
+        view.getTable().getView().setRedraw(true);
+        view.getTable().getView().refresh();*/
+    }
 
     protected void conditionalFormattingAction() {
 
@@ -280,12 +332,33 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
             values[3] = view.getFontColorFalse();
 
             Configuration configuration = new Configuration(values);
-
-            Conditional conditional = new Conditional(this.view.getActiveCell(), configuration, view.getOperator(), conditionalValue);
-            ConditionalFormattingExtension.addConditional(conditional);
+            
+            Spreadsheet sh = this.view.getCurrentSpreadsheet();
+            
+            if(view.getConditionalCell().equals("_cell")) {
+                char columnStart = view.getConditionalRangeStart().charAt(0);
+                char columnEnd = view.getConditionalRangeEnd().charAt(0);
+                
+                char rowStart = view.getConditionalRangeStart().charAt(1);
+                char rowEnd = view.getConditionalRangeEnd().charAt(1);
+                
+                for(char i = columnStart; i <= columnEnd; i++) {
+                    for(char p = rowStart; p <= rowEnd; p++) {
+                        Cell cell = sh.getCell(new Address("" + i + p));
+                        Conditional conditional = new Conditional(cell, configuration, view.getOperator(), conditionalValue);
+                        
+                        applyConditionToCell(cell, conditional);
+                    }
+                }
+            } else {
+                Cell cell = sh.getCell(new Address(view.getConditionalCell()));
+                Conditional conditional = new Conditional(cell, configuration, view.getOperator(), conditionalValue);
+                        
+                applyConditionToCell(cell, conditional);
+            }
 
             /*1050475 lang03.1 persistencia com erro no Conditional service*/
-            ConditionalServiceAsync conditionalSvc = GWT.create(ConditionalService.class);
+            /*ConditionalServiceAsync conditionalSvc = GWT.create(ConditionalService.class);
 
             AsyncCallback<ConditionalDTO> callback = new AsyncCallback<ConditionalDTO>() {
                 @Override
@@ -297,7 +370,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
                 public void onSuccess(ConditionalDTO result) {
                     MaterialToast.fireToast("Conditionalextension conditional configured!");
                 }
-            };
+            };*/
             //conditionalSvc.saveConditional(conditional.toDTO(), callback);
 
 
@@ -315,9 +388,8 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
     }
-
+    
     /* 1050475 Hernani Gil
                Repository loading
      */
