@@ -39,7 +39,7 @@ public class UploadServlet extends HttpServlet {
 
                 InputStream in = fileItem.openStream();
                 // The destination of your uploaded files.
-                File file = new File("./uploadedFiles/" + fileItem.getName());
+                File file = new File("./nsheets/src/main/webapp/uploadedFiles/" + fileItem.getName());
                 OutputStream outputStream = new FileOutputStream(file);
 
                 int length = 0;

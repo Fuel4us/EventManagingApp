@@ -77,6 +77,7 @@ import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core.CellStyle;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtension;
+import pt.isep.nsheets.shared.lapr4.green.n1160557.s2.services.ConditionalRangeDTO;
 import pt.isep.nsheets.shared.services.ChartType;
 
 public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, WorkbookPresenter.MyProxy> {
@@ -152,11 +153,11 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         /* 1050475 Hernani Gil
            Repository loading
          */
-        //conditionalService();
         this.wDTO = Settings.getInstance().getWorkbook().toDTO();
         this.view = view;
 
         this.placeManager = placeManager;
+        conditionalService();
     }
 
     PlaceManager placeManager;
@@ -241,7 +242,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         updateCellCharts();
 
         MaterialToast.fireToast("Workbook page updated");
-
+        conditionalService();
     }
 
     private void redirectToChartPage() {
@@ -282,47 +283,39 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 
     }
     
-    private void applyConditionToCell(Cell cell, Conditional conditional) {
+    private void applyConditionToCell(Conditional conditional) {
+        boolean res = ConditionalFormattingExtension.setOperation(conditional.getCell(), conditional.getCondOperator(), conditional.getCondValue());
+        MaterialToast.fireToast("Cell " + conditional.getCell().getAddress() + " = " + res);
         ConditionalFormattingExtension.addConditional(conditional);
         
+        applyConditionStyleToCell(conditional);
+    }
+    
+    private void applyConditionStyleToCell(Conditional conditional) {
         int bgColor = 0;
         int fgColor = 0;
-        if(ConditionalFormattingExtension.setOperation(cell, conditional.getCondOperator(), conditional.getCondValue())) {
+        
+        if(ConditionalFormattingExtension.setOperation(conditional.getCell(), conditional.getCondOperator(), conditional.getCondValue())) {
             bgColor = conditional.getConfiguration().getBgColorPos();
             fgColor = conditional.getConfiguration().getFgColorPos();
         } else {
             bgColor = conditional.getConfiguration().getBgColorNeg();
             fgColor = conditional.getConfiguration().getFgColorNeg();
         }
-        
-        ConditionalServiceAsync conditionalSvc = GWT.create(ConditionalService.class);
-        AsyncCallback<ConditionalDTO> callback = new AsyncCallback<ConditionalDTO>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                MaterialToast.fireToast("Error configuring Conditionalextension! " + caught.getMessage());
-            }
 
-            @Override
-            public void onSuccess(ConditionalDTO result) {
-                MaterialToast.fireToast("Conditionalextension conditional configured!");
-            }
-        };
-        conditionalSvc.saveConditional(conditional.toDTO(), callback);
-
-        /*CellStyle cs = CellStyleExtension.getCellStyle(cell.getAddress());
+        CellStyle cs = CellStyleExtension.getCellStyle(conditional.getCell().getAddress());
         if (cs == null) {
-            cs = new CellStyle(cell.getAddress(), bgColor, fgColor, 0, 12);
+            cs = new CellStyle(conditional.getCell().getAddress(), bgColor, fgColor, 0, 12);
             CellStyleExtension.addCellStyle(cs);
         } else {
             cs.setBackgroungColor(bgColor);
             cs.setFontColor(fgColor);
         }
         view.getTable().getView().setRedraw(true);
-        view.getTable().getView().refresh();*/
+        view.getTable().getView().refresh();
     }
 
     protected void conditionalFormattingAction() {
-
         try {
             Value conditionalValue = Value.parseNumericValue(this.view.getConditionalValue());
             int[] values = new int[4];
@@ -335,6 +328,8 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
             
             Spreadsheet sh = this.view.getCurrentSpreadsheet();
             
+            ConditionalServiceAsync conditionalSvc = GWT.create(ConditionalService.class);
+            
             if(view.getConditionalCell().equals("_cell")) {
                 char columnStart = view.getConditionalRangeStart().charAt(0);
                 char columnEnd = view.getConditionalRangeEnd().charAt(0);
@@ -342,74 +337,74 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
                 char rowStart = view.getConditionalRangeStart().charAt(1);
                 char rowEnd = view.getConditionalRangeEnd().charAt(1);
                 
+                ConditionalRangeDTO condRange = new ConditionalRangeDTO();
+                
                 for(char i = columnStart; i <= columnEnd; i++) {
                     for(char p = rowStart; p <= rowEnd; p++) {
                         Cell cell = sh.getCell(new Address("" + i + p));
                         Conditional conditional = new Conditional(cell, configuration, view.getOperator(), conditionalValue);
                         
-                        applyConditionToCell(cell, conditional);
+                        condRange.addConditional(conditional.toDTO());
+                        
+                        applyConditionToCell(conditional);
                     }
                 }
+                
+                AsyncCallback<List<ConditionalDTO>> callback = new AsyncCallback<List<ConditionalDTO>>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        MaterialToast.fireToast("Error configuring Conditionalextension! " + caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(List<ConditionalDTO> result) {
+                        MaterialToast.fireToast("Range of " + result.size() + " conditions saved to DB");
+                    }
+                };
+                conditionalSvc.saveRangeConditional(condRange, callback);
             } else {
                 Cell cell = sh.getCell(new Address(view.getConditionalCell()));
                 Conditional conditional = new Conditional(cell, configuration, view.getOperator(), conditionalValue);
                         
-                applyConditionToCell(cell, conditional);
+                applyConditionToCell(conditional);
+                
+                AsyncCallback<ConditionalDTO> callback = new AsyncCallback<ConditionalDTO>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        MaterialToast.fireToast("Error configuring Conditionalextension! " + caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(ConditionalDTO result) {
+                        MaterialToast.fireToast("Condition saved to DB");
+                    }
+                };
+                conditionalSvc.saveConditional(conditional.toDTO(), callback);
             }
-
-            /*1050475 lang03.1 persistencia com erro no Conditional service*/
-            /*ConditionalServiceAsync conditionalSvc = GWT.create(ConditionalService.class);
-
-            AsyncCallback<ConditionalDTO> callback = new AsyncCallback<ConditionalDTO>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                    MaterialToast.fireToast("Error configuring Conditionalextension! " + caught.getMessage());
-                }
-
-                @Override
-                public void onSuccess(ConditionalDTO result) {
-                    MaterialToast.fireToast("Conditionalextension conditional configured!");
-                }
-            };*/
-            //conditionalSvc.saveConditional(conditional.toDTO(), callback);
-
-
-            /* LANG03.1 NOT WORKING
-            Extension extension = ExtensionManager.getInstance().getExtension("ConditionalExtension");
-            ConditionalFormattingExtension.addConditional(conditional);
-            this.view.getActiveCell().getExtension("ConditionalExtension");
-            MaterialToast.fireToast(this.view.getActiveCell().getAddress().toString() + " conditional result ="
-                    + ConditionalFormattingExtension.setOperation(this.view.getActiveCell(), conditional.getCondOperator(), conditional.getCondValue()));
-
-            for (CellListener l : this.view.getActiveCell().getCellListeners()) {
-                l.valueChanged(this.view.getActiveCell());
-            }
-             */
         } catch (ParseException e) {
             e.printStackTrace();
         }
     }
-    
-    /* 1050475 Hernani Gil
-               Repository loading
-     */
- /*
+ 
     private void conditionalService() {
         ConditionalServiceAsync conditionalSvc = GWT.create(ConditionalService.class);
 
-        AsyncCallback<List<ConditionalDTO>> callback = new AsyncCallback<List<ConditionalDTO>>() {
+        AsyncCallback<ArrayList<ConditionalDTO>> callback = new AsyncCallback<ArrayList<ConditionalDTO>>() {
             @Override
             public void onFailure(Throwable caught) {
                 MaterialToast.fireToast("Error retrieving conditional! " + caught.getMessage());
             }
 
             @Override
-            public void onSuccess(List<ConditionalDTO> conditionalDTOS) {
-                MaterialToast.fireToast("List conditionals retrieved! ");
+            public void onSuccess(ArrayList<ConditionalDTO> conditionalDTOS) {
+                MaterialToast.fireToast(conditionalDTOS.size() + " conditions retrieved from DB!");
+                for(ConditionalDTO cond : conditionalDTOS)
+                    applyConditionStyleToCell(Conditional.fromDTO(cond));
             }
         };
         conditionalSvc.getListConditional(callback);
-    }*/
+    }
+    
     private void refreshWorkbooks() {
         WorkbooksServiceAsync workbookSvc = GWT.create(WorkbooksService.class);
 

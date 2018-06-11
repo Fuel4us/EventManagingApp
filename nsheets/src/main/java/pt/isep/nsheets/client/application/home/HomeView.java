@@ -57,10 +57,15 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
     @Inject
     HomeView(Binder uiBinder, CurrentUser currentUser) {
         initWidget(uiBinder.createAndBindUi(this));
+        
         MenuView.getUsername().clear();
+        MenuView.getUsername().setText("Welcome, " + currentUser.getUser().getNickname());
+        
         MenuView.getLogout().clear();
         MenuView.getLogout().setText("Logout");
-        MenuView.getUsername().setText("Welcome, " + currentUser.getUser().getNickname());
+        
+        MenuView.getImage().setUrl(currentUser.getUser().getPictureName());
+        MenuView.getImage().setBorder("2px solid #186AAB");
     }
     
     private MaterialCard createCard(WorkbookDTO wb) {

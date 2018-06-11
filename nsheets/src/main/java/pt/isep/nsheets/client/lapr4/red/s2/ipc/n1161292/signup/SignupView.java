@@ -1,12 +1,17 @@
 package pt.isep.nsheets.client.lapr4.red.s2.ipc.n1161292.signup;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
+import gwt.material.design.addins.client.fileuploader.MaterialFileUploader;
+import gwt.material.design.addins.client.fileuploader.base.UploadFile;
+import gwt.material.design.addins.client.fileuploader.events.CompleteEvent;
 import gwt.material.design.client.base.validator.RegExValidator;
 import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialImage;
 import gwt.material.design.client.ui.MaterialTextBox;
 import javax.inject.Inject;
 
@@ -25,10 +30,25 @@ public class SignupView extends ViewImpl implements SignupPresenter.MyView {
     @UiField
     MaterialButton submitBtn;
     
+    @UiField
+    MaterialFileUploader cardUploader;
+    
+    @UiField
+    MaterialImage imgPreview;
+    
     @Inject
     SignupView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
+        cardUploader.setUrl(GWT.getModuleBaseURL() + "uploadServlet");
+        
         validateInput();
+        
+        cardUploader.addCompleteHandler(new CompleteEvent.CompleteHandler<UploadFile>() {
+            @Override
+            public void onComplete(CompleteEvent<UploadFile> event) {
+                imgPreview.setUrl(GWT.getHostPageBaseURL() + "uploadedFiles/" + event.getTarget().getName());
+            }
+        });
     }
     
     public void validateInput(){
@@ -89,5 +109,10 @@ public class SignupView extends ViewImpl implements SignupPresenter.MyView {
         this.username.clear();
         this.name.clear();
         this.password.clear();
+    }
+    
+    @Override
+    public MaterialImage image(){
+        return this.imgPreview;
     }
 }

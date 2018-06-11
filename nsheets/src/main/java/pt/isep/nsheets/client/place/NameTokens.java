@@ -35,6 +35,8 @@ public class NameTokens {
 
     public static final String calendar = "calendar";
 
+    public static final String agenda = "agenda";
+
     public static final String export = "export";
 
     public static final String imports = "import";
@@ -128,4 +130,9 @@ public class NameTokens {
     public static String getCode_js() {
         return code_js;
     }
+
+    public static String getAgenda() {
+        return agenda;
+    }
+
 }

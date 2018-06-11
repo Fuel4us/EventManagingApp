@@ -17,6 +17,7 @@
     <class>pt.isep.nsheets.shared.core.SpreadsheetImpl</class>
     <class>pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629.Configuration</class>
     <class>pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional</class>
+    <class>pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160634.users.domain.PrivateChat</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test"/>
       <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
