@@ -24,13 +24,14 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.application.ExportStyledPDFController;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core.CellStyle;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleDTO;
 
 /**
  *
@@ -46,9 +47,11 @@ public class PDFBuilder {
     private final Font catFont = new Font(Font.FontFamily.HELVETICA, 22, Font.BOLD);
     private final BaseColor TITLE_COLOR = new BaseColor(224, 224, 224);
     private BaseColor color;
+    private List<CellStyleDTO> cell_list;
 
-    public PDFBuilder(Workbook workbook) {
+    public PDFBuilder(List<CellStyleDTO> list,Workbook workbook) {
         this.workbook = workbook;
+        cell_list = list;
         File file = new File(FILE_PATH);
         file.getParentFile().mkdirs();
     }
@@ -82,7 +85,6 @@ public class PDFBuilder {
         CellStyleLine cellStyle = CellStyleLine.getCellStyleByValue(style);
         Color c = new ColorUtil(s_color).getColor();
         color = new BaseColor(c.getRed(), c.getGreen(), c.getBlue());
-        Iterable<CellStyle> styles = new ExportStyledPDFController().getCellStyles();
 
         try {
 
@@ -147,7 +149,7 @@ public class PDFBuilder {
 
                         Font text_font = new Font(TABLE_FONT);
 
-                         CellStyle style_cell = cellStyle(spread_cell, styles);
+                         CellStyle style_cell = cellStyle(spread_cell, cell_list);
 
                         if (style_cell != null) {
                             
@@ -157,16 +159,19 @@ public class PDFBuilder {
                             ColorUtil back_util_color = new ColorUtil(hex_back_color);
                             ColorUtil text_util_color = new ColorUtil(hex_text_color);
                             
-                            cell.setBackgroundColor(new BaseColor(back_util_color.getColor().getRed(), back_util_color.getColor().getGreen(), back_util_color.getColor().getBlue()));
+                            
+                            cell = new PdfPCell(new Phrase(spread_cell.getContent().toUpperCase(), text_font));
+                            
+                            BaseColor bc = new BaseColor(back_util_color.getColor().getRed(), back_util_color.getColor().getGreen(), back_util_color.getColor().getBlue());
+                            cell.setBackgroundColor(bc);
                             cell.setHorizontalAlignment(style_cell.getTextALIGN()+1); //Because 0 - left, 1-center, 2 - right
                             
                             text_font.setColor(text_util_color.getColor().getRed(), text_util_color.getColor().getGreen(), text_util_color.getColor().getBlue());
                             text_font.setSize(style_cell.getFontSize());
                             
-                            cell = new PdfPCell(new Phrase(spread_cell.getContent().toUpperCase(), text_font));
                             
                         } else {
-                            cell = new PdfPCell(new Phrase(spread_cell.getContent().toUpperCase(), text_font));
+                            cell = new PdfPCell(new Phrase(spread_cell.getContent(), text_font));
                             
                             cell.setBackgroundColor(BaseColor.WHITE);
                             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -174,7 +179,7 @@ public class PDFBuilder {
                         }
                         
                         cell.setBorder(Rectangle.NO_BORDER);
-                        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                        cell.setVerticalAlignment(Element.ALIGN_CENTER);
                         cell.setBorderWidth(1);
                         cell.setCellEvent(chooseCellEvent(cellStyle, color, size));
                         cell.setMinimumHeight(20);
@@ -208,12 +213,12 @@ public class PDFBuilder {
         return null;
     }
     
-    private CellStyle cellStyle(Cell cell, Iterable<CellStyle> iterable){
+    private CellStyle cellStyle(Cell cell, List<CellStyleDTO> list){
         
-        if(iterable == null) return null;
+        if(list == null) return null;
         
-        while(iterable.iterator().hasNext()){
-            CellStyle style = iterable.iterator().next();
+        for(CellStyleDTO dto: list){
+            CellStyle style = CellStyle.fromDTO(dto);
             if(style.getAddress().equals(cell.getAddress())) return  style;
         }
         

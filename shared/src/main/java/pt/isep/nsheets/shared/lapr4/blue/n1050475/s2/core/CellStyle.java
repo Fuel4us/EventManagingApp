@@ -105,7 +105,7 @@ public class CellStyle implements Serializable {
     }
 
     public static CellStyle fromDTO(CellStyleDTO dto){
-        int[] values =new int[2];
+        int[] values =new int[4];
         values[0]=dto.backgroungColor;
         values[1]=dto.fontColor;
         values[2]=dto.textALIGN;
