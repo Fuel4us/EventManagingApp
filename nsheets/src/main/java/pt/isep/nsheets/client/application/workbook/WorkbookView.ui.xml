@@ -52,7 +52,7 @@ governing permissions and limitations under the License. #L% -->
         <m:MaterialFAB>
             <m:MaterialButton type="FLOATING" iconType="SETTINGS" size="LARGE"/>
             <m:MaterialFABList>
-                <m:MaterialButton ui:field="addBasicWizardButton" type="FLOATING" waves="LIGHT" iconType="INSERT_DRIVE_FILE" tooltip="New Basic Wizard" tooltipPosition="LEFT"/> 
+                <m:MaterialButton ui:field="addBasicWizardButton" type="FLOATING" waves="LIGHT" iconType="ADD" tooltip="New Basic Wizard" tooltipPosition="LEFT"/> 
                 <m:MaterialButton ui:field="newSpreadSheetButton" type="FLOATING" waves="LIGHT" iconType="ADD" tooltip="New Spreadsheet" tooltipPosition="LEFT"/>
                 <m:MaterialButton ui:field="editWorkbookButton" type="FLOATING" waves="LIGHT" iconType="INSERT_DRIVE_FILE" tooltip="Edit Workbook" tooltipPosition="LEFT"/>
             </m:MaterialFABList>
