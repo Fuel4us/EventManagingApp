@@ -22,38 +22,9 @@ class ImportView extends ViewImpl implements ImportPresenter.MyView {
     ImportView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
 
-        uploader.addAddedFileHandler(event -> MaterialToast.fireToast("Event : Added File (" + event.getTarget().getName() + ")"));
-
-        uploader.addRemovedFileHandler(event -> MaterialToast.fireToast("Event : Removed File (" + event.getTarget().getName() + ")"));
-
-        uploader.addErrorHandler(event -> {
-            MaterialToast.fireToast("Event : Error (" + event.getTarget().getName() + ")");
-            MaterialToast.fireToast("Response Code : (" + event.getResponse().getCode() + ") - " + event.getResponse().getMessage());
-        });
-
-        uploader.addSendingHandler(event -> MaterialToast.fireToast("Event : Sending (" + event.getTarget().getName() + ")"));
-
-        uploader.addSuccessHandler(event -> {
-            MaterialToast.fireToast("Event : Success (" + event.getTarget().getName() + ")");
-
-            ImportServiceAsync service = GWT.create(ImportService.class);
-
-            AsyncCallback<Void> callback = new AsyncCallback<Void>() {
-                public void onSuccess(Void aVoid) {
-                    MaterialToast.fireToast("File read successfully", "rounded");
-                }
-
-                public void onFailure(Throwable caught) {
-                    MaterialToast.fireToast("There was an error reading the file", "rounded");
-                }
-            };
-
-            service.importXmlFile(callback);
-        });
+        uploader.setUrl(GWT.getModuleBaseURL() + "uploadServlet"); //Thanks Zé
 
         uploader.addCompleteHandler(event -> {
-            MaterialToast.fireToast("Event : Complete (" + event.getTarget().getName() + ")");
-
             ImportServiceAsync service = GWT.create(ImportService.class);
 
             AsyncCallback<Void> callback = new AsyncCallback<Void>() {
@@ -66,14 +37,8 @@ class ImportView extends ViewImpl implements ImportPresenter.MyView {
                 }
             };
 
-            service.importXmlFile(callback);
+            //service.importXmlFile(callback);
         });
-
-        uploader.addCancelHandler(event -> MaterialToast.fireToast("Event : Cancel (" + event.getTarget().getName() + ")"));
-
-        uploader.addMaxFilesExceededHandler(event -> MaterialToast.fireToast("Event : Max Files Exceeded (" + event.getTarget().getName() + ")"));
-
-        uploader.addMaxFilesReachHandler(event -> MaterialToast.fireToast("Event : Max Files Reached (" + event.getTarget().getName() + ")"));
     }
 
     @UiField

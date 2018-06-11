@@ -20,13 +20,11 @@
 package pt.isep.nsheets.client.application.workbook;
 
 import com.google.gwt.core.client.GWT;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.RichTextArea;
 import gwt.material.design.client.constants.Color;
 import javax.inject.Inject;
 
@@ -50,14 +48,9 @@ import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.table.MaterialDataTable;
-import pt.isep.nsheets.server.lapr4.green.s1.core.n1140302.search.Application.SearchSpreadsheetController;
 import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
@@ -182,21 +175,13 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialLink rangeConditionButton;
     @UiField
-    MaterialModal rangeConditionModal;
+    MaterialTextBox conditionalCell;
     @UiField
-    MaterialTextBox rangeConditionFormula;
+    MaterialRow conditionalRange;
     @UiField
-    MaterialListValueBox<Color> rangeBackgroundColorTrue;
+    MaterialTextBox rangeConditionalStart;
     @UiField
-    MaterialListValueBox<Color> rangeFontColorTrue;
-    @UiField
-    MaterialListValueBox<Color> rangeBackgroundColorFalse;
-    @UiField
-    MaterialListValueBox<Color> rangeFontColorFalse;
-    @UiField
-    MaterialIcon rangeConditionModalCloseButton;
-    @UiField
-    MaterialIcon rangeConditionModalDoneButton;
+    MaterialTextBox rangeConditionalEnd;
 
     @UiHandler("click_chart")
     void onclick(ClickEvent e) {
@@ -271,7 +256,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
     @Override
     public void initWorkbook() {
-        Spreadsheet sh = Settings.getInstance().getWorkbook().getSpreadsheet(0);
+        Spreadsheet sh = getCurrentSpreadsheet();
 
         int columnNumber = 0;
 
@@ -375,13 +360,17 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         conditionalButton.addClickHandler(event -> {
             if (activeCell != null) {
-
-                conditionalModal.open();
                 conditionalTitle.setTitle("Conditional Formating of Cell " + activeCell.getAddress().toString());
+                conditionalCell.setValue(activeCell.getAddress().toString());
+                conditionalRange.setVisibility(Style.Visibility.HIDDEN);
+                conditionalModal.open();
             }
         });
         rangeConditionButton.addClickHandler(event -> {
-            rangeConditionModal.open();
+            conditionalTitle.setTitle("Conditional Formatting of a range of Cells");
+            conditionalCell.setValue("_cell");
+            conditionalRange.setVisibility(Style.Visibility.VISIBLE);
+            conditionalModal.open();
         });
         backgroundcolorLst.addValueChangeHandler(event -> {
 
@@ -459,10 +448,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         conditionalModalCloseButton.addClickHandler(event -> {
             conditionalModal.close();
-        });
-
-        rangeConditionModalCloseButton.addClickHandler(event -> {
-            rangeConditionModal.close();
         });
 
         // It is possible to create your own custom renderer per table
@@ -577,11 +562,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 fontColorFalse.addItem(c);
                 backgroundcolorLst.addItem(c);
                 fontcolorLst.addItem(c);
-                
-                rangeBackgroundColorTrue.addItem(c);
-                rangeFontColorTrue.addItem(c);
-                rangeBackgroundColorFalse.addItem(c);
-                rangeFontColorFalse.addItem(c);
             }
         }
     }
@@ -656,10 +636,30 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     public String getConditionalValue() {
         return conditionalText.getText();
     }
+    
+    @Override
+    public String getConditionalCell() {
+        return conditionalCell.getText();
+    }
+    
+    @Override
+    public String getConditionalRangeStart() {
+        return rangeConditionalStart.getText();
+    }
+    
+    @Override
+    public String getConditionalRangeEnd() {
+        return rangeConditionalEnd.getText();
+    }
 
     @Override
     public MaterialModal getConditionalModal() {
         return this.conditionalModal;
+    }
+    
+    @Override
+    public Spreadsheet getCurrentSpreadsheet() {
+        return Settings.getInstance().getWorkbook().getSpreadsheet(0);
     }
 
     @UiHandler("editWorkbookButton")

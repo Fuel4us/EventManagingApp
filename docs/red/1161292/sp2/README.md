@@ -59,6 +59,127 @@ The main idea for the "workflow" of this feature increment.
 
 Regarding tests we try to follow an approach inspired by test driven development. However it is not realistic to apply it for all the application (for instance for the UI part). Therefore we focus on the domain classes and also on the services provided by the server.
 
+**UserBuilder**: This class represents the Builder Pattern. It has the knowledge of how to build a User entity by knowing his attributes. We tested this class to make sure that after calling **build()** method, we have our entity represented with our information.
+
+```java
+@Test
+public void ensureUserBuilderIsWorking(){
+    System.out.println("ensureUserBuilderIsWorking");
+    final Boolean expected = true;
+    
+    final UserDTO expectedDTO = new UserDTO("1161292@isep.ipp.pt", "Tiago", "tiago", "Teste123", false);
+    final UserDTO resultDTO = new UserBuilder().withEmail("1161292@isep.ipp.pt").withName("Tiago").withNickname("tiago").withPassword("Teste123").withSuperUser(false).build();
+    
+    assertEquals(expected, resultDTO.equals(expectedDTO));
+}
+```
+
+```java
+@Test
+public void ensureUserBuilderIsNotWorkingBecauseEmail(){
+    System.out.println("ensureUserBuilderIsNotWorkingBecauseEmail");
+    final Boolean expected = false;
+    
+    final UserDTO expectedDTO = new UserDTO("1161292@isep.ipp.pt", "Tiago", "tiago", "Teste123", false);
+    final UserDTO resultDTO = new UserBuilder().withEmail("1161291@isep.ipp.pt").withName("Tiago").withNickname("tiago").withPassword("Teste123").withSuperUser(false).build();
+    
+    assertEquals(expected, resultDTO.equals(expectedDTO));
+}
+```
+
+```java
+@Test
+public void ensureUserBuilderIsNotWorkingBecauseName(){
+    System.out.println("ensureUserBuilderIsNotWorkingBecauseName");
+    final Boolean expected = false;
+    
+    final UserDTO expectedDTO = new UserDTO("1161292@isep.ipp.pt", "Tiago", "tiago", "Teste123", false);
+    final UserDTO resultDTO = new UserBuilder().withEmail("1161292@isep.ipp.pt").withName("João").withNickname("tiago").withPassword("Teste123").withSuperUser(false).build();
+    
+    assertEquals(expected, resultDTO.equals(expectedDTO));
+}
+```
+
+```java
+@Test
+public void ensureUserBuilderIsNotWorkingBecauseNickname(){
+    System.out.println("ensureUserBuilderIsNotWorkingBecauseNickname");
+    final Boolean expected = false;
+    
+    final UserDTO expectedDTO = new UserDTO("1161292@isep.ipp.pt", "Tiago", "tiago", "Teste123", false);
+    final UserDTO resultDTO = new UserBuilder().withEmail("1161292@isep.ipp.pt").withName("Tiago").withNickname("joão").withPassword("Teste123").withSuperUser(false).build();
+    
+    assertEquals(expected, resultDTO.equals(expectedDTO));
+}
+```  
+
+```java
+@Test
+public void ensureUserBuilderIsNotWorkingBecausePassword(){
+    System.out.println("ensureUserBuilderIsNotWorkingBecausePassword");
+    final Boolean expected = false;
+    
+    final UserDTO expectedDTO = new UserDTO("1161292@isep.ipp.pt", "Tiago", "tiago", "Teste123", false);
+    final UserDTO resultDTO = new UserBuilder().withEmail("1161292@isep.ipp.pt").withName("Tiago").withNickname("tiago").withPassword("Teste1234").withSuperUser(false).build();
+    
+    assertEquals(expected, resultDTO.equals(expectedDTO));
+}
+```
+
+```java
+@Test
+public void ensureUserBuilderIsNotWorkingBecauseSuperUser(){
+    System.out.println("ensureUserBuilderIsNotWorkingBecauseSuperUser");
+    final Boolean expected = false;
+    
+    final UserDTO expectedDTO = new UserDTO("1161292@isep.ipp.pt", "Tiago", "tiago", "Teste123", false);
+    final UserDTO resultDTO = new UserBuilder().withEmail("1161292@isep.ipp.pt").withName("Tiago").withNickname("tiago").withPassword("Teste123").withSuperUser(true).build();
+    
+    assertEquals(expected, resultDTO.equals(expectedDTO));
+}
+```
+
+**SignupController**: This class is responsible for the communication between UI and Domain. In this case, it is where the signup begins in the server, so it can persist a new User in the database.
+
+The information below represents the dummy information used for testing normal behaviour.
+
+```java
+private static final String EMAIL = "1161292@isep.ipp.pt";
+private static final String USERNAME = "tiago";
+private static final String NAME = "Tiago";
+private static final String PASSWORD = "Teste123";
+private static final Boolean SUPERUSER = false;
+```
+
+```java
+@Test
+public void testNormalBehaviour() throws Exception {
+    System.out.println("testNormalBehaviour");
+    
+    final User expected = new User(EMAIL, NAME, USERNAME, PASSWORD, SUPERUSER);
+    SignupController ctrl = new SignupController();
+
+    User result = ctrl.signupUser(new UserDTO(EMAIL, NAME, USERNAME, PASSWORD, SUPERUSER));
+
+    assertTrue("The added User does not have the same data as input", expected.sameAs(result));
+}
+```
+
+```java
+@Test
+public void testIfUserWasAdded() throws Exception {
+    System.out.println("testIfUserWasAdded");
+
+    final User expected = new User(EMAIL, NAME, USERNAME, PASSWORD, SUPERUSER);
+    SignupController ctrl = new SignupController();
+    User result = ctrl.signupUser(new UserDTO(EMAIL, NAME, USERNAME, PASSWORD, SUPERUSER));
+
+    ListUserController ctrlList = new ListUserController();
+    Iterable<User> list = ctrlList.listUsers();
+
+    assertTrue("The added User is not in the database", list.iterator().hasNext());
+}
+```
 
 ## 4.2. Requirements Realization
 
@@ -80,7 +201,6 @@ Regarding tests we try to follow an approach inspired by test driven development
 - Repository
 - Builder
 - MVP
-- ValueObject
 
 # 5. Integration/Demonstration
 
@@ -94,6 +214,11 @@ Some Questions/Issues identified during the work in this feature increment:
 
 # 7. Work Log
 
+* [Removed Password Value Object. GWT UI is working with Regex](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/3a21401073446b8c76c029d28717e3374fef6911)
+* [Fixed logged in user UI bugs](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/d9ff5af8bd1064ee3ac792e766ed73d22ffc9592)
+* [Application now shows who is logged in](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/ac8f96bccaf2d7cb71f974a5adc611efbfabb447)
+* [Added redirection to Login Page after signup](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/c26852b13854e7fcf222225badd56570f3e1c8b0)
+* [Implemented input validation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/f2f1fcaf8c22109354ece287bfb7a9ee1b847624)
 * [Fixed Login issues](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/282185efe8e19ae2a70534c074c6edbacab24a1b)
 * [Fixed servlet location](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/399c1744d15985a0b35e9fea3433e1091b3afbce)
 * [Created add user to database service](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/c40c22cca5b829c8aed4ec50d57f9f3885a77e66)

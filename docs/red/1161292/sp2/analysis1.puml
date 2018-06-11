@@ -5,16 +5,16 @@ skinparam packageStyle rect
 skinparam defaultFontName FG Virgil
 skinparam shadowing false
 
-actor User
+actor NonRegisteredUser
 
-User -> Browser : navigate to page
-User -> Browser : Signup Request
+NonRegisteredUser -> Browser : navigate to page
+NonRegisteredUser -> Browser : Signup Request
 
-Browser -> User : Asks for nickname, email, name and picture
-User -> Browser : Inserts all requested data
+Browser -> NonRegisteredUser : Asks for nickname, email, name and picture
+NonRegisteredUser -> Browser : Inserts all requested data
 
-Browser -> User : Asks for confirmation
-User -> Browser : Confirms
+Browser -> NonRegisteredUser : Asks for confirmation
+NonRegisteredUser -> Browser : Confirms
 
 Browser ->> Server : createNewUser()
 

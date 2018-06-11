@@ -1,16 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates and open the template
- * in the editor.
- */
 package eapli.util;
+
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import eapli.util.Strings;
 
 /**
  *
@@ -39,10 +37,11 @@ public class StringsTest {
      */
     @Test
     public void testStringWithContentIsNotNullNorEmpty() {
-        final String text = "abcdef";
-        final boolean expResult = false;
-        final boolean result = Strings.isNullOrEmpty(text);
-        assertEquals(expResult, result);
+            System.out.println("string with content is not isNullOrEmpty");
+            final String text = "abcdef";
+            final boolean expResult = false;
+            final boolean result = Strings.isNullOrEmpty(text);
+            assertEquals(expResult, result);
     }
 
     /**
@@ -50,20 +49,76 @@ public class StringsTest {
      */
     @Test
     public void testNullIsNullOrEmpty() {
-        final String text = null;
-        final boolean expResult = true;
-        final boolean result = Strings.isNullOrEmpty(text);
-        assertEquals(expResult, result);
+            System.out.println("null isNullOrEmpty");
+            final String text = null;
+            final boolean expResult = true;
+            final boolean result = Strings.isNullOrEmpty(text);
+            assertEquals(expResult, result);
     }
 
     /**
-     * Test of isNullOrEmpty method, of class Validations.
      */
     @Test
     public void testEmptyStringIsNullOrEmpty() {
-        final String text = "";
-        final boolean expResult = true;
-        final boolean result = Strings.isNullOrEmpty(text);
-        assertEquals(expResult, result);
+            System.out.println("empty string isNullOrEmpty");
+            final String text = "";
+            final boolean expResult = true;
+            final boolean result = Strings.isNullOrEmpty(text);
+            assertEquals(expResult, result);
+    }
+
+    /**
+     */
+    @Test
+    public void testContainsDigitSingleChar() {
+            System.out.println("ContainsDigit single char");
+            final String text = "1";
+            final boolean expResult = true;
+            final boolean result = Strings.containsDigit(text);
+            assertEquals(expResult, result);
+    }
+
+    /**
+     */
+    @Test
+    public void testContainsDigitInTheMiddle() {
+            System.out.println("ContainsDigit in the middle");
+            final String text = "ab1cd";
+            final boolean expResult = true;
+            final boolean result = Strings.containsDigit(text);
+            assertEquals(expResult, result);
+    }
+
+    /**
+     */
+    @Test
+    public void testContainsDigitInTheBegining() {
+            System.out.println("ContainsDigit in the begining");
+            final String text = "1cd";
+            final boolean expResult = true;
+            final boolean result = Strings.containsDigit(text);
+            assertEquals(expResult, result);
+    }
+
+    /**
+     */
+    @Test
+    public void testContainsDigitInTheEnd() {
+            System.out.println("ContainsDigit in the end");
+            final String text = "ad1";
+            final boolean expResult = true;
+            final boolean result = Strings.containsDigit(text);
+            assertEquals(expResult, result);
+    }
+
+    /**
+     */
+    @Test
+    public void testContainsDigitDetectsNonDigit() {
+            System.out.println("ContainsDigit without digits");
+            final String text = "dd";
+            final boolean expResult = false;
+            final boolean result = Strings.containsDigit(text);
+            assertEquals(expResult, result);
     }
 }
