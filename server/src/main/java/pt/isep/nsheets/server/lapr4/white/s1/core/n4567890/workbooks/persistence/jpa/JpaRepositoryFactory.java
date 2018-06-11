@@ -6,6 +6,7 @@
 package pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.jpa;
 
 import pt.isep.nsheets.server.lapr4.blue.n1050475.s1.persistence.ConditionalRepository;
+import pt.isep.nsheets.server.lapr4.blue.n1050475.s2.persistence.CellStyleRepository;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.persistence.UserRepository;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.persistence.MessagesRepository;
 //import pt.isep.nsheets.server.lapr4.green.s1.core.n1160832.spreadsheets.persistence.jpa.JpaSpreadsheetRepository;
@@ -87,6 +88,11 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     @Override
     public ConditionalRepository conditional() {
         return new JpaConditionalRepository(this.settings);
+    }
+
+    @Override
+    public CellStyleRepository cellstyle() {
+        return new JpaCellStyleRepository(this.settings);
     }
     
     @Override

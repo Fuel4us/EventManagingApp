@@ -18,6 +18,7 @@
     <class>pt.isep.nsheets.server.lapr4.blue.n1150372.s2.domain.Agenda</class>
     <class>pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.domain.Message</class>
     <class>pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional</class>
+    <class>pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core.CellStyle</class>
     <class>pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.domain.Contact</class>
     <class>pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160634.users.domain.PrivateChat</class>
     <properties>

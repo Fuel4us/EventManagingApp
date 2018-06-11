@@ -11,13 +11,13 @@
   
        http://www.apache.org/licenses/LICENSE-2.0
   
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-  #L%
-  -->
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+#L%
+-->
 
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.7.0//EN"
         "http://gwtproject.org/doctype/2.7.0/gwt-module.dtd">
@@ -47,7 +47,7 @@
     <inherits name="gwt.material.design.themes.ThemeYellowResources"/>
     <inherits name="gwt.material.design.addins.GwtMaterialAddinsDebug"/>
     <inherits name="gwt.material.design.GwtMaterialTableDebug"/>
-    
+    <inherits name="com.google.gwt.i18n.I18N"/>
     <inherits name="pt.isep.nsheets.client.Resources"/>
 
     <!--Google charts-->
@@ -61,9 +61,9 @@
     <extend-configuration-property name="gin.ginjector.modules"
                                    value="pt.isep.nsheets.client.gin.ClientModule"/>
 
-<!-- 
-    <set-configuration-property name="CssResource.enableGss" value="true"/>
- -->
+    <!-- 
+       <set-configuration-property name="CssResource.enableGss" value="true"/>
+    -->
      
     <!-- allow Super Dev Mode -->
     <add-linker name="xsiframe"/>

@@ -6,6 +6,7 @@
 package pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence;
 
 import pt.isep.nsheets.server.lapr4.blue.n1050475.s1.persistence.ConditionalRepository;
+import pt.isep.nsheets.server.lapr4.blue.n1050475.s2.persistence.CellStyleRepository;
 import pt.isep.nsheets.server.lapr4.blue.n1150372.s2.persistence.AgendaRepository;
 import pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.persistence.ContactsRepository;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.persistence.UserRepository;
@@ -45,5 +46,8 @@ public interface RepositoryFactory {
     ConfigurationRepository configuration();
 
     ConditionalRepository conditional();
+
+    CellStyleRepository cellstyle();
+
     PrivateChatsRepository privateChats();
 }

@@ -39,6 +39,11 @@ import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalForma
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.services.ConditionalDTO;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.services.ConditionalService;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.services.ConditionalServiceAsync;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core.CellStyle;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtension;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleDTO;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleService;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleServiceAsync;
 import pt.isep.nsheets.shared.services.ConfigurationDTO;
 import pt.isep.nsheets.shared.services.ConfigurationService;
 import pt.isep.nsheets.shared.services.ConfigurationServiceAsync;
@@ -114,7 +119,7 @@ public class ApplicationPresenter
 
         conditionalServiceAsync.getListConditional(callbackCond);
 
-        //End of extension configuration loading
+        //loadCellStyles();
 
         this.menuPresenter = menuPresenter;
             
@@ -137,5 +142,40 @@ public class ApplicationPresenter
     @Override
     public void onSetPageTitle(SetPageTitleEvent event) {
         getView().setPageTitle(event.getTitle(), event.getDescription(), event.getLink(), event.getSpecification());
-    }    
+    }
+
+    public void loadCellStyles(){
+        //End of extension CellStyle loading
+
+        /* 1050475 Hernani Gil
+           Repository loading
+         */
+
+        /* Core08.1 */
+
+        CellStyleServiceAsync cellStyleServiceAsync = GWT.create(CellStyleService.class);
+        AsyncCallback<ArrayList<CellStyleDTO>> callbackCStyle = new AsyncCallback<ArrayList<CellStyleDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                MaterialToast.fireToast("Error retrieving extension cellStyle! " + caught.getMessage());
+            }
+
+            @Override
+            public void onSuccess(ArrayList<CellStyleDTO> result) {
+                //ArrayList<CellStyle> lstResultFromDTO = new ArrayList<CellStyle>();
+                for (CellStyleDTO cellStyleDTO: result) {
+                    //lstResultFromDTO.add(CellStyle.fromDTO(cellStyleDTO));
+                    CellStyleExtension.addCellStyle(CellStyle.fromDTO(cellStyleDTO));
+                }
+
+                //CellStyleExtension.lstCellStyle = lstResultFromDTO;
+                MaterialToast.fireToast("Sucess retrieving extension "+ result.size() +" cellStyle!" );
+            }
+        };
+
+        cellStyleServiceAsync.getListCellStyle(callbackCStyle);
+
+        /*End of extension cellSTyle loading*/
+
+    }
 }
