@@ -13,12 +13,9 @@ import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
+import gwt.material.design.client.ui.MaterialImage;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
@@ -48,6 +45,7 @@ public class SignupPresenter extends Presenter<SignupPresenter.MyView, SignupPre
         MaterialTextBox txtPassword();
         MaterialTextBox txtEmail();
         MaterialTextBox txtName();
+        MaterialImage image();
         
         void clearFields();
     }
@@ -93,7 +91,7 @@ public class SignupPresenter extends Presenter<SignupPresenter.MyView, SignupPre
             validation = this.view.txtPassword().validate();
             
             if(validation){
-                UserDTO dto = new UserDTO(this.view.email(), this.view.name(), this.view.username(), this.view.password(), false);
+                UserDTO dto = new UserDTO(this.view.email(), this.view.name(), this.view.username(), this.view.password(), this.view.image().getUrl(), false);
 
                 signupSvc.signupUser(dto, callback);
             }
