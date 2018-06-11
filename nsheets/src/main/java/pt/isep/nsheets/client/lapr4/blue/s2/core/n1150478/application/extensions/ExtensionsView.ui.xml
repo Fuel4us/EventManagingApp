@@ -52,7 +52,8 @@
                     <m:MaterialLink text="Add Popup Option" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
                 </m:MaterialCollapsibleHeader>
                 <m:MaterialCollapsibleBody backgroundColor="GREY_LIGHTEN_2">
-                    <m:MaterialLabel text="Add a Popup Option on the cells menu (on the spreadsheet). Test it by clicking the right button of the mouse on the spreadhseet." fontSize="3em"/>
+                    <m:MaterialLabel text="Add a Popup Option" fontSize="3em"/>
+                    <m:MaterialLabel text="Add a Popup Option on the Cells Menu (on the spreadsheet). Test it by clicking the right button of the mouse on the spreadhseet." fontSize="2em"/>
                     <m:MaterialLabel text="Choose the name of the new Popup Menu option:"/>
                     <m:MaterialTextBox ui:field="popName"/> 
                     <m:MaterialLabel text="Choose the icon:"/>
