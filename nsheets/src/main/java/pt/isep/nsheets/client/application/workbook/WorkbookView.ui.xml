@@ -52,6 +52,7 @@ governing permissions and limitations under the License. #L% -->
         <m:MaterialFAB>
             <m:MaterialButton type="FLOATING" iconType="SETTINGS" size="LARGE"/>
             <m:MaterialFABList>
+                <m:MaterialButton ui:field="addBasicWizardButton" type="FLOATING" waves="LIGHT" iconType="INSERT_DRIVE_FILE" tooltip="New Basic Wizard" tooltipPosition="LEFT"/> 
                 <m:MaterialButton ui:field="newSpreadSheetButton" type="FLOATING" waves="LIGHT" iconType="ADD" tooltip="New Spreadsheet" tooltipPosition="LEFT"/>
                 <m:MaterialButton ui:field="editWorkbookButton" type="FLOATING" waves="LIGHT" iconType="INSERT_DRIVE_FILE" tooltip="Edit Workbook" tooltipPosition="LEFT"/>
             </m:MaterialFABList>
@@ -65,6 +66,15 @@ governing permissions and limitations under the License. #L% -->
                 <m:MaterialButton ui:field="deleteButtonModal" text="Delete" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="DELETE" iconPosition="LEFT" iconColor="RED"/>
                 <m:MaterialButton ui:field="cancelButtonModal" text="Cancel" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK" iconType="CANCEL" iconPosition="LEFT" iconColor="BLUE"/>
             </m:MaterialModalContent>
+            <ma:window.MaterialWindow ui:field="basicWizardWindow" width="70%" title="Basic Wizard">
+                <m:MaterialPanel padding="32" textAlign="CENTER" height="350px">
+                    <m:MaterialListBox ui:field="basicWizardComboBox" placeholder="Functions"/>
+                    <m:MaterialTextBox ui:field="basicWizardTextBox" placeholder="Parameters" active="true" readOnly="true"/>
+                    <m:MaterialTextBox ui:field="basicWizardTextBox2" placeholder="Description" active="true" readOnly="true"/>
+                    <m:MaterialButton ui:field="chooseButton" text="description" iconColor="RED" circle="false" grid="s1"/>
+                    <m:MaterialButton ui:field="doneButton" iconType="DONE" iconColor="BLUE" circle="false" grid="s1" float="RIGHT" type="FLOATING"/>
+                </m:MaterialPanel>
+            </ma:window.MaterialWindow>
         </m:MaterialModal>
         <m:MaterialRow marginTop="60">
             <m:MaterialTextBox

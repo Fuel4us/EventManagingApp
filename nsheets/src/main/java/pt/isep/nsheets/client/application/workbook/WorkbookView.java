@@ -65,6 +65,10 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetController;
 import pt.isep.nsheets.shared.application.Settings;
+import pt.isep.nsheets.shared.core.formula.Function;
+import pt.isep.nsheets.shared.core.formula.FunctionParameter;
+import pt.isep.nsheets.shared.core.formula.lang.Language;
+import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
 import pt.isep.nsheets.shared.services.*;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
@@ -130,7 +134,23 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialListValueBox<Color> fontColorFalse;
     /* End of Conditional UI Objects */
 
- /*
+    //uiObjects by 1140317
+    @UiField
+    MaterialButton addBasicWizardButton;
+    @UiField
+    MaterialButton chooseButton;
+    @UiField
+    MaterialButton doneButton;
+    @UiField
+    MaterialWindow basicWizardWindow;
+    @UiField
+    MaterialListBox basicWizardComboBox;
+    @UiField
+    MaterialTextBox basicWizardTextBox;
+    @UiField
+    MaterialTextBox basicWizardTextBox2;
+
+    /*
     Style UI objects by 1050475
      */
     @UiField
@@ -551,7 +571,52 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         initWorkbook();
 
         customTable.getTableTitle().setText("The Future Worksheet!");
+        
+        //1140317
+        addBasicWizardButton.addClickHandler(event -> {
+            basicWizardWindow.open();
+        });
+
+        Language lang = new Language("basic wizard");
+        for (Function function : lang.getFunctions()) {
+            basicWizardComboBox.add(function.getIdentifier());
+        }
+
+        doneButton.addClickHandler(event -> {
+            int i = basicWizardComboBox.getSelectedIndex();
+            firstBox.setText(lang.getFunctions()[i].getIdentifier());
+            basicWizardWindow.close();
+        });
+
+        chooseButton.addClickHandler(event -> {
+            basicWizardTextBox.setText(getParameters(lang));
+            basicWizardTextBox2.setText(getDescription(lang));
+
+        });
     }
+
+    private String getParameters(Language lang){
+        String par = "Parameters: \n";
+        try{
+            for (FunctionParameter fp : lang.getFunction(basicWizardComboBox.getSelectedValue()).getParameters()) {
+                par += "   -" + fp.getName();
+            }
+        } catch (UnknownElementException ex){
+            MaterialToast.fireToast("No parameters");
+        }
+        return par;
+    }
+    
+    private String getDescription(Language lang){
+        String desc = "Description: ";
+        try{
+            desc += lang.getFunction(basicWizardComboBox.getSelectedValue()).getInformativeText();
+        }catch (UnknownElementException ex){
+            MaterialToast.fireToast("No description");
+        }
+        return desc;
+    }
+        
 
     @Override
     protected void onAttach() {
