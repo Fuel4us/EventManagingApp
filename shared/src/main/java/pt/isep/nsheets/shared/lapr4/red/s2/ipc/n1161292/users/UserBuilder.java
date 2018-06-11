@@ -14,7 +14,6 @@ public class UserBuilder {
     private String nickname;
     private String password;
     private boolean superUser;
-    private List<UserDTO> blacklist;
 
     public UserBuilder() {
     }
@@ -41,11 +40,6 @@ public class UserBuilder {
 
     public UserBuilder withSuperUser(boolean superUser) {
         this.superUser = superUser;
-        return this;
-    }
-
-    public UserBuilder withBlacklist(List<UserDTO> blacklist) {
-        this.blacklist = blacklist;
         return this;
     }
 
