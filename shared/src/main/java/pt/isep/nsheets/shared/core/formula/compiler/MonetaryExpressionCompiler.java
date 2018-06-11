@@ -5,9 +5,13 @@
  */
 package pt.isep.nsheets.shared.core.formula.compiler;
 
+import com.google.gwt.i18n.client.NumberFormat;
 import gwt.material.design.client.ui.MaterialToast;
+
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -16,6 +20,7 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.tree.ParseTree;
 import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.formula.Expression;
 import pt.isep.nsheets.shared.core.formula.lang.Language;
 import pt.isep.nsheets.shared.core.formula.lang.LanguageManager;
@@ -45,6 +50,8 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
 
     @Override
     public Expression compile(Cell cell, String source) throws FormulaCompilationException {
+
+
         String number = "";
         String sourceResult = "";
 
@@ -66,6 +73,7 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
                             rValue = MonetaryConversion.EuroToDollar * total;
                             sourceResult += Double.toString(rValue) + '\u20AC';
                             break;
+                            
                         default:
                             rValue = total;
                             sourceResult += Double.toString(rValue) + '\u0024';
@@ -92,13 +100,13 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
                     switch (source.charAt(i)) {
                         case '\u20AC':
                             rValue = MonetaryConversion.EuroToPound * total;
-                            sourceResult += Double.toString(rValue) + '\u20AC';
+                            sourceResult += Double.toString(rValue)  + '\u20AC';
                             break;
                         case '\u0024':
                             rValue = MonetaryConversion.DollarToPound * total;
-                            sourceResult += Double.toString(rValue) + '\u0024';
+                            sourceResult += Double.toString(rValue)  + '\u0024';
                             break;
-                        default:
+                        case '\u00A3':
                             rValue = total;
                             sourceResult += Double.toString(rValue) + '\u00A3';
                             break;
@@ -123,13 +131,13 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
                     switch (source.charAt(i)) {
                         case '\u0024':
                             rValue = MonetaryConversion.DollarToEuro * total;
-                            sourceResult += Double.toString(rValue) + '\u0024';
+                            sourceResult += Double.toString(rValue)  + '\u0024';
                             break;
                         case '\u00A3':
                             rValue = MonetaryConversion.PoundToEuro * total;
-                            sourceResult += Double.toString(rValue) + '\u00A3';
+                            sourceResult += Double.toString(rValue)  + '\u00A3';
                             break;
-                        default:
+                        case '\u20AC':
                             rValue = total;
                             sourceResult += Double.toString(rValue) + '\u20AC';
                             break;
@@ -145,10 +153,9 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
                 }
             }
         }
-
         //Creates the lexer and parser
         ANTLRInputStream input = new ANTLRInputStream(sourceResult);
-        
+
         //Create the buffer of tokens between the lexer and parser
         MonetaryLexer lexer = new MonetaryLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -159,21 +166,22 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
         parser.addErrorListener(monetaryErrorListener); //Add ours    
 
         //Attempts to match an expression
-        ParseTree tree = parser.expression();
+        ParseTree tree = parser.start();
         if (parser.getNumberOfSyntaxErrors() > 0) {
             MaterialToast.fireToast("Syntax Error: " + monetaryErrorListener.getErrorMessage());
+            MaterialToast.fireToast("Syntax Error Number: " + parser.getNumberOfSyntaxErrors());
             throw new FormulaCompilationException(monetaryErrorListener.getErrorMessage());
         }
-
+        
+        MaterialToast.fireToast(tree.toStringTree());
         //Visit the expression and returns it
         MonetaryEvalVisitor eval = new MonetaryEvalVisitor(cell, language);
         Expression result = eval.visit(tree);
-
         if (eval.getNumberOfErrors() > 0) {
             MaterialToast.fireToast("FormulaCompilationException: " + eval.getErrorsMessage());
             throw new FormulaCompilationException(eval.getErrorsMessage());
         }
-        MaterialToast.fireToast("RESULT:" + result.toString());
+        
         return result;
     }
 

@@ -7,14 +7,13 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
-import gwt.material.design.addins.client.window.MaterialWindow;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 
 /**
  *
- * @author João Pereira <1150478@isep.ipp.pt>
+ * @author_João Pereira <1150478@isep.ipp.pt
  */
 public class FormPresenter extends Presenter<FormPresenter.MyView, FormPresenter.MyProxy> {
 

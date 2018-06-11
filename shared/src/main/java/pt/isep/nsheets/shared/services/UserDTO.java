@@ -11,15 +11,16 @@ public class UserDTO implements Serializable {
     private String name;
     private String nickname;
     private String password;
+    private String pictureName;
     private boolean superUser;
 
-    public UserDTO(String email, String name, String nickname, String password, boolean superUser) {
+    public UserDTO(String email, String name, String nickname, String password, String pictureName, boolean superUser) {
         this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.password = password;
+        this.pictureName = pictureName;
         this.superUser = superUser;
-
     }
 
     // It is mandatory to have a default constructor with no arguments to be serializable!
@@ -46,7 +47,10 @@ public class UserDTO implements Serializable {
         return this.superUser;
     }
 
-
+    public String getPictureName() {
+        return pictureName;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 3;
@@ -54,6 +58,7 @@ public class UserDTO implements Serializable {
         hash = 29 * hash + Objects.hashCode(this.name);
         hash = 29 * hash + Objects.hashCode(this.nickname);
         hash = 29 * hash + Objects.hashCode(this.password);
+        hash = 29 * hash + Objects.hashCode(this.pictureName);
         hash = 29 * hash + (this.superUser ? 1 : 0);
         return hash;
     }
@@ -77,6 +82,9 @@ public class UserDTO implements Serializable {
             return false;
         }
         if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.pictureName, other.pictureName)) {
             return false;
         }
         if (!Objects.equals(this.nickname, other.nickname)) {

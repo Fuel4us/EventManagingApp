@@ -7,7 +7,7 @@
     
     <m:MaterialPanel>
         <m:MaterialRow>
-            <ma:fileuploader.MaterialFileUploader ui:field="cardUploader" acceptedFiles="image/*" grid="s12 m6 l5"  url="/fileupload" preview="false" maxFileSize="20" shadow="0" clickable="cardUpload">
+            <ma:fileuploader.MaterialFileUploader ui:field="cardUploader" acceptedFiles="image/*" grid="s12 m6 l5" preview="false" maxFileSize="20" shadow="0" clickable="cardUpload">
                 <m:MaterialCard>
                     <m:MaterialCardImage>
                         <m:MaterialImage ui:field="imgPreview" url="http://demo.geekslabs.com/materialize/v3.1/images/gallary/33.jpg" />

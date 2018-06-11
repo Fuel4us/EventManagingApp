@@ -13,11 +13,28 @@ import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalForma
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class ConditionalCellFormattingController {
 
 
     public ConditionalCellFormattingController(){
+    }
+    
+    public List<Conditional> addRangeConditional(List<Conditional> conditions) {
+        List<Conditional> ret = new ArrayList<>();
+        final ConditionalRepository conditionalRepository = PersistenceContext.repositories().conditional();
+        for(Conditional cond : conditions) {
+            try {
+                Conditional tmp = conditionalRepository.save(cond);
+                ret.add(tmp);
+                ConditionalFormattingExtension.addConditional(tmp);
+            } catch (DataConcurrencyException | DataIntegrityViolationException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return ret;
     }
 
     public Conditional addConditional(CellImpl cell, Configuration configuration, String condOperator, Value condValue) {
@@ -35,11 +52,11 @@ public class ConditionalCellFormattingController {
     }
 
     public ArrayList<Conditional> loadConditionalFromDatabase() {
-        ArrayList<Conditional> lstConditional = new ArrayList<Conditional>();
+        ArrayList<Conditional> lstConditional = new ArrayList<>();
         final ConditionalRepository conditionalRepository = PersistenceContext.repositories().conditional();
 
         Iterator<Conditional> conditionalIterator = conditionalRepository.findAll().iterator();
-        if(conditionalIterator.hasNext()){
+        while(conditionalIterator.hasNext()) {
             Conditional c = conditionalIterator.next();
             ConditionalFormattingExtension.addConditional(c);
 

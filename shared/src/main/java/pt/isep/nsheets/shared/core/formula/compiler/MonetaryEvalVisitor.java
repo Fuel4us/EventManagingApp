@@ -6,13 +6,23 @@
 package pt.isep.nsheets.shared.core.formula.compiler;
 
 import gwt.material.design.client.ui.MaterialToast;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.core.IllegalValueTypeException;
+import pt.isep.nsheets.shared.core.Value;
 import pt.isep.nsheets.shared.core.formula.BinaryOperation;
 import pt.isep.nsheets.shared.core.formula.BinaryOperator;
 import pt.isep.nsheets.shared.core.formula.Expression;
+import pt.isep.nsheets.shared.core.formula.Literal;
+import pt.isep.nsheets.shared.core.formula.UnaryOperation;
 import pt.isep.nsheets.shared.core.formula.lang.Language;
 import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
+import pt.isep.nsheets.shared.core.formula.util.ExpressionVisitor;
+import pt.isep.nsheets.shared.lapr4.blue.n1150455.s1.temporaryVariables.TemporaryVariable;
+import pt.isep.nsheets.shared.lapr4.green.s2.n1140572.MonetaryConversion.MonetaryConversion;
 
 /**
  *
@@ -21,6 +31,7 @@ import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
 public class MonetaryEvalVisitor extends MonetaryBaseVisitor<Expression> {
 
     private Cell cell = null;
+    private static String currency;
     int numberOfErros;
     private final StringBuilder errorBuffer;
     final private Language language;
@@ -41,24 +52,45 @@ public class MonetaryEvalVisitor extends MonetaryBaseVisitor<Expression> {
     }
 
     @Override
-    public Expression visitMonetary(MonetaryParser.MonetaryContext ctx) {
-        if (ctx.getChildCount() == 4) {
+    public Expression visitStart(MonetaryParser.StartContext ctx) {
+        return visit(ctx.expression());
+    }
+
+    @Override
+    public Expression visitExpression(MonetaryParser.ExpressionContext ctx) {
+        currency = ctx.getChild(1).getText();
+        return visit(ctx.account());
+    }
+
+    @Override
+    public Expression visitAccount(MonetaryParser.AccountContext ctx) {
+
+        if (ctx.getChildCount() > 2) {
             try {
-                ParseTree account = ctx.getChild(2);
-                BinaryOperator operator = this.language.getBinaryOperator(account.getChild(2).getText());
-                MaterialToast.fireToast("Child 0: " + account.getChild(0).getText());
-                MaterialToast.fireToast("Child 3: " + account.getChild(3).getText());
+                BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(2).getText());
                 return new BinaryOperation(
-                        visit(account.getChild(0)),
+                        visit(ctx.getChild(0)),
                         operator,
-                        visit(account.getChild(3))
+                        visit(ctx.getChild(3))
                 );
+
             } catch (UnknownElementException ex) {
-                MaterialToast.fireToast(ex.toString());
+                MaterialToast.fireToast("ERRO NO RETURN!!!");
+                Logger.getLogger(MonetaryEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else {
+            MaterialToast.fireToast("Tamanho < 2: " + ctx.getChild(0).getText());
+            return visit(ctx.getChild(0));
         }
-        MaterialToast.fireToast("ESTÁ A RETORNAR NULL!!!");
+
         return null;
+    }
+
+    @Override
+    public Expression visitNumber(MonetaryParser.NumberContext ctx) {
+        MaterialToast.fireToast("Entrou no visit number!");
+        MaterialToast.fireToast("CTX VALUE: " + ctx.getText());
+        return new Literal(Value.parseValue(ctx.getText()));
     }
 
 }

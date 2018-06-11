@@ -1,0 +1,14 @@
+@startuml us
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+
+actor User
+
+User -> (US1 : Add Menu Option) 
+User -> (US2 : Add Popup Option)
+User -> (US3 : Add Side Bar)
+@enduml

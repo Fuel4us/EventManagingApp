@@ -1,0 +1,29 @@
+@startuml  domain.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+hide empty methods
+
+interface PdfCellEvent
+entity DashedCell << ValueObject >>
+entity SolidCell << ValueObject >>
+entity DoubleCell << ValueObject >>
+entity DottedCell << ValueObject >>
+entity PDFBuilder  << Entity >>
+entity ColorUtil  << ValueObject >>
+entity ColorTransformer  << ValueObject >>
+
+
+PdfCellEvent <|.. DashedCell
+PdfCellEvent <|.. SolidCell
+PdfCellEvent <|.. DoubleCell
+PdfCellEvent <|.. DottedCell
+PDFBuilder --> ColorUtil
+PDFBuilder --> ColorTransformer
+PDFBuilder --> PdfCellEvent
+
+
+@enduml

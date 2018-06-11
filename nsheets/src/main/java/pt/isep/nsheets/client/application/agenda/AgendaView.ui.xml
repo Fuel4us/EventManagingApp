@@ -1,4 +1,7 @@
-<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<!--<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent"> -->
+
+<!-- @author Pedro Alves_1150372@isep.ipp.pt -->
+
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:m="urn:import:gwt.material.design.client.ui"
@@ -10,29 +13,6 @@
     <g:HTMLPanel>
 
         <m:MaterialCollapsible grid="s12 m6 l8" ui:field="collapsible">
-            <!-- Configuration UIs must be manually added to this Collapsible-->
-            <m:MaterialCollapsibleItem>
-                <m:MaterialCollapsibleHeader>
-                    <m:MaterialLink text="Value Colour Extension" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
-                </m:MaterialCollapsibleHeader>
-                <m:MaterialCollapsibleBody>
-                    <m:MaterialLabel text="Colour Configuration" fontSize="3em"/>
-                    <m:MaterialLabel text="When cell value is positive" fontSize="2em"/>
-                    <m:MaterialLabel text="Background Color"/>
-                    <m:MaterialListValueBox ui:field="bgColorPos" grid="s12"/>
-                    <m:MaterialLabel text="Font Color"/>
-                    <m:MaterialListValueBox ui:field="fgColorPos" grid="s12"/>
-                    <m:MaterialLabel text="When cell value is negative" fontSize="2em"/>
-                    <m:MaterialLabel text="Background Color"/>
-                    <m:MaterialListValueBox ui:field="bgColorNeg" grid="s12"/>
-                    <m:MaterialLabel text="Font Color"/>
-                    <m:MaterialListValueBox ui:field="fgColorNeg" grid="s12"/>
-                    <m:MaterialDivider marginTop="10"/>
-                    <m:MaterialButton waves="LIGHT" size="LARGE" iconType="DONE" backgroundColor="BLUE" iconColor="WHITE" ui:field="confirmButton" text="CONFIRM" marginTop="25"/>
-                </m:MaterialCollapsibleBody>
-            </m:MaterialCollapsibleItem>
-            <!-- Core 02.2 Implementation -> @author João Pereira_1150478@isep.ipp.pt -->
-            <!-- Add Menu Option -->
             <m:MaterialCollapsibleItem>
                 <m:MaterialCollapsibleHeader>
                     <m:MaterialLink text="Add Menu Option" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
@@ -52,7 +32,8 @@
                     <m:MaterialLink text="Add Popup Option" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
                 </m:MaterialCollapsibleHeader>
                 <m:MaterialCollapsibleBody backgroundColor="GREY_LIGHTEN_2">
-                    <m:MaterialLabel text="Add a Popup Option on the cells menu (on the spreadsheet). Test it by clicking the right button of the mouse on the spreadhseet." fontSize="3em"/>
+                    <m:MaterialLabel text="Add a Popup Option" fontSize="3em"/>
+                    <m:MaterialLabel text="Add a Popup Option on the Cells Menu (on the spreadsheet). Test it by clicking the right button of the mouse on the spreadhseet." fontSize="2em"/>
                     <m:MaterialLabel text="Choose the name of the new Popup Menu option:"/>
                     <m:MaterialTextBox ui:field="popName"/> 
                     <m:MaterialLabel text="Choose the icon:"/>

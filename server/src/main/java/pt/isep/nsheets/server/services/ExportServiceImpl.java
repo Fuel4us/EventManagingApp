@@ -1,6 +1,7 @@
 package pt.isep.nsheets.server.services;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import java.util.List;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1140317.ExportXML.application.ExportXMLController;
 
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1150503.ExportPDF.ExportPdfController;
@@ -8,6 +9,7 @@ import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160998.ExportCSV.ExportCSVCon
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160629.export.application.ExportCSLController;
 import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.application.ExportStyledPDFController;
 import pt.isep.nsheets.shared.core.Workbook;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleDTO;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.ExportService;
 
@@ -45,8 +47,8 @@ public class ExportServiceImpl extends RemoteServiceServlet implements ExportSer
     }
 
     @Override
-    public boolean exportStyledWorkbookPDF(WorkbookDTO workbookDTO, String style,String color, int range) {
-        return new ExportStyledPDFController().buildPDF(workbookDTO, style,color, range);
+    public boolean exportStyledWorkbookPDF(List<CellStyleDTO> list, WorkbookDTO workbookDTO, String style,String color, int range) {
+        return new ExportStyledPDFController().buildPDF(list, workbookDTO, style,color, range);
     }
 
 

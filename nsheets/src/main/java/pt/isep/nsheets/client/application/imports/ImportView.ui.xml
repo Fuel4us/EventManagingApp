@@ -6,7 +6,7 @@
     <g:HTMLPanel>
         <m:MaterialRow>
             <m:MaterialColumn grid="s6">
-                <ma:fileuploader.MaterialFileUploader ui:field="uploader" url="/uploadServlet" acceptedFiles=".xml">
+                <ma:fileuploader.MaterialFileUploader ui:field="uploader" acceptedFiles=".xml">
                     <ma:fileuploader.MaterialUploadLabel title="Import from XML" description="Drag or select your file"/>
                 </ma:fileuploader.MaterialFileUploader>
             </m:MaterialColumn>
