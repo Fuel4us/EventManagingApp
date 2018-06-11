@@ -198,6 +198,7 @@ public class PDFBuilder {
 
     }
 
+
     private PdfPCellEvent chooseCellEvent(CellStyleLine style, BaseColor color, int size) {
         switch (style) {
             case DASHED:

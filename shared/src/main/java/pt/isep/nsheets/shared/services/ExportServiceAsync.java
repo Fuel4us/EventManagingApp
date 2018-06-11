@@ -1,6 +1,7 @@
 package pt.isep.nsheets.shared.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.itextpdf.text.BaseColor;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
