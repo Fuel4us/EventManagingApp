@@ -64,10 +64,10 @@ public class SignupControllerTest {
     public void testNormalBehaviour() throws Exception {
         System.out.println("testNormalBehaviour");
         
-        final User expected = new User(EMAIL, NAME, USERNAME, PASSWORD, SUPERUSER);
+        final User expected = new User(EMAIL, NAME, USERNAME, PASSWORD, "", SUPERUSER);
         SignupController ctrl = new SignupController();
 
-        User result = ctrl.signupUser(new UserDTO(EMAIL, NAME, USERNAME, PASSWORD, SUPERUSER));
+        User result = ctrl.signupUser(new UserDTO(EMAIL, NAME, USERNAME, PASSWORD, "", SUPERUSER));
 
         assertTrue("The added User does not have the same data as input", expected.sameAs(result));
     }
@@ -76,9 +76,9 @@ public class SignupControllerTest {
     public void testIfUserWasAdded() throws Exception {
         System.out.println("testIfUserWasAdded");
 
-        final User expected = new User(EMAIL, NAME, USERNAME, PASSWORD, SUPERUSER);
+        final User expected = new User(EMAIL, NAME, USERNAME, PASSWORD, "", SUPERUSER);
         SignupController ctrl = new SignupController();
-        User result = ctrl.signupUser(new UserDTO(EMAIL, NAME, USERNAME, PASSWORD, SUPERUSER));
+        User result = ctrl.signupUser(new UserDTO(EMAIL, NAME, USERNAME, PASSWORD, "", SUPERUSER));
 
         ListUserController ctrlList = new ListUserController();
         Iterable<User> list = ctrlList.listUsers();

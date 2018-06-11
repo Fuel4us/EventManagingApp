@@ -39,7 +39,7 @@ public class UserTest {
 
     @Before
     public void setUp() {
-        testUser = new User(defaultEmail, defaultName, defaultNickname, defaultPassword, defaultSuperuser);
+        testUser = new User(defaultEmail, defaultName, defaultNickname, defaultPassword, "", defaultSuperuser);
     }
 
     @After
@@ -116,12 +116,12 @@ public class UserTest {
     @Test
     public void testSameAs() {
         System.out.println("sameAs");
-        User user_1 = new User(defaultEmail, defaultName, defaultNickname, defaultPassword, defaultSuperuser);
-        User user_2 = new User("", defaultName, defaultNickname, defaultPassword, defaultSuperuser);
-        User user_3 = new User(defaultEmail, "", defaultNickname, defaultPassword, defaultSuperuser);
-        User user_4 = new User(defaultEmail, defaultName, "", defaultPassword, defaultSuperuser);
-        User user_5 = new User(defaultEmail, defaultName, defaultNickname, "Mnb12345", defaultSuperuser);
-        User user_6 = new User(defaultEmail, defaultName, defaultNickname, defaultPassword, false);
+        User user_1 = new User(defaultEmail, defaultName, defaultNickname, defaultPassword, "", defaultSuperuser);
+        User user_2 = new User("", defaultName, defaultNickname, defaultPassword, "", defaultSuperuser);
+        User user_3 = new User(defaultEmail, "", defaultNickname, defaultPassword, "", defaultSuperuser);
+        User user_4 = new User(defaultEmail, defaultName, "", defaultPassword, "", defaultSuperuser);
+        User user_5 = new User(defaultEmail, defaultName, defaultNickname, "Mnb12345", "", defaultSuperuser);
+        User user_6 = new User(defaultEmail, defaultName, defaultNickname, defaultPassword, "", false);
 
         assertEquals(false, testUser.sameAs(new String()));
         assertEquals(true, testUser.sameAs(testUser));
@@ -157,7 +157,7 @@ public class UserTest {
     @Test
     public void testToDTO() {
         System.out.println("toDTO");
-        UserDTO expected = new UserDTO(defaultEmail, defaultName, defaultNickname, defaultPassword, defaultSuperuser);
+        UserDTO expected = new UserDTO(defaultEmail, defaultName, defaultNickname, defaultPassword, "", defaultSuperuser);
         assertEquals(true, testUser.toDTO().equals(expected));
     }
 
@@ -167,7 +167,7 @@ public class UserTest {
     @Test
     public void testFromDTO() {
         System.out.println("fromDTO");
-        UserDTO dto = new UserDTO(defaultEmail, defaultName, defaultNickname, defaultPassword, defaultSuperuser);
+        UserDTO dto = new UserDTO(defaultEmail, defaultName, defaultNickname, defaultPassword, "", defaultSuperuser);
         assertEquals(true, User.fromDTO(dto, true).sameAs(testUser));
     }
 
