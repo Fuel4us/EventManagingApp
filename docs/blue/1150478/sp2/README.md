@@ -45,11 +45,11 @@ US03
 ## 3.1 Analysis Plan
 
 ```
-	**Extension** - It's an option that allows the user to create new functionalities;
-	**Menu Option** - A new option that is created on the side bar;
-	**Side Bar** - It's an bar, in this case, on the left side of the screen, wich has options inside linked to other functions and windows on the program;
-	**Popup option** - An option, in this case, on the menu of the spreadsheet, that is launched by pressing the right button of the mouse on the spreadsheet;
-	**Spreadsheet** - The table with cells (set of rows and columns), that exists on the workbook.
+	Extension - It's an option that allows the user to create new functionalities;
+	Menu Option - A new option that is created on the side bar;
+	Side Bar - It's an bar, in this case, on the left side of the screen, wich has options inside linked to other functions and windows on the program;
+	Popup option - An option, in this case, on the menu of the spreadsheet, that is launched by pressing the right button of the mouse on the spreadsheet;
+	Spreadsheet - The table with cells (set of rows and columns), that exists on the workbook.
 ```
 
 ## 3.2 Analysis Diagrams
@@ -186,3 +186,4 @@ Some Questions/Issues identified during the work in this feature increment
 * [ [Documentation] Core02.2 - ReadMe.md updated. Added design diagrams for us1, us2 and us3, and the us diagram. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/5c6b819dd321e05114873cecb3ecf4d7938686ef?at=master)
 * [ [Documentation] Core02.2 - ReadMe.md updated. Added analysis diagrams for the us1 us2 and us3. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/174bc7843786af1bc4bf25b63be39ddf3e0b9f54)
 * [ [Documentation] Core02.2 - Changes on the readMe.md (images size). ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/499a2318e2b5b56291e5985cb597905a91894c61)
+* [ [Documentation] Core02.2 - Changes on the readMe.md. [Implementatio] Core02.2 - Changes on layout. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/60169baeddbde5e6dc253cf293856aa95f6ad72e)
