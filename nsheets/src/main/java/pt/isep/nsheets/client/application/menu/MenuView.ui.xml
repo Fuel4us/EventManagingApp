@@ -46,6 +46,12 @@
         font-size: 1em !important;
         margin-top: 20px;
         }
+        
+        .profilePhoto {
+        height: 30px!important;
+        width: auto!important;
+        margin-top: 20px;
+        }
     </ui:style>
 
     <m:MaterialPanel ui:field="panel">
@@ -54,6 +60,7 @@
                 <!-- <m:MaterialNavBar backgroundColor="PURPLE"> -->
                 <m:MaterialNavBrand text="NSheets" paddingLeft="20"/>
                 <m:MaterialNavSection float="RIGHT">
+                    <m:MaterialImage ui:field="image" addStyleNames="{style.profilePhoto}" circle="true"/>
                     <m:MaterialLink ui:field="username" text="Login" href="#login"/>
                     <m:MaterialLink ui:field="logout" text="Signup" href="#signup"/>
                 </m:MaterialNavSection>

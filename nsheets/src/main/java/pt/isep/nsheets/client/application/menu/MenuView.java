@@ -6,6 +6,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import gwt.material.design.client.ui.MaterialImage;
 import gwt.material.design.client.ui.MaterialLink;
 
 import gwt.material.design.client.ui.MaterialNavBar;
@@ -25,6 +26,8 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     static MaterialSideNavPush sideNav;
     @UiField
     static MaterialLink username, logout;
+    @UiField
+    static MaterialImage image;
 
     @Inject
     MenuView(Binder uiBinder) {
@@ -49,5 +52,9 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
 
     public static MaterialLink getLogout() {
         return logout;
+    }
+
+    public static MaterialImage getImage() {
+        return image;
     }
 }
