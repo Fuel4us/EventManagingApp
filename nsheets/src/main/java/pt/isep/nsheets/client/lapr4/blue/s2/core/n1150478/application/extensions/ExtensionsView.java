@@ -1,4 +1,4 @@
-package pt.isep.nsheets.client.application.extensions;
+package pt.isep.nsheets.client.lapr4.blue.s2.core.n1150478.application.extensions;
 
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -15,7 +15,7 @@ import javax.inject.Inject;
 
 /**
  *
- * João Pereira <1150478@isep.ipp.pt>
+ * João Pereira_1150478@isep.ipp.pt
  */
 class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
 

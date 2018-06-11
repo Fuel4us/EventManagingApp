@@ -4,7 +4,7 @@ import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 
 /**
  *
- * @author João Pereira <1150478@isep.ipp.pt>
+ * @author João Pereira_1150478@isep.ipp.pt
  */
 public class FormModule extends AbstractPresenterModule {
     
