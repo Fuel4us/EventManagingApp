@@ -13,6 +13,7 @@ public class UserBuilder {
     private String name;
     private String nickname;
     private String password;
+    private String pictureName;
     private boolean superUser;
 
     public UserBuilder() {
@@ -42,8 +43,13 @@ public class UserBuilder {
         this.superUser = superUser;
         return this;
     }
+    
+    public UserBuilder withPictureName(String pictureName){
+        this.pictureName = pictureName;
+        return this;
+    }
 
     public UserDTO build() {
-        return new UserDTO(this.email, this.name, this.nickname, this.password, this.superUser);
+        return new UserDTO(this.email, this.name, this.nickname, this.password, this.pictureName, this.superUser);
     }
 }
