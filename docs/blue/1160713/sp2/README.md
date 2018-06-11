@@ -78,11 +78,11 @@ US2: Accept/Deny/Block/Unblock Invitations from User
 
 **For US1 - Invitation Dispatch**
 
-![US1 Design]("Core05.1 - Contacts (Invitation Dispatch).png")
+![US1 Design](dispatch.png)
 
 **For US2 - Invitation Reception**
 
-![US2 Design]("Core05.1 - Contacts (Invitation Reception).png")
+![US2 Design](reception.png)
 
 
 ## 4.3. Classes
