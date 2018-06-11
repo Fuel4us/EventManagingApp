@@ -9,16 +9,16 @@ package pt.isep.nsheets.shared.lapr4.red.s2.ipc.n1160630.services;
  *
  * @author pedromonteiro
  */
-public enum CellStyle {
+public enum CellStylePDF {
     DASHED("dashed"), DOTTED("dotted"), DOUBLE("double"), SOLID("solid");
     
     public String value;
-    CellStyle(String value) {
+    CellStylePDF(String value) {
         this.value = value;
     }
     
-    static public CellStyle getCellStyleByValue(String value){
-        for(CellStyle style: CellStyle.values()){
+    static public CellStylePDF getCellStyleByValue(String value){
+        for(CellStylePDF style: CellStylePDF.values()){
             if(style.value.equals(value)) return style;
         }
         

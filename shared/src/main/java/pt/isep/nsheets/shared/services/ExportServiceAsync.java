@@ -1,10 +1,7 @@
 package pt.isep.nsheets.shared.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.itextpdf.text.BaseColor;
-import java.io.ByteArrayOutputStream;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
-import pt.isep.nsheets.shared.lapr4.red.s2.ipc.n1160630.services.CellStyle;
 
 /**
  *
