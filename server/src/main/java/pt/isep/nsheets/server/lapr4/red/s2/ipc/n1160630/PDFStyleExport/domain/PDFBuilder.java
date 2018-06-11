@@ -160,7 +160,7 @@ public class PDFBuilder {
                             ColorUtil text_util_color = new ColorUtil(hex_text_color);
                             
                             
-                            cell = new PdfPCell(new Phrase(spread_cell.getContent().toUpperCase(), text_font));
+                            cell = new PdfPCell(new Phrase(spread_cell.getContent(), text_font));
                             
                             BaseColor bc = new BaseColor(back_util_color.getColor().getRed(), back_util_color.getColor().getGreen(), back_util_color.getColor().getBlue());
                             cell.setBackgroundColor(bc);
