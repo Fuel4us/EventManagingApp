@@ -98,7 +98,7 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
         };
 
         MaterialToast.fireToast("ListSize: "+cellStyleList().size());
-        exportServiceAsync.exportStyledWorkbookPDF(cellStyleList(), workbookDTO, style, color, range, callback);
+        //exportServiceAsync.exportStyledWorkbookPDF(cellStyleList(), workbookDTO, style, color, range, callback);
 
     }
 

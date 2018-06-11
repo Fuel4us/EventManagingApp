@@ -20,6 +20,7 @@ import pt.isep.nsheets.shared.services.MessagesDTO;
 public class AddMessageControllerTest {
 
     Message message;
+    Date DEFAULT_DATE = new Date();
     String DEFAULT_USER = "user1";
     String DEFAULT_TEXT = "Test message";
     int DEFAULT_INDEX_CHAT = 0;
@@ -53,7 +54,7 @@ public class AddMessageControllerTest {
 
     @Before
     public void setUp() {
-        message = new Message(DEFAULT_TEXT, DEFAULT_USER, DEFAULT_INDEX_CHAT);
+        message = new Message(DEFAULT_TEXT, DEFAULT_DATE, DEFAULT_USER, DEFAULT_INDEX_CHAT);
     }
 
     @After

@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import eapli.framework.domain.AggregateRoot;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import pt.isep.nsheets.shared.services.UserDTO;
 
 /**
@@ -27,7 +28,8 @@ public class User implements AggregateRoot<Long>, Serializable {
     @Id
     @GeneratedValue
     private Long pk = null;
-
+    
+    @Column(unique = true)
     private String email;
     private String name;
     private String nickname;

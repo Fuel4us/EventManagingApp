@@ -1,6 +1,7 @@
 package pt.isep.nsheets.client.application.chat;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -79,7 +80,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
                 }
 
             };
-            MessagesDTO mDTO = new MessagesDTO(view.textPublicChat(), this.user.getUser().getNickname(), CHAT_INDEX_PUBLIC);
+            MessagesDTO mDTO = new MessagesDTO(view.textPublicChat(), new Date(), this.user.getUser().getNickname(), CHAT_INDEX_PUBLIC);
             messagesSvc.addMessage(mDTO, callback);
         });
 
@@ -99,7 +100,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
                 }
 
             };
-            MessagesDTO mDTO = new MessagesDTO(view.textPrivateChat2(), this.user.getUser().getNickname(), CHAT_INDEX_PRIVATE_2);
+            MessagesDTO mDTO = new MessagesDTO(view.textPrivateChat2(), new Date(), this.user.getUser().getNickname(), CHAT_INDEX_PRIVATE_2);
             messagesSvc.addMessage(mDTO, callback);
         });
 
@@ -119,7 +120,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
                 }
 
             };
-            MessagesDTO mDTO = new MessagesDTO(view.textPrivateChat3(), this.user.getUser().getNickname(), CHAT_INDEX_PRIVATE_3);
+            MessagesDTO mDTO = new MessagesDTO(view.textPrivateChat3(), new Date(), this.user.getUser().getNickname(), CHAT_INDEX_PRIVATE_3);
             messagesSvc.addMessage(mDTO, callback);
         });
         

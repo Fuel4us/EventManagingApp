@@ -175,7 +175,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialButton cancelButtonModal;
     @UiField
     MaterialButton deleteButtonModal;
-    
+
     @UiField
     MaterialLink rangeConditionButton;
     @UiField
@@ -186,6 +186,27 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox rangeConditionalStart;
     @UiField
     MaterialTextBox rangeConditionalEnd;
+
+    @UiField
+    MaterialTextBox nameModal;
+    @UiField
+    MaterialTextBox descriptionModal;
+
+    public MaterialModal getModal() {
+        return modal;
+    }
+
+    public MaterialTextBox getNameModal() {
+        return nameModal;
+    }
+
+    public MaterialTextBox getDescriptionModal() {
+        return descriptionModal;
+    }
+
+    public MaterialButton getEditWorkbookButton() {
+        return editWorkbookButton;
+    }
 
     @UiHandler("click_chart")
     void onclick(ClickEvent e) {
@@ -387,11 +408,11 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 if (c != null) {
                     c.setBackgroungColor(backgroundcolorLst.getSelectedValue().ordinal());
                     this.updateCellStyles(c);
-                    MaterialToast.fireToast("existia " +  CellStyleExtension.getCellStyle(activeCell.getAddress()).getBackgroungColor());
-                }else{
+                    MaterialToast.fireToast("existia " + CellStyleExtension.getCellStyle(activeCell.getAddress()).getBackgroungColor());
+                } else {
                     MaterialToast.fireToast("nao existia");
                     //CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), backgroundcolorLst.getSelectedValue().ordinal(), Color.BLACK.ordinal(),0,12));
-                    this.updateCellStyles(new CellStyle(activeCell.getAddress(), backgroundcolorLst.getSelectedValue().ordinal(), Color.BLACK.ordinal(),0,12));
+                    this.updateCellStyles(new CellStyle(activeCell.getAddress(), backgroundcolorLst.getSelectedValue().ordinal(), Color.BLACK.ordinal(), 0, 12));
                 }
                 customTable.getView().setRedraw(true);
                 customTable.getView().refresh();
@@ -411,9 +432,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 } else {
                     MaterialToast.fireToast("nao existia");
 
-                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(),0,12));
+                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(), 0, 12));
                 }
-                MaterialToast.fireToast("list CellStyle is empty? "+CellStyleExtension.lstCellStyle.isEmpty());
+                MaterialToast.fireToast("list CellStyle is empty? " + CellStyleExtension.lstCellStyle.isEmpty());
 
                 customTable.getView().setRedraw(true);
                 customTable.getView().refresh();
@@ -647,17 +668,17 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     public String getConditionalValue() {
         return conditionalText.getText();
     }
-    
+
     @Override
     public String getConditionalCell() {
         return conditionalCell.getText();
     }
-    
+
     @Override
     public String getConditionalRangeStart() {
         return rangeConditionalStart.getText();
     }
-    
+
     @Override
     public String getConditionalRangeEnd() {
         return rangeConditionalEnd.getText();
@@ -668,7 +689,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         return this.conditionalModal;
     }
 
-    public void updateCellStyles(CellStyle cellStyle){
+    public void updateCellStyles(CellStyle cellStyle) {
         CellStyleServiceAsync cellStyleServiceAsync = GWT.create(CellStyleService.class);
 
         AsyncCallback<CellStyleDTO> callback = new AsyncCallback<CellStyleDTO>() {
@@ -694,15 +715,14 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         //loadCellStyles();
     }
 
-    public void loadCellStyles(){
+    public void loadCellStyles() {
         //End of extension CellStyle loading
 
         /* 1050475 Hernani Gil
            Repository loading
          */
 
-        /* Core08.1 */
-
+ /* Core08.1 */
         CellStyleServiceAsync cellStyleServiceAsync = GWT.create(CellStyleService.class);
         AsyncCallback<ArrayList<CellStyleDTO>> callbackCStyle = new AsyncCallback<ArrayList<CellStyleDTO>>() {
             @Override
