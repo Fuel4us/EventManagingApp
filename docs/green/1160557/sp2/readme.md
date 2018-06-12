@@ -73,3 +73,5 @@ Commits:
 
 [Cell Style Changing](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/c8b84dc879c2a0d97b024e1327d93042dcdcbe1f)
 
+[Small fix in documentation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/d03ffa7ccd7483a35a7895aff9c267ea88b47b20)
+
