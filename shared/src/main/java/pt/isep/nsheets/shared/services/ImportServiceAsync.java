@@ -5,5 +5,5 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 public interface ImportServiceAsync {
 
-    void importXmlFile(String fileLocation, AsyncCallback<WorkbookDTO> async);
+    void importXmlFile(String fileName, AsyncCallback<WorkbookDTO> async);
 }
