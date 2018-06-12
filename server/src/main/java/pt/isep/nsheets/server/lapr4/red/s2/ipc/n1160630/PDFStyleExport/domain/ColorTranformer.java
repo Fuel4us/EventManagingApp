@@ -301,16 +301,25 @@ public enum ColorTranformer {
         this.hexColor = hexColor;
     }
     
+    /**
+     * Returns a string with hexadecimal code, giving a GWT color constant
+     * @param color GWT Color
+     * @return hexadecimal code
+     */
     public static String getHexColorByGWTColor(Color color){
         
         for(ColorTranformer color_t:values()){
             if(color_t.name().equals(color.name()))
                 return color_t.hexColor;
         }
-        
         return null;
     }
     
+    /**
+     * Returns a string with hexadecimal code, giving a GWT color constant number
+     * @param color GWT Color number
+     * @return hexadecimal code
+     */
     public static String getHexColorByGWTColor(int color){
         
         for(ColorTranformer color_t:values()){

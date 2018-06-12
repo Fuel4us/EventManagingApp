@@ -22,10 +22,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtension;
 
 /**
- * Based on https://stackoverflow.com/questions/13725198/how-can-a-user-download-a-file-in-client-side-google-web-toolkit
+ * Download Servelet class.
+ * Based on https://stackoverflow.com/questions/13725198/how-can-a-user-download-a-file-in-client-side-google-web-toolkit and 
+ * https://shdhumale.wordpress.com/2015/09/14/downloading-data-in-pdf-xls-word-format-in-gwt/
  *
  * @author pedromonteiro
  */

@@ -13,13 +13,20 @@ import com.itextpdf.text.pdf.PdfPCellEvent;
 import com.itextpdf.text.pdf.PdfPTable;
 
 /**
- *
+ * Dottec Cell class.
  * @author pedromonteiro
  */
 public class DottedCell implements PdfPCellEvent {
     private int border = 0;
     private final BaseColor color;
     private final int size;
+
+    /**
+     * Constructor.
+     * @param border border position
+     * @param color border color
+     * @param size border size
+     */
     public DottedCell(int border, BaseColor color, int size) {
         this.border = border;
         this.color = color;
