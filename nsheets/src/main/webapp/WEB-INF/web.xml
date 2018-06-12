@@ -60,6 +60,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>formsVariablesServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.FormsVariablesServiceImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>formsVariablesServiceServlet</servlet-name>
+        <url-pattern>/nsheets/formsVariablesService</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>cellsServiceServlet</servlet-name>
         <servlet-class>pt.isep.nsheets.server.services.CellsServiceImpl</servlet-class>
     </servlet>
