@@ -53,13 +53,13 @@ The main idea for the "workflow" of this feature increment.
 
 **Use Cases**
 
-![Use Cases](Core08.1 US.png)
+![Use Cases](Core08.1US.png)
 
 - **Use Cases**. 
 
 **Domain Model (for this feature increment)**
 
-![Domain Model](Core08.1 CD.png)
+![Domain Model](Core08.1CD.png)
 
 - **Domain Model**. Since we found no specific requirements for the structure of Workbook Descriptions we follow the Structure of the existing DTO (WorkbookDescriptionDTO).
 
@@ -233,7 +233,7 @@ Inside CellStyleExtension, the UIExtension is extended in a CellDecorator that i
     }
 
 Any time that the customTable of the Workbook is rendered, the method getValue() of the SheetWidgetColumn is called for each cell, returning a MaterialLabel that represents the cell.
-If the CellStyleExtension isn't null, it looks if each cell has a CellStyle associated and decorates this widget.
+If the CellStyleExtension isn't null, it looks if each cell has a CellStyle associated and decorates this widget:
 
 public MaterialLabel getValue(SheetCell object) {
         MaterialLabel badge = new MaterialLabel();
@@ -253,10 +253,10 @@ public MaterialLabel getValue(SheetCell object) {
                 }
             }
         }
-       badge.setLayoutPosition(Style.Position.RELATIVE);
+		badge.setLayoutPosition(Style.Position.RELATIVE);
 
-        return badge;
-    }
+		return badge;
+}
 
 
 # 6. Integration/Demonstration
