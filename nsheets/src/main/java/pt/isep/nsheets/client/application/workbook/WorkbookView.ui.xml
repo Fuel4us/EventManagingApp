@@ -177,8 +177,22 @@ governing permissions and limitations under the License. #L% -->
                 <m:MaterialLink  ui:field="forms" targetHistoryToken="{form}" text="Forms" textColor="BLUE" iconType="POLYMER" iconPosition="LEFT"/>
             </m:MaterialColumn>
             <m:MaterialColumn>
-                <m:MaterialLink  ui:field="macro" text="Edit Macro" textColor="ORANGE" iconType="CODE" iconPosition="LEFT"/>
+                <m:MaterialLink  ui:field="macro" text="Edit Macro" textColor="ORANGE" iconType="SETTINGS" iconPosition="LEFT"/>
             </m:MaterialColumn>
+            <m:MaterialModal ui:field="macroModal" type="DEFAULT" dismissible="true">
+                <m:MaterialModalContent>
+                    <m:MaterialRow>
+                        <m:MaterialTitle ui:field="macroTitle" title="Edit Macro"/>
+                    </m:MaterialRow>
+                    <m:MaterialRow>
+                        <m:MaterialTextArea ui:field="macroTextArea"/>
+                    </m:MaterialRow>
+                </m:MaterialModalContent>
+                <m:MaterialModalFooter>
+                    <m:MaterialIcon ui:field="macroModalCloseButton" iconType="CLOSE" iconColor="RED" waves="DEFAULT" circle="true" grid="s1"/>
+                    <m:MaterialIcon ui:field="macroModalDoneButton" iconType="DONE" iconColor="GREEN" waves="DEFAULT" circle="true" grid="s1"/>
+                </m:MaterialModalFooter>
+            </m:MaterialModal>
             <m:MaterialColumn>
                 <m:MaterialLink  ui:field="rangeConditionButton" text="Range Condition" textColor="RED" iconType="SETTINGS" iconPosition="LEFT"/>
             </m:MaterialColumn>

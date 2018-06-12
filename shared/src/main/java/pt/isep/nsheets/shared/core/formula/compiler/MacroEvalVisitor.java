@@ -1,42 +1,25 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pt.isep.nsheets.shared.core.formula.compiler;
 
 import gwt.material.design.client.ui.MaterialToast;
+import org.antlr.v4.runtime.Token;
+import org.apache.velocity.runtime.directive.Macro;
+import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Value;
-import pt.isep.nsheets.shared.core.formula.BinaryOperation;
-import pt.isep.nsheets.shared.core.formula.BinaryOperator;
-import pt.isep.nsheets.shared.core.formula.Expression;
-import pt.isep.nsheets.shared.core.formula.Function;
-import pt.isep.nsheets.shared.core.formula.FunctionCall;
-import pt.isep.nsheets.shared.core.formula.Literal;
-import pt.isep.nsheets.shared.core.formula.UnaryOperation;
-import pt.isep.nsheets.shared.core.formula.lang.CellReference;
-import pt.isep.nsheets.shared.core.formula.lang.Language;
-import pt.isep.nsheets.shared.core.formula.lang.RangeReference;
-import pt.isep.nsheets.shared.core.formula.lang.ReferenceOperation;
-import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
+import pt.isep.nsheets.shared.core.Workbook;
+import pt.isep.nsheets.shared.core.formula.*;
+import pt.isep.nsheets.shared.core.formula.lang.*;
+import pt.isep.nsheets.shared.lapr4.blue.n1150455.s1.temporaryVariables.TemporaryVariable;
+import pt.isep.nsheets.shared.lapr4.green.n1160815.formula.lang.GlobalVariable;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.antlr.v4.runtime.Token;
-import pt.isep.nsheets.shared.application.Settings;
-import pt.isep.nsheets.shared.core.IllegalValueTypeException;
-import pt.isep.nsheets.shared.core.Workbook;
-import pt.isep.nsheets.shared.lapr4.blue.n1150455.s1.temporaryVariables.TemporaryVariable;
-import pt.isep.nsheets.shared.lapr4.green.n1160815.formula.lang.GlobalVariable;
 
-/**
- *
- * @author jrt
- */
-public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
+public class MacroEvalVisitor extends MacroBaseVisitor<Expression> {
 
     private Cell cell = null;
     int numberOfErros;
@@ -44,7 +27,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
 
     final private Language language;
 
-    public FormulaEvalVisitor(Cell cell, Language lang) {
+    public MacroEvalVisitor(Cell cell, Language lang) {
         this.cell = cell;
         numberOfErros = 0;
         errorBuffer = new StringBuilder();
@@ -60,12 +43,14 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
     }
 
     @Override
-    public Expression visitExpression(FormulaParser.ExpressionContext ctx) {
-        return visit(ctx.comparison());
+    public Expression visitExpression(MacroParser.ExpressionContext ctx) {
+        for(MacroParser.ComparisonContext e : ctx.comparison())
+            visit(e);
+        return visit(ctx.comparison(0));
     }
 
     @Override
-    public Expression visitComparison(FormulaParser.ComparisonContext ctx) {
+    public Expression visitComparison(MacroParser.ComparisonContext ctx) {
         if (ctx.getChildCount() == 3) {
             try {
                 BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
@@ -84,7 +69,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
     }
 
     @Override
-    public Expression visitBlock(FormulaParser.BlockContext ctx) {
+    public Expression visitBlock(MacroParser.BlockContext ctx) {
         if (ctx.getChildCount() == 1) {
             return visit(ctx.manyexpressions());
         } else {
@@ -93,7 +78,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
     }
 
     @Override
-    public Expression visitConcatenation(FormulaParser.ConcatenationContext ctx
+    public Expression visitConcatenation(MacroParser.ConcatenationContext ctx
     ) {
         try {
             if (ctx.getChildCount() == 2) { // Convert unary operation
@@ -131,7 +116,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
     }
 
     @Override
-    public Expression visitAtom(FormulaParser.AtomContext ctx
+    public Expression visitAtom(MacroParser.AtomContext ctx
     ) {
         if (ctx.getChildCount() == 3) {
             return visit(ctx.getChild(1));
@@ -140,14 +125,14 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
         return visitChildren(ctx);
     }
 
-    public Expression visitFunction_call(FormulaParser.Function_callContext ctx) {
+    public Expression visitFunction_call(MacroParser.Function_callContext ctx) {
         // Convert function call
         Function function = null;
         try {
             // function = Language.getInstance().getFunction(ctx.getChild(0).getText());
             function = this.language.getFunction(ctx.getChild(0).getText());
         } catch (UnknownElementException ex) {
-            Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MacroEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         if (function != null) {
@@ -170,7 +155,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
     }
 
     @Override
-    public Expression visitReference(FormulaParser.ReferenceContext ctx) {
+    public Expression visitReference(MacroParser.ReferenceContext ctx) {
         try {
             if (ctx.getChildCount() == 3) {
                 //BinaryOperator operator = Language.getInstance().getBinaryOperator(ctx.getChild(1).getText());
@@ -183,27 +168,14 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
                 );
             } else {
                 Token t = (Token) ctx.getChild(0).getPayload();
-                switch (t.getType()) {
-                    case FormulaParser.CELL_REF:
-                        return new CellReference(cell.getSpreadsheet(), ctx.getText());
-                    case FormulaParser.NAMEGLOBAL:
-                        Workbook currentWorkbook = Settings.getInstance().getWorkbook();
-
-                        String gvName = ctx.getChild(0).getText();
-                        if (currentWorkbook.checkIfGVExists(gvName)) {
-                            //Global variable already exits
-                            return currentWorkbook.getGlobalVariable(gvName);
-                        } else {
-                            GlobalVariable gv = new GlobalVariable(new Value(), gvName);
-                            currentWorkbook.addGlobalVariable(gvName);
-                            return gv;
-                        }
-                    default:
-                        return visit(ctx.getChild(0));
+                if (t.getType() == MacroParser.CELL_REF) {
+                    return new CellReference(cell.getSpreadsheet(), ctx.getText());
+                } else {
+                    return visit(ctx.getChild(0));
                 }
 
             }
-            // return visitChildren(ctx); 
+            // return visitChildren(ctx);
         } catch (ParseException | UnknownElementException ex) {
             addVisitError(ex.getMessage());
             MaterialToast.fireToast("ERRO REFERENCE");
@@ -213,18 +185,20 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
     }
 
     @Override
-    public Expression visitLiteral(FormulaParser.LiteralContext ctx) {
+    public Expression visitLiteral(MacroParser.LiteralContext ctx) {
         Token t = (Token) ctx.getChild(0).getPayload();
 
-        if (t.getType() == FormulaParser.NUMBER) {
+        if (t.getType() == MacroParser.NUMBER) {
             return new Literal(Value.parseValue(ctx.getText()));
         } else {
-            if (t.getType() == FormulaParser.STRING) {
+            if (t.getType() == MacroParser.STRING) {
                 String value = ctx.getText().substring(1, ctx.getText().length() - 1);
                 return new Literal(Value.parseValue(value, Value.Type.BOOLEAN, Value.Type.DATE));
-            } else if (t.getType() == FormulaParser.RULE_nameTemporary) {
-                TemporaryVariable tempVariable = (TemporaryVariable) ctx.getChild(0);
-                return new Literal(tempVariable.getValue());
+            } else {
+                if (t.getType() == MacroParser.RULE_nameTemporary) {
+                    TemporaryVariable tempVariable = (TemporaryVariable) ctx.getChild(0);
+                    return new Literal(tempVariable.getValue());
+                }
             }
         }
         MaterialToast.fireToast("RETURN NULL Literal");
@@ -232,13 +206,13 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
     }
 
     @Override
-    public Expression visitManyexpressions(FormulaParser.ManyexpressionsContext ctx) {
+    public Expression visitManyexpressions(MacroParser.ManyexpressionsContext ctx) {
         Function function = null;
         try {
             // function = Language.getInstance().getFunction(ctx.getChild(0).getText());
             function = this.language.getFunction(ctx.getChild(0).getText());
         } catch (UnknownElementException ex) {
-            Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MacroEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         if (function != null) {
@@ -253,7 +227,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
                 // return new FunctionCall(function, argArray);
                 return new Literal(function.applyTo(argArray));
             } catch (IllegalValueTypeException ex) {
-                Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MacroEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         MaterialToast.fireToast("RETURN NULL_Many expressions");
@@ -261,7 +235,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
     }
 
     @Override
-    public Expression visitAssignment(FormulaParser.AssignmentContext ctx) {
+    public Expression visitAssignment(MacroParser.AssignmentContext ctx) {
         try {
             BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
             return new BinaryOperation(
@@ -276,7 +250,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
     }
 
     @Override
-    public Expression visitForexpression(FormulaParser.ForexpressionContext ctx) {
+    public Expression visitForexpression(MacroParser.ForexpressionContext ctx) {
         Function function = null;
         try {
             function = this.language.getFunction(ctx.getParent().getChild(0).getText());
@@ -300,7 +274,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
                 MaterialToast.fireToast("FUNCTION NULL");
             }
         } catch (IllegalValueTypeException ex) {
-            Logger.getLogger(FormulaEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MacroEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         MaterialToast.fireToast("RETURN NULL FOREXPRESSION");
@@ -308,7 +282,7 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
     }
 
     @Override
-    public Expression visitTemporaryreference(FormulaParser.TemporaryreferenceContext ctx) {
+    public Expression visitTemporaryreference(MacroParser.TemporaryreferenceContext ctx) {
         if (ctx.getChildCount() == 3) {
             try {
                 BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
@@ -326,6 +300,37 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
 
         return null;
     }
+
+    @Override
+    public Expression visitGlobalreference(MacroParser.GlobalreferenceContext ctx) {
+        Workbook currentWorkbook = Settings.getInstance().getWorkbook();
+        MaterialToast.fireToast("Entrou no visitor");
+        //Change code so it does not create a global reference here
+        GlobalVariable gv = new GlobalVariable(new Value(ctx.getChild(0).getText()));
+
+        if (currentWorkbook.checkIfGVExists(gv)) {
+            //Global variable exists
+            MaterialToast.fireToast("Global Variable ja existe");
+            try {
+                BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
+                return new BinaryOperation(
+                        visit(ctx.getChild(0)),
+                        operator,
+                        visit(ctx.getChild(2))
+                );
+            } catch (UnknownElementException ex) {
+                MaterialToast.fireToast("Error in Temporary Reference");
+            }
+        } else {
+            //Global variable doesnt exists
+            MaterialToast.fireToast("Global Variable não existe");
+            return new GlobalVariable(new Value(ctx.getChild(2).getText()));
+        }
+
+        return null;
+    }
+
+
 
     private void addVisitError(String msg) {
         errorBuffer.append(msg).append("\n");

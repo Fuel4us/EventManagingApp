@@ -25,6 +25,7 @@ public class LanguageManager {
 
         languages.add(new ExcelLanguage("excel"));
         languages.add(new Language("monetary"));
+        languages.add(new ExcelLanguage("macro"));
     }
 
     /**

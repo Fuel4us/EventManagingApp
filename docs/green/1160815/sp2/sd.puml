@@ -1,0 +1,58 @@
+@startuml design1
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+boundary WorkbookView
+boundary WorkbookPresenter
+
+box "NSheets Client"
+participant WorkbookView
+participant WorkbookPresenter
+end box
+
+box "NSheets Shared"
+participant FormulaEvalVisitor
+participant workbook
+participant BinaryOperator
+participant Assignment
+end box
+
+User -> WorkbookView : onReveal() / navigate to page
+User -> WorkbookView : click on a cell
+User -> WorkbookView : add a formula with global variables
+
+WorkbookView -> WorkbookPresenter : conditionalFormattingAction()
+loop allSelectedCells
+WorkbookPresenter -> WorkbookPresenter : applyConditionToCell()
+end
+
+WorkbookPresenter ->> FormulaEvalVisitor : visitExpression()
+
+FormulaEvalVisitor -> FormulaEvalVisitor: visitReference()
+
+alt variable already exists
+FormulaEvalVisitor -> workbook : getGlobalVariable(gvName)
+else variable does not exists
+FormulaEvalVisitor -> workbook : addGlobalVariable(gvName)
+end
+
+FormulaEvalVisitor -> FormulaEvalVisitor : visitAssignment()
+
+FormulaEvalVisitor -> BinaryOperator : new BinaryOperation()
+
+BinaryOperator -> Assignment : applyTo()
+
+alt instanceof GlobalVariable
+Assignment -> workbook : setGVValue(gvName)
+end
+
+Assignment -> BinaryOperator : return value
+
+BinaryOperator -> FormulaEvalVisitor : return value
+
+FormulaEvalVisitor -> WorkbookView : value
+@enduml

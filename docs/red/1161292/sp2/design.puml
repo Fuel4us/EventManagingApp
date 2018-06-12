@@ -13,8 +13,8 @@ control SignupServiceImpl
 control SignupController
 control SignupService
 entity UserRepository
+entity UserDTO
 entity User
-entity UserBuilder
 database Database 
 
 box "NSheets Client"
@@ -24,14 +24,14 @@ participant SignupPresenter
 end box
 
 box "NSheets Shared"
-participant UserBuilder
-participant User
+participant UserDTO
 end box
 
 box "NSheets Server"
 participant SignupServiceImpl
 participant SignupController
 participant SignupService
+participant User
 participant UserRepository
 end box
 
@@ -48,18 +48,13 @@ NonRegisteredUser -> SignupPresenter : Inserts requested data
 SignupPresenter -> NonRegisteredUser : Asks for confirmation
 NonRegisteredUser -> SignupPresenter : Confirms
 
-SignupPresenter -> UserBuilder : ub : new UserBuilder()
-SignupPresenter -> UserBuilder : ub.withEmail(email)
-SignupPresenter -> UserBuilder : ub.withPassword(password)
-SignupPresenter -> UserBuilder : ub.withUsername(username)
-SignupPresenter -> UserBuilder : ub.withPicture(picture)
-SignupPresenter -> UserBuilder : user : ub.build()
-UserBuilder -> User : user : new User()
+SignupPresenter -> UserDTO : dto : new UserDTO(email, name, username, password, pictureName, false)
 
-SignupPresenter -> SignupServiceImpl : registerNewUser(user)
-SignupServiceImpl -> SignupController : registerNewUser(user)
-SignupController -> SignupService : registerNewUser(user)
-SignupService -> UserRepository : addNewUser(user)
+SignupPresenter -> SignupServiceImpl : signupUser(dto)
+SignupServiceImpl -> SignupController : signupUser(dto)
+SignupController -> SignupService : signupUser(signupUser)
+SignupService -> User : u : User.fromDTOHashPassword(dto)
+SignupService -> UserRepository : save(u)
 UserRepository -> Database : save
 
 SignupServiceImpl -> SignupPresenter : onSuccess()

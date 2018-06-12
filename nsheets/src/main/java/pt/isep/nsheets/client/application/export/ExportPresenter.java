@@ -1,6 +1,5 @@
 package pt.isep.nsheets.client.application.export;
 
-import com.google.gwt.user.client.Window;
 import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.ExportService;
