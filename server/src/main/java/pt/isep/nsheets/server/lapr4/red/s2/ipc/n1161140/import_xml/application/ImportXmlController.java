@@ -1,20 +1,12 @@
 package pt.isep.nsheets.server.lapr4.red.s2.ipc.n1161140.import_xml.application;
 
-import com.google.gwt.core.client.GWT;
-
-import java.io.File;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 public class ImportXmlController {
 
-    public void importWorkbooks() {
-        ImportXmlService service = new ImportXmlService(new File(GWT.getModuleBaseURL()));
+    public WorkbookDTO importWorkbooks(String fileName) {
+        ImportXmlService service = new ImportXmlService();
 
-        service.importWorkbooks();
-    }
-
-    public void importSpreadsheets() {
-    }
-
-    public void importCells() {
+        return service.importWorkbooks(fileName);
     }
 }

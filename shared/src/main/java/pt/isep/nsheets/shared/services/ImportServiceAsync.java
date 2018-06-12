@@ -1,8 +1,9 @@
 package pt.isep.nsheets.shared.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 public interface ImportServiceAsync {
 
-    void importXmlFile(AsyncCallback<Void> async);
+    void importXmlFile(String fileLocation, AsyncCallback<WorkbookDTO> async);
 }

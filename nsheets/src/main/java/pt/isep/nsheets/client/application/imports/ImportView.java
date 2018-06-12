@@ -8,12 +8,19 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.addins.client.fileuploader.MaterialFileUploader;
 import gwt.material.design.client.ui.MaterialToast;
+import pt.isep.nsheets.shared.application.Settings;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.ImportService;
 import pt.isep.nsheets.shared.services.ImportServiceAsync;
 
 import javax.inject.Inject;
 
 class ImportView extends ViewImpl implements ImportPresenter.MyView {
+
+    @UiField
+    MaterialFileUploader uploader;
+
+    String fileLocation;
 
     interface Binder extends UiBinder<Widget, ImportView> {
     }
@@ -24,12 +31,16 @@ class ImportView extends ViewImpl implements ImportPresenter.MyView {
 
         uploader.setUrl(GWT.getModuleBaseURL() + "uploadServlet");
 
-        uploader.addCompleteHandler(event -> {
+        uploader.addSuccessHandler(event -> {
+
+            fileLocation = GWT.getHostPageBaseURL() + "uploadedFiles/" + event.getTarget().getName();
+
             ImportServiceAsync service = GWT.create(ImportService.class);
 
-            AsyncCallback<Void> callback = new AsyncCallback<Void>() {
-                public void onSuccess(Void aVoid) {
+            AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
+                public void onSuccess(WorkbookDTO workbook) {
                     MaterialToast.fireToast("File read successfully", "rounded");
+                    Settings.getInstance().updateWorkbook(workbook);
                 }
 
                 public void onFailure(Throwable caught) {
@@ -37,10 +48,7 @@ class ImportView extends ViewImpl implements ImportPresenter.MyView {
                 }
             };
 
-            service.importXmlFile(callback);
+            service.importXmlFile(fileLocation, callback);
         });
     }
-
-    @UiField
-    MaterialFileUploader uploader;
 }
