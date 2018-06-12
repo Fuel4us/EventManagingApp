@@ -1,17 +1,24 @@
 package pt.isep.nsheets.shared.lapr4.green.n1160557.s2.services;
 
-import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.services.ConditionalDTO;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+import pt.isep.nsheets.shared.core.Value;
+import pt.isep.nsheets.shared.ext.extensions.lapr4.red.s1.core.n1160629.Configuration;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.CellDTO;
 
 @SuppressWarnings("serial")
-public class ConditionalRangeDTO implements Serializable{
-    public List<ConditionalDTO> conditionalList;
+public class ConditionalRangeDTO implements Serializable {
+    public CellRangeDTO cellList;
+    public Configuration configuration;
+    public String operator;
+    public Value value;
 
-    public ConditionalRangeDTO(List<ConditionalDTO> list){
-        this.conditionalList = list;
+    public ConditionalRangeDTO(CellRangeDTO list, Configuration configuration, String operator, Value value){
+        this.cellList = list;
+        this.configuration = configuration;
+        this.operator = operator;
+        this.value = value;
     }
 
     /**
@@ -19,14 +26,14 @@ public class ConditionalRangeDTO implements Serializable{
      * serializable!
      */
     public ConditionalRangeDTO() {
-        conditionalList = new ArrayList<>();
+        this.cellList = new CellRangeDTO();
     }
     
-    public void addConditional(ConditionalDTO cond) {
-        this.conditionalList.add(cond);
+    public void addCell(CellDTO cond) {
+        this.cellList.addCell(cond);
     }
     
-    public List<ConditionalDTO> getConditionals() {
-        return this.conditionalList;
+    public List<CellDTO> getCells() {
+        return this.cellList.getCells();
     }
 }

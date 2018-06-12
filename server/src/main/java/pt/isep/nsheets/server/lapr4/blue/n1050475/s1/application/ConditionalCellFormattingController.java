@@ -14,6 +14,8 @@ import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.ConditionalForma
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import pt.isep.nsheets.shared.core.Cell;
+import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.services.ConditionalDTO;
 
 public class ConditionalCellFormattingController {
 
@@ -49,6 +51,22 @@ public class ConditionalCellFormattingController {
         }
 
         return ret;
+    }
+    
+    public ConditionalDTO removeConditionalForCell(Cell cell) {
+        final ConditionalRepository conditionalRepository = PersistenceContext.repositories().conditional();
+
+        Iterator<Conditional> conditionalIterator = conditionalRepository.findAll().iterator();
+        ConditionalDTO res = new ConditionalDTO();
+        while(conditionalIterator.hasNext()) {
+            Conditional c = conditionalIterator.next();
+            if(c.getCell().getAddress().equals(cell.getAddress())) {
+                res = c.toDTO();
+                conditionalRepository.remove(c);
+            }
+
+        }
+        return res;
     }
 
     public ArrayList<Conditional> loadConditionalFromDatabase() {

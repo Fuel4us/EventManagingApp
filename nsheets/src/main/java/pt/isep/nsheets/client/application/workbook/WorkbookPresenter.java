@@ -77,7 +77,9 @@ import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core.CellStyle;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtension;
+import pt.isep.nsheets.shared.lapr4.green.n1160557.s2.services.CellRangeDTO;
 import pt.isep.nsheets.shared.lapr4.green.n1160557.s2.services.ConditionalRangeDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.CellDTO;
 import pt.isep.nsheets.shared.services.ChartType;
 
 public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, WorkbookPresenter.MyProxy> {
@@ -102,6 +104,8 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         public MaterialModal getConditionalModal();
 
         public void addConfirmationHandler(ClickHandler cMDB);
+        
+        public void deleteConfirmationHandler(ClickHandler cMDB);
 
         public int getBackgroudColorTrue();
 
@@ -156,6 +160,11 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 
                 view.getConditionalModal().close();
             }
+        });
+        
+        view.deleteConfirmationHandler(event -> {
+            deleteConditionals();
+            view.getConditionalModal().close();
         });
 
         /* 1050475 Hernani Gil
@@ -314,6 +323,13 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 
         applyConditionStyleToCell(conditional);
     }
+    
+    private void removeConditionToCell(Cell cell) {
+        MaterialToast.fireToast("Removed condition from cell " + cell.getAddress());
+        ConditionalFormattingExtension.removeConditional((CellImpl)cell);
+
+        removeConditionStyleToCell(cell);
+    }
 
     private void applyConditionStyleToCell(Conditional conditional) {
         int bgColor = 0;
@@ -339,6 +355,75 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         view.getTable().getView().refresh();
     }
 
+    private void removeConditionStyleToCell(Cell cell) {
+        CellStyle cs = CellStyleExtension.getCellStyle(cell.getAddress());
+        if (cs == null) {
+            cs = new CellStyle(cell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(), 0, 12);
+            CellStyleExtension.addCellStyle(cs);
+        } else {
+            cs.setBackgroungColor(Color.WHITE.ordinal());
+            cs.setFontColor(Color.BLACK.ordinal());
+        }
+        view.getTable().getView().setRedraw(true);
+        view.getTable().getView().refresh();
+    }
+    
+    protected void deleteConditionals() {
+        Spreadsheet sh = this.view.getCurrentSpreadsheet();
+
+        ConditionalServiceAsync conditionalSvc = GWT.create(ConditionalService.class);
+
+        if (view.getConditionalCell().equals("_cell")) {
+            char columnStart = view.getConditionalRangeStart().charAt(0);
+            char columnEnd = view.getConditionalRangeEnd().charAt(0);
+
+            char rowStart = view.getConditionalRangeStart().charAt(1);
+            char rowEnd = view.getConditionalRangeEnd().charAt(1);
+
+            CellRangeDTO range = new CellRangeDTO();
+
+            for (char i = columnStart; i <= columnEnd; i++) {
+                for (char p = rowStart; p <= rowEnd; p++) {
+                    Cell cell = sh.getCell(new Address("" + i + p));
+
+                    range.addCell(cell.toDTO());
+
+                    removeConditionToCell(cell);
+                }
+            }
+
+            AsyncCallback<CellRangeDTO> callback = new AsyncCallback<CellRangeDTO>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error configuring Conditionalextension! " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(CellRangeDTO result) {
+                    MaterialToast.fireToast("Removed from DB all conditions for " + result.list.size() + " cells");
+                }
+            };
+            conditionalSvc.deleteRangeConditional(range, callback);
+        } else {
+            Cell cell = sh.getCell(new Address(view.getConditionalCell()));
+
+            removeConditionToCell(cell);
+
+            AsyncCallback<CellDTO> callback = new AsyncCallback<CellDTO>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error configuring Conditionalextension! " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(CellDTO result) {
+                    MaterialToast.fireToast("Removed from DB all conditions for cell " + result.address.location);
+                }
+            };
+            conditionalSvc.deleteConditional(cell.toDTO(), callback);
+        }
+    }
+
     protected void conditionalFormattingAction() {
         try {
             Value conditionalValue = Value.parseNumericValue(this.view.getConditionalValue());
@@ -362,15 +447,17 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
                 char rowEnd = view.getConditionalRangeEnd().charAt(1);
 
                 ConditionalRangeDTO condRange = new ConditionalRangeDTO();
+                condRange.configuration = configuration;
+                condRange.operator = view.getOperator();
+                condRange.value = conditionalValue;
 
                 for (char i = columnStart; i <= columnEnd; i++) {
                     for (char p = rowStart; p <= rowEnd; p++) {
                         Cell cell = sh.getCell(new Address("" + i + p));
-                        Conditional conditional = new Conditional(cell, configuration, view.getOperator(), conditionalValue);
 
-                        condRange.addConditional(conditional.toDTO());
+                        condRange.addCell(cell.toDTO());
 
-                        applyConditionToCell(conditional);
+                        applyConditionToCell(new Conditional(cell, configuration, view.getOperator(), conditionalValue));
                     }
                 }
 

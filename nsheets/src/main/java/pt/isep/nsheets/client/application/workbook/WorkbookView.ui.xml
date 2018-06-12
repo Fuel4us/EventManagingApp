@@ -141,7 +141,7 @@ governing permissions and limitations under the License. #L% -->
                 <m:MaterialModalFooter>
                     <m:MaterialIcon ui:field="conditionalModalCloseButton" iconType="CLOSE" iconColor="RED" waves="DEFAULT" circle="true" grid="s1"/>
                     <m:MaterialIcon ui:field="conditionalModalDoneButton" iconType="DONE" iconColor="GREEN" waves="DEFAULT" circle="true" grid="s1"/>
-
+                    <m:MaterialIcon ui:field="conditionalModalDeleteButton" iconType="DELETE" iconColor="GREEN" waves="DEFAULT" circle="true" grid="s1"/>
                 </m:MaterialModalFooter>
             </m:MaterialModal>
             <m:MaterialIcon ui:field="conditionalButton" iconType="SETTINGS" iconColor="RED" waves="DEFAULT" circle="true" grid="s1"/>

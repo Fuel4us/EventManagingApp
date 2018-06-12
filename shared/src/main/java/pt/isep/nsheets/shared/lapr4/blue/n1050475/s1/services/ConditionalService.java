@@ -7,7 +7,9 @@ import pt.isep.nsheets.shared.services.DataException;
 
 import java.util.ArrayList;
 import java.util.List;
+import pt.isep.nsheets.shared.lapr4.green.n1160557.s2.services.CellRangeDTO;
 import pt.isep.nsheets.shared.lapr4.green.n1160557.s2.services.ConditionalRangeDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.CellDTO;
 
 @RemoteServiceRelativePath("conditionalService")
 public interface ConditionalService extends RemoteService {
@@ -16,4 +18,8 @@ public interface ConditionalService extends RemoteService {
     ConditionalDTO saveConditional(ConditionalDTO conditionalDTO) throws DataException;
     
     List<ConditionalDTO> saveRangeConditional(ConditionalRangeDTO conditionalRangeDTO) throws DataException;
+    
+    CellDTO deleteConditional(CellDTO cell) throws DataException;
+    
+    CellRangeDTO deleteRangeConditional(CellRangeDTO range) throws DataException;
 }
