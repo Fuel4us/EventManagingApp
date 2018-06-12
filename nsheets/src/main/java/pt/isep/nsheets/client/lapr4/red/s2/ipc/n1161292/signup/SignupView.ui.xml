@@ -20,19 +20,19 @@
             </ma:fileuploader.MaterialFileUploader>
             
             <m:MaterialColumn grid="s12 m6 l7">
-                <m:MaterialTextBox ui:field="username" label="Username" iconType="ACCOUNT_CIRCLE" />
+                <m:MaterialTextBox ui:field="username" label="Username" iconType="ACCOUNT_CIRCLE" iconColor="BLUE" type="EMAIL"/>
             </m:MaterialColumn>
 
             <m:MaterialColumn grid="s12 m6 l7" >
-                <m:MaterialTextBox ui:field="password" label="Password" iconType="VPN_KEY" />
+                <m:MaterialTextBox ui:field="password" label="Password" iconType="VPN_KEY" iconColor="BLUE" type="PASSWORD"/>
             </m:MaterialColumn>
 
             <m:MaterialColumn grid="s12 m6 l7" >
-                <m:MaterialTextBox ui:field="name" label="Name" iconType="PERSON" />
+                <m:MaterialTextBox ui:field="name" label="Name" iconType="PERSON" iconColor="BLUE" />
             </m:MaterialColumn>
 
             <m:MaterialColumn grid="s12 m6 l7" >
-                <m:MaterialTextBox ui:field="email" label="E-mail" iconType="EMAIL" />
+                <m:MaterialTextBox ui:field="email" label="E-mail" iconType="EMAIL" iconColor="BLUE" />
             </m:MaterialColumn>
 
             <m:MaterialColumn grid="s12 m6 l7" textAlign="CENTER">
