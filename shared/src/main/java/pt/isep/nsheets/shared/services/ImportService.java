@@ -6,5 +6,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("importService")
 public interface ImportService extends RemoteService {
 
-    void importXmlFile();
+    void importXmlFile(String fileLocation);
 }

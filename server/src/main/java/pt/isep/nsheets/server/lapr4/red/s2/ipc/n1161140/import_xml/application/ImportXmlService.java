@@ -6,7 +6,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import pt.isep.nsheets.shared.core.*;
+import pt.isep.nsheets.shared.core.Workbook;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,28 +16,22 @@ import java.io.IOException;
 
 public class ImportXmlService {
 
-    File file;
-
-    public ImportXmlService(File file) {
-        this.file = file;
-    }
-
     /**
      * Imports one or more workbooks and its respective spreadsheets and cells
      *
      * @return true, if the import is successful; false, if something bad happens
      */
-    public boolean importWorkbooks() {
+    public boolean importWorkbooks(String fileName) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(file);
+            Document document = builder.parse(new File(fileName));
             document.getDocumentElement().normalize();
 
             NodeList workbookNodeList = document.getElementsByTagName("workbook");
             for (int i = 0; i < workbookNodeList.getLength(); i++) {
 
-                String spreadsheetTitle = null;
+                String[][] values = new String[26][9];
 
                 Node workbookNode = workbookNodeList.item(i);
                 if (workbookNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -53,7 +47,7 @@ public class ImportXmlService {
                         if (spreadsheetNode.getNodeType() == Node.ELEMENT_NODE) {
                             Element spreadsheetElement = (Element) spreadsheetNode;
 
-                            spreadsheetTitle = spreadsheetElement.getAttribute("title");
+                            String spreadsheetTitle = spreadsheetElement.getAttribute("title");
 
                             NodeList cellNodeList = document.getElementsByTagName("cell");
                             for (int k = 0; k < cellNodeList.getLength(); k++) {
@@ -62,21 +56,16 @@ public class ImportXmlService {
                                 if (cellNode.getNodeType() == Node.ELEMENT_NODE) {
                                     Element cellElement = (Element) cellNode;
 
-                                    String[][] values = new String[26][9];
-
                                     String pos = cellElement.getAttribute("pos");
 
+                                    //e.g. A1 -> A = 65 in ASCII, 1 = 1 -> 65 - 65 = 0, 1 - 1 = 0 -> array[0][0]
                                     values[(int) pos.charAt(0) - 65][pos.charAt(1) - 1] = cellElement.getElementsByTagName("value").item(0).getTextContent();
-
-                                    Cell cell = new CellImpl();
                                 }
                             }
                         }
                     }
 
-                    Workbook workbook = new Workbook(workbookTitle, descriptionTitle);
-
-                    Spreadsheet spreadsheet = new SpreadsheetImpl(workbook, spreadsheetTitle);
+                    Workbook workbook = new Workbook(workbookTitle, descriptionTitle, values);
                 }
             }
         } catch (ParserConfigurationException | IOException | SAXException e) {
@@ -84,13 +73,5 @@ public class ImportXmlService {
             return false;
         }
         return true;
-    }
-
-    public void importSpreadsheets() {
-
-    }
-
-    public void importCells() {
-
     }
 }

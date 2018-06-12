@@ -4,5 +4,5 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface ImportServiceAsync {
 
-    void importXmlFile(AsyncCallback<Void> async);
+    void importXmlFile(String fileLocation, AsyncCallback<Void> async);
 }

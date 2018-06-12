@@ -15,6 +15,11 @@ import javax.inject.Inject;
 
 class ImportView extends ViewImpl implements ImportPresenter.MyView {
 
+    @UiField
+    MaterialFileUploader uploader;
+
+    String fileLocation;
+
     interface Binder extends UiBinder<Widget, ImportView> {
     }
 
@@ -23,6 +28,8 @@ class ImportView extends ViewImpl implements ImportPresenter.MyView {
         initWidget(uiBinder.createAndBindUi(this));
 
         uploader.setUrl(GWT.getModuleBaseURL() + "uploadServlet");
+
+        uploader.addSuccessHandler(event -> fileLocation = GWT.getHostPageBaseURL() + "uploadedFiles/" + event.getTarget().getName());
 
         uploader.addCompleteHandler(event -> {
             ImportServiceAsync service = GWT.create(ImportService.class);
@@ -37,10 +44,7 @@ class ImportView extends ViewImpl implements ImportPresenter.MyView {
                 }
             };
 
-            service.importXmlFile(callback);
+            service.importXmlFile(fileLocation, callback);
         });
     }
-
-    @UiField
-    MaterialFileUploader uploader;
 }
