@@ -9,6 +9,7 @@ import pt.isep.nsheets.server.lapr4.blue.n1050475.s1.persistence.ConditionalRepo
 import pt.isep.nsheets.server.lapr4.blue.n1050475.s2.persistence.CellStyleRepository;
 import pt.isep.nsheets.server.lapr4.blue.n1150372.s2.persistence.AgendaRepository;
 import pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.persistence.ContactsRepository;
+import pt.isep.nsheets.server.lapr4.blue.s2.n1140403.persistence.ListNotesRepository;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.persistence.UserRepository;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.persistence.MessagesRepository;
 //import pt.isep.nsheets.server.lapr4.green.s1.core.n1160832.spreadsheets.persistence.jpa.SpreadsheetRepository;
@@ -31,6 +32,8 @@ public interface RepositoryFactory {
     UserRepository users();
 
     NoteRepository notes();
+    
+    ListNotesRepository listNotes();
 
     ContactsRepository contacts();
 

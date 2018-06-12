@@ -1,0 +1,33 @@
+@startuml Pedro
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+User->WorkbookPresenter : Writes the #formula
+WorkbookPresenter->CellImpl: storeContent();
+CellImpl->FormulaCompiler: compile(content);
+FormulaCompiler->MonetaryExpressionCompiler: getStarter(content);
+FormulaCompiler->MonetaryExpressionCompiler: compile(cell,source);
+MonetaryExpressionCompiler->ANTLRInputStream: input = new ANTLRInputStream(source);
+MonetaryExpressionCompiler->MonetaryLexer: lexer = new MonetaryLexer(input);
+MonetaryExpressionCompiler->CommonTokenStream: tokens  = new CommonTokenStream(lexer);
+MonetaryExpressionCompiler->MonetaryParser: parser = new MonetaryParser(tokens);
+MonetaryExpressionCompiler->MonetaryErrorListener: monetaryErrorListener = new MonetaryErrorListener();
+MonetaryErrorListener->MonetaryParser: removeErrorListeners(); 
+MonetaryErrorListener->MonetaryParser: addErrorListener(monetaryErrorListener);  
+MonetaryExpressionCompiler->ParseTree: tree = new ParseTree();
+ParseTree->MonetaryParser: tree = parse.start();
+MonetaryExpressionCompiler->MonetaryEvalVisitor: eval = new MonetaryEvalVisitor(cell, language);
+MonetaryExpressionCompiler->MonetaryEvalVisitor: result = eval.visit(tree);
+MonetaryEvalVisitor->MonetaryParser: expression = visitStart();
+MonetaryEvalVisitor->MonetaryParser: expression = visitExpression();
+MonetaryEvalVisitor->MonetaryParser: expression = visitAccount();
+MonetaryEvalVisitor->MonetaryParser: expression = visitNumber();
+FormulaCompiler->CellImpl: setContent(cell,result);
+CellImpl->WorkbookPresenter: setContent(cell,result);
+
+@enduml
