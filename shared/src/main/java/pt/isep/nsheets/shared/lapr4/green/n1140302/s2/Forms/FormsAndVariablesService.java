@@ -14,7 +14,7 @@ public class FormsAndVariablesService {
     private static List<TemporaryVariable> temporaryVariablesListButton = new ArrayList<>();
 
     public String getTemporaryVariableValueByName(String name,int choice){
-        Value value = new Value(name);
+        Value value = new Value("_"+name);
         if(choice==1) {
             for (TemporaryVariable var :
                     temporaryVariablesListButton) {
@@ -48,7 +48,7 @@ public class FormsAndVariablesService {
     public void addTemporaryVariable(String name, String value, int choice){
         TemporaryVariable temporaryVariable = null;
 
-            temporaryVariable = new TemporaryVariable(new Value(value),new Value(name));
+            temporaryVariable = new TemporaryVariable(new Value(value),new Value("_"+name));
 
             boolean flag = false;
             if(choice==1){
