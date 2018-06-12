@@ -20,7 +20,7 @@ public interface ListNotesService extends RemoteService {
      *
      * @return
      */
-    ArrayList<ListNotesDTO> getNotes();
+    ArrayList<ListNotesDTO> getListNotes();
 
     /**
      *
@@ -28,5 +28,5 @@ public interface ListNotesService extends RemoteService {
      * @return
      * @throws DataException
      */
-    NoteDTO addNote(ListNotesDTO listNotesDTO) throws DataException;
+    NoteDTO addListNotes(ListNotesDTO listNotesDTO) throws DataException;
 }

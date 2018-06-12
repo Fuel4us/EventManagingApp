@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import eapli.framework.domain.AggregateRoot;
+import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.domain.Note;
+import pt.isep.nsheets.shared.services.ListNotesDTO;
 import pt.isep.nsheets.shared.services.NoteDTO;
 
 /**
@@ -45,6 +47,21 @@ public class ListNotes implements AggregateRoot<Long>, Serializable {
         }
 
         this.dateNote = new Date();
+    }
+    
+    public ListNotes(Note note){
+        if (note.getTitleNote() == null) {
+            throw new IllegalArgumentException("title of the Note must be non-null");
+        }
+        this.titleNote = note.getTitleNote();
+
+        if (note.getTextNote() == null) {
+            this.textNote = "";
+        } else {
+            this.textNote = note.getTextNote();
+        }
+
+        this.dateNote = note.getDateNote();
     }
 
     /**
@@ -142,18 +159,18 @@ public class ListNotes implements AggregateRoot<Long>, Serializable {
      *
      * @return
      */
-    public NoteDTO toDTO() {
-        return new NoteDTO(this.titleNote, this.textNote);
+    public ListNotesDTO toDTO() {
+        return new ListNotesDTO(this.titleNote, this.textNote);
     }
 
     /**
      *
-     * @param noteDTO
+     * @param listNotesDTO
      * @return
      * @throws IllegalArgumentException
      */
-    public static ListNotes fromDTO(NoteDTO noteDTO) throws IllegalArgumentException {
-        return new ListNotes(noteDTO.getTitleNote(), noteDTO.getTextNote());
+    public static ListNotes fromDTO(ListNotesDTO listNotesDTO) throws IllegalArgumentException {
+        return new ListNotes(listNotesDTO.getTitleNote(), listNotesDTO.getTextNote());
     }
 
 }
