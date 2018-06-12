@@ -212,6 +212,19 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialTextBox descriptionModal;
 
+    @UiField
+    MaterialLink macro;
+    @UiField
+    MaterialModal macroModal;
+    @UiField
+    MaterialTitle macroTitle;
+    @UiField
+    MaterialTextArea macroTextArea;
+    @UiField
+    MaterialIcon macroModalDoneButton;
+    @UiField
+    MaterialIcon macroModalCloseButton;
+
     @Override
     public MaterialModal getModal() {
         return modal;
@@ -605,6 +618,43 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             basicWizardTextBox.setText(getParameters(lang));
             basicWizardTextBox2.setText(getDescription(lang));
 
+        });
+
+        macro.addClickHandler(event -> {
+            macroModal.open();
+        });
+
+        macroModalCloseButton.addClickHandler(event -> {
+            macroModal.close();
+        });
+
+        macroModalDoneButton.addClickHandler(event -> {
+            if (activeCell != null) {
+
+                String result = "";
+                try {
+                    activeCell.setContent("!" + macroTextArea.getText());
+                    Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
+                    if (extensionCond != null) {
+
+                        Conditional cond = ConditionalFormattingExtension.containsCondition((CellImpl) activeCell);
+
+                        if (cond != null) {
+                            boolean flag = ConditionalFormattingExtension.setOperation((CellImpl) activeCell, cond.getCondOperator(), cond.getCondValue());
+                            MaterialToast.fireToast("Update Cell. Conditional this " + activeCell.getAddress().toString() + " " + cond.getCondOperator() + " " + cond.getCondValue().toString() + " is " + flag);
+
+                        }
+                    }
+                } catch (FormulaCompilationException e) {
+                    result = e.getMessage();
+                } finally {
+                    customTable.getView().setRedraw(true);
+                    customTable.getView().refresh();
+
+                    this.setActiveCell(activeCell);
+                }
+            }
+            macroModal.close();
         });
     }
 
