@@ -1,0 +1,12 @@
+@startuml  dm
+
+skinparam monochrome true
+skinparam shadowing false
+hide footbox
+
+hide empty methods
+
+class Workbook << (Entity) >> {
+}
+
+@enduml

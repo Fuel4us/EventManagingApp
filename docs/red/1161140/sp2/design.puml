@@ -16,6 +16,10 @@ participant ImportView
 participant ImportPresenter
 end box
 
+box "Shared"
+control Settings
+end box
+
 box "Server"
 participant ImportXmlServices
 participant ImportXmlController
@@ -23,10 +27,10 @@ participant ImportXmlService
 end box
 
 User -> ImportPresenter : onReveal()
-ImportPresenter ->> ImportXmlServices : importXmlFile()
-ImportXmlServices -> ImportXmlController : importXmlFile()
-ImportXmlController -> ImportXmlService : importXmlFile()
+ImportPresenter ->> ImportXmlServices : importXmlFile(fileName)
+ImportXmlServices -> ImportXmlController : importWorkbooks(fileName)
+ImportXmlController -> ImportXmlService : importWorkbooks(fileName)
 ImportXmlServices ->> ImportPresenter : onSuccess()
-ImportPresenter -> ImportView : setContents()
+Settings -> ImportView : updateWorkbook(workbook)
 
 @enduml
