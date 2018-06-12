@@ -23,7 +23,13 @@ public class CellStyleController implements Controller {
         final CellStyleRepository cellstyleRepository = PersistenceContext.repositories().cellstyle();
 
         CellStyle cellStyle = CellStyle.fromDTO(cellStyleDTO);
-        cellstyleRepository.removeCellStyle(cellStyle); // maybe it works maybe not
+        Iterable<CellStyle> cellStyles = loadCellStyleFromDatabase();
+        for(CellStyle c : cellStyles){
+            if(c.getAddress().equals(cellStyle.getAddress())){
+                cellstyleRepository.removeCellStyle(c); // maybe it works maybe not
+            }
+        }
+
         cellstyleRepository.save(cellStyle);
 
         //CellStyleExtension.removeCellStyle(CellStyleExtension.getCellStyle(address));

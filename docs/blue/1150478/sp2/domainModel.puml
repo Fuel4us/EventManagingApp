@@ -1,0 +1,29 @@
+@startuml
+skinparam handwritten true
+skinparam monochrome y  
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+hide empty methods
+
+class User << (E,yellow) >> {
+}
+
+class Browser << (E,yellow) >> {
+}
+
+class Extensions << (E,yellow) >> {
+}
+
+class Menu << (E,yellow) >> {
+}
+
+class Workbook << (E,yellow) >> {
+}
+
+User --> Browser
+Browser --> Extensions
+Browser --> Menu
+Browser --> Workbook
+@enduml
