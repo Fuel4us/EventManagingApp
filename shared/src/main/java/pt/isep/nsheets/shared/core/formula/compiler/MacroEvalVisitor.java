@@ -306,9 +306,9 @@ public class MacroEvalVisitor extends MacroBaseVisitor<Expression> {
         Workbook currentWorkbook = Settings.getInstance().getWorkbook();
         MaterialToast.fireToast("Entrou no visitor");
         //Change code so it does not create a global reference here
-        GlobalVariable gv = new GlobalVariable(new Value(ctx.getChild(0).getText()));
+        GlobalVariable gv = new GlobalVariable(new Value(ctx.getChild(0).getText()), ctx.getChild(0).getText());
 
-        if (currentWorkbook.checkIfGVExists(gv)) {
+        if (currentWorkbook.checkIfGVExists(ctx.getChild(0).getText())) {
             //Global variable exists
             MaterialToast.fireToast("Global Variable ja existe");
             try {
@@ -324,7 +324,7 @@ public class MacroEvalVisitor extends MacroBaseVisitor<Expression> {
         } else {
             //Global variable doesnt exists
             MaterialToast.fireToast("Global Variable não existe");
-            return new GlobalVariable(new Value(ctx.getChild(2).getText()));
+            return new GlobalVariable(new Value(ctx.getChild(2).getText()), ctx.getChild(2).getText());
         }
 
         return null;
