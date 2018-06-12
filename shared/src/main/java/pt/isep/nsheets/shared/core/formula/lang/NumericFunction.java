@@ -86,4 +86,9 @@ public class NumericFunction implements Function {
 	public boolean isVarArg() {
 		return method.isVarArgs();
 	}
+
+    @Override
+    public String getInformativeText() {
+        return "A numeric function that invokes a method object.";
+    }
 }

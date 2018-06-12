@@ -10,9 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
-
 /**
- * https://gist.github.com/kevzlou7979/2d97b81437760016cad8ecc9d74b8f7a
+ * @see <a href="https://gist.github.com/kevzlou7979/2d97b81437760016cad8ecc9d74b8f7a">FileUploadServlet</a>
  */
 public class UploadServlet extends HttpServlet {
 

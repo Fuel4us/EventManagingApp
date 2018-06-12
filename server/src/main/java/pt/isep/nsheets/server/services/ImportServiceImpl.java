@@ -11,7 +11,5 @@ public class ImportServiceImpl extends RemoteServiceServlet implements ImportSer
         ImportXmlController controller = new ImportXmlController();
 
         controller.importWorkbooks();
-        controller.importSpreadsheets();
-        controller.importCells();
     }
 }

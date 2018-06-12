@@ -22,7 +22,6 @@ package pt.isep.nsheets.shared.core;
 
 //import java.io.ObjectInputStream;		// not supported in GWT
 //import java.io.ObjectOutputStream;		// not supported in GWT
-import com.google.gwt.i18n.client.NumberFormat;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -198,8 +197,6 @@ public class CellImpl implements Cell, Serializable {
         if (formula != null) {
             try {
                 newValue = formula.evaluate();
-                String d = NumberFormat.getFormat("0.00").format(newValue.toDouble());
-                newValue = Value.parseValue(d);
             } catch (IllegalValueTypeException e) {
                 newValue = new Value(e);
             }

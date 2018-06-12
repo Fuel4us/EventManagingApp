@@ -55,4 +55,9 @@ public class False implements Function {
 	public boolean isVarArg() {
 		return false;
 	}
+
+    @Override
+    public String getInformativeText() {
+        return "returns the boolean value false.";
+    }
 }

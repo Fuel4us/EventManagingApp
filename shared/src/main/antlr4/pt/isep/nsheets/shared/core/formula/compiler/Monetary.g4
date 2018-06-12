@@ -9,7 +9,7 @@ start: expression EOF
 expression: HH currency ICHA account FCHA 
 	  ;
 
-account: number coinsign ( operator number coinsign )*
+account: number coinsign ( operator number coinsign )?
        ;
         
 operator: PLUS 

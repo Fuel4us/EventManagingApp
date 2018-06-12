@@ -65,6 +65,10 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetController;
 import pt.isep.nsheets.shared.application.Settings;
+import pt.isep.nsheets.shared.core.formula.Function;
+import pt.isep.nsheets.shared.core.formula.FunctionParameter;
+import pt.isep.nsheets.shared.core.formula.lang.Language;
+import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
 import pt.isep.nsheets.shared.services.*;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
@@ -130,7 +134,23 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialListValueBox<Color> fontColorFalse;
     /* End of Conditional UI Objects */
 
- /*
+    //uiObjects by 1140317
+    @UiField
+    MaterialButton addBasicWizardButton;
+    @UiField
+    MaterialButton chooseButton;
+    @UiField
+    MaterialButton doneButton;
+    @UiField
+    MaterialWindow basicWizardWindow;
+    @UiField
+    MaterialListBox basicWizardComboBox;
+    @UiField
+    MaterialTextBox basicWizardTextBox;
+    @UiField
+    MaterialTextBox basicWizardTextBox2;
+
+    /*
     Style UI objects by 1050475
      */
     @UiField
@@ -192,20 +212,28 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialTextBox descriptionModal;
 
+    @Override
     public MaterialModal getModal() {
         return modal;
     }
 
+    @Override
     public MaterialTextBox getNameModal() {
         return nameModal;
     }
 
+    @Override
     public MaterialTextBox getDescriptionModal() {
         return descriptionModal;
     }
 
-    public MaterialButton getEditWorkbookButton() {
-        return editWorkbookButton;
+    @Override
+    public MaterialButton getEditButtonModal() {
+        return editButtonModal;
+    }
+
+    public MaterialButton getAddWizard() {
+        return addBasicWizardButton;
     }
 
     @UiHandler("click_chart")
@@ -248,6 +276,18 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
     public void setActiveCell(pt.isep.nsheets.shared.core.Cell cell) {
         this.activeCell = cell;
+        CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
+        if (c != null) {
+            backgroundcolorLst.setSelectedValue(Color.values()[c.getBackgroungColor()]);
+            fontcolorLst.setSelectedValue(Color.values()[c.getFontColor()]);
+            textAlignLst.setSelectedIndex(c.getTextALIGN()+1);
+            fontsizeLst.setSelectedValue(c.getFontSize());
+        }else{
+            backgroundcolorLst.setSelectedValue(Color.WHITE);
+            fontcolorLst.setSelectedValue(Color.BLACK);
+            textAlignLst.setSelectedIndex(1);
+            fontsizeLst.setSelectedValue(12);
+        }
 
         this.customTable.getTableTitle().setText(cell.toString() + ": " + cell.getContent().toString());
         this.firstBox.setText(cell.getContent().toString());
@@ -414,11 +454,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                     //CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), backgroundcolorLst.getSelectedValue().ordinal(), Color.BLACK.ordinal(),0,12));
                     this.updateCellStyles(new CellStyle(activeCell.getAddress(), backgroundcolorLst.getSelectedValue().ordinal(), Color.BLACK.ordinal(), 0, 12));
                 }
-                customTable.getView().setRedraw(true);
-                customTable.getView().refresh();
 
                 //remover depois de persistencia e extensions a funcionar. resize do label
-                customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() + 1).setBackgroundColor(backgroundcolorLst.getSelectedValue());
+                //customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() + 1).setBackgroundColor(backgroundcolorLst.getSelectedValue());
             }
         });
 
@@ -428,16 +466,13 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
                 if (c != null) {
                     c.setFontColor(fontcolorLst.getSelectedValue().ordinal());
+                    this.updateCellStyles(c);
                     MaterialToast.fireToast("existia " + CellStyleExtension.getCellStyle(activeCell.getAddress()).getFontColor());
                 } else {
                     MaterialToast.fireToast("nao existia");
-
-                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(), 0, 12));
+                    //CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(),0,12));
+                    this.updateCellStyles(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(),0,12));
                 }
-                MaterialToast.fireToast("list CellStyle is empty? " + CellStyleExtension.lstCellStyle.isEmpty());
-
-                customTable.getView().setRedraw(true);
-                customTable.getView().refresh();
             }
 
         });
@@ -447,14 +482,13 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
                 if (c != null) {
                     c.setFontSize(fontsizeLst.getSelectedValue());
+                    this.updateCellStyles(c);
                     MaterialToast.fireToast("existia " + CellStyleExtension.getCellStyle(activeCell.getAddress()).getFontSize());
                 } else {
                     MaterialToast.fireToast("nao existia");
-                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(), 0, fontsizeLst.getSelectedValue()));
-
+                    //CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(), 0, fontsizeLst.getSelectedValue()));
+                    this.updateCellStyles(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(), 0, fontsizeLst.getSelectedValue()));
                 }
-                customTable.getView().setRedraw(true);
-                customTable.getView().refresh();
 
                 customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() + 1).setFontSize(fontsizeLst.getSelectedValue(), Style.Unit.PX);
             }
@@ -465,14 +499,13 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
                 if (c != null) {
                     c.setTextALIGN(textAlignLst.getSelectedIndex() - 1);
+                    this.updateCellStyles(c);
                     MaterialToast.fireToast("existia " + CellStyleExtension.getCellStyle(activeCell.getAddress()).getTextALIGN());
                 } else {
                     MaterialToast.fireToast("nao existia");
-                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(), textAlignLst.getSelectedIndex() - 1, 12));
-
+                    //CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(), textAlignLst.getSelectedIndex() - 1, 12));
+                    this.updateCellStyles(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(), textAlignLst.getSelectedIndex() - 1, 12));
                 }
-                customTable.getView().setRedraw(true);
-                customTable.getView().refresh();
 
                 customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() + 1).setTextAlign(TextAlign.values()[textAlignLst.getSelectedValue().ordinal()]);
             }
@@ -551,6 +584,50 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         initWorkbook();
 
         customTable.getTableTitle().setText("The Future Worksheet!");
+
+        //1140317
+        addBasicWizardButton.addClickHandler(event -> {
+            basicWizardWindow.open();
+        });
+
+        Language lang = new Language("basic wizard");
+        for (Function function : lang.getFunctions()) {
+            basicWizardComboBox.add(function.getIdentifier());
+        }
+
+        doneButton.addClickHandler(event -> {
+            int i = basicWizardComboBox.getSelectedIndex();
+            firstBox.setText(lang.getFunctions()[i].getIdentifier());
+            basicWizardWindow.close();
+        });
+
+        chooseButton.addClickHandler(event -> {
+            basicWizardTextBox.setText(getParameters(lang));
+            basicWizardTextBox2.setText(getDescription(lang));
+
+        });
+    }
+
+    private String getParameters(Language lang) {
+        String par = "Parameters: \n";
+        try {
+            for (FunctionParameter fp : lang.getFunction(basicWizardComboBox.getSelectedValue()).getParameters()) {
+                par += "   -" + fp.getName();
+            }
+        } catch (UnknownElementException ex) {
+            MaterialToast.fireToast("No parameters");
+        }
+        return par;
+    }
+
+    private String getDescription(Language lang) {
+        String desc = "Description: ";
+        try {
+            desc += lang.getFunction(basicWizardComboBox.getSelectedValue()).getInformativeText();
+        } catch (UnknownElementException ex) {
+            MaterialToast.fireToast("No description");
+        }
+        return desc;
     }
 
     @Override
@@ -702,15 +779,12 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             public void onSuccess(CellStyleDTO result) {
                 MaterialToast.fireToast("CellStyle repository updated!");
                 CellStyleExtension.addCellStyle(CellStyle.fromDTO(result));
+                customTable.getView().setRedraw(true);
+                customTable.getView().refresh();
             }
         };
 
         cellStyleServiceAsync.saveCellStyle(cellStyle.toDTO(), callback);
-
-        MaterialToast.fireToast("now doing redraw");
-        customTable.getView().setRedraw(true);
-        MaterialToast.fireToast("now doing redraw");
-        customTable.getView().refresh();
 
         //loadCellStyles();
     }
