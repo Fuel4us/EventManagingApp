@@ -69,7 +69,10 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         @Id
         @GeneratedValue
         private Long id;
-
+        
+        /**
+         * Value is the name and global variable is the actual number value of the variable
+         */
         private List<GlobalVariable> globalVariables;
         
 	/**
@@ -90,14 +93,14 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
                     spreadsheets.add(new SpreadsheetImpl(this,
                             getNextSpreadsheetTitle()));
             
-            this.globalVariables = new ArrayList<>();
+            this.globalVariables = new ArrayList<GlobalVariable>();
 	}
 
 	public Workbook(String name, String description, List<Spreadsheet> spreadsheets) {
             this.name = name;
             this.description = description;
             this.spreadsheets = spreadsheets;
-            this.globalVariables = new ArrayList<>();
+            this.globalVariables = new ArrayList<GlobalVariable>();
 	}
 
 	/**
@@ -114,7 +117,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
                             getNextSpreadsheetTitle(), content));
             
             
-            this.globalVariables = new ArrayList<>();
+            this.globalVariables = new ArrayList<GlobalVariable>();
 	}
 
 	/**
@@ -283,21 +286,38 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
             }
     }
     
-    public boolean checkIfGVExists(GlobalVariable gv){
+    public boolean checkIfGVExists(String gvName){
         for (GlobalVariable tempGV : this.globalVariables) {
-            if(tempGV.getValue().equals(gv.getValue()))
+            if(tempGV.getGvName().equals(gvName))
                 return true;
         }
         
         return false;
+        
+        //return globalVariables.containsKey(gvName);
     }
     
-    public void addGlobalVariable(GlobalVariable gv){
-        if (!checkIfGVExists(gv)) {
-            this.globalVariables.add(gv);
-        } else {
-            MaterialToast.fireToast("Temporary variable already exists.");
+    public GlobalVariable getGlobalVariable(String gvName){
+        for (GlobalVariable tempGV : this.globalVariables) {
+            if(tempGV.getGvName().equals(gvName))
+                return tempGV;
         }
+        
+        return null;
+
+        //return globalVariables.
+    }
+    
+    public void setGVValue(String gvName, Value gvValue){
+        for (GlobalVariable tempGV : this.globalVariables) {
+            if(tempGV.getGvName().equals(gvName))
+                tempGV.setValue(gvValue);
+        }
+    }
+    
+    public void addGlobalVariable(String gvName){
+        if(!checkIfGVExists(gvName))
+            this.globalVariables.add(new GlobalVariable(new Value(), gvName));
     }
 	/*
  * GENERAL
