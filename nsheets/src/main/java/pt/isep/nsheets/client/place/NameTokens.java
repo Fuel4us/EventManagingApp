@@ -56,6 +56,8 @@ public class NameTokens {
     public static final String SIGNUP = "signup";
 
     public static final String macro = "macro";
+    
+    public static final String listNotes = "listNotes";
 
     public static final String contacts = "contacts";
 
@@ -69,6 +71,10 @@ public class NameTokens {
 
     public static String getMacro() {
         return macro;
+    }
+    
+    public static String getListNotes(){
+        return listNotes;
     }
 
     public static String getWorkbook() {
