@@ -212,20 +212,28 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialTextBox descriptionModal;
 
+    @Override
     public MaterialModal getModal() {
         return modal;
     }
 
+    @Override
     public MaterialTextBox getNameModal() {
         return nameModal;
     }
 
+    @Override
     public MaterialTextBox getDescriptionModal() {
         return descriptionModal;
     }
 
-    public MaterialButton getEditWorkbookButton() {
-        return editWorkbookButton;
+    @Override
+    public MaterialButton getEditButtonModal() {
+        return editButtonModal;
+    }
+
+    public MaterialButton getAddWizard() {
+        return addBasicWizardButton;
     }
 
     @UiHandler("click_chart")
@@ -571,7 +579,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         initWorkbook();
 
         customTable.getTableTitle().setText("The Future Worksheet!");
-        
+
         //1140317
         addBasicWizardButton.addClickHandler(event -> {
             basicWizardWindow.open();
@@ -595,28 +603,27 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         });
     }
 
-    private String getParameters(Language lang){
+    private String getParameters(Language lang) {
         String par = "Parameters: \n";
-        try{
+        try {
             for (FunctionParameter fp : lang.getFunction(basicWizardComboBox.getSelectedValue()).getParameters()) {
                 par += "   -" + fp.getName();
             }
-        } catch (UnknownElementException ex){
+        } catch (UnknownElementException ex) {
             MaterialToast.fireToast("No parameters");
         }
         return par;
     }
-    
-    private String getDescription(Language lang){
+
+    private String getDescription(Language lang) {
         String desc = "Description: ";
-        try{
+        try {
             desc += lang.getFunction(basicWizardComboBox.getSelectedValue()).getInformativeText();
-        }catch (UnknownElementException ex){
+        } catch (UnknownElementException ex) {
             MaterialToast.fireToast("No description");
         }
         return desc;
     }
-        
 
     @Override
     protected void onAttach() {
