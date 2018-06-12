@@ -7,6 +7,7 @@ package pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistenc
 
 import pt.isep.nsheets.server.lapr4.blue.n1050475.s1.persistence.ConditionalRepository;
 import pt.isep.nsheets.server.lapr4.blue.n1050475.s2.persistence.CellStyleRepository;
+import pt.isep.nsheets.server.lapr4.blue.s2.n1140403.persistence.ListNotesRepository;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.persistence.UserRepository;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.persistence.MessagesRepository;
 //import pt.isep.nsheets.server.lapr4.green.s1.core.n1160832.spreadsheets.persistence.jpa.JpaSpreadsheetRepository;
@@ -49,6 +50,12 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     @Override
     public NoteRepository notes() {
         return new JpaNoteRepository(this.settings);
+    }
+
+    @Override
+    public ListNotesRepository listNotes() {
+        return new JpaListNotesRepository(this.settings);
+
     }
 
     @Override
