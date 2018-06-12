@@ -22,7 +22,7 @@ public class TemporaryVariable extends Literal {
         super(value);
     }
 
-    public TemporaryVariable(Value value, Value name) throws IllegalValueTypeException {
+    public TemporaryVariable(Value value, Value name)  {
         super(value);
         this.name = name;
     }
