@@ -56,7 +56,7 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
     @UiField
     MaterialTextArea textNote;
 
-    MaterialButton checkBtn, editBtn, removeBtn;
+    MaterialButton checkBtn, editBtn, removeBtn, createListNotes;
 
     @Inject
     NotesView(Binder uiBinder) {
@@ -202,6 +202,19 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
             cardTextArea.setReadOnly(false);
             checkBtn.setVisible(true);
         });
+        
+        createListNotes = new MaterialButton("Create ListNotes", IconType.EDIT, ButtonType.FLOATING);
+        createListNotes.setWaves(WavesType.LIGHT);
+        createListNotes.setBackgroundColor(Color.BLACK);
+        createListNotes.setTooltip("Create ListNotes");
+        createListNotes.addStyleName("margin-right: 10px");
+
+        createListNotes.addClickHandler(e -> {
+            MaterialToast.fireToast("The create ListNotes button was clicked!");
+            cardTitle.setReadOnly(false);
+            cardTextArea.setReadOnly(false);
+            checkBtn.setVisible(true);
+        });
 
         removeBtn = new MaterialButton("Remove", IconType.REMOVE, ButtonType.FLOATING);
         removeBtn.setWaves(WavesType.LIGHT);
@@ -221,7 +234,8 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
         cardAction.add(checkBtn);
         cardAction.add(editBtn);
         cardAction.add(removeBtn);
-
+        cardAction.add(createListNotes);
+        
         card.add(cardContent);
         card.add(cardAction);
         

@@ -10,4 +10,12 @@ public class JpaConditionalRepository extends NSheetsJpaRepositoryBase<Condition
         super(settings);
     }
 
+    @Override
+    public void remove(Conditional conditional) {
+        entityManager().getTransaction().begin();
+        entityManager().createQuery("delete from Conditional c where c.pk=:conditionalid")
+                .setParameter("conditionalid", conditional.getId())
+                .executeUpdate();
+        entityManager().getTransaction().commit();
+    }
 }

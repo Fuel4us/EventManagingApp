@@ -16,7 +16,7 @@ NonRegisteredUser -> Browser : Inserts all requested data
 Browser -> NonRegisteredUser : Asks for confirmation
 NonRegisteredUser -> Browser : Confirms
 
-Browser ->> Server : createNewUser()
+Browser ->> Server : signupUser()
 
 database Database 
 

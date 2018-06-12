@@ -1,0 +1,44 @@
+@startuml design2
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+boundary WorkbookView
+boundary WorkbookPresenter
+
+box "NSheets Client"
+participant WorkbookView
+participant WorkbookPresenter
+end box
+
+box "NSheets Server"
+participant ConditionalServiceImpl
+participant ConditionalCellFormattingController
+participant ConditionalRepository
+end box
+
+box "Database"
+participant Database
+end box
+
+User -> WorkbookView : onReveal() / navigate to page
+User -> WorkbookView : click on conditional button
+
+WorkbookView -> WorkbookPresenter : deleteConditionals()
+loop allSelectedCells
+WorkbookPresenter -> WorkbookPresenter : removeConditionToCell()
+end
+
+WorkbookPresenter -> ConditionalServiceImpl : deleteRangeConditional()
+loop Conditional
+ConditionalServiceImpl -> ConditionalCellFormattingController : removeConditionalForCell()
+ConditionalCellFormattingController -> ConditionalRepository : remove
+ConditionalRepository -> Database : remove
+end
+
+
+ConditionalServiceImpl -> WorkbookPresenter : onSuccess()
+@enduml

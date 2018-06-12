@@ -206,6 +206,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox rangeConditionalStart;
     @UiField
     MaterialTextBox rangeConditionalEnd;
+    @UiField
+    MaterialIcon conditionalModalDeleteButton;
 
     @UiField
     MaterialTextBox nameModal;
@@ -737,6 +739,11 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @Override
     public void addConfirmationHandler(ClickHandler cMDB) {
         conditionalModalDoneButton.addClickHandler(cMDB);
+    }
+    
+    @Override
+    public void deleteConfirmationHandler(ClickHandler cMDB) {
+        conditionalModalDeleteButton.addClickHandler(cMDB);
     }
 
     @Override

@@ -183,10 +183,23 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
                 );
             } else {
                 Token t = (Token) ctx.getChild(0).getPayload();
-                if (t.getType() == FormulaParser.CELL_REF) {
-                    return new CellReference(cell.getSpreadsheet(), ctx.getText());
-                } else {
-                    return visit(ctx.getChild(0));
+                switch (t.getType()) {
+                    case FormulaParser.CELL_REF:
+                        return new CellReference(cell.getSpreadsheet(), ctx.getText());
+                    case FormulaParser.NAMEGLOBAL:
+                        Workbook currentWorkbook = Settings.getInstance().getWorkbook();
+
+                        String gvName = ctx.getChild(0).getText();
+                        if (currentWorkbook.checkIfGVExists(gvName)) {
+                            //Global variable already exits
+                            return currentWorkbook.getGlobalVariable(gvName);
+                        } else {
+                            GlobalVariable gv = new GlobalVariable(new Value(), gvName);
+                            currentWorkbook.addGlobalVariable(gvName);
+                            return gv;
+                        }
+                    default:
+                        return visit(ctx.getChild(0));
                 }
 
             }
@@ -209,11 +222,9 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
             if (t.getType() == FormulaParser.STRING) {
                 String value = ctx.getText().substring(1, ctx.getText().length() - 1);
                 return new Literal(Value.parseValue(value, Value.Type.BOOLEAN, Value.Type.DATE));
-            } else {
-                if (t.getType() == FormulaParser.RULE_nameTemporary) {
-                    TemporaryVariable tempVariable = (TemporaryVariable) ctx.getChild(0);
-                    return new Literal(tempVariable.getValue());
-                }
+            } else if (t.getType() == FormulaParser.RULE_nameTemporary) {
+                TemporaryVariable tempVariable = (TemporaryVariable) ctx.getChild(0);
+                return new Literal(tempVariable.getValue());
             }
         }
         MaterialToast.fireToast("RETURN NULL Literal");
@@ -315,37 +326,6 @@ public class FormulaEvalVisitor extends FormulaBaseVisitor<Expression> {
 
         return null;
     }
-
-    @Override
-    public Expression visitGlobalreference(FormulaParser.GlobalreferenceContext ctx) {
-        Workbook currentWorkbook = Settings.getInstance().getWorkbook();
-        MaterialToast.fireToast("Entrou no visitor");
-        //Change code so it does not create a global reference here
-        GlobalVariable gv = new GlobalVariable(new Value(ctx.getChild(0).getText()));
-
-        if (currentWorkbook.checkIfGVExists(gv)) {
-            //Global variable exists
-            MaterialToast.fireToast("Global Variable ja existe");
-            try {
-                BinaryOperator operator = this.language.getBinaryOperator(ctx.getChild(1).getText());
-                return new BinaryOperation(
-                        visit(ctx.getChild(0)),
-                        operator,
-                        visit(ctx.getChild(2))
-                );
-            } catch (UnknownElementException ex) {
-                MaterialToast.fireToast("Error in Temporary Reference");
-            }
-        } else {
-            //Global variable doesnt exists
-            MaterialToast.fireToast("Global Variable não existe");
-            return new GlobalVariable(new Value(ctx.getChild(2).getText()));
-        }
-
-        return null;
-    }
-
-   
 
     private void addVisitError(String msg) {
         errorBuffer.append(msg).append("\n");

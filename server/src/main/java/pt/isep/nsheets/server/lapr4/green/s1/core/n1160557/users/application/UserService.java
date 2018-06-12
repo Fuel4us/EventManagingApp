@@ -21,7 +21,7 @@ public class UserService {
 
         final UserRepository userRepository = PersistenceContext.repositories().users();
         
-        User wb= User.fromDTO(dto, true);
+        User wb= User.fromDTO(dto);
         userRepository.save(wb);
         
         return wb;

@@ -35,6 +35,11 @@ For this feature increment, since it is the second I needed to:
 - Understand what was done and what was not completed in the first sprint regarding to what I was dependant on.
 
 - Understand the concept of range of cells.
+
+# 4. Design
+
+
+## 4.1. Tests
  
 Tests:
 
@@ -44,6 +49,22 @@ If anytime the workbook is opened, the conditions are retrieved from the databas
 If anytime an Conditional instance is created it is saved in the Extension and in the repository.
 If when creating a Conditional for a range of cells it is being stored in the DB a conditional for each cell within the range.
 If when deleting a conditional for a specific cell or a range of cells, it is being removed from the DB.
+
+## 4.2. Requirements Realization
+
+![SD US1](sd1.png)
+
+![SD US2](sd2.png)
+
+## 4.3. Classes
+
+**Conditional** 
+**ConditionalServiceImpl**  
+
+## 4.4. Design Patterns and Best Practices
+
+By memory we apply/use:  
+- DTO  
 
 # 5. Implementation
 
@@ -72,4 +93,8 @@ Commits:
 [Documentation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/47a41cfbbc07db38c915b8bcb3bc5a1322e91cfb)
 
 [Cell Style Changing](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/c8b84dc879c2a0d97b024e1327d93042dcdcbe1f)
+
+[Small fix in documentation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/d03ffa7ccd7483a35a7895aff9c267ea88b47b20)
+
+[Conditional Range storing improvements, Remove conditionals and conditionals range](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/75167f77e389a693c05bb9f15b4965c51e36bfc3)
 

@@ -31,16 +31,14 @@ concatenation
         | concatenation AMP concatenation
         | block
         ;
-		
 
 atom
 	:	function_call
 	|	reference
-        |       assignment
+    |   assignment
 	|	literal
 	|	LPAR concatenation RPAR
-        |       globalreference
-        |       temporaryreference
+    |   temporaryreference
 	;
 
 function_call
@@ -51,13 +49,14 @@ function_call
 reference
 	:	CELL_REF
 		( ( COLON ) CELL_REF )?
+    |   NAMEGLOBAL
 	;
 	
 literal
 	:	NUMBER
 	|	STRING
-        |       nameglobal
-        |       nameTemporary
+    |   nameTemporary
+    |   NAMEGLOBAL
 	;
 	
 manyexpressions
@@ -88,11 +87,7 @@ nameTemporary
     :   UNDERSCORE ( LETTER )+
     ;
 
-globalreference
-    :	nameglobal ASSIGN concatenation
-    ;
-
-nameglobal
+NAMEGLOBAL
     :   ARROBA ( LETTER )+
     ;
 

@@ -8,10 +8,20 @@ actor User
 database Database order 100
 
 User -> Browser : Creates an event
-Browser ->> Server : createCalendarEvent()
+Browser ->> Server : getAllCalendarEvent()
+Server -> Database : getAllCalendarEvent()
+
+Database -->> Server : return
+Server -->> Browser : return
+Browser -> User : Ask name,description and EventsSelect to Agenda
+
+User -> Browser : Inserte data
+Browser ->> Server : createAgenda()
 Server -> Database : save()
 
+Database -->> Server : return
 Server -->> Browser : return
-Browser -> User : display
+Browser -> User : display sucess
+
 
 @enduml

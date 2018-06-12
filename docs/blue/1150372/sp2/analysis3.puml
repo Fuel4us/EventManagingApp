@@ -7,10 +7,11 @@ hide footbox
 actor User
 database Database order 100
 
-User -> Browser : Edits an event
-Browser ->> Server : updateCalendarEvent()
-Server -> Database : update()
+User -> Browser : Edits an Agenda
+Browser ->> Server : updateAgenda()
+Server -> Database : updateAgenda()
 
+Database -->> Server : return
 Server -->> Browser : return
 Browser -> User : display
 
