@@ -8,10 +8,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.addins.client.fileuploader.MaterialFileUploader;
 import gwt.material.design.addins.client.fileuploader.base.UploadFile;
-import gwt.material.design.addins.client.fileuploader.events.CompleteEvent;
+import gwt.material.design.addins.client.fileuploader.events.SuccessEvent;
 import gwt.material.design.client.base.validator.RegExValidator;
 import gwt.material.design.client.ui.MaterialButton;
-import gwt.material.design.client.ui.MaterialImage;
 import gwt.material.design.client.ui.MaterialTextBox;
 import javax.inject.Inject;
 
@@ -20,7 +19,9 @@ import javax.inject.Inject;
  * @author Tiago João Santos Rios, 1161292@isep.ipp.pt
  */
 public class SignupView extends ViewImpl implements SignupPresenter.MyView {
-
+    
+    protected static String URL = null;
+    
     interface Binder extends UiBinder<Widget, SignupView> {
     }
     
@@ -31,22 +32,19 @@ public class SignupView extends ViewImpl implements SignupPresenter.MyView {
     MaterialButton submitBtn;
     
     @UiField
-    MaterialFileUploader cardUploader;
-    
-    @UiField
-    MaterialImage imgPreview;
+    MaterialFileUploader uploader;
     
     @Inject
     SignupView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
-        cardUploader.setUrl(GWT.getModuleBaseURL() + "uploadServlet");
+        uploader.setUrl(GWT.getModuleBaseURL() + "uploadServlet");
         
         validateInput();
         
-        cardUploader.addCompleteHandler(new CompleteEvent.CompleteHandler<UploadFile>() {
+        uploader.addSuccessHandler(new SuccessEvent.SuccessHandler<UploadFile> (){ 
             @Override
-            public void onComplete(CompleteEvent<UploadFile> event) {
-                imgPreview.setUrl(GWT.getHostPageBaseURL() + "uploadedFiles/" + event.getTarget().getName());
+            public void onSuccess(SuccessEvent<UploadFile> event) {
+                URL = GWT.getHostPageBaseURL() + "uploadedFiles/" + event.getTarget().getName();
             }
         });
     }
@@ -109,10 +107,5 @@ public class SignupView extends ViewImpl implements SignupPresenter.MyView {
         this.username.clear();
         this.name.clear();
         this.password.clear();
-    }
-    
-    @Override
-    public MaterialImage image(){
-        return this.imgPreview;
     }
 }

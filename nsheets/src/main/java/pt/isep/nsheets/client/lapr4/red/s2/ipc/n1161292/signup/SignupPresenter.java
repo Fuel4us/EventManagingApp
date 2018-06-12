@@ -45,7 +45,6 @@ public class SignupPresenter extends Presenter<SignupPresenter.MyView, SignupPre
         MaterialTextBox txtPassword();
         MaterialTextBox txtEmail();
         MaterialTextBox txtName();
-        MaterialImage image();
         
         void clearFields();
     }
@@ -91,7 +90,7 @@ public class SignupPresenter extends Presenter<SignupPresenter.MyView, SignupPre
             validation = this.view.txtPassword().validate();
             
             if(validation){
-                UserDTO dto = new UserDTO(this.view.email(), this.view.name(), this.view.username(), this.view.password(), this.view.image().getUrl(), false);
+                UserDTO dto = new UserDTO(this.view.email(), this.view.name(), this.view.username(), this.view.password(), SignupView.URL, false);
 
                 signupSvc.signupUser(dto, callback);
             }
