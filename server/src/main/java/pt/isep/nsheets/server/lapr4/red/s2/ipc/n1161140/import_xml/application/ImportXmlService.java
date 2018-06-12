@@ -6,13 +6,18 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import pt.isep.nsheets.shared.core.Workbook;
+import pt.isep.nsheets.shared.core.Value;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.AddressDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.CellDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.*;
 
 public class ImportXmlService {
 
@@ -21,17 +26,21 @@ public class ImportXmlService {
      *
      * @return true, if the import is successful; false, if something bad happens
      */
-    public boolean importWorkbooks(String fileName) {
+    public WorkbookDTO importWorkbooks(String fileName) {
+
+        WorkbookDTO workbook = null;
+
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(new File(fileName));
+            Document document = builder.parse(new File("./nsheets/src/main/webapp/uploadedFiles/workbooks.xml"));
             document.getDocumentElement().normalize();
 
             NodeList workbookNodeList = document.getElementsByTagName("workbook");
             for (int i = 0; i < workbookNodeList.getLength(); i++) {
 
-                String[][] values = new String[26][9];
+                Map<AddressDTO, CellDTO> cells = new HashMap<>();
+                List<SpreadsheetDTO> spreadsheetList = new ArrayList<>();
 
                 Node workbookNode = workbookNodeList.item(i);
                 if (workbookNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -49,6 +58,10 @@ public class ImportXmlService {
 
                             String spreadsheetTitle = spreadsheetElement.getAttribute("title");
 
+                            SpreadsheetDTO spreadsheet = new SpreadsheetDTO(cells, spreadsheetTitle, 26, 9);
+
+                            spreadsheetList.add(spreadsheet);
+
                             NodeList cellNodeList = document.getElementsByTagName("cell");
                             for (int k = 0; k < cellNodeList.getLength(); k++) {
 
@@ -58,20 +71,26 @@ public class ImportXmlService {
 
                                     String pos = cellElement.getAttribute("pos");
 
-                                    //e.g. A1 -> A = 65 in ASCII, 1 = 1 -> 65 - 65 = 0, 1 - 1 = 0 -> array[0][0]
-                                    values[(int) pos.charAt(0) - 65][pos.charAt(1) - 1] = cellElement.getElementsByTagName("value").item(0).getTextContent();
+                                    String value = cellElement.getElementsByTagName("value").item(0).getTextContent();
+
+                                    AddressDTO address = new AddressDTO((int) pos.charAt(0) - 65, pos.charAt(1) - 1, pos);
+
+                                    CellDTO cell = new CellDTO(address, value, new Value(value), new TreeSet<>(), new TreeSet<>());
+
+                                    cells.put(address, cell);
+
                                 }
                             }
                         }
                     }
 
-                    Workbook workbook = new Workbook(workbookTitle, descriptionTitle, values);
+                    workbook = new WorkbookDTO(workbookTitle, descriptionTitle, spreadsheetList);
                 }
             }
         } catch (ParserConfigurationException | IOException | SAXException e) {
             MaterialToast.fireToast("Failed to import the workbooks");
-            return false;
         }
-        return true;
+
+        return workbook;
     }
 }
