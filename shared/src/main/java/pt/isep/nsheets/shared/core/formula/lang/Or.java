@@ -61,4 +61,9 @@ public class Or implements Function {
 	public boolean isVarArg() {
 		return true;
 	}
+
+    @Override
+    public String getInformativeText() {
+        return "returns true if any of its arguments are true.";
+    }
 }

@@ -48,4 +48,9 @@ public class ManyExpressions implements Function {
         return value.isOfType(Value.Type.UNDEFINED);
     }
 
+    @Override
+    public String getInformativeText() {
+        return "Many Expressions function";
+    }
+
 }

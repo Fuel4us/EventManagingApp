@@ -15,9 +15,9 @@ public class MessagesDTO implements Serializable{
     private String user;
     private int chatIndex;
 
-    public MessagesDTO(String text, String user, int chatIndex) {
+    public MessagesDTO(String text, Date date, String user, int chatIndex) {
         this.text = text;
-        this.date = new Date();
+        this.date = date;
         this.user = user;
         this.chatIndex = chatIndex;
     }

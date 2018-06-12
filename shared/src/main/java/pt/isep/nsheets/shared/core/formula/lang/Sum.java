@@ -73,4 +73,9 @@ public class Sum implements Function {
 	public boolean isVarArg() {
 		return true;
 	}
+
+    @Override
+    public String getInformativeText() {
+        return "returns the numeric sum of its arguments.";
+    }
 }

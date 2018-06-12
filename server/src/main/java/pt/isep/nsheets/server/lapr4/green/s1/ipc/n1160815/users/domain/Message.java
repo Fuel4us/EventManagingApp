@@ -61,12 +61,13 @@ public class Message implements AggregateRoot<Long>, Serializable {
      * Constructor of the message with all the arguments
      *
      * @param text Text of the message
+     * @param currentDate Current Date
      * @param user Nickname of the user of the message
      * @param chatIndex Index of the chat
      */
-    public Message(String text, String user, int chatIndex) {
+    public Message(String text, Date currentDate, String user, int chatIndex) {
         this.text = text;
-        this.currentDate = new Date();
+        this.currentDate = currentDate;
         this.userNickname = user;
         this.chatIndex = chatIndex;
     }
@@ -105,7 +106,7 @@ public class Message implements AggregateRoot<Long>, Serializable {
      * @return MessageDTO created
      */
     public MessagesDTO toDTO() {
-        return new MessagesDTO(this.text, this.userNickname, this.chatIndex);
+        return new MessagesDTO(this.text, this.currentDate, this.userNickname, this.chatIndex);
     }
 
     /**
@@ -116,7 +117,7 @@ public class Message implements AggregateRoot<Long>, Serializable {
      * @throws IllegalArgumentException exceptions
      */
     public static Message fromDTO(MessagesDTO dto) throws IllegalArgumentException {
-        return new Message(dto.getText(), dto.getUser(), dto.getChatIndex());
+        return new Message(dto.getText(), dto.getDate(), dto.getUser(), dto.getChatIndex());
     }
 
     /**

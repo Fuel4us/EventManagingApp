@@ -22,7 +22,7 @@ class ImportView extends ViewImpl implements ImportPresenter.MyView {
     ImportView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
 
-        uploader.setUrl(GWT.getModuleBaseURL() + "uploadServlet"); //Thanks Zé
+        uploader.setUrl(GWT.getModuleBaseURL() + "uploadServlet");
 
         uploader.addCompleteHandler(event -> {
             ImportServiceAsync service = GWT.create(ImportService.class);
@@ -37,7 +37,7 @@ class ImportView extends ViewImpl implements ImportPresenter.MyView {
                 }
             };
 
-            //service.importXmlFile(callback);
+            service.importXmlFile(callback);
         });
     }
 
