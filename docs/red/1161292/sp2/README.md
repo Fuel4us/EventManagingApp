@@ -3,7 +3,7 @@
 
 # 1. General Notes
 
-Questions made to Product Owner (LMN):
+Questions made to Product Owner (PRP):
 
 ```
 Q: Should I add security measures, for instance, password hash?
@@ -14,6 +14,8 @@ A: Yes.
 Q: Can I create business rules, like Password with minimum requirements?
 A: Yes.
 ```
+
+I also want to thanks my teammate [José Pedro Monteiro](https://bitbucket.org/lei-isep/lapr4-18-2db/src/master/docs/red/1160630/)for every help they gave me so I could finish this Use Case, even though it wasn't possible at all.
 
 # 2. Requirements
 
@@ -28,7 +30,7 @@ US01
 
 # 3. Analysis
 
-*In this section you should describe the study/analysis/research you developed in order to design a solution.*  
+##### *In this section you should describe the study/analysis/research you developed in order to design a solution.*  
 
 ## 3.1 Analysis Diagrams
 
@@ -50,94 +52,14 @@ The main idea for the "workflow" of this feature increment.
 
 # 4. Design
 
-*In this section you should present the design solution for the requirements of this sprint.*
+##### *In this section you should present the design solution for the requirements of this sprint.*
 
 
 ## 4.1. Tests
 
-*In this section you should describe the design of the tests that, as much as possibe, cover the requirements of the sprint.*
+##### *In this section you should describe the design of the tests that, as much as possibe, cover the requirements of the sprint.*
 
-Regarding tests we try to follow an approach inspired by test driven development. However it is not realistic to apply it for all the application (for instance for the UI part). Therefore we focus on the domain classes and also on the services provided by the server.
-
-**UserBuilder**: This class represents the Builder Pattern. It has the knowledge of how to build a User entity by knowing his attributes. We tested this class to make sure that after calling **build()** method, we have our entity represented with our information.
-
-```java
-@Test
-public void ensureUserBuilderIsWorking(){
-    System.out.println("ensureUserBuilderIsWorking");
-    final Boolean expected = true;
-    
-    final UserDTO expectedDTO = new UserDTO("1161292@isep.ipp.pt", "Tiago", "tiago", "Teste123", false);
-    final UserDTO resultDTO = new UserBuilder().withEmail("1161292@isep.ipp.pt").withName("Tiago").withNickname("tiago").withPassword("Teste123").withSuperUser(false).build();
-    
-    assertEquals(expected, resultDTO.equals(expectedDTO));
-}
-```
-
-```java
-@Test
-public void ensureUserBuilderIsNotWorkingBecauseEmail(){
-    System.out.println("ensureUserBuilderIsNotWorkingBecauseEmail");
-    final Boolean expected = false;
-    
-    final UserDTO expectedDTO = new UserDTO("1161292@isep.ipp.pt", "Tiago", "tiago", "Teste123", false);
-    final UserDTO resultDTO = new UserBuilder().withEmail("1161291@isep.ipp.pt").withName("Tiago").withNickname("tiago").withPassword("Teste123").withSuperUser(false).build();
-    
-    assertEquals(expected, resultDTO.equals(expectedDTO));
-}
-```
-
-```java
-@Test
-public void ensureUserBuilderIsNotWorkingBecauseName(){
-    System.out.println("ensureUserBuilderIsNotWorkingBecauseName");
-    final Boolean expected = false;
-    
-    final UserDTO expectedDTO = new UserDTO("1161292@isep.ipp.pt", "Tiago", "tiago", "Teste123", false);
-    final UserDTO resultDTO = new UserBuilder().withEmail("1161292@isep.ipp.pt").withName("João").withNickname("tiago").withPassword("Teste123").withSuperUser(false).build();
-    
-    assertEquals(expected, resultDTO.equals(expectedDTO));
-}
-```
-
-```java
-@Test
-public void ensureUserBuilderIsNotWorkingBecauseNickname(){
-    System.out.println("ensureUserBuilderIsNotWorkingBecauseNickname");
-    final Boolean expected = false;
-    
-    final UserDTO expectedDTO = new UserDTO("1161292@isep.ipp.pt", "Tiago", "tiago", "Teste123", false);
-    final UserDTO resultDTO = new UserBuilder().withEmail("1161292@isep.ipp.pt").withName("Tiago").withNickname("joão").withPassword("Teste123").withSuperUser(false).build();
-    
-    assertEquals(expected, resultDTO.equals(expectedDTO));
-}
-```  
-
-```java
-@Test
-public void ensureUserBuilderIsNotWorkingBecausePassword(){
-    System.out.println("ensureUserBuilderIsNotWorkingBecausePassword");
-    final Boolean expected = false;
-    
-    final UserDTO expectedDTO = new UserDTO("1161292@isep.ipp.pt", "Tiago", "tiago", "Teste123", false);
-    final UserDTO resultDTO = new UserBuilder().withEmail("1161292@isep.ipp.pt").withName("Tiago").withNickname("tiago").withPassword("Teste1234").withSuperUser(false).build();
-    
-    assertEquals(expected, resultDTO.equals(expectedDTO));
-}
-```
-
-```java
-@Test
-public void ensureUserBuilderIsNotWorkingBecauseSuperUser(){
-    System.out.println("ensureUserBuilderIsNotWorkingBecauseSuperUser");
-    final Boolean expected = false;
-    
-    final UserDTO expectedDTO = new UserDTO("1161292@isep.ipp.pt", "Tiago", "tiago", "Teste123", false);
-    final UserDTO resultDTO = new UserBuilder().withEmail("1161292@isep.ipp.pt").withName("Tiago").withNickname("tiago").withPassword("Teste123").withSuperUser(true).build();
-    
-    assertEquals(expected, resultDTO.equals(expectedDTO));
-}
-```
+##### Regarding tests we try to follow an approach inspired by test driven development. However it is not realistic to apply it for all the application (for instance for the UI part). Therefore we focus on the domain classes and also on the services provided by the server.
 
 **SignupController**: This class is responsible for the communication between UI and Domain. In this case, it is where the signup begins in the server, so it can persist a new User in the database.
 
@@ -199,21 +121,42 @@ public void testIfUserWasAdded() throws Exception {
 *Present and explain how you applied design patterns and best practices.*
 
 - Repository
-- Builder
 - MVP
+- DTO
 
 # 5. Integration/Demonstration
 
-*In this section document your contribution and efforts to the integration of your work with the work of the other elements of the team and also your work regarding the demonstration (i.e., tests, updating of scripts, etc.)*
+##### *In this section document your contribution and efforts to the integration of your work with the work of the other elements of the team and also your work regarding the demonstration (i.e., tests, updating of scripts, etc.)*
 
 # 6. Final Remarks 
 
-*In this section present your views regarding alternatives, extra work and future work on the issue.*
+##### *In this section present your views regarding alternatives, extra work and future work on the issue.*
 
 Some Questions/Issues identified during the work in this feature increment:
 
+- My main concern during this sprint was implementing OOP Patterns, like Value Object and Builder.
+    - Even though, Value Object could easily be implemented, GWT provides tools for input validation with Regular Expressions, so I decided to used them.
+    - About Builder Pattern, I didn't find a good solution for it, since I could not initialize an UserBuilder instance in UI. 
+
 # 7. Work Log
 
+* []()
+* [Login and Users work with hashed password](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/fb9dad00860ec69a27847b83ffd3b767a83cae49)
+* [Changed method implementation and regex](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/1d130cb11ff2c8b8a573467ebbe208929559a3a5)
+* [Removed default login information](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/13eeab886008d73649cb23b0d187fed377628c22)
+* [Removed image preview](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/04d20b97bc808249441d5ecc5892d18c66bbccac)
+* [Changed icon colors and implemented type on password textbox](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/981f9c676d9908c03eea3e68371249b771ec3b32)
+* [Email attribute is now unique](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/440faeb89b60efe99281d2063a5614c2c81b2f2f)
+* [Added empty file](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/64d3c258accbf8d7308127969b741608036389f6)
+* [Fixed tests classes because Picture field on user](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/c8ec0a4ec81553fcefafbcbaaa4439f91fad32d5)
+* [Fixed Domain classes](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/b997d81c4a02bcc272a4fff70491b6d30100a903)
+* [Application goes to DB to search for registered users](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/42da2e170dac93642c12ea7da5a412ff23d226cd)
+* [Fixed where files are saved in the server](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/ecc14fd968d496c3e63a4eba4c4677e77a79347e)
+* [Card shows image preview after uploading](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/b053986bfa30a1c9576f742562e2195524cd4271)
+* [Added picture to NavBar when logged in](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/4188985c299418b34d0d8786f91179cf743c3aa8)
+* [Updated documentation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/cfb83227236c5ed8b4a65ce1b4fe0de2ab1cb284)
+* [Added IPC01.2 tests for Controller and Builder](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/e5678e861e0c82d64cdc0bdd62f81041d0fbb634)
+* [Fixed UserBuilder implementation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/e702cb059606ccaeee3a3aa5538a3be897205139)
 * [Removed Password Value Object. GWT UI is working with Regex](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/3a21401073446b8c76c029d28717e3374fef6911)
 * [Fixed logged in user UI bugs](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/d9ff5af8bd1064ee3ac792e766ed73d22ffc9592)
 * [Application now shows who is logged in](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/ac8f96bccaf2d7cb71f974a5adc611efbfabb447)
