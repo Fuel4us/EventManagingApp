@@ -62,6 +62,8 @@ The main idea for the "workflow" of this feature increment.
 
 **Domain Model**
 
+![Domain Model](domainModel.PNG)
+
 **System Sequence Diagrams**
 
 **For US1**

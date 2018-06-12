@@ -129,7 +129,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 
         void initWorkbook();
 
-        MaterialButton getEditWorkbookButton();
+        MaterialButton getEditButtonModal();
 
         MaterialTextBox getNameModal();
 
@@ -238,7 +238,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
             }
         });
 
-        getView().getEditWorkbookButton().addClickHandler(new ClickHandler() {
+        getView().getEditButtonModal().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 String name = getView().getNameModal().getText();

@@ -50,4 +50,9 @@ public class Form implements Function {
         return false;
     }
 
+    @Override
+    public String getInformativeText() {
+        return "form function";
+    }
+
 }

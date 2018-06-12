@@ -34,6 +34,7 @@ import pt.isep.nsheets.client.lapr4.blue.s2.core.n1150478.application.extensions
 import pt.isep.nsheets.client.application.form.FormModule;
 import pt.isep.nsheets.client.application.home.HomeModule;
 import pt.isep.nsheets.client.application.imports.ImportModule;
+import pt.isep.nsheets.client.application.listNotes.ListNotesModule;
 import pt.isep.nsheets.client.application.login.LoginModule;
 import pt.isep.nsheets.client.application.macro.MacroModule;
 import pt.isep.nsheets.client.application.menu.MenuModule;
@@ -65,6 +66,7 @@ public class ApplicationModule extends AbstractPresenterModule {
         install(new MacroModule());
         install(new ContactsModule());
         install(new AgendaModule());
+        install(new ListNotesModule());
 
         bindPresenter(ApplicationPresenter.class, ApplicationPresenter.MyView.class, ApplicationView.class, ApplicationPresenter.MyProxy.class);
     }

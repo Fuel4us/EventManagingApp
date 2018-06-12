@@ -48,6 +48,12 @@ public interface Function {
 	 * @return the parameters of the function
 	 */
 	public FunctionParameter[] getParameters();
+        
+        /**
+	 * Returns the description of the function.
+	 * @return the description of the function
+	 */
+        public String getInformativeText();        
 
 	/**
 	 * Returns whether the function accepts a variable number of arguments,

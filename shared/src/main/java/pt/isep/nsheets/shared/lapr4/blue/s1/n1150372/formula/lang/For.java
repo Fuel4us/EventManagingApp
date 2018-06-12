@@ -95,4 +95,9 @@ public class For implements Function {
         return false;
     }
 
+    @Override
+    public String getInformativeText() {
+        return "for function";
+    }
+
 }
