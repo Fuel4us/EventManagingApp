@@ -5,24 +5,34 @@
  */
 package pt.isep.nsheets.shared.lapr4.green.n1160815.formula.lang;
 
+import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Value;
 import pt.isep.nsheets.shared.core.formula.Expression;
 import pt.isep.nsheets.shared.core.formula.Literal;
+import pt.isep.nsheets.shared.core.formula.util.ExpressionVisitor;
 
 /**
  *
  * @author Leandro
  */
-public class GlobalVariable extends Literal{
+public class GlobalVariable extends Literal implements Expression{
     
-    private Expression expression;
+    String gvName;
     
-    public GlobalVariable(Value value) {
-        super(value);
+    /**
+     *
+     * @param gvValue
+     */
+    public GlobalVariable(Value gvValue, String gvName) {
+        super(gvValue);
+        this.gvName = gvName;
     }
-    
-    public void setContent(Expression expression) {
-        this.expression = expression;
+
+    public String getGvName() {
+        return gvName;
     }
-    
+
+    public void setGvName(String gvName) {
+        this.gvName = gvName;
+    }
 }

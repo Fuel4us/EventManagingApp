@@ -5,6 +5,7 @@ import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Value;
 import static pt.isep.nsheets.shared.core.Value.Type.*;
+import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.core.formula.BinaryOperator;
 import pt.isep.nsheets.shared.core.formula.Expression;
 import pt.isep.nsheets.shared.core.formula.Literal;
@@ -56,11 +57,12 @@ public class Assignment implements BinaryOperator {
                 leftOp.setContent(value);
                 return value;
             } else if (leftOperand instanceof GlobalVariable) {
+                Workbook currentWorkbook = Settings.getInstance().getWorkbook();
+                
                 Value value = rightOperand.evaluate();
-                GlobalVariable leftOp = (GlobalVariable) leftOperand;
-
-                leftOp.setContent(new Literal(value));
-                Settings.getInstance().getWorkbook().addGlobalVariable(leftOp);
+                GlobalVariable gv = (GlobalVariable) leftOperand;
+                currentWorkbook.setGVValue(gv.getGvName(), value);
+                
                 return value;
             }
             throw new UnsupportedOperationException("The Left Operand are not a cellreference.");
