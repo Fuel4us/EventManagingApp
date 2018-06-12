@@ -230,7 +230,7 @@ public class PDFBuilder {
 
     private void cellPropertiesRender(PdfPCell cell, int size, int miniumHeight) {
         cell.setBorder(Rectangle.NO_BORDER);
-        cell.setVerticalAlignment(Element.ALIGN_CENTER);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         cell.setBorderWidth(1);
         cell.setCellEvent(chooseCellEvent(cellStyle, color, size));
         cell.setMinimumHeight(miniumHeight);
