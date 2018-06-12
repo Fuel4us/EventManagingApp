@@ -8,9 +8,10 @@ actor User
 database Database order 100
 
 User -> Browser : Deletes an event
-Browser ->> Server : deleteCalendarEvent()
-Server -> Database : delete()
+Browser ->> Server : deleteAgenda()
+Server -> Database : deleteAgenda()
 
+Database -->> Server : return
 Server -->> Browser : return
 Browser -> User : display
 

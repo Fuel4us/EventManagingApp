@@ -7,10 +7,19 @@ hide footbox
 actor User
 database Database order 100
 
-User -> Browser : Opens the events
-Browser ->> Server : getCalendarEvents()
-Server -> Database : findCurrentAndFutureEvents()
+User -> Browser : Open the Agenda
+Browser ->> Server : getAllAgendas()
+Server -> Database : findAllAgendas()
 
+Database -->> Server : return
+Server -->> Browser : return
+Browser -> User : display
+
+User -> Browser : Select One Agenda
+Browser ->> Server : getAllCalendarCurrentFutureInAgenda()
+Server -> Database : getAllCalendarCurrentFutureInAgenda()
+
+Database -->> Server : return
 Server -->> Browser : return
 Browser -> User : display
 

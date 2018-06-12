@@ -5,37 +5,48 @@ skinparam shadowing false
 hide footbox
 
 actor User
-boundary CalendarView
-control CalendarPresenter
-control CalendarEventServices
-control ViewCalendarEventsController
-control CalendarEventService
-entity CalendarEventRepository
+boundary AgendaView
+control AgendaPresenter
+control AgendaServices
+control ViewAgendasController
+control AgendaService
+entity AgendaRepository
 database Database 
 
 box "Client"
-participant CalendarView
-participant CalendarPresenter 
+participant AgendaView
+participant AgendaPresenter 
 end box
 
 box "Server"
-participant CalendarEventServices
-participant ViewCalendarEventsController
-participant CalendarEventService
-participant CalendarEventRepository
+participant AgendaServices
+participant ViewAgendasController
+participant AgendaService
+participant AgendaRepository
 end box
 
 box "Database"
 participant Database
 end box
 
-User -> CalendarPresenter : onReveal() / navigate to page 
-CalendarPresenter ->> CalendarEventServices : getCalendarEvents()
-CalendarEventServices -> ViewCalendarEventsController : viewCalendarEvents()
-ViewCalendarEventsController -> CalendarEventService : getAllCalendarEvents()
-CalendarEventService -> CalendarEventRepository : findCurrentAndFutureEvents()
-CalendarEventRepository -> Database : fetch
-CalendarEventServices ->> CalendarPresenter : onSuccess() 
-CalendarPresenter -> CalendarView : setContents()
+User -> AgendaPresenter : onReveal() / navigate to page 
+AgendaPresenter ->> AgendaServices : getAgendas()
+AgendaServices -> ViewAgendasController : viewAgendas()
+ViewAgendasController -> AgendaService : getAllAgendas()
+AgendaService -> AgendaRepository : findAllAgendas()
+AgendaRepository -> Database : findAllAgendas()
+
+AgendaServices ->> AgendaPresenter : return
+AgendaPresenter -> AgendaView : return
+
+AgendaView -> AgendaPresenter : getAllCalendarEventsToAgenda()
+AgendaPresenter ->> AgendaServices : getAllCalendarEventsToAgenda()
+AgendaServices -> ViewAgendasController : getAllCalendarEventsToAgenda()
+ViewAgendasController -> AgendaService : getAllCalendarEventsToAgenda()
+AgendaService -> AgendaRepository : getAllCalendarEventsToAgenda()
+AgendaRepository -> Database : findAllAgendas()
+
+AgendaServices ->> AgendaPresenter : return
+AgendaPresenter -> AgendaView : return
 
 @enduml
