@@ -21,7 +21,7 @@ no only in memory (client app), but also in the repository.
 
 Proposal:
 
-US1 - As the Product Owner I want the formatting settings of a cell to be persisted in the repository and updated everytime the user changes it.
+US1 - As a User I want the formatting settings of a cell to be persisted in the repository and updated everytime the user changes it.
 
 US2 - As a User of the Application I want to be able to change backgroung color, font color, text alignment and font size of a cell.
 
@@ -53,13 +53,13 @@ The main idea for the "workflow" of this feature increment.
 
 **Use Cases**
 
-![Use Cases](Core08.1.png)
+![Use Cases](Core08.1 US.png)
 
-- **Use Cases**. Since these use cases have a one-to-one correspondence with the User Stories we do not add here more detailed use case descriptions. We find that these use cases are very simple and may eventually add more specification at a later stage if necessary.
+- **Use Cases**. 
 
 **Domain Model (for this feature increment)**
 
-![Domain Model](dm.png)
+![Domain Model](Core08.1 CD.png)
 
 - **Domain Model**. Since we found no specific requirements for the structure of Workbook Descriptions we follow the Structure of the existing DTO (WorkbookDescriptionDTO).
 
@@ -78,101 +78,23 @@ The main idea for the "workflow" of this feature increment.
 
 ## 4.1. Tests
 
-*In this section you should describe the design of the tests that, as much as possibe, cover the requirements of the sprint.*
+Only function tests were done.
 
-Regarding tests we try to follow an approach inspired by test driven development. However it is not realistic to apply it for all the application (for instance for the UI part). Therefore we focus on the domain classes and also on the services provided by the server.
+** US1 **
 
-**Domain classes**
+As a User I want the formatting settings of a cell to be persisted in the repository and updated everytime the user changes it.
 
-For the Domain classes we will have a class that represents the entity **WorkbookDescription**. This entity will have attributes that, for the moment, will be based on the class **WorkbookDescriptionDTO**:
-	
-	- name (string)
-	- description (string) 
+The CellStyle changes shall be created in real-time in the database
+The CellStyle if change shall be updated with concurrency care
+The CellStyles shall be uploaded when we open the WorkbookView
 
-**Test:** We should ensure that a WorkbookDescription can be created when all the attributes are set.  
+** US2 **
 
-	@Test(expected = IllegalArgumentException.class)
-		public void ensureNullIsNotAllowed() {
-		System.out.println("ensureNullIsNotAllowed");
-		WorkbookDescription instance = new WorkbookDescription(null, null);
-	}
+As a User of the Application I want to be able to change backgroung color, font color, text alignment and font size of a cell.
 
-**Services/Controllers**
+When user press a activeCell, the system shall look if there is any CellStyle applied and update the GWT MaterialListBox (backgroundColor, fontColor, fontSize, TextAlign)
+When user changes one of the listbox, the is launch an event with and handler for selection change. The Cell Style is created or updated in the CellStyleExtension list only if saved in the database
 
-For the services the application already has a service specified in the interface **WorkbooksService**:
-
-	@RemoteServiceRelativePath("workbooksService")
-	public interface WorkbooksService extends RemoteService {
-		ArrayList<WorkbookDescriptionDTO> getWorkbooks();
-	}
-	
-This method seems to be sufficient for supporting US1 but not US2.
-
-For US2 we need a method that can be used to create a new WorkbookDescription given a WorkbookDescriptionDTO.
-
-The proposal is:
-
-	@RemoteServiceRelativePath("workbooksService")
-	public interface WorkbooksService extends RemoteService {
-		ArrayList<WorkbookDescriptionDTO> getWorkbooks();
-		WorkbookDescriptionDTO addWorkbookDescription(WorkbookDescriptionDTO wdDto) throws DataException;
-	}
-		
-Tests:  
-- The tests on the controllers require the presence of a database.  
-- We will use the database in memory (H2).  
-- We will have a *controller* from adding new WorkbookDescriptions. This controller will be invoked by the GWT RPC service.
-- We will have a *controller* from listing WorkbookDescriptions. This controller will be invoked by the GWT RPC service.
-
-Controller **AddWorkbookDescriptionController**
-
-**Test:** Verify the normal creation of an WorkbookDescription.  
-
-	@Test
-	public void testNormalBehaviour() throws Exception {
-		System.out.println("testNormalBehaviour");
-		final String name = "Workbook1";
-		final String description = "Description for Workbook1";
-		final WorkbookDescription expected = new WorkbookDescription(name, description);
-		AddWorkbookDescriptionController ctrl = new AddWorkbookDescriptionController();
-		WorkbookDescription result = ctrl.addWorkbookDescription(expected.toDTO());
-		assertTrue("the added WorkbookDescription does not have the same data as input", expected.sameAs(result));
-	}
-
-Controller **ListWorkbookDescriptionController**
-
-Note: We will be using the annotation @FixMethodOrder(MethodSorters.NAME_ASCENDING) to ensure the test methods are executed in order. This is useful since the memory database will have state changing between tests.
- 
-**Test:** At the beginning of the tests the memory database should be empty, so listWorkbookDiscriptions should return an empty set.
-
-	   @Test 
-	   public void testAensureGetWorkbooksEmpty() {
-		   System.out.println("testAensureGetWorkbooksEmpty");
-		   ListWorkbookDescriptionController ctrl=new ListWorkbookDescriptionController();
-		   Iterable<WorkbookDescription> wbs=ctrl.listWorkbookDescriptions();
-		   assertTrue("the list of WorkbookDescriptions is not empty", !wbs.iterator().hasNext());
-	   } 
- 
-**Test:** If a WorkbookDescription is created it should be present in a following invocation of getWorkbooks().
-
-		@Test
-		public void testBtestDatabaseInsertion() throws Exception {
-			System.out.println("testBtestDatabaseInsertion");
-			final String name = "Workbook1";
-			final String description = "Description for Workbook1";
-			final WorkbookDescription expected = new WorkbookDescription(name, description);
-			AddWorkbookDescriptionController ctrlAdd = new AddWorkbookDescriptionController();
-			WorkbookDescription result = ctrlAdd.addWorkbookDescription(expected.toDTO());
-			ListWorkbookDescriptionController ctrlList=new ListWorkbookDescriptionController();
-			Iterable<WorkbookDescription> wbs=ctrlList.listWorkbookDescriptions();
-			assertTrue("the added WorkbookDescription is not in the database", wbs.iterator().hasNext());
-		}
-
-**Test Coverage**  
-- The actual coverage for domain classes: 61%
-- The actual coverage for application(controller) classes: 100%
- 
-- TODO: Add more tests to increase the coverage of the domain class. 
 
 ## 4.2. Requirements Realization
 
@@ -182,22 +104,21 @@ Following the guidelines for JPA from EAPLI we envision a scenario like the foll
 
 **For US1**
 
-![SD US1](design1.png)
-
 Notes:  
 - The diagram only depicts the less technical details of the scenario;  
 - For clarity reasons details such as the PersistenceContext or the RepositoryFactory are not depicted in this diagram.   
-- **WorkbookServices** realizes the GWT RPC mechanism;  
-- **ListWorkbookDescriptionController** is the *use case controller*;  
-- **ListWorkbookDescriptionServices** is to group together all the services related to WorkbookDescription. 
+- **CellStyleServices** realizes the connection with the controller from the UI;  
+- **CellStyleController** is the *use case controller* and manages the repository;  
 
 **For US2**
+- **CellStyleExtension** manages the CellDecorator to change Cell formatting style. 
 
-![SD US2](design2.png)
 
 ## 4.3. Classes
 
-*Present and describe the major classes of you solution.*
+CellStyle is the main class of this Core08.1. It has the colors and settings and has a One to One relation with the cell Address.
+
+CellStyleExtension is the main responsible for this funcionality. It has the list of CellStyles and the CellDecorator class inside that allows to change the formatting settings of the GWT widgets.
 
 ## 4.4. Design Patterns and Best Practices
 
@@ -217,57 +138,125 @@ By memory we apply/use:
 
 **For US1**
 
+In the WorkView, anytime a CellStyle setting is changed in the ListBox, there is an event handler that starts the US2. This one also updates the database, if successful, updates the CellStyleExtension list
+and redraw the customTable for the user to see the changes in real-time:
+
+backgroundcolorLst.addValueChangeHandler(event -> {
+
+            if (activeCell != null) {
+                CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
+                if (c != null) {
+                    c.setBackgroungColor(backgroundcolorLst.getSelectedValue().ordinal());
+                    this.updateCellStyles(c);
+                    MaterialToast.fireToast("existia " + CellStyleExtension.getCellStyle(activeCell.getAddress()).getBackgroungColor());
+                } else {
+                    MaterialToast.fireToast("nao existia");
+                    //CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), backgroundcolorLst.getSelectedValue().ordinal(), Color.BLACK.ordinal(),0,12));
+                    this.updateCellStyles(new CellStyle(activeCell.getAddress(), backgroundcolorLst.getSelectedValue().ordinal(), Color.BLACK.ordinal(), 0, 12));
+                }
+            }
+        });
+		
+Note the call of method updateCellStyles() and what happens when successful:
+
+
+public void updateCellStyles(CellStyle cellStyle) {
+        CellStyleServiceAsync cellStyleServiceAsync = GWT.create(CellStyleService.class);
+
+        AsyncCallback<CellStyleDTO> callback = new AsyncCallback<CellStyleDTO>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                MaterialToast.fireToast("Error saving cellStyle! " + caught.getMessage());
+            }
+
+            @Override
+            public void onSuccess(CellStyleDTO result) {
+                MaterialToast.fireToast("CellStyle repository updated!");
+                CellStyleExtension.addCellStyle(CellStyle.fromDTO(result));
+                customTable.getView().setRedraw(true);
+                customTable.getView().refresh();
+            }
+        };
+
+        cellStyleServiceAsync.saveCellStyle(cellStyle.toDTO(), callback);
+
+        //loadCellStyles();
+    }
+
+
+
 **For US2**
 
+The CellStyleExtension has the List of CellStyles in client app memory.
 
-**For US1**
+public class CellStyleExtension extends Extension {
 
-The UI for this US was already implemented. We simply implemented the server as described previously.
+    public static ArrayList<CellStyle> lstCellStyle = new ArrayList<CellStyle>();
 
-**For US2**
 
-**UI: Button for adding a new Workbook Description**
+Inside CellStyleExtension, the UIExtension is extended in a CellDecorator that is responsible to change widget that represents a Cell for the User.
 
-For this concern we decided to use a Material Widget called Material FAB (Floating Action Button). This is a kind of button that usually appears at the left bottom part of the screen and contains actions available for the elements of the page.  
+@Override
+    public UIExtension getUIExtension(MaterialWidget element) {
+        return new CellDecorator(element);
+    }
 
-We updated the HomeView.ui.xml accordingly and declare the element with a tag *ui:field="newWorkbookButton"*. In the corresponding class View (i.e., HomeView) we bind that button to the corresponding widget class: 	
+    class CellDecorator extends UIExtension {
+        MaterialWidget element;
 
-	@UiField
-	MaterialButton newWorkbookButton;
+        CellDecorator(MaterialWidget element) {
+            this.element = element;
+        }
 
-We must now add the code that invokes the server to add a new workbook description when the user clicks in the button. This is an event. To implement this behavior we could use GWT Events such as the SetPageTitleEvent already used in the application. These are special type of events that GWT manages and are available to all pages in the application. 
 
-We chose to provide our click event globally but to simple use the click event handler of the button and connect it to a method in the HomePresenter.
+        @Override
+        public void decorate(Object o) {
+            CellStyle c = CellStyleExtension.getCellStyle((Address) o);
+            if (c != null) {
+                element.setBackgroundColor(Color.values()[c.getBackgroungColor()]);
+                element.setTextColor(Color.values()[c.getFontColor()]);
+                if(c.getTextALIGN() == -1){
+                    element.setTextAlign(TextAlign.LEFT);
+                }else if(c.getTextALIGN() == 1){
+                    element.setTextAlign(TextAlign.RIGHT);
+                }else{
+                    element.setTextAlign(TextAlign.CENTER);
+                }
+                element.setFontSize(c.getFontSize(), Style.Unit.PX);
+            }else{
+                element.setBackgroundColor(Color.WHITE);
+                element.setTextColor(Color.BLACK);
+                element.setTextAlign(TextAlign.CENTER);
+                element.setFontSize(12, Style.Unit.PX);
+            }
+        }
+    }
 
-Since Presenters should only depend on a View interface we added a new method to the HomePresenter.MyView:
+Any time that the customTable of the Workbook is rendered, the method getValue() of the SheetWidgetColumn is called for each cell, returning a MaterialLabel that represents the cell.
+If the CellStyleExtension isn't null, it looks if each cell has a CellStyle associated and decorates this widget.
 
-	interface MyView extends View {
-		void setContents(ArrayList<WorkbookDescriptionDTO> contents);
-		void addClickHandler(ClickHandler ch);
-	}
+public MaterialLabel getValue(SheetCell object) {
+        MaterialLabel badge = new MaterialLabel();
+        //badge.setPixelSize(180,30);
+        badge.setMinHeight("30px");
+        if (this.colNumber == -1) {
+            badge.setText("" + (object.getCell(0).getAddress().getRow() + 1));
+        } else {
+            badge.setText(object.getCell(this.colNumber).getValue().toString());
+            Extension ui = ExtensionManager.getInstance().getExtension("CellStyleExtension");
+            if(ui != null) {
+                ui.getUIExtension(badge).decorate(object.getCell(this.colNumber).getAddress());
+                try {
+                    this.view.customTable.getRow(object.getCell(this.colNumber).getAddress().getRow()).getWidget().getColumn(object.getCell(this.colNumber).getAddress().getColumn()+1).setBackgroundColor(Color.values()[CellStyleExtension.getCellStyle(object.getCell(this.colNumber).getAddress()).getBackgroungColor()]);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+       badge.setLayoutPosition(Style.Position.RELATIVE);
 
-Then, we implemented the *addClickHandler* in the HomeView class and call this method in the constructor of the HomePresenter. In the constructor our handler class the server method that adds a new workbook description.   
-
-**Code Organization**  
-
-We followed the recommended organization for packages:  
-- Code should be added (when possible) inside packages that identify the group, sprint, functional area and author;
-- For instance, we used **lapr4.white.s1.core.n4567890**
-
-The code for this sprint:  
-Project **server**    
-- pt.isep.nsheets.server.**lapr4.white.s1.core.n4567890**.workbooks.application: contains the controllers  
-- pt.isep.nsheets.server.**lapr4.white.s1.core.n4567890**.workbooks.domain: contains the domain classes  
-- pt.isep.nsheets.server.**lapr4.white.s1.core.n4567890**.workbooks.persistence: contains the persistence/JPA classes 
-- Updated the existing class: **pt.isep.nsheets.server.WorkbookServiceImpl**
-
-Project **shared**  
-- Added the class: **pt.isep.nsheets.shared.services.DataException**: This class is new and is used to return database exceptions from the server  
-- Updated the classes: **pt.isep.nsheets.shared.services.WorkbookService** and **pt.isep.nsheets.shared.services.WorkbookServiceAsync**  
-
-Project **NShests** 
-- Updated the classes: **pt.isep.nsheets.client.aaplication.home.HomeView** and **pt.isep.nsheets.client.aaplication.home.HomePresenter**  
-- Updated the file: **pt.isep.nsheets.client.aaplication.home.HomeView.ui.xml**  
+        return badge;
+    }
 
 
 # 6. Integration/Demonstration
@@ -287,8 +276,10 @@ Some Questions/Issues identified during the work in this feature increment:
 Commits:
 
 
-[#22] Core08.1 CellStyleExtension updated and correct my work from sp1 (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/48693bc9b84fcfd07b3d8a820f0dfc748ae22222)
-[#22] Core08.1 update workbook UI: (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/dcd8f9a007d8fb064760be7ebb4f000f71092ac3)
+[#22] Core08.1 CellStyleExtension updated and correct my work from sp1 
+(https://bitbucket.org/lei-isep/lapr4-18-2db/commits/48693bc9b84fcfd07b3d8a820f0dfc748ae22222)
+
+[#22] Core08.1 update workbook UI: 
 a. lists for cell formatting options:
 1. background color
 2. font color
@@ -297,12 +288,19 @@ a. lists for cell formatting options:
 b. implementation of handlers for lists to change colors in the CellStyleExtension list of CellStyles
 c. impl with getValue() is caled in SheetWidgetColumn, colors update if Cell has formating options
 d. correction: last sp1, widget was changed to button and limits the formatting options. Changed back to label
-[#22] Core08.1: https://bitbucket.org/lei-isep/lapr4-18-2db/commits/2ff4a72a74f8d68c1eb951d242bb7ce4d3002ce6
+(https://bitbucket.org/lei-isep/lapr4-18-2db/commits/dcd8f9a007d8fb064760be7ebb4f000f71092ac3)
+
+[#22] Core08.1: 
 1. CellStyle created. Class has formatting options for each cell
 2. CellStyle services created for persistence
-[#22] CellStyle Persistence working: (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/6274006ba9568026b11f6004a32f27082559b6be)
+(https://bitbucket.org/lei-isep/lapr4-18-2db/commits/2ff4a72a74f8d68c1eb951d242bb7ce4d3002ce6)
+
+[#22] CellStyle Persistence working: 
 1. cellstyles aren't unique yet
-[#22] CellStyle persisting 100% (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/f50fef0c46a9f804ff105928b2b4d37d4a65f665)
+(https://bitbucket.org/lei-isep/lapr4-18-2db/commits/6274006ba9568026b11f6004a32f27082559b6be)
+
+[#22] CellStyle persisting 100% 
 1. Cells keep their style in repository
 2. Possible to Update CellStyle that exists
 3. Formatting menus show activeCell settings when click
+(https://bitbucket.org/lei-isep/lapr4-18-2db/commits/f50fef0c46a9f804ff105928b2b4d37d4a65f665)
