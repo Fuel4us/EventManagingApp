@@ -15,7 +15,7 @@ Q: Can I create business rules, like Password with minimum requirements?
 A: Yes.
 ```
 
-I also want to thanks my teammate [JosÃ© Pedro Monteiro](https://bitbucket.org/lei-isep/lapr4-18-2db/src/master/docs/red/1160630/)for every help they gave me so I could finish this Use Case, even though it wasn't possible at all.
+I also want to thanks my teammate [José Pedro Monteiro](https://bitbucket.org/lei-isep/lapr4-18-2db/src/master/docs/red/1160630/)for every help they gave me so I could finish this Use Case, even though it wasn't possible at all.
 
 # 2. Requirements
 
@@ -140,7 +140,7 @@ Some Questions/Issues identified during the work in this feature increment:
 
 # 7. Work Log
 
-* []()
+* [Updated and ended documentation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/37872c2d02b19b13aa47bd6fc64b8134c50d8896)
 * [Login and Users work with hashed password](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/fb9dad00860ec69a27847b83ffd3b767a83cae49)
 * [Changed method implementation and regex](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/1d130cb11ff2c8b8a573467ebbe208929559a3a5)
 * [Removed default login information](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/13eeab886008d73649cb23b0d187fed377628c22)
