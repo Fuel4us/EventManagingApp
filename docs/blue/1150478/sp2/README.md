@@ -14,6 +14,12 @@ Questions made to the Product Owner (PRP):
 	Q: Do we need to implement what's inside the menu option, or popup option?
 	A: No, the extensions just have to handle its creation.
 ```
+Questions made to the Client (ATB):
+
+```
+	Q: There is needed to persist the data created by the extensions?
+	A: No, the extensions are made just for the programmers extend the application, and not the users. It's just needed to persist the 'extra' data that the extensions add to the application, and this functionality is made on Core08.1/.2
+```
 
 # 2. Requirements
 
