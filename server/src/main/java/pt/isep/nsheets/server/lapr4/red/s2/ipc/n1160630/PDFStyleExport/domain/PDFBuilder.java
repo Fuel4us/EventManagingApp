@@ -34,7 +34,7 @@ import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core.CellStyle;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleDTO;
 
 /**
- *
+ * PDF Builder.
  * @author pedromonteiro
  */
 public class PDFBuilder {
@@ -48,8 +48,14 @@ public class PDFBuilder {
     private final BaseColor TITLE_COLOR = new BaseColor(224, 224, 224);
     private BaseColor color;
     private List<CellStyleDTO> cell_list;
+    private CellStyleLine cellStyle;
 
-    public PDFBuilder(List<CellStyleDTO> list,Workbook workbook) {
+    /**
+     * Constructor
+     * @param list style list
+     * @param workbook workbook
+     */
+    public PDFBuilder(List<CellStyleDTO> list, Workbook workbook) {
         this.workbook = workbook;
         cell_list = list;
         File file = new File(FILE_PATH);
@@ -80,10 +86,17 @@ public class PDFBuilder {
         }
     }
 
+    /**
+     * PDF Render
+     * @param style pdf line style (dashed/dotted/solid/double)
+     * @param s_color line color
+     * @param size line size
+     * @return return true if pdf created, false if not
+     */
     public boolean createPdf(String style, String s_color, int size) {
 
-        CellStyleLine cellStyle = CellStyleLine.getCellStyleByValue(style);
-        Color c = new ColorUtil(s_color).getColor();
+        cellStyle = CellStyleLine.getCellStyleByValue(style);
+        Color c = Color.decode(s_color);
         color = new BaseColor(c.getRed(), c.getGreen(), c.getBlue());
 
         try {
@@ -123,12 +136,8 @@ public class PDFBuilder {
                     }
 
                     cell.setBackgroundColor(TITLE_COLOR);
-                    cell.setBorder(Rectangle.NO_BORDER);
-                    cell.setCellEvent(chooseCellEvent(cellStyle, color, size));
-                    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    cell.setMinimumHeight(25);
-                    cell.setBorderWidth(1);
+                    cellPropertiesRender(cell, size, 35);
                     table.addCell(cell);
                     letter++;
                 }
@@ -136,12 +145,8 @@ public class PDFBuilder {
                 for (int i = 0; i < ss.getRowCount(); i++) {
                     cell = new PdfPCell(new Phrase(String.valueOf(i + 1), TABLE_FONT));
                     cell.setBackgroundColor(TITLE_COLOR);
-                    cell.setBorder(Rectangle.NO_BORDER);
-                    cell.setCellEvent(chooseCellEvent(cellStyle, color, size));
-                    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    cell.setMinimumHeight(20);
-                    cell.setBorderWidth(1);
+                    cellPropertiesRender(cell, size, 20);
                     table.addCell(cell);
                     for (int j = 0; j < ss.getColumnCount(); j++) {
 
@@ -149,40 +154,33 @@ public class PDFBuilder {
 
                         Font text_font = new Font(TABLE_FONT);
 
-                         CellStyle style_cell = cellStyle(spread_cell, cell_list);
+                        CellStyle style_cell = cellStyle(spread_cell, cell_list);
 
                         if (style_cell != null) {
-                            
+
                             String hex_back_color = ColorTranformer.getHexColorByGWTColor(style_cell.getBackgroungColor());
                             String hex_text_color = ColorTranformer.getHexColorByGWTColor(style_cell.getFontColor());
 
-                            ColorUtil back_util_color = new ColorUtil(hex_back_color);
-                            ColorUtil text_util_color = new ColorUtil(hex_text_color);
-                            
-                            
+                            Color back_util_color = Color.decode(hex_back_color);
+                            Color text_util_color = Color.decode(hex_text_color);
+
                             cell = new PdfPCell(new Phrase(spread_cell.getContent(), text_font));
-                            
-                            BaseColor bc = new BaseColor(back_util_color.getColor().getRed(), back_util_color.getColor().getGreen(), back_util_color.getColor().getBlue());
+
+                            BaseColor bc = new BaseColor(back_util_color.getRed(), back_util_color.getGreen(), back_util_color.getBlue());
                             cell.setBackgroundColor(bc);
-                            cell.setHorizontalAlignment(style_cell.getTextALIGN()+1); //Because 0 - left, 1-center, 2 - right
-                            
-                            text_font.setColor(text_util_color.getColor().getRed(), text_util_color.getColor().getGreen(), text_util_color.getColor().getBlue());
+                            cell.setHorizontalAlignment(style_cell.getTextALIGN() + 1); //Because 0 - left, 1-center, 2 - right
+
+                            text_font.setColor(text_util_color.getRed(), text_util_color.getGreen(), text_util_color.getBlue());
                             text_font.setSize(style_cell.getFontSize());
-                            
-                            
+
                         } else {
                             cell = new PdfPCell(new Phrase(spread_cell.getContent(), text_font));
-                            
+
                             cell.setBackgroundColor(BaseColor.WHITE);
                             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                            
+
                         }
-                        
-                        cell.setBorder(Rectangle.NO_BORDER);
-                        cell.setVerticalAlignment(Element.ALIGN_CENTER);
-                        cell.setBorderWidth(1);
-                        cell.setCellEvent(chooseCellEvent(cellStyle, color, size));
-                        cell.setMinimumHeight(20);
+                        cellPropertiesRender(cell, size, 20);
                         table.addCell(cell);
                     }
                 }
@@ -198,7 +196,6 @@ public class PDFBuilder {
 
     }
 
-
     private PdfPCellEvent chooseCellEvent(CellStyleLine style, BaseColor color, int size) {
         switch (style) {
             case DASHED:
@@ -213,18 +210,30 @@ public class PDFBuilder {
 
         return null;
     }
-    
-    private CellStyle cellStyle(Cell cell, List<CellStyleDTO> list){
-        
-        if(list == null) return null;
-        
-        for(CellStyleDTO dto: list){
-            CellStyle style = CellStyle.fromDTO(dto);
-            if(style.getAddress().equals(cell.getAddress())) return  style;
+
+    private CellStyle cellStyle(Cell cell, List<CellStyleDTO> list) {
+
+        if (list == null) {
+            return null;
         }
-        
+
+        for (CellStyleDTO dto : list) {
+            CellStyle style = CellStyle.fromDTO(dto);
+            if (style.getAddress().equals(cell.getAddress())) {
+                return style;
+            }
+        }
+
         return null;
-        
+
+    }
+
+    private void cellPropertiesRender(PdfPCell cell, int size, int miniumHeight) {
+        cell.setBorder(Rectangle.NO_BORDER);
+        cell.setVerticalAlignment(Element.ALIGN_CENTER);
+        cell.setBorderWidth(1);
+        cell.setCellEvent(chooseCellEvent(cellStyle, color, size));
+        cell.setMinimumHeight(miniumHeight);
     }
 
 }

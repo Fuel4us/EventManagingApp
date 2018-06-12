@@ -13,13 +13,20 @@ import com.itextpdf.text.pdf.PdfPCellEvent;
 import com.itextpdf.text.pdf.PdfPTable;
 
 /**
- *
+ * Solid Cell class.
  * @author pedromonteiro
  */
 public class SolidCell implements PdfPCellEvent{
     private int border = 0;
     private final BaseColor color;
     private final int size;
+    
+    /**
+     * Constructor.
+     * @param border border position
+     * @param color border color
+     * @param size border size
+     */
     public SolidCell(int border, BaseColor color, int size) {
         this.border = border;
         this.color = color;

@@ -13,13 +13,20 @@ import com.itextpdf.text.pdf.PdfPCellEvent;
 import com.itextpdf.text.pdf.PdfPTable;
 
 /**
- *
+ * Dashed Cell class.
  * @author pedromonteiro
  */
 public class DashedCell implements PdfPCellEvent{
     private int border = 0;
     private final BaseColor color;
     private final int size;
+
+    /**
+     * Constructor.
+     * @param border border position
+     * @param color border color
+     * @param size border size
+     */
     public DashedCell(int border, BaseColor color, int size) {
         this.border = border;
         this.color = color;

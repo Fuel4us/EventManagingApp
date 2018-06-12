@@ -16,7 +16,6 @@ import gwt.material.design.client.ui.MaterialInput;
 import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialRadioButton;
 import gwt.material.design.client.ui.MaterialRange;
-import gwt.material.design.client.ui.MaterialRow;
 import gwt.material.design.client.ui.MaterialToast;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,8 +96,7 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
             }
         };
 
-        MaterialToast.fireToast("ListSize: "+cellStyleList().size());
-        //exportServiceAsync.exportStyledWorkbookPDF(cellStyleList(), workbookDTO, style, color, range, callback);
+        exportServiceAsync.exportStyledWorkbookPDF(cellStyleList(), workbookDTO, style, color, range, callback);
 
     }
 
