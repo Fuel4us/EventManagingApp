@@ -5,9 +5,9 @@
 
 **Core06.2 - Agenda**
 
-The calendar view should now evolve into an agenda view that may display several calendars. 
+The Agenda view should now evolve into an agenda view that may display several calendars. 
 
-It should be possible to create, edit and remove calendars. 
+It should be possible to create, edit and remove Agenda. 
 
 Each user can have one or more calendars. 
 
@@ -23,13 +23,13 @@ The view should display only actual and future events.
 
 Proposal:
 
-* US1 - As a User, I want to access my calendar, so I can view my current and future events .
+* US1 - As a User, I want to access my agenda, so I can view my current and future calendar/event .
 
-* US2 - As a User, I want to create an event, so I can .
+* US2 - As a User, I want to create an agenda, so I can .
 
-* US3 - As a User, I want to edit a previously created event, so I can correct misspelled information.
+* US3 - As a User, I want to edit a previously created agenda, so I can correct misspelled information.
 
-* US4 - As a User, I want to delete an event, so I can .
+* US4 - As a User, I want to delete an agenda, so I can .
 
 ## Analysis
 
@@ -80,36 +80,6 @@ Regarding tests we try to follow an approach inspired by test driven development
 However it is not realistic to apply it for all the application (for instance for the UI part). 
 Therefore we focus on the domain classes and also on the services provided by the server.
 
-####TEST VIEW A FUTURE AND CURRENT EVENTS
-1. ---------------------------------------;
-2. ---------------------------------------;
-3. ---------------------------------------;
-4. ---------------------------------------;
-
-####TEST CREATE ONE CALENDAR
-1. ---------------------------------------;
-2. ---------------------------------------;
-3. ---------------------------------------;
-4. ---------------------------------------;
-    4.1 ---------------------------------------;
-    4.2 ---------------------------------------;
-
-####TEST EDIT ONE CALENDAR
-1. ---------------------------------------;
-2. ---------------------------------------;
-3. ---------------------------------------;
-4. ---------------------------------------;
-    4.1 ---------------------------------------;
-    4.2 ---------------------------------------;
-	
-####TEST DELETE ONE CALENDAR
-1. ---------------------------------------;
-2. ---------------------------------------;
-3. ---------------------------------------;
-4. ---------------------------------------;
-    4.1 ---------------------------------------;
-    4.2 ---------------------------------------;
-
 **Requirements Realization**
 
 **US1**
@@ -129,10 +99,12 @@ Therefore we focus on the domain classes and also on the services provided by th
 ![Design SD](design4.png)
 
 **Classes**
-ainda a ver
-
-## Work Log
-
-Commits:
-	Exemplo
-[Added base folder for documentation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/e75f35afa3b5a8ec77c9eb332fb9eb97f87f3157)
+AgendaView
+AgendaCalendar
+AgendarService
+ViewAgendaController
+CreateAgendaController
+EditAgendaController
+DeleteAgendaController
+Agenda
+JpaAgendaRepository
