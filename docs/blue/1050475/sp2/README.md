@@ -2,25 +2,28 @@
 ===============================
 
 # 1. General Notes
-
+The application should have a new extension to associate styles with cells. The functionality should be similar to the one present in the desktop version of Cleansheets.
+The similarities are in the use of extensions and the UI extension. This application is a web app and has next way of approach. This UC has lots of other UC that depend on it. Like Lang03.1, Lang03.2, IPC03.2, etc.
+The challenge is to make something that is easily applied by everyone. Priorities shall be set by each of the UC that apply this UC.
 
 *In this section you should register important notes regarding your work during the sprint. For instance, if you spend significant time helping a colleague or if you work in more than one feature increment.*
+I was responsible for Lang03.1 that needed this UC. In this second sprint there was an Core02.1 that manage to create a change of color with the class Configuration and the ValueColorExtension. It was important
+to deactivate this UC. Persistence was only able to persist one configuration for one Spreadsheet. So wasn't able to reuse this funcionality. Also, in the first sprint, some programmer change the cell widget
+from MaterialLabel to MaterialButton. As I understood, the idea was to be able to rigth click and open an menu. A MaterialLabel can do this event as well as well, is more pratical to take care of the string
+values from the cell. Also, is more pratical to set the color, font and alignment settings.
+
 
 # 2. Requirements
 
-*In this section you should describe the requirements for this sprint.*
+This Core 8.1 we need to need a way in the UI to set several formatting settings to change the style of a cell. each cell, will have a style when the settings are set. It is important to persist this settings
+no only in memory (client app), but also in the repository.
 
-*This is simply an example of documentation*
-
-Core00.0 - The Home page should present metadata about all workbooks (i.e., Workbook Descriptions). This metadata should be persisted in a relational database (using JPA). In the UI of the Home page it should be possible to add a new Workbook Description.
-
-We can further specify this textual requirements as user stories.
 
 Proposal:
 
-US1 - As the Product Owner I want that the workbooks that are displayed in the Home Page come from a relational database so that they are persisted and can be updated.
+US1 - As the Product Owner I want the formatting settings of a cell to be persisted in the repository and updated everytime the user changes it.
 
-US2 - As a User of the Application I want to be able to add new Workbook Descriptions when I am in the Home Page.
+US2 - As a User of the Application I want to be able to change backgroung color, font color, text alignment and font size of a cell.
 
 # 3. Analysis
 
@@ -28,152 +31,20 @@ US2 - As a User of the Application I want to be able to add new Workbook Descrip
 
 For this feature increment, since it is the first one to be developed in a new project I need to:  
 
-- Understand how the application works and also understand the key aspects of GWT, since it is the main technology behind the application  
-
-- Understand how the Home Page is implemented (for instance, how the UI gets the Workbook Descriptions that are displayed)  
+- Understand how the application works and also understand the key aspects of GWT, since it is the main technology behind the application 
+	WorkbookView has a customTable that is redraw everytime that is updated. I found in the SheetWidgetColumn the render of each cell per column. The cell is materialized as a MaterialLabel. The value of
+	the cell is stored in this label as a String. Then we can change background color that didnt fit the grid, so I resized a min height for the label to fit. Then we can change font color, align and font size.
+	These were the setting I think a cleansheet needs for a cell and to respect the needs of other UC. It is important for the user to know the settings that are already applied in order to compare to the settings
+	that we can choose. So when we press on a cell, the formatting lists show the user the style settings applied.
 
 - Understand how to integrate a relational database into the project (Will be assuming JPA since it is studied in EAPLI)   
-
-## 3.1 GWT and Project Structure
-
-**Modules**. From the pom.xml file we can see that the application is composed of 5 modules:  
-- **server**. It is the "server part" of the web application.  
-- **shared**. It contains code that is shared between the client (i.e., web application) and the server.   
-- **nsheets**. It is the web application (i.e., Client).  
-- **util**. This is the same module as the one of EAPLI.  
-- **framework**. This is the same module as the one of EAPLI.   
-  
-From [GWT Overview](http://www.gwtproject.org/overview.html): *"The GWT SDK contains the Java API libraries, compiler, and development server. It lets you write client-side applications in Java and deploy them as JavaScript."*
-
-Therefore:
-  - The project is totally developed in Java, event for the UI parts.
-  - GWT uses a technique know as "transpilation" to translate Java code to Javascript. This is totally transparent to the user
-  - A GWT application is comprised of "GWT modules" (see [GWT Tutorial](http://www.gwtproject.org/doc/latest/tutorial/create.html)). These GWT modules are described in .gwt.xml files.
-   The nsheets project contains a .gwt.xml file named nsheets.gwt.xml (nsheets/src/main/resources/pt/isep/nsheets/nsheets.gwt.xml). One of the important contents of the file is the specification of the entry point of the application. However, since the application uses the [GWTP framework](http://dev.arcbees.com/gwtp/) the entry point is automatically provided (no need to specify it in the .gwt.xml file). In this case what is specified is the GIN client module pt.isep.nsheets.client.gin.ClientModule:
-   
-	    <extend-configuration-property name="gin.ginjector.modules"
-                                   value="pt.isep.nsheets.client.gin.ClientModule"/>
-                                   
-   It is from this **ClientModule** that the application starts.
-   Another important content of a .gwt.xml file is setting the paths for translatable code, .i.e., java code that should be translated to javascript. Usually the default source path is the client subpackage underneath where the .gwt.xml File is stored. In this case every code inside package pt.isep.nsheets.client and pt.isep.nsheets.shared will be translated to javascript. 
-   
-	<!-- Specify the paths for translatable code                    -->
-    <source path='client'/>
-    <source path='shared'/>
-        
-   The shared package is where shared code between server and client should reside. See [GWT - What to put in the shared folder?](https://stackoverflow.com/questions/5664601/gwt-what-to-put-in-the-shared-folder?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa) and also [using GWT RPC](http://www.gwtproject.org/doc/latest/tutorial/RPC.html).
-   
-   In this project the shared, server and client (i.e, nsheets) code are separated also in Maven modules (but they could all be in the same project/maven module). 
-   
-## 3.2 Application Startup and GWTP
-
-As described before the entry point for the application is the class **pt.isep.nsheets.client.gin.ClientModule**.
-
-GWTP follows the MVP (Model-View-Presenter) pattern. It uses [GIN dependency injection](http://dev.arcbees.com/gwtp/core/presenters/gin-bindings.html) to put together the parts of each MVP. How the GWTP structures the application and uses GIN to bind all the required elements is described in [GWTP Beginner's Tutorial](http://dev.arcbees.com/gwtp/tutorials/index.html).
-
-We can see that **ClientModule** installs the base presenter of the application:
-
-	    install(new ApplicationModule());
-	        
-The **ApplicationModule** module install all the other modules of the application:
-
-	    install(new HomeModule());
-		install(new MenuModule());
-		install(new AboutModule());
-		install(new WorkbookModule());   
-
-Each module represents an MVP page in the application.
-
-In this MVP pattern each presenter defines a specific interface that is use to communicate with the UI (i.e., the View). Therefore the presenter can be fully isolated from dependencies related to the UI. For instance, the View interface that is defined by the ApplicationPresenter only has one method:
-
-	interface MyView extends View {
-    		void setPageTitle(String title, String description, String link, String specification);
-    } 
-
-In this specific case the only type that is "shared" between Presenter and View is the String.
-
-The View class is where all the UI code should be implemented. In GWT it is possible to create UI elements programmatically (see [GWT Build the UI](http://www.gwtproject.org/doc/latest/tutorial/buildui.html)). The UI can also be described in .ui.xml files using [UIBinder](http://www.gwtproject.org/doc/latest/DevGuideUiBinder.html). The NSheets project is using [GWT Material Design](https://github.com/GwtMaterialDesign/gwt-material) and therefore all the UI widgets are from that library. 
-
-In the case of the Application module we can see that there is a ApplicationView.ui.xml. This file declares some widgets. The attribute ui:field can be used to specify an id that can be then used to bind that element to a class in the code. For instance, in ApplicationView.ui.xml:
-
-	<m:MaterialPanel ui:field="panel">
-		<m:MaterialLabel ui:field="title" text="NSheets" fontSize="2.3em"/>
-		<m:MaterialLabel ui:field="description" text="A Sophisticated Web Spreadsheet Application." fontSize="1.1em"/>
-	</m:MaterialPanel>
+	The CellStyle is the class that stores the settings of a cell by background color, font color, font size and text align. The colors are all available in the gwt library, the font size are from 6 to 28 and the align of the
+	text is "left", "center" and "right".
 	
-It is set the ui:field attribute for two existing labels. In the code (ApplicationView.java) one can bind to Widgets classes. For instance:
-
-	@UiField
-    MaterialLabel title, description;
-    
-Then we can use this instances to access the widgets link in:
-
-	@Override
-	public void setPageTitle(String title, String description, String link, String specification) {
-        this.title.setText(title);
-        this.description.setText(description);
-        new MaterialAnimation().transition(Transition.BOUNCEINLEFT).animate(this.title);
-        new MaterialAnimation().transition(Transition.BOUNCEINLEFT).animate(this.description);
-    }    
-
-## 3.3 Server and RPC
-
-The Home page displays what seems to be Workbooks that should reside in the server.
-
-In the method **onReveal** the Home presenter invokes a WorkbookService asynchronously. It uses the base communication mechanism of GWT called [GWT RPC](http://www.gwtproject.org/doc/latest/tutorial/RPC.html).
-
-Basically, it requires the definition of an interface for the service. In this case:
-
-	@RemoteServiceRelativePath("workbooksService")
-	public interface WorkbooksService extends RemoteService {
-		ArrayList<WorkbookDescriptionDTO> getWorkbooks();
-	}
-	
-Note: The @RemoteServiceRelativePath annotation associates the service with a default path relative to the module base URL.
-
-When an RPC is invoked since it is always executed asynchronously we have to prove a callback: 
-
-	// Make the call to the stock price service.
-	workbooksSvc.getWorkbooks(callback);
-	
-The callback is simple a class that provides two methods, one for a successful result and the other for a failure:
-
-	// Set up the callback object.
-	AsyncCallback<ArrayList<WorkbookDescriptionDTO>> callback = new AsyncCallback<ArrayList<WorkbookDescriptionDTO>>() {
-		public void onFailure(Throwable caught) {
-			// TODO: Do something with errors.
-		}
-		public void onSuccess(ArrayList<WorkbookDescriptionDTO> result) {
-			refreshView(result);
-		}
-	}; 
-
-Since the interface is code that must be accessed by both server and client code it should reside in the **shared** project.
-
-The interface must be implemented in the **server**. The implementation can be very simple, like the one presented in the project. In this case the server simply returns always the same objects:
-
-	@Override
-	public ArrayList<WorkbookDescriptionDTO> getWorkbooks() {
-	    ArrayList<WorkbookDescriptionDTO> workbooks = new ArrayList<WorkbookDescriptionDTO>();
-	    WorkbookDescriptionDTO wb=new WorkbookDescriptionDTO("workbook1", "Este workbook contem uma lista...");
-	    workbooks.add(wb);
-		WorkbookDescriptionDTO wb2=new WorkbookDescriptionDTO("workbook notas", "Este workbook contem notas de disciplinas...");
-	    workbooks.add(wb2);	    
-		return workbooks;
-	}
-
-Since the service is a servlet it must be declared in the **web.xml** file of the project (see file nsheets/src/main/webapp/WEB-INF/web.xml).
-
-	<!-- Servlets for the workbooks -->
-	<servlet>
-		<servlet-name>workbooksServiceServlet</servlet-name>
-		<servlet-class>pt.isep.nsheets.server.services.WorkbooksServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>workbooksServiceServlet</servlet-name>
-		<!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
-		<url-pattern>/nsheets/workbooksService</url-pattern>
-	</servlet-mapping> 
+	The CellStyleExtension have a list of CellStyle that stores in memory while Client app is running. Anytime a setting is changed in the list, the list is check to see if the CellStyle already exists to be created or updated. 
+	The same happens with the repository database. The CellStyleServiceImp sends the CellStyleDTO to the server, where the CellStyleController checks if exists any CellStyle with same address as this one. If exists,
+	removes the last one and saves the new one. this way, there is only CellStyle per Cell. The save in the repository returns a CellStyle that is store. It is this cellStyle, after Success, that updates in memory
+	the list of CellStyles in the first mentioned CellStyleExtension and the render of the customTable is forced for the user to see the changes happening in real-time.
 	
 
 ## 3.4 Analysis Diagrams
@@ -182,7 +53,7 @@ The main idea for the "workflow" of this feature increment.
 
 **Use Cases**
 
-![Use Cases](us.png)
+![Use Cases](Core08.1.png)
 
 - **Use Cases**. Since these use cases have a one-to-one correspondence with the User Stories we do not add here more detailed use case descriptions. We find that these use cases are very simple and may eventually add more specification at a later stage if necessary.
 
@@ -194,13 +65,10 @@ The main idea for the "workflow" of this feature increment.
 
 **System Sequence Diagrams**
 
-**For US1**
+**For US1 and US2**
 
-![Analysis SD](analysis.png)
+![Analysis SD](Core08.1.png)
 
-**For US2**
-
-![Analysis SD](analysis2.png)
 
 # 4. Design
 
@@ -339,13 +207,18 @@ By memory we apply/use:
 - Singleton  
 - Repository  
 - DTO  
-- MVP  
+- MVP
 
 **TODO:** Exemplify the realization of these patterns using class diagrams and/or SD with roles marked as stereotypes. 
 
 # 5. Implementation
 
 *If required you should present in this section more details about the implementation. For instance, configuration files, grammar files, etc. You may also explain the organization of you code. You may reference important commits.*
+
+**For US1**
+
+**For US2**
+
 
 **For US1**
 
@@ -411,8 +284,6 @@ Some Questions/Issues identified during the work in this feature increment:
 
 # 8. Work Log
 
-*Insert here a log of you daily work. This is in essence the log of your daily work. It should reference your commits as much as possible.*
-
 Commits:
 
 
@@ -429,8 +300,9 @@ d. correction: last sp1, widget was changed to button and limits the formatting 
 [#22] Core08.1: https://bitbucket.org/lei-isep/lapr4-18-2db/commits/2ff4a72a74f8d68c1eb951d242bb7ce4d3002ce6
 1. CellStyle created. Class has formatting options for each cell
 2. CellStyle services created for persistence
-
-
-
-
-
+[#22] CellStyle Persistence working: (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/6274006ba9568026b11f6004a32f27082559b6be)
+1. cellstyles aren't unique yet
+[#22] CellStyle persisting 100% (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/f50fef0c46a9f804ff105928b2b4d37d4a65f665)
+1. Cells keep their style in repository
+2. Possible to Update CellStyle that exists
+3. Formatting menus show activeCell settings when click
