@@ -1,0 +1,17 @@
+@startuml Diogo
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+actor User
+User->FormPresenter: onReveal()
+FormPresenter->FormsVariablesServiceImpl: addTemporaryVariable(String name, String value, int choice)
+FormsVariablesServiceImpl-->FormsAndVariablesController:create()
+FormsAndVariablesController-->FormsAndVariablesService:create()
+FormsVariablesServiceImpl->FormsAndVariablesController:addTemporaryVariable(String name, String value, int choice)
+FormsAndVariablesController->FormsAndVariablesService:addTemporaryVariable(String name, String value, int choice)
+FormsAndVariablesService->FormsAndVariablesService:updateTemporaryVariable(TemporaryVariable temporaryVariable)
+FormPresenter-->User: Notifies success of the operation
+
+@enduml

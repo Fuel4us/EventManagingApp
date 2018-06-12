@@ -1,0 +1,13 @@
+@startuml Diogo
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+actor User
+User->System:Starts Use Case
+System-->User:Asks for a name and to select a widget
+User->System: Inserts name and selects widget
+System-->User: Saves the information in a temporary variable
+
+@enduml
