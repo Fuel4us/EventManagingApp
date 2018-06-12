@@ -16,7 +16,7 @@ public class SignupService {
     public User signupUser(UserDTO dto) throws DataConcurrencyException, DataIntegrityViolationException {
         final UserRepository userRepository = PersistenceContext.repositories().users();
         
-        return userRepository.save(User.fromDTO(dto, true));
+        return userRepository.save(User.fromDTOHashPassword(dto));
     }
     
 }

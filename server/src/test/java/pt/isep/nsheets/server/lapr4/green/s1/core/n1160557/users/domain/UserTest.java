@@ -5,6 +5,7 @@
  */
 package pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.domain;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -168,7 +169,7 @@ public class UserTest {
     public void testFromDTO() {
         System.out.println("fromDTO");
         UserDTO dto = new UserDTO(defaultEmail, defaultName, defaultNickname, defaultPassword, "", defaultSuperuser);
-        assertEquals(true, User.fromDTO(dto, true).sameAs(testUser));
+        assertEquals(true, User.fromDTO(dto).sameAs(testUser));
     }
 
 }
