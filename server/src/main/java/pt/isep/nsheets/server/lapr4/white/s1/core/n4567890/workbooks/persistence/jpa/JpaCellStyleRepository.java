@@ -37,6 +37,8 @@ public class JpaCellStyleRepository extends NSheetsJpaRepositoryBase<CellStyle, 
     }
 
 
+
+
     @Override
     public CellStyle updateCellStyle(CellStyle cellStyle) {
         CellStyle style = findByAddress(cellStyle.getAddress());

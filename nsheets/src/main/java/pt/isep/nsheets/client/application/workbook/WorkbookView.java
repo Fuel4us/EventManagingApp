@@ -227,6 +227,18 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
     public void setActiveCell(pt.isep.nsheets.shared.core.Cell cell) {
         this.activeCell = cell;
+        CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
+        if (c != null) {
+            backgroundcolorLst.setSelectedValue(Color.values()[c.getBackgroungColor()]);
+            fontcolorLst.setSelectedValue(Color.values()[c.getFontColor()]);
+            textAlignLst.setSelectedIndex(c.getTextALIGN()+1);
+            fontsizeLst.setSelectedValue(c.getFontSize());
+        }else{
+            backgroundcolorLst.setSelectedValue(Color.WHITE);
+            fontcolorLst.setSelectedValue(Color.BLACK);
+            textAlignLst.setSelectedIndex(1);
+            fontsizeLst.setSelectedValue(12);
+        }
 
         this.customTable.getTableTitle().setText(cell.toString() + ": " + cell.getContent().toString());
         this.firstBox.setText(cell.getContent().toString());
@@ -393,11 +405,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                     //CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), backgroundcolorLst.getSelectedValue().ordinal(), Color.BLACK.ordinal(),0,12));
                     this.updateCellStyles(new CellStyle(activeCell.getAddress(), backgroundcolorLst.getSelectedValue().ordinal(), Color.BLACK.ordinal(),0,12));
                 }
-                customTable.getView().setRedraw(true);
-                customTable.getView().refresh();
 
                 //remover depois de persistencia e extensions a funcionar. resize do label
-                customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() + 1).setBackgroundColor(backgroundcolorLst.getSelectedValue());
+                //customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() + 1).setBackgroundColor(backgroundcolorLst.getSelectedValue());
             }
         });
 
@@ -407,16 +417,13 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
                 if (c != null) {
                     c.setFontColor(fontcolorLst.getSelectedValue().ordinal());
+                    this.updateCellStyles(c);
                     MaterialToast.fireToast("existia " + CellStyleExtension.getCellStyle(activeCell.getAddress()).getFontColor());
                 } else {
                     MaterialToast.fireToast("nao existia");
-
-                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(),0,12));
+                    //CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(),0,12));
+                    this.updateCellStyles(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(),0,12));
                 }
-                MaterialToast.fireToast("list CellStyle is empty? "+CellStyleExtension.lstCellStyle.isEmpty());
-
-                customTable.getView().setRedraw(true);
-                customTable.getView().refresh();
             }
 
         });
@@ -426,14 +433,13 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
                 if (c != null) {
                     c.setFontSize(fontsizeLst.getSelectedValue());
+                    this.updateCellStyles(c);
                     MaterialToast.fireToast("existia " + CellStyleExtension.getCellStyle(activeCell.getAddress()).getFontSize());
                 } else {
                     MaterialToast.fireToast("nao existia");
-                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(), 0, fontsizeLst.getSelectedValue()));
-
+                    //CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(), 0, fontsizeLst.getSelectedValue()));
+                    this.updateCellStyles(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(), 0, fontsizeLst.getSelectedValue()));
                 }
-                customTable.getView().setRedraw(true);
-                customTable.getView().refresh();
 
                 customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() + 1).setFontSize(fontsizeLst.getSelectedValue(), Style.Unit.PX);
             }
@@ -444,14 +450,13 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 CellStyle c = CellStyleExtension.getCellStyle(activeCell.getAddress());
                 if (c != null) {
                     c.setTextALIGN(textAlignLst.getSelectedIndex() - 1);
+                    this.updateCellStyles(c);
                     MaterialToast.fireToast("existia " + CellStyleExtension.getCellStyle(activeCell.getAddress()).getTextALIGN());
                 } else {
                     MaterialToast.fireToast("nao existia");
-                    CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(), textAlignLst.getSelectedIndex() - 1, 12));
-
+                    //CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(), textAlignLst.getSelectedIndex() - 1, 12));
+                    this.updateCellStyles(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), Color.BLACK.ordinal(), textAlignLst.getSelectedIndex() - 1, 12));
                 }
-                customTable.getView().setRedraw(true);
-                customTable.getView().refresh();
 
                 customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() + 1).setTextAlign(TextAlign.values()[textAlignLst.getSelectedValue().ordinal()]);
             }
@@ -681,15 +686,12 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             public void onSuccess(CellStyleDTO result) {
                 MaterialToast.fireToast("CellStyle repository updated!");
                 CellStyleExtension.addCellStyle(CellStyle.fromDTO(result));
+                customTable.getView().setRedraw(true);
+                customTable.getView().refresh();
             }
         };
 
         cellStyleServiceAsync.saveCellStyle(cellStyle.toDTO(), callback);
-
-        MaterialToast.fireToast("now doing redraw");
-        customTable.getView().setRedraw(true);
-        MaterialToast.fireToast("now doing redraw");
-        customTable.getView().refresh();
 
         //loadCellStyles();
     }
