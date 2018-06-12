@@ -19,7 +19,7 @@
         <m:MaterialFAB>
             <m:MaterialButton type="FLOATING" iconType="BOOK" size="LARGE"/>
             <m:MaterialFABList>
-                <m:MaterialButton ui:field="btnOpenCreateWindow" type="FLOATING" waves="LIGHT" iconType="ADD" tooltip="New Spreadsheet" tooltipPosition="LEFT"/>
+                <m:MaterialButton ui:field="btnOpenCreateWindow" type="FLOATING" waves="LIGHT" iconType="ADD" tooltip="New Agenda" tooltipPosition="LEFT"/>
             </m:MaterialFABList>
         </m:MaterialFAB>
         <m:MaterialModal ui:field="modal" type="DEFAULT">
@@ -27,7 +27,7 @@
                 <m:MaterialLabel text="Create Agenda" fontSize="3em"/>
                 <m:MaterialTextBox ui:field="nameAgenda" label="NAME" grid="s12"/>
                 <m:MaterialTextBox ui:field="descriptionAgenda" label="DESCRIPTION" grid="s12"/>
-                <combobox:MaterialComboBox ui:field="comboCreate" width="100%" placeholder="Widgets">
+                <combobox:MaterialComboBox closeOnSelect="false" multiple="true" ui:field="comboCreateCalendar" placeholder="Calendars">
                 </combobox:MaterialComboBox>
                 <m:MaterialButton ui:field="saveButton" text="Save" textColor="GREEN" iconType="SAVE" iconPosition="LEFT" backgroundColor="WHITE"/>
                 <m:MaterialButton ui:field="cancelButton" text="Cancel" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK" iconType="CANCEL" iconPosition="LEFT" iconColor="BLUE"/>
@@ -35,17 +35,15 @@
         </m:MaterialModal>
 
         <m:MaterialRow addStyleNames="code">
-            <m:MaterialTitle title="Agendas" description="Description"/>
+            <m:MaterialTitle ui:field="updateTitle" title="Agendas" description="Description"/>
             <combobox:MaterialComboBox ui:field="comboAgendas" width="100%" placeholder="Widgets">
             </combobox:MaterialComboBox>
             <m:MaterialButton ui:field="btnSelect" text="Select Agenda" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED" />
             <m:MaterialButton ui:field="btnEdit" text="Edit Agenda" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED" />
             <m:MaterialButton ui:field="btnDelete" text="Delete Agenda" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED" />
-            <ma:window.MaterialWindow ui:field="editWindow" backgroundColor="WHITE" toolbarColor="BLUE" width="70%" title="Edit Agenda">
-                <m:MaterialPanel padding="32" textAlign="CENTER" height="300px">
-                    <m:MaterialLabel text="TESTE AGENDA"/>
-                </m:MaterialPanel>       
-            </ma:window.MaterialWindow>       
+            <m:MaterialPanel ui:field="materialPlanEmptyState">
+                <ma:emptystate.MaterialEmptyState ui:field="emptyState" height="50vh" iconType="EVENT" iconColor="BLUE" title="No Events" description="This calendar has no events" textColor="BLUE" backgroundColor="WHITE"/>
+            </m:MaterialPanel>      
         </m:MaterialRow>   
        
     </g:HTMLPanel>

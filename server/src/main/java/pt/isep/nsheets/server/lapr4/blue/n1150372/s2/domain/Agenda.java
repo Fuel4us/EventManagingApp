@@ -1,13 +1,14 @@
 package pt.isep.nsheets.server.lapr4.blue.n1150372.s2.domain;
 
-import com.google.gwt.dev.util.collect.HashSet;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.domain.User;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1161140.calendar.domain.CalendarEvent;
+import pt.isep.nsheets.shared.services.AgendaDTO;
+import pt.isep.nsheets.shared.services.CalendarEventDTO;
 
 /**
  *
@@ -21,61 +22,32 @@ public class Agenda {
 
     private String name;
 
-    private String descrição;
+    private String description;
 
-    private User user;
-
+//    private User user;
     @ManyToOne
-    private Set<CalendarEvent> listEvents = new HashSet<>();
+    private Set<CalendarEvent> listEvents;
 
-    public Agenda(String name, String descrição, User user) {
+    public Agenda(String name, String descrição) {
         this.name = name;
-        this.descrição = descrição;
-        this.user = user;
+        this.description = descrição;
+//        this.user = user;
+        this.listEvents = new HashSet<>();
     }
 
     public Agenda() {
+        this.listEvents = new HashSet<>();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getDescrição() {
-        return descrição;
-    }
-
-    public Set<CalendarEvent> getListEvents() {
-        return listEvents;
-    }
-
-    public Long getPk() {
-        return pk;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setName(String name) {
+    private Agenda(String name, String description, HashSet<CalendarEvent> listEvents) {
         this.name = name;
-    }
-
-    public void setDescrição(String descrição) {
-        this.descrição = descrição;
-    }
-
-    public void setListEvents(Set<CalendarEvent> listEvents) {
+        this.description = description;
+//        this.user = user;
         this.listEvents = listEvents;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    @Override
-    public String toString() {
-        return "Agenda{" + "name=" + name + ", descri\u00e7\u00e3o=" + descrição + ", user=" + user + ", listEvents=" + listEvents + '}';
+    public Long id() {
+        return pk;
     }
 
     @Override
@@ -104,7 +76,36 @@ public class Agenda {
         if (!Objects.equals(this.pk, other.pk)) {
             return false;
         }
-        return Objects.equals(this.user, other.user);
+        return true;
+    }
+
+    public AgendaDTO toDTO() {
+        HashSet<CalendarEventDTO> listEventsDTO = getListEventsToDTO();
+        return new AgendaDTO(this.name, this.description, listEventsDTO);
+    }
+
+    public static Agenda fromDTO(AgendaDTO dto) {
+        HashSet<CalendarEvent> listEvents = getListEventsFromDTO(dto.getListEvents());
+        return new Agenda(dto.getName(), dto.getDescription(), listEvents);
+    }
+
+    private HashSet<CalendarEventDTO> getListEventsToDTO() {
+        HashSet<CalendarEventDTO> listEventsDTO = new HashSet<>();
+
+        listEvents.forEach((calendarEvent) -> {
+            listEventsDTO.add(calendarEvent.toDTO());
+        });
+        return listEventsDTO;
+    }
+
+    private static HashSet<CalendarEvent> getListEventsFromDTO(Set<CalendarEventDTO> ceDTO) {
+        HashSet<CalendarEvent> listEvents = new HashSet<>();
+        CalendarEvent ce;
+        for (CalendarEventDTO calendarEventDTO : ceDTO) {
+            ce = CalendarEvent.fromDTO(calendarEventDTO);
+            listEvents.add(ce);
+        }
+        return listEvents;
     }
 
 }
