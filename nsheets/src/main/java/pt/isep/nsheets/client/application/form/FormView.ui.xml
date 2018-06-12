@@ -46,7 +46,10 @@ Uncomment this for XHTML entities
                     </m:MaterialColumn>
                 </m:MaterialRow>
                 <m:MaterialPanel m:id="addRow"  padding="32"  height="300px" textAlign="CENTER" overflow="AUTO">
-                    
+                    <m:MaterialRow marginTop="20">
+                        <m:MaterialTextBox ui:field="nameTextBox" placeholder="Enter form name here" label="Enter form name here" title="Enter form name here" active="true" grid="s11"/>
+                        <m:MaterialButton ui:field="checkBtn" waves="GREEN" backgroundColor="WHITE" type="FLOATING" iconType="CHECK" size="LARGE" />
+                    </m:MaterialRow>
                     <!-- ADD ROW CODE -->  
                     <m:MaterialRow>
                         <m:MaterialTextBox label="Choose the widgets to add on the form." enabled="false"/>
