@@ -53,4 +53,8 @@ public class Conditional implements Serializable {
     public static Conditional fromDTO(ConditionalDTO dto){
         return new Conditional(CellImpl.fromDTO(dto.cell), dto.configuration, dto.condOperator, dto.condValue);
     }
+    
+    public Long getId() {
+        return this.pk;
+    }
 }

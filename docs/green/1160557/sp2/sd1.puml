@@ -1,0 +1,44 @@
+@startuml design1
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+boundary WorkbookView
+boundary WorkbookPresenter
+
+box "NSheets Client"
+participant WorkbookView
+participant WorkbookPresenter
+end box
+
+box "NSheets Server"
+participant ConditionalServiceImpl
+participant ConditionalCellFormattingController
+participant ConditionalRepository
+end box
+
+box "Database"
+participant Database
+end box
+
+User -> WorkbookView : onReveal() / navigate to page
+User -> WorkbookView : click on conditional button
+
+WorkbookView -> WorkbookPresenter : conditionalFormattingAction()
+loop allSelectedCells
+WorkbookPresenter -> WorkbookPresenter : applyConditionToCell()
+end
+
+WorkbookPresenter -> ConditionalServiceImpl : saveRangeConditional()
+ConditionalServiceImpl -> ConditionalCellFormattingController : addRangeConditional()
+ConditionalCellFormattingController -> ConditionalRepository : save
+loop Conditional
+ConditionalRepository -> Database : save
+end
+
+
+ConditionalServiceImpl -> WorkbookPresenter : onSuccess()
+@enduml

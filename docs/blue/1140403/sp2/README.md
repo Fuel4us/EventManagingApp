@@ -189,31 +189,6 @@ Since the service is a servlet it must be declared in the **web.xml** file of th
 	</servlet-mapping> 
 	
 
-## 3.4 Analysis Diagrams
-
-The main idea for the "workflow" of this feature increment.
-
-**Use Cases**
-
-
-
-- **Use Cases**. Since these use cases have a one-to-one correspondence with the User Stories we do not add here more detailed use case descriptions. We find that these use cases are very simple and may eventually add more specification at a later stage if necessary.
-
-**Domain Model (for this feature increment)**
-
-
-
-
-- **Domain Model**. Since we found no specific requirements for the structure of Workbook Descriptions we follow the Structure of the existing DTO (WorkbookDescriptionDTO).
-
-**System Sequence Diagrams**
-
-**For US1**
-
-
-
-**For US2**
-
 
 
 # 4. Design
@@ -230,95 +205,63 @@ Regarding tests we try to follow an approach inspired by test driven development
 
 **Domain classes**
 
-For the Domain classes we will have a class that represents the entity **WorkbookDescription**. This entity will have attributes that, for the moment, will be based on the class **WorkbookDescriptionDTO**:
-	
-	- name (string)
-	- description (string) 
+For the Domain classes we will have a class that represents the entity **ListNotes**. This entity will have attributes that, for the moment, will be based on the class **ListNotesDTO**:
 
-**Test:** We should ensure that a WorkbookDescription can be created when all the attributes are set.  
+	- titleNote (string)
+	- textNote (string)
+        - dateNote (Date) 
+
+**Test:** We should ensure that a ListNotes can be created when all the attributes are set.  
 
 	@Test(expected = IllegalArgumentException.class)
 		public void ensureNullIsNotAllowed() {
 		System.out.println("ensureNullIsNotAllowed");
-		WorkbookDescription instance = new WorkbookDescription(null, null);
+		ListNotes instance = new ListNotes(null, null);
 	}
 
 **Services/Controllers**
 
-For the services the application already has a service specified in the interface **WorkbooksService**:
+For the services the application already has a service specified in the interface **ListNotesService**:
 
-	@RemoteServiceRelativePath("workbooksService")
-	public interface WorkbooksService extends RemoteService {
-		ArrayList<WorkbookDescriptionDTO> getWorkbooks();
+	@RemoteServiceRelativePath("listNotesService")
+	public interface ListNotesService extends RemoteService {
+		ArrayList<ListNotesDTO> getListNotes();
 	}
 	
-This method seems to be sufficient for supporting US1 but not US2.
 
-For US2 we need a method that can be used to create a new WorkbookDescription given a WorkbookDescriptionDTO.
+For US2 we need a method that can be used to create a new ListNotes given a NoteDTO.
 
 The proposal is:
 
-	@RemoteServiceRelativePath("workbooksService")
-	public interface WorkbooksService extends RemoteService {
-		ArrayList<WorkbookDescriptionDTO> getWorkbooks();
-		WorkbookDescriptionDTO addWorkbookDescription(WorkbookDescriptionDTO wdDto) throws DataException;
+	@RemoteServiceRelativePath("listNotesService")
+	public interface ListNotesService extends RemoteService {
+		ArrayList<ListNotesDTO> getListNotes();
+		ListNotesDTO addListNotes(ListNotesDTO listNotesDto) throws DataException;
 	}
-		
+
 Tests:  
-- The tests on the controllers require the presence of a database.  
-- We will use the database in memory (H2).  
-- We will have a *controller* from adding new WorkbookDescriptions. This controller will be invoked by the GWT RPC service.
-- We will have a *controller* from listing WorkbookDescriptions. This controller will be invoked by the GWT RPC service.
+- The tests on the controllers require the presence of a database.
+- We will use the database in memory (H2).
+- We will have a *controller* from adding new ListNotes. This controller will be invoked by the GWT RPC service.
+- We will have a *controller* from listing ListNotes. This controller will be invoked by the GWT RPC service.
 
-Controller **AddWorkbookDescriptionController**
+Controller **AddListNotesController**
 
-**Test:** Verify the normal creation of an WorkbookDescription.  
+**Test:** Verify the normal creation of an ListNotes.  
 
 	@Test
 	public void testNormalBehaviour() throws Exception {
 		System.out.println("testNormalBehaviour");
-		final String name = "Workbook1";
-		final String description = "Description for Workbook1";
-		final WorkbookDescription expected = new WorkbookDescription(name, description);
-		AddWorkbookDescriptionController ctrl = new AddWorkbookDescriptionController();
-		WorkbookDescription result = ctrl.addWorkbookDescription(expected.toDTO());
-		assertTrue("the added WorkbookDescription does not have the same data as input", expected.sameAs(result));
+		final String titleNote = "Title of ListNote";
+		final String textNote = "Text for ListNote";
+		final ListNotes expected = new ListNotes(titleNote, textNote);
+		AddListNotesController ctrl = new AddListNotesController();
+		ListNotes result = ctrl.addListNotes(expected.toDTO());
+		assertTrue("the added ListNotes does not have the same data as input", expected.sameAs(result));
 	}
 
-Controller **ListWorkbookDescriptionController**
 
-Note: We will be using the annotation @FixMethodOrder(MethodSorters.NAME_ASCENDING) to ensure the test methods are executed in order. This is useful since the memory database will have state changing between tests.
- 
-**Test:** At the beginning of the tests the memory database should be empty, so listWorkbookDiscriptions should return an empty set.
 
-	   @Test 
-	   public void testAensureGetWorkbooksEmpty() {
-		   System.out.println("testAensureGetWorkbooksEmpty");
-		   ListWorkbookDescriptionController ctrl=new ListWorkbookDescriptionController();
-		   Iterable<WorkbookDescription> wbs=ctrl.listWorkbookDescriptions();
-		   assertTrue("the list of WorkbookDescriptions is not empty", !wbs.iterator().hasNext());
-	   } 
- 
-**Test:** If a WorkbookDescription is created it should be present in a following invocation of getWorkbooks().
-
-		@Test
-		public void testBtestDatabaseInsertion() throws Exception {
-			System.out.println("testBtestDatabaseInsertion");
-			final String name = "Workbook1";
-			final String description = "Description for Workbook1";
-			final WorkbookDescription expected = new WorkbookDescription(name, description);
-			AddWorkbookDescriptionController ctrlAdd = new AddWorkbookDescriptionController();
-			WorkbookDescription result = ctrlAdd.addWorkbookDescription(expected.toDTO());
-			ListWorkbookDescriptionController ctrlList=new ListWorkbookDescriptionController();
-			Iterable<WorkbookDescription> wbs=ctrlList.listWorkbookDescriptions();
-			assertTrue("the added WorkbookDescription is not in the database", wbs.iterator().hasNext());
-		}
-
-**Test Coverage**  
-- The actual coverage for domain classes: 61%
-- The actual coverage for application(controller) classes: 100%
- 
-- TODO: Add more tests to increase the coverage of the domain class. 
 
 ## 4.2. Requirements Realization
 
@@ -326,14 +269,18 @@ Note: We will be using the annotation @FixMethodOrder(MethodSorters.NAME_ASCENDI
 
 Following the guidelines for JPA from EAPLI we envision a scenario like the following for realizing the use cases for this feature increment.
 
-**For US1**
+**SD**
+![SD](SD ListNotes.png)
 
-
-
-
-
-**For US2**
-
+Notes:
+- It is intended that a user can have one or more ListNotes
+- For  the modal has a MaterialTextBox for the Title of the ListNotes and a MaterialTextArea for the Text of the ListNotes, for the porpuse of clarity in the UI.
+- For clarity reasons details such as the PersistenceContext or the RepositoryFactory are not depicted in this diagram.   
+- **ListNotesServices** realizes the GWT RPC mechanism;
+- **AddListNotesController** is one *use case controller*;   
+- **ListListNotesController** is one *use case controller*;
+- **AddListNotesServices** is to add a ListNotes to the noteRepository;
+- **ListListNotesServices** is to group together all the services related to ListNotes.
 
 
 ## 4.3. Classes
@@ -344,74 +291,60 @@ Following the guidelines for JPA from EAPLI we envision a scenario like the foll
 
 *Present and explain how you applied design patterns and best practices.*
 
-By memory we apply/use:  
-- Singleton  
-- Repository  
-- DTO  
-- MVP  
+By memory we apply/use:
+- Singleton, across multiple classes
+- Repository, in the package Server
+- DTO, in the package Shared
+- MVP, in the package NSheets
+- GRASP, GoF, SOLID and DDD, where shown in some classes and relations bettween classes.
+	For instance, we have controller pattern in controller classes, pure fabrication in the factory's done by Server,  high cohesion and low coupling especially important for Shared package and many moore.
 
-**TODO:** Exemplify the realization of these patterns using class diagrams and/or SD with roles marked as stereotypes. 
 
 # 5. Implementation
 
 *If required you should present in this section more details about the implementation. For instance, configuration files, grammar files, etc. You may also explain the organization of you code. You may reference important commits.*
 
-**For US1**
 
+The UI for this US was implemented according the Home and About implementations.
 
+	**UI: Button for adding a new Note**
 
-**For US2**
+	For this concern we decided to use a Material Widget called Material FAB (Floating Action Button). This is a kind of button that usually appears at the left bottom part of the screen and contains actions available for the elements of the page.  
 
+	We updated the NotesView.ui.xml accordingly and declare two elements with the tags *ui:field="openModalBtn"* and *ui:field="saveBtn"*. In the corresponding class View (i.e., ListNotesView) we bind that button to the corresponding widget class: 	
 
+		@UiField
+		MaterialButton openModalBtn, saveBtn;
 
-We updated the HomeView.ui.xml accordingly and declare the element with a tag *ui:field="newWorkbookButton"*. In the corresponding class View (i.e., HomeView) we bind that button to the corresponding widget class: 	
+	We must now add the code that invokes the server to add a new Note when the user clicks in the button. This is an event. To implement this behavior we could use GWT Events such as the SetPageTitleEvent already used in the application. These are special type of events that GWT manages and are available to all pages in the application. 
 
-	@UiField
-	MaterialButton newWorkbookButton;
+	We chose to provide our click event globally but to simple use the click event handler of the button and connect it to a method in the ListNotesPresenter.
 
-We must now add the code that invokes the server to add a new workbook description when the user clicks in the button. This is an event. To implement this behavior we could use GWT Events such as the SetPageTitleEvent already used in the application. These are special type of events that GWT manages and are available to all pages in the application. 
+	Since Presenters should only depend on a View interface we added a new method to the ListNotesPresenter.MyView:
 
-We chose to provide our click event globally but to simple use the click event handler of the button and connect it to a method in the HomePresenter.
+		interface MyView extends View {
+			void addClickHandlerOpenModal(ClickHandler ch);
+			void buttonClickHandlerSaveNote(ClickHandler ch);
+			...
+		}
 
-Since Presenters should only depend on a View interface we added a new method to the HomePresenter.MyView:
+	Then, we implemented both *addClickHandler* in the ListNotesView class and call this method in the constructor of the ListNotesPresenter. In the constructor our handler class the server method that adds a new ListNotes.
 
-	interface MyView extends View {
-		void setContents(ArrayList<WorkbookDescriptionDTO> contents);
-		void addClickHandler(ClickHandler ch);
-	}
+	**UI: Creating a Card for the ListNotes**
 
-Then, we implemented the *addClickHandler* in the HomeView class and call this method in the constructor of the HomePresenter. In the constructor our handler class the server method that adds a new workbook description.   
+	The method createCard(ListNotesDTO notes) on NotesView shows how a card it's implemented, with a title, a text (both adding to a MaterialCardContent) and 4 buttons, check, edit, remove and covert to ListNotes (with the help of a MaterialCardAction).
 
-**Code Organization**  
+	**UI: Buttons for editing a new ListNotes**
 
-We followed the recommended organization for packages:  
-- Code should be added (when possible) inside packages that identify the group, sprint, functional area and author;
-- For instance, we used **lapr4.white.s1.core.n4567890**
+	This is done with the edit and check buttons and it's similar to add button.
 
-The code for this sprint:  
-Project **server**    
-- pt.isep.nsheets.server.**lapr4.white.s1.core.n4567890**.workbooks.application: contains the controllers  
-- pt.isep.nsheets.server.**lapr4.white.s1.core.n4567890**.workbooks.domain: contains the domain classes  
-- pt.isep.nsheets.server.**lapr4.white.s1.core.n4567890**.workbooks.persistence: contains the persistence/JPA classes 
-- Updated the existing class: **pt.isep.nsheets.server.WorkbookServiceImpl**
+	In ListNotesView, the checkBtn it's created invivible for the user and when the user clicks the edit button, the check button shows, so that the user can edit the ListNotes.
 
-Project **shared**  
-- Added the class: **pt.isep.nsheets.shared.services.DataException**: This class is new and is used to return database exceptions from the server  
-- Updated the classes: **pt.isep.nsheets.shared.services.WorkbookService** and **pt.isep.nsheets.shared.services.WorkbookServiceAsync**  
+	**UI: Button for removing a new ListNotes**
 
-Project **NShests** 
-- Updated the classes: **pt.isep.nsheets.client.aaplication.home.HomeView** and **pt.isep.nsheets.client.aaplication.home.HomePresenter**  
-- Updated the file: **pt.isep.nsheets.client.aaplication.home.HomeView.ui.xml**  
+	This is done with the remove button and it's similar to add button.
 
+	In ListNotesView, the removeBtn have a addClickHandler (similar to all buttons) that when clicked the card of that ListNotes stays invisible.
 
-# 6. Integration/Demonstration
-
-*In this section document your contribution and efforts to the integration of your work with the work of the other elements of the team and also your work regarding the demonstration (i.e., tests, updating of scripts, etc.)*
-
-# 7. Final Remarks 
-
-*In this section present your views regarding alternatives, extra work and future work on the issue.*
-
-Some Questions/Issues identified during the work in this feature increment:
 
 
