@@ -48,6 +48,12 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
         String textPrivateChat2();
 
         String textPrivateChat3();
+
+        void buttonClickHandlerUploadImage1(ClickHandler ch);
+
+        void buttonClickHandlerUploadImage2(ClickHandler ch);
+
+        void buttonClickHandlerUploadImage3(ClickHandler ch);
     }
 
     @NameToken(NameTokens.chat)
@@ -60,6 +66,8 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
     @Inject
     ChatPresenter(EventBus eventBus, MyView view, MyProxy proxy, CurrentUser currentUser) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
+        
+        refreshMessages();
 
         this.user = currentUser;
         this.view = view;
@@ -124,6 +132,68 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
             messagesSvc.addMessage(mDTO, callback);
         });
         
+//        //####################################IMAGE UPLOAD####################################
+//
+//        this.view.buttonClickHandlerUploadImage1(e -> {
+//            MessagesServiceAsync messagesSvc = GWT.create(MessagesService.class);
+//
+//            // Set up the callback object.
+//            AsyncCallback<MessagesDTO> callback = new AsyncCallback<MessagesDTO>() {
+//                @Override
+//                public void onFailure(Throwable caught) {
+//                    MaterialToast.fireToast("Error! " + caught.getMessage());
+//                }
+//
+//                @Override
+//                public void onSuccess(MessagesDTO result) {
+//                    refreshMessages();
+//                }
+//
+//            };
+//            MessagesDTO mDTO = new MessagesDTO(view.textPublicChat(), new Date(), this.user.getUser().getNickname(), CHAT_INDEX_PUBLIC);
+//            messagesSvc.addMessage(mDTO, callback);
+//        });
+//        
+//        this.view.buttonClickHandlerUploadImage2(e -> {
+//            MessagesServiceAsync messagesSvc = GWT.create(MessagesService.class);
+//
+//            // Set up the callback object.
+//            AsyncCallback<MessagesDTO> callback = new AsyncCallback<MessagesDTO>() {
+//                @Override
+//                public void onFailure(Throwable caught) {
+//                    MaterialToast.fireToast("Error! " + caught.getMessage());
+//                }
+//
+//                @Override
+//                public void onSuccess(MessagesDTO result) {
+//                    refreshMessages();
+//                }
+//
+//            };
+//            MessagesDTO mDTO = new MessagesDTO(view.textPrivateChat2(), new Date(), this.user.getUser().getNickname(), CHAT_INDEX_PRIVATE_2);
+//            messagesSvc.addMessage(mDTO, callback);
+//        });
+//        
+//        this.view.buttonClickHandlerUploadImage3(e -> {
+//            MessagesServiceAsync messagesSvc = GWT.create(MessagesService.class);
+//
+//            // Set up the callback object.
+//            AsyncCallback<MessagesDTO> callback = new AsyncCallback<MessagesDTO>() {
+//                @Override
+//                public void onFailure(Throwable caught) {
+//                    MaterialToast.fireToast("Error! " + caught.getMessage());
+//                }
+//
+//                @Override
+//                public void onSuccess(MessagesDTO result) {
+//                    refreshMessages();
+//                }
+//
+//            };
+//            MessagesDTO mDTO = new MessagesDTO(view.textPrivateChat3(), new Date(), this.user.getUser().getNickname(), CHAT_INDEX_PRIVATE_3);
+//            messagesSvc.addMessage(mDTO, callback);
+//        });
+
     }
 
     private void refreshMessages() {
@@ -133,10 +203,12 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 
         // Set up the callback object.
         AsyncCallback<ArrayList<MessagesDTO>> callback = new AsyncCallback<ArrayList<MessagesDTO>>() {
+            @Override
             public void onFailure(Throwable caught) {
                 MaterialToast.fireToast("Error! " + caught.getMessage());
             }
 
+            @Override
             public void onSuccess(ArrayList<MessagesDTO> result) {
                 view.setContents(result, user.getUser());
             }

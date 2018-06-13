@@ -48,7 +48,12 @@
             <artifactId>apache-el</artifactId>
             <version>8.0.9.M3</version>
         </dependency>
-
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+            <version>1.5.5</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
 	<name>NSheets Server</name>

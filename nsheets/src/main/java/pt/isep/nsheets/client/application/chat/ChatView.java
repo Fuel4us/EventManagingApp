@@ -17,6 +17,9 @@ import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.addins.client.bubble.MaterialBubble;
 import gwt.material.design.addins.client.combobox.MaterialComboBox;
 import gwt.material.design.addins.client.emptystate.MaterialEmptyState;
+import gwt.material.design.addins.client.fileuploader.MaterialFileUploader;
+import gwt.material.design.addins.client.fileuploader.base.UploadFile;
+import gwt.material.design.addins.client.fileuploader.events.SuccessEvent;
 
 import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.constants.ImageType;
@@ -46,11 +49,10 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
     private boolean FLAG1 = true, FLAG2 = true, FLAG3 = true,
             FLAG_S2 = true, FLAG_S3 = true, HAS_ACCESS_2 = true, HAS_ACCESS_3 = true,
             SHOW_ONLY_ONCE_1 = true, SHOW_ONLY_ONCE_2 = true, SHOW_ONLY_ONCE_3 = true;
-    private List<String> selectedEmailUsers2 = new ArrayList<>(), 
+    private List<String> selectedEmailUsers2 = new ArrayList<>(),
             selectedEmailUsers3 = new ArrayList<>();
 //    private PrivateChatDTO privateChatDTO_2, privateChatDTO_3;
-    
-    
+
     interface Binder extends UiBinder<Widget, ChatView> {
     }
 
@@ -65,26 +67,27 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
 
     @UiField
     MaterialEmptyState emptyState1, emptyState2, emptyState3;
-    
+
     @UiField
     MaterialButton searchBtn2, searchBtn3, sendButton1, sendButton2, sendButton3;
 
     @UiField
+    MaterialFileUploader uploadBtn1, uploadBtn2, uploadBtn3;
+
+    @UiField
     MaterialCard messageCard1, messageCard2, messageCard3;
-    
+
     @UiField
     MaterialTextBox txtMessage1, txtMessage2, txtMessage3;
-    
-    
+
     @UiHandler("searchBtn2")
     public void onTagMultiGetValue2(ClickEvent e) {
-        if(FLAG_S2){
-            if(comboBox2.getSelectedValues().isEmpty()){
+        if (FLAG_S2) {
+            if (comboBox2.getSelectedValues().isEmpty()) {
                 MaterialToast.fireToast("Users not selected!");
-            }
-            else{
+            } else {
                 comboBox2.setEnabled(false);
-                for (String value : ((List<String>)comboBox2.getSelectedValues())) {
+                for (String value : ((List<String>) comboBox2.getSelectedValues())) {
 //                    privateChatDTO_2.addEmail(value);
                     selectedEmailUsers2.add(value);
                 }
@@ -98,11 +101,10 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
 
     @UiHandler("searchBtn3")
     public void onTagMultiGetValue3(ClickEvent e) {
-        if(FLAG_S3){
-            if(comboBox3.getSelectedValues().isEmpty()){
+        if (FLAG_S3) {
+            if (comboBox3.getSelectedValues().isEmpty()) {
                 MaterialToast.fireToast("Users not selected!");
-            }
-            else{
+            } else {
                 comboBox3.setEnabled(false);
                 for (String value : ((List<String>) comboBox3.getSelectedValues())) {
 //                    privateChatDTO_3.addEmail(value);
@@ -115,10 +117,37 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
             }
         }
     }
-    
+
     @Inject
     ChatView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
+
+        uploadBtn1.setUrl(GWT.getModuleBaseURL() + "uploadServlet");
+
+        uploadBtn1.addSuccessHandler(new SuccessEvent.SuccessHandler<UploadFile>() {
+            @Override
+            public void onSuccess(SuccessEvent<UploadFile> event) {
+                txtMessage1.setText("/image/" + GWT.getHostPageBaseURL() + "uploadedFiles/" + event.getTarget().getName());
+            }
+        });
+
+        uploadBtn2.setUrl(GWT.getModuleBaseURL() + "uploadServlet");
+
+        uploadBtn2.addSuccessHandler(new SuccessEvent.SuccessHandler<UploadFile>() {
+            @Override
+            public void onSuccess(SuccessEvent<UploadFile> event) {
+                txtMessage2.setText("/image/" + GWT.getHostPageBaseURL() + "uploadedFiles/" + event.getTarget().getName());
+            }
+        });
+
+        uploadBtn3.setUrl(GWT.getModuleBaseURL() + "uploadServlet");
+
+        uploadBtn3.addSuccessHandler(new SuccessEvent.SuccessHandler<UploadFile>() {
+            @Override
+            public void onSuccess(SuccessEvent<UploadFile> event) {
+                txtMessage3.setText("/image/" + GWT.getHostPageBaseURL() + "uploadedFiles/" + event.getTarget().getName());
+            }
+        });
 
 //        buildDynamicTab();
     }
@@ -129,22 +158,18 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
 //        dynamicTabs.add(newTabItem(index));
 //        dynamicTabs.setTabIndex(index - 1);
 //    }
-    
     @Override
     public void setContents(ArrayList<MessagesDTO> contents, UserDTO userDto) {
 
 //        dynamicTabs.reload();
-        
         messageCard1.clear();
         messageCard2.clear();
         messageCard3.clear();
-        
 
-        if(SHOW_ONLY_ONCE_1){
-            
+        if (SHOW_ONLY_ONCE_1) {
+
 //            addPrivateChat_2();
 //            addPrivateChat_3();
-            
             UsersServiceAsync usersSvc = GWT.create(UsersService.class);
             // Set up the callback object.
             AsyncCallback<ArrayList<UserDTO>> callback = new AsyncCallback<ArrayList<UserDTO>>() {
@@ -155,10 +180,11 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
 
                 @Override
                 public void onSuccess(ArrayList<UserDTO> result) {
-                    if(result.isEmpty())
+                    if (result.isEmpty()) {
                         MaterialToast.fireToast("The Database don't have users!");
+                    }
 
-                    for(UserDTO udto : result){
+                    for (UserDTO udto : result) {
                         comboBox2.addItem(udto.getEmail());
                         comboBox3.addItem(udto.getEmail());
                     }
@@ -168,80 +194,74 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
             };
 
             usersSvc.getUsers(callback);
-            
-            
+
             SHOW_ONLY_ONCE_1 = false;
         }
-        
-        
-        
+
         boolean isOnPrivateList2 = false, isOnPrivateList3 = false;
-        
+
 //        if(!privateChatDTO_2.getListEmails().isEmpty()){
 //            for(String email : privateChatDTO_2.getListEmails()){
 //                if(email.equals(userDto.getEmail()))
 //                    isOnPrivateList2 = true;
 //            }
 //        }
-        
-        if(!selectedEmailUsers2.isEmpty()){
-            for(String email : selectedEmailUsers2){
-                if(email.equals(userDto.getEmail()))
+        if (!selectedEmailUsers2.isEmpty()) {
+            for (String email : selectedEmailUsers2) {
+                if (email.equals(userDto.getEmail())) {
                     isOnPrivateList2 = true;
+                }
             }
         }
-        
+
 //        if(!privateChatDTO_3.getListEmails().isEmpty()){
 //            for(String email : privateChatDTO_3.getListEmails()){
 //                if(email.equals(userDto.getEmail()))
 //                    isOnPrivateList3 = true;
 //            }
 //        }
-        
-        if(!selectedEmailUsers3.isEmpty()){
-            for(String email : selectedEmailUsers3){
-                if(email.equals(userDto.getEmail()))
+        if (!selectedEmailUsers3.isEmpty()) {
+            for (String email : selectedEmailUsers3) {
+                if (email.equals(userDto.getEmail())) {
                     isOnPrivateList3 = true;
+                }
             }
         }
-        
+
         for (MessagesDTO m : contents) {
 
             if (m.getChatIndex() == CHAT_INDEX_PUBLIC) {
-                if(FLAG1){
+                if (FLAG1) {
                     emptyState1.setVisible(false);
                     FLAG1 = false;
                 }
                 createBubble(m, userDto, CHAT_INDEX_PUBLIC);
             }
 
-            if ( (m.getChatIndex() == CHAT_INDEX_PRIVATE_2) && (isOnPrivateList2 || HAS_ACCESS_2) ) {
-                if(FLAG2){
+            if ((m.getChatIndex() == CHAT_INDEX_PRIVATE_2) && (isOnPrivateList2 || HAS_ACCESS_2)) {
+                if (FLAG2) {
                     emptyState2.setVisible(false);
                     FLAG2 = false;
                 }
 
                 createBubble(m, userDto, CHAT_INDEX_PRIVATE_2);
-            }
-            else if((m.getChatIndex() == CHAT_INDEX_PRIVATE_2) && (!isOnPrivateList2 || HAS_ACCESS_2)){
-                if(SHOW_ONLY_ONCE_2){
+            } else if ((m.getChatIndex() == CHAT_INDEX_PRIVATE_2) && (!isOnPrivateList2 || HAS_ACCESS_2)) {
+                if (SHOW_ONLY_ONCE_2) {
                     MaterialToast.fireToast("You don't have access to this chat");
                     emptyState2.setVisible(true);
                     SHOW_ONLY_ONCE_2 = false;
                 }
             }
-                
 
-            if ( (m.getChatIndex() == CHAT_INDEX_PRIVATE_3) && (isOnPrivateList3 || HAS_ACCESS_3) ) {
-                if(FLAG3){
+            if ((m.getChatIndex() == CHAT_INDEX_PRIVATE_3) && (isOnPrivateList3 || HAS_ACCESS_3)) {
+                if (FLAG3) {
                     emptyState3.setVisible(false);
                     FLAG3 = false;
                 }
-                
+
                 createBubble(m, userDto, CHAT_INDEX_PRIVATE_3);
-            }
-            else if((m.getChatIndex() == CHAT_INDEX_PRIVATE_3) && (!isOnPrivateList3 || HAS_ACCESS_3)){
-                if(SHOW_ONLY_ONCE_3){
+            } else if ((m.getChatIndex() == CHAT_INDEX_PRIVATE_3) && (!isOnPrivateList3 || HAS_ACCESS_3)) {
+                if (SHOW_ONLY_ONCE_3) {
                     MaterialToast.fireToast("You don't have access to this chat");
                     emptyState3.setVisible(true);
                     SHOW_ONLY_ONCE_3 = false;
@@ -249,11 +269,9 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
             }
 
         }
-        
+
 //        refreshPrivateChat_2();
 //        refreshPrivateChat_3();
-        
-        
     }
 
 //    private void buildDynamicTab() {
@@ -275,9 +293,8 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
 //        dynamicTabsRow.add(content);
 //        return item;
 //    }
-    
     private void createBubble(MessagesDTO m, UserDTO userDto, int index_chat) {
-        
+
         MaterialImage avatar = new MaterialImage();
         avatar.setUrl(userDto.getPictureName());
         avatar.setType(ImageType.CIRCLE);
@@ -285,20 +302,31 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
         avatar.setWidth("40px");
         avatar.setHeight("40px");
         avatar.setShadow(1);
-        
+
         String messageuser = m.getUser();
 
         MaterialRow row = new MaterialRow();
         row.setMarginBottom(0);
-        
+
         MaterialBubble bubble = new MaterialBubble(Color.WHITE, Color.GREY);
-        
+
         MaterialLabel userLabel = new MaterialLabel();
         userLabel.setText(messageuser);
 
+        //in case of message
         MaterialLabel textLabel = new MaterialLabel();
-        textLabel.setText(m.getText());
-        textLabel.setFontSize("1.6em");
+        //in case of image
+        MaterialImage image = new MaterialImage();
+
+        if (m.getText().startsWith("/image/")) {
+            image.setUrl(m.getText().substring(7));
+            image.setType(ImageType.DEFAULT);
+            image.setMarginTop(8);
+            image.setShadow(1);
+        } else {
+            textLabel.setText(m.getText());
+            textLabel.setFontSize("1.6em");
+        }
 
         MaterialLabel dateLabel = new MaterialLabel();
         dateLabel.setText(m.getDate().toString());
@@ -312,34 +340,33 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
             bubble.setBackgroundColor(Color.WHITE);
             bubble.setPosition(Position.LEFT);
             bubble.setFloat(Style.Float.LEFT);
-        }
-        else{
+        } else {
             avatar.setFloat(Style.Float.RIGHT);
             avatar.setMarginRight(12);
             bubble.setPosition(Position.RIGHT);
             bubble.setFloat(Style.Float.RIGHT);
         }
 
-        
         bubble.add(userLabel);
         bubble.add(textLabel);
         bubble.add(dateLabel);
-        
+        bubble.add(image);
+
         row.add(avatar);
         row.add(bubble);
-        
-        if(index_chat == CHAT_INDEX_PUBLIC){
+
+        if (index_chat == CHAT_INDEX_PUBLIC) {
             messageCard1.add(row);
         }
-        
-        if(index_chat == CHAT_INDEX_PRIVATE_2){
+
+        if (index_chat == CHAT_INDEX_PRIVATE_2) {
             messageCard2.add(row);
         }
-        
-        if(index_chat == CHAT_INDEX_PRIVATE_3){
+
+        if (index_chat == CHAT_INDEX_PRIVATE_3) {
             messageCard3.add(row);
         }
-        
+
     }
 
 //    private void addPrivateChat_2(){
@@ -424,8 +451,6 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
 //        privateChatsSvc.addPrivateChat(privateChatDTO_3, callback);
 //        
 //    }
-    
-    
     @Override
     public void buttonClickHandlerPublicChat(ClickHandler ch) {
         sendButton1.addClickHandler(ch);
@@ -439,6 +464,21 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
     @Override
     public void buttonClickHandlerPrivateChat3(ClickHandler ch) {
         sendButton3.addClickHandler(ch);
+    }
+
+    @Override
+    public void buttonClickHandlerUploadImage1(ClickHandler ch) {
+        uploadBtn1.addClickHandler(ch);
+    }
+
+    @Override
+    public void buttonClickHandlerUploadImage2(ClickHandler ch) {
+        uploadBtn2.addClickHandler(ch);
+    }
+
+    @Override
+    public void buttonClickHandlerUploadImage3(ClickHandler ch) {
+        uploadBtn3.addClickHandler(ch);
     }
 
     @Override

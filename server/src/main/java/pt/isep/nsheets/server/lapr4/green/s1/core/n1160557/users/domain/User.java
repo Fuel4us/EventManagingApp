@@ -80,6 +80,10 @@ public class User implements AggregateRoot<Long>, Serializable {
         return this.superUser;
     }
 
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
     public boolean verifyPassword(String password) {
         return this.password.equals(password);
     }
