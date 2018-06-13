@@ -8,4 +8,6 @@ public interface ContactsRepository extends Repository<Contact, Long> {
     public Iterable<Contact> findAllFromUser(String email);
 
     public Contact findContactFromDTO(String contactEmail, String contactOwnerEmail);
+    
+    public void removeContact(String contactEmail, String contactOwnerEmail);
 }
