@@ -70,6 +70,19 @@ public class VbBaseListener implements VbListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterEnd_method(@NotNull VbParser.End_methodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEnd_method(@NotNull VbParser.End_methodContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAtomExpr(@NotNull VbParser.AtomExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -103,6 +116,19 @@ public class VbBaseListener implements VbListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitType(@NotNull VbParser.TypeContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTypeOfFunction(@NotNull VbParser.TypeOfFunctionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTypeOfFunction(@NotNull VbParser.TypeOfFunctionContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -148,6 +174,19 @@ public class VbBaseListener implements VbListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFunction(@NotNull VbParser.FunctionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFunction(@NotNull VbParser.FunctionContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBlock(@NotNull VbParser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -155,6 +194,19 @@ public class VbBaseListener implements VbListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBlock(@NotNull VbParser.BlockContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterInit_method(@NotNull VbParser.Init_methodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInit_method(@NotNull VbParser.Init_methodContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -207,6 +259,19 @@ public class VbBaseListener implements VbListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAssignment(@NotNull VbParser.AssignmentContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNameOfMethod(@NotNull VbParser.NameOfMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNameOfMethod(@NotNull VbParser.NameOfMethodContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -298,6 +363,19 @@ public class VbBaseListener implements VbListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStat_block_while(@NotNull VbParser.Stat_block_whileContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterReturnMethod(@NotNull VbParser.ReturnMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReturnMethod(@NotNull VbParser.ReturnMethodContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
