@@ -52,7 +52,6 @@ public class FormulaCompiler {
     private void initCompilers() {
         compilers.add(new ExcelExpressionCompiler());
         compilers.add(new MonetaryExpressionCompiler());
-        compilers.add(new MacroExpressionCompiler());
     }
 
     /**
