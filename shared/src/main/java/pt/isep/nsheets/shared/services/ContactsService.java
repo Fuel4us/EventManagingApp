@@ -12,13 +12,13 @@ public interface ContactsService extends RemoteService {
 
     public Iterable<ContactDTO> allAvailableContacts(String email);
 
-    public void acceptInvitation(ContactDTO contact, UserDTO currentUser);
+    public void acceptInvitation(String currentUserEmail, String otherUserEmail);
 
-    public void denyInvitation(ContactDTO contact, UserDTO currentUser);
+    public void denyInvitation(String currentUserEmail, String otherUserEmail);
 
-    public void blockUser(UserDTO user);
+    public void blockUser(String currentUserEmail, String userToBlockEmail);
 
-    public void unblockUser(UserDTO user);
+    public void unblockUser(String currentUserEmail, String userToBlockEmail);
 
     public void sendInvitation(String emailReceiver, String emailSender);
 

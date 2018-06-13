@@ -11,21 +11,20 @@ import pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.persistence.C
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.domain.User;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.persistence.UserRepository;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
-import pt.isep.nsheets.shared.services.ContactDTO;
 import pt.isep.nsheets.shared.services.UserDTO;
 
 public class ContactsService {
 
     /**
      *
-     * @param currentUser
+     * @param currentUserEmail
      * @return
      */
     //Only for usage in other methods
-    public Iterable<Contact> allContactsFromUser(String email) {
+    public Iterable<Contact> allContactsFromUser(String currentUserEmail) {
 
         final ContactsRepository contactsRepository = PersistenceContext.repositories().contacts();
-        return contactsRepository.findAllFromUser(email);
+        return contactsRepository.findAllFromUser(currentUserEmail);
         //return contactsRepository.findAll();
     }
 
@@ -49,9 +48,9 @@ public class ContactsService {
         return list;
     }
 
-    public void acceptInvitation(ContactDTO contact, UserDTO currentUser) {
+    public void acceptInvitation(String currentUserEmail, String otherUserEmail) {
         final ContactsRepository contactsRepository = PersistenceContext.repositories().contacts();
-        Contact foundContact = contactsRepository.findContactFromDTO(contact);
+        Contact foundContact = contactsRepository.findContactFromDTO(otherUserEmail, currentUserEmail);
         foundContact.accept();
         try {
             contactsRepository.save(foundContact);
@@ -62,7 +61,7 @@ public class ContactsService {
         }
 
         //adds contact for the user who sent the invite
-        Contact newContact = new Contact(currentUser, contact.getContact(), false, true);
+        Contact newContact = new Contact(currentUserEmail, otherUserEmail, false, true);
         try {
             contactsRepository.save(newContact);
         } catch (DataConcurrencyException ex) {
@@ -72,24 +71,17 @@ public class ContactsService {
         }
     }
 
-    public void denyInvitation(ContactDTO contact, UserDTO currentUser) {
+    public void denyInvitation(String currentUserEmail, String otherUserEmail) {
         final ContactsRepository contactsRepository = PersistenceContext.repositories().contacts();
-        Contact foundContact = contactsRepository.findContactFromDTO(contact);
-        foundContact.deny();
-        try {
-            contactsRepository.save(foundContact);
-        } catch (DataConcurrencyException ex) {
-            Logger.getLogger(ContactsService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DataIntegrityViolationException ex) {
-            Logger.getLogger(ContactsService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        contactsRepository.removeContact(otherUserEmail, currentUserEmail);
     }
 
-    public void blockUser(UserDTO user) {
+    public void blockUser(String currentUser, String userToBlock) {
         final UserRepository userRepo = PersistenceContext.repositories().users();
 
-        User foundUser = userRepo.findByEmail(user.getEmail());
-        foundUser.getBlacklist().add(foundUser);
+        User foundUser = userRepo.findByEmail(currentUser);
+        foundUser.getBlacklist().add(userToBlock);
 
         try {
             userRepo.save(foundUser);
@@ -100,11 +92,11 @@ public class ContactsService {
         }
     }
 
-    public void unblockUser(UserDTO user) {
+    public void unblockUser(String currentUser, String userToUnlock) {
         final UserRepository userRepo = PersistenceContext.repositories().users();
 
-        User foundUser = userRepo.findByEmail(user.getEmail());
-        foundUser.getBlacklist().remove(foundUser);
+        User foundUser = userRepo.findByEmail(currentUser);
+        foundUser.getBlacklist().remove(userToUnlock);
 
         try {
             userRepo.save(foundUser);
@@ -126,13 +118,11 @@ public class ContactsService {
 
         final ContactsRepository contactsRepository = PersistenceContext.repositories().contacts();
         final UserRepository userRepo = PersistenceContext.repositories().users();
-        User receiver = userRepo.findByEmail(emailReceiver);
-        User sender = userRepo.findByEmail(emailSender);
 
-        if (sender.getBlacklist().contains(receiver)) {
+        if (userRepo.findByEmail(emailReceiver).getBlacklist().contains(emailSender)) {
             return;
         }
-        Contact contact = new Contact(sender.toDTO(), receiver.toDTO(), true, false);
+        Contact contact = new Contact(emailSender, emailReceiver, true, false);
         contactsRepository.save(contact);
     }
 

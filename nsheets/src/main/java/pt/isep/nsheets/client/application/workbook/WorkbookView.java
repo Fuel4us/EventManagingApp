@@ -308,21 +308,22 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         SearchAndReplaceController controller = new SearchAndReplaceController();
         controller.setSpreadsheet(this.customTable.getRow(0).getData().sheet);
         controller.searchAll(expression);
+        replaceButton.setEnabled(true);
+        replaceWindowFirstBox.setEnabled(true);
         searchAndReplaceWindow.open();
         Cell c = controller.getCurrent();
         if (c != null) {
-            replaceWindowResultBox.setText("Content found on cell " + c.getAddress().toString() + ": " + c.getContent() + "      how change will look: "
-                    + controller.replacePossibility(expression, c));
+            replaceWindowResultBox.setText("Content found on cell " + c.getAddress().toString() + ": " + c.getContent());
         } else {
             replaceWindowResultBox.setText("No matches found");
             replaceButton.setEnabled(false);
+            replaceWindowFirstBox.setEnabled(false);
         }
         findNextButton.addClickHandler(event -> {
 
             Cell cell = controller.getNext();
             if (cell != null) {
-                replaceWindowResultBox.setText("Content found on cell " + cell.getAddress().toString() + ": " + cell.getContent() + "      how change will look: "
-                        + controller.replacePossibility(expression, cell));
+                replaceWindowResultBox.setText("Content found on cell " + cell.getAddress().toString() + ": " + cell.getContent());
             } else {
                 replaceWindowResultBox.setText("There's no more matches for your expression");
             }
@@ -330,7 +331,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         replaceButton.addClickHandler(event -> {
             Cell cell = controller.getCurrent();
             try {
-                controller.replace(expression, cell);
+                String s = replaceWindowFirstBox.getText();
+                controller.replace(s, cell);
             } catch (FormulaCompilationException ex) {
                 Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
                 MaterialToast.fireToast("Error replacing formula");
@@ -342,7 +344,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         
         replaceAllButton.addClickHandler(event ->{
             try {
-                controller.replaceAll(expression);
+                String s = replaceWindowFirstBox.getText();
+                controller.replaceAll(s);
             } catch (FormulaCompilationException ex) {
                 Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
                 MaterialToast.fireToast("Error replacing formula");
@@ -704,7 +707,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
                 String result = "";
                 try {
-                    activeCell.setContent("!" + macroTextArea.getText());
+                    activeCell.setContentByMacro(macroTextArea.getText());
                     Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
                     if (extensionCond != null) {
 

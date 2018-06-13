@@ -6,7 +6,23 @@ hide footbox
 
 hide empty methods
 
-class Workbook << (Entity) >> {
+class Workbook <<(E,white)>> {
+    String title
+    String description
+    List<Spreadsheet> spreadsheets
 }
+
+class Spreadsheet <<(E,white)>> {
+    String title
+    List<Cell> cells
+}
+
+class Cell <<(E,white)>> {
+     Address address
+     String content
+}
+
+Workbook --> Spreadsheet
+Spreadsheet --> Cell
 
 @enduml

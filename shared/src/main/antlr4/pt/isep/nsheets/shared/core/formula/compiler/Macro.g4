@@ -5,8 +5,15 @@ grammar Macro;
 }
 
 expression
-	: EX comparison+ /* EOF */
+	: expression comparison
+	    | expression comment
+	    | comparison
+	    | comment
 	;
+
+comment
+    : COMMENT
+    ;
 
 comparison
 	: concatenation
@@ -32,15 +39,13 @@ concatenation
         | block
         ;
 
-
 atom
 	:	function_call
 	|	reference
-        |       assignment
+    |   assignment
 	|	literal
 	|	LPAR concatenation RPAR
-        |       globalreference
-        |       temporaryreference
+    |   temporaryreference
 	;
 
 function_call
@@ -51,13 +56,14 @@ function_call
 reference
 	:	CELL_REF
 		( ( COLON ) CELL_REF )?
+    |   NAMEGLOBAL
 	;
 
 literal
 	:	NUMBER
 	|	STRING
-        |       nameglobal
-        |       nameTemporary
+    |   nameTemporary
+    |   NAMEGLOBAL
 	;
 
 manyexpressions
@@ -88,11 +94,7 @@ nameTemporary
     :   UNDERSCORE ( LETTER )+
     ;
 
-globalreference
-    :	nameglobal ASSIGN concatenation
-    ;
-
-nameglobal
+NAMEGLOBAL
     :   ARROBA ( LETTER )+
     ;
 
@@ -116,8 +118,6 @@ FRACTIONALPART:  COMMA  DIGIT DIGIT
 
 DIGIT : '0'..'9' ;
 DIGITNOTZERO : '1'..'9' ;
-
-EX : '!' ;
 
 /* Comparison operators */
 EQ	: '=' ;
@@ -164,3 +164,5 @@ FOR : 'FOR{';
 
 /* White-space (ignored) */
 WS: ( ' ' | '\r' '\n' | '\n' | '\t' ) -> skip ;
+
+COMMENT: SEMI ~[\r\n]* ->skip ;

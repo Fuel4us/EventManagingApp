@@ -4,13 +4,14 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.formula.Expression;
+import pt.isep.nsheets.shared.core.formula.Formula;
 import pt.isep.nsheets.shared.core.formula.lang.Language;
 import pt.isep.nsheets.shared.core.formula.lang.LanguageManager;
 
 import java.util.Collections;
 import java.util.List;
 
-public class MacroExpressionCompiler implements ExpressionCompiler {
+public class MacroExpressionCompiler {
 
     private Language language = null;
 
@@ -21,13 +22,8 @@ public class MacroExpressionCompiler implements ExpressionCompiler {
         language = LanguageManager.getInstance().getLanguage("macro");
     }
 
-    @Override
-    public char getStarter() {
-        return '.';
-    }
 
-    @Override
-    public Expression compile(Cell cell, String source) throws FormulaCompilationException {
+    public Formula compile(Cell cell, String source) throws FormulaCompilationException {
         // Creates the lexer and parser
         ANTLRInputStream input = new ANTLRInputStream(source);
 
@@ -54,7 +50,7 @@ public class MacroExpressionCompiler implements ExpressionCompiler {
             throw new FormulaCompilationException(eval.getErrorsMessage());
         }
 
-        return result;
+        return new Formula(cell, result);
     }
 
     public static class MacroErrorListener extends BaseErrorListener {

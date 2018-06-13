@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import eapli.framework.domain.AggregateRoot;
 import java.util.Objects;
 import pt.isep.nsheets.shared.services.ContactDTO;
-import pt.isep.nsheets.shared.services.UserDTO;
 
 @Entity
 public class Contact implements AggregateRoot<Long>, Serializable {
@@ -18,8 +17,8 @@ public class Contact implements AggregateRoot<Long>, Serializable {
     @Id
     @GeneratedValue
     private Long id = null;
-    private UserDTO contact;
-    private UserDTO contactOwner;
+    private String contactEmail;
+    private String contactOwnerEmail;
     private boolean waitingAcceptance;
     private boolean accepted;
 
@@ -29,25 +28,25 @@ public class Contact implements AggregateRoot<Long>, Serializable {
      * @param contactOwner
      * @throws IllegalArgumentException
      */
-    public Contact(UserDTO contact, UserDTO contactOwner) throws IllegalArgumentException {
+    public Contact(String contact, String contactOwner) throws IllegalArgumentException {
         if (contact == null) {
             throw new IllegalArgumentException("Contact is Null");
         }
-        this.contact = contact;
+        this.contactEmail = contact;
 
-        this.contactOwner = contactOwner;
+        this.contactOwnerEmail = contactOwner;
         this.waitingAcceptance = true;
         this.accepted = false;
 
     }
 
-    public Contact(UserDTO contact, UserDTO contactOwner, boolean waitingAcception, boolean accepted) throws IllegalArgumentException {
+    public Contact(String contact, String contactOwner, boolean waitingAcception, boolean accepted) throws IllegalArgumentException {
         if (contact == null) {
             throw new IllegalArgumentException("Contact is Null");
         }
-        this.contact = contact;
+        this.contactEmail = contact;
 
-        this.contactOwner = contactOwner;
+        this.contactOwnerEmail = contactOwner;
         this.waitingAcceptance = waitingAcception;
         this.accepted = accepted;
 
@@ -64,12 +63,12 @@ public class Contact implements AggregateRoot<Long>, Serializable {
         return this.id;
     }
 
-    public UserDTO getContact() {
-        return contact;
+    public String getContactEmail() {
+        return contactEmail;
     }
 
-    public UserDTO getContactOwner() {
-        return contactOwner;
+    public String getContactOwnerEmail() {
+        return contactOwnerEmail;
     }
 
     public boolean isWaitingAcception() {
@@ -100,11 +99,11 @@ public class Contact implements AggregateRoot<Long>, Serializable {
         if (this == that) {
             return true;
         }
-        if (!this.contact.equals(that.contact)) {
+        if (!this.contactEmail.equals(that.contactEmail)) {
             return false;
         }
 
-        if (!this.contactOwner.equals(that.contactOwner)) {
+        if (!this.contactOwnerEmail.equals(that.contactOwnerEmail)) {
             return false;
         }
 
@@ -126,11 +125,12 @@ public class Contact implements AggregateRoot<Long>, Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 71 * hash + Objects.hashCode(this.id);
-        hash = 71 * hash + Objects.hashCode(this.contactOwner);
-        hash = 71 * hash + (this.waitingAcceptance ? 1 : 0);
-        hash = 71 * hash + (this.accepted ? 1 : 0);
+        int hash = 5;
+        hash = 79 * hash + Objects.hashCode(this.id);
+        hash = 79 * hash + Objects.hashCode(this.contactEmail);
+        hash = 79 * hash + Objects.hashCode(this.contactOwnerEmail);
+        hash = 79 * hash + (this.waitingAcceptance ? 1 : 0);
+        hash = 79 * hash + (this.accepted ? 1 : 0);
         return hash;
     }
 
@@ -152,10 +152,13 @@ public class Contact implements AggregateRoot<Long>, Serializable {
         if (this.accepted != other.accepted) {
             return false;
         }
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.contactEmail, other.contactEmail)) {
             return false;
         }
-        if (!Objects.equals(this.contactOwner, other.contactOwner)) {
+        if (!Objects.equals(this.contactOwnerEmail, other.contactOwnerEmail)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
@@ -163,15 +166,19 @@ public class Contact implements AggregateRoot<Long>, Serializable {
 
     @Override
     public String toString() {
-        return "Contact{" + "id=" + id + ", contact=" + contact + ", contactOwner=" + contactOwner + ", waitingAcceptance=" + waitingAcceptance + ", accepted=" + accepted + '}';
+        return "Contact{" + "id=" + id + ", contactEmail=" + contactEmail + ", contactOwnerEmail=" + contactOwnerEmail + ", waitingAcceptance=" + waitingAcceptance + ", accepted=" + accepted + '}';
     }
+
+
+
+
 
     /**
      *
      * @return
      */
     public ContactDTO toDTO() {
-        return new ContactDTO(this.contact, this.contactOwner, this.waitingAcceptance, this.accepted);
+        return new ContactDTO(this.contactEmail, this.contactOwnerEmail, this.waitingAcceptance, this.accepted);
     }
 
     /**

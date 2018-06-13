@@ -30,6 +30,8 @@ User -> ImportPresenter : onReveal()
 ImportPresenter ->> ImportXmlServices : importXmlFile(fileName)
 ImportXmlServices -> ImportXmlController : importWorkbooks(fileName)
 ImportXmlController -> ImportXmlService : importWorkbooks(fileName)
+ImportXmlService ->> ImportXmlController : return workbook
+ImportXmlController ->> ImportXmlServices : return workbook
 ImportXmlServices ->> ImportPresenter : onSuccess()
 Settings -> ImportView : updateWorkbook(workbook)
 
