@@ -9,15 +9,10 @@ start: expression EOF
 expression: HH currency ICHA account FCHA 
 	  ;
 
-account: number coinsign ( operator number coinsign )?
+account: number coinsign (( PLUS | MINUS ) number coinsign)?
+       | number coinsign (( MULTI | DIV )  number)
        ;
         
-operator: PLUS 
-        | MINUS 
-        | DIV 
-        | MULTI
-        ;
-
 currency: 'dollar'
         | 'pound'
         | 'euro'
