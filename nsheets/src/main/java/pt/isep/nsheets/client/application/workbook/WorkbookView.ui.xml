@@ -317,8 +317,8 @@ governing permissions and limitations under the License. #L% -->
                 <m:MaterialRow grid="s6 m10">
                     <m:MaterialTextBox
                         ui:field="replaceWindowFirstBox" label="Enter the text you wish to replace"
-                        active="true" grid="s11" />
-                    <m:MaterialTextArea ui:field="replaceWindowResultBox"/>
+                        active="true" />
+                    <m:MaterialTextArea ui:field="replaceWindowResultBox" enabled="false"/>
                 </m:MaterialRow>
                 <m:MaterialRow grid="s6 m2">
                     <m:MaterialButton ui:field="findNextButton" width="100%;" text="Next" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK"/>
