@@ -43,7 +43,11 @@ public class MacroEvalVisitor extends MacroBaseVisitor<Expression>  {
 
     @Override
     public Expression visitExpression(MacroParser.ExpressionContext ctx) {
-        return visitChildren(ctx);
+        ArrayList<Expression> list = new ArrayList<>();
+        for(int i = 0; i < ctx.getChildCount(); i++){
+            list.add(visit(ctx.getChild(i)));
+        }
+        return list.get(list.size() - 1);
     }
 
     @Override
