@@ -41,6 +41,13 @@ public interface VbVisitor<T> extends ParseTreeVisitor<T> {
 	T visitStat_block_if(@NotNull VbParser.Stat_block_ifContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link VbParser#end_method}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEnd_method(@NotNull VbParser.End_methodContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link VbParser#atomExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -60,6 +67,13 @@ public interface VbVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitType(@NotNull VbParser.TypeContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link VbParser#typeOfFunction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTypeOfFunction(@NotNull VbParser.TypeOfFunctionContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link VbParser#parExpr}.
@@ -83,11 +97,25 @@ public interface VbVisitor<T> extends ParseTreeVisitor<T> {
 	T visitWhile_stat(@NotNull VbParser.While_statContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link VbParser#function}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunction(@NotNull VbParser.FunctionContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link VbParser#block}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBlock(@NotNull VbParser.BlockContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link VbParser#init_method}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInit_method(@NotNull VbParser.Init_methodContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link VbParser#if_stat}.
@@ -116,6 +144,13 @@ public interface VbVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAssignment(@NotNull VbParser.AssignmentContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link VbParser#nameOfMethod}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNameOfMethod(@NotNull VbParser.NameOfMethodContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link VbParser#orExpr}.
@@ -165,6 +200,13 @@ public interface VbVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitStat_block_while(@NotNull VbParser.Stat_block_whileContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link VbParser#returnMethod}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturnMethod(@NotNull VbParser.ReturnMethodContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link VbParser#notExpr}.

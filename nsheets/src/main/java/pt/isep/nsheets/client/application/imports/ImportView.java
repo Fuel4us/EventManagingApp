@@ -20,7 +20,7 @@ class ImportView extends ViewImpl implements ImportPresenter.MyView {
     @UiField
     MaterialFileUploader uploader;
 
-    String fileLocation;
+    String fileName;
 
     interface Binder extends UiBinder<Widget, ImportView> {
     }
@@ -32,23 +32,22 @@ class ImportView extends ViewImpl implements ImportPresenter.MyView {
         uploader.setUrl(GWT.getModuleBaseURL() + "uploadServlet");
 
         uploader.addSuccessHandler(event -> {
-
-            fileLocation = GWT.getHostPageBaseURL() + "uploadedFiles/" + event.getTarget().getName();
+            fileName = event.getTarget().getName();
 
             ImportServiceAsync service = GWT.create(ImportService.class);
 
             AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
                 public void onSuccess(WorkbookDTO workbook) {
-                    MaterialToast.fireToast("File read successfully", "rounded");
+                    MaterialToast.fireToast("Workbook imported successfully", "rounded");
                     Settings.getInstance().updateWorkbook(workbook);
                 }
 
                 public void onFailure(Throwable caught) {
-                    MaterialToast.fireToast("There was an error reading the file", "rounded");
+                    MaterialToast.fireToast("There was a problem importing the workbook", "rounded");
                 }
             };
 
-            service.importXmlFile(fileLocation, callback);
+            service.importXmlFile(fileName, callback);
         });
     }
 }

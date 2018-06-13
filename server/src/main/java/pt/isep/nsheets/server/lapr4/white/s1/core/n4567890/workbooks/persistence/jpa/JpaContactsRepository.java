@@ -5,8 +5,6 @@ import java.util.Map;
 import pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.domain.Contact;
 import pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.persistence.ContactsRepository;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;
-import pt.isep.nsheets.shared.services.ContactDTO;
-import pt.isep.nsheets.shared.services.UserDTO;
 
 public class JpaContactsRepository extends NSheetsJpaRepositoryBase<Contact, Long> implements ContactsRepository {
 
@@ -19,16 +17,25 @@ public class JpaContactsRepository extends NSheetsJpaRepositoryBase<Contact, Lon
         final Map<String, Object> params = new HashMap<>();
         params.put("email", email);
 
-        return match("e.contactOwner.email=:email", params);
+        return match("e.contactOwnerEmail=:email", params);
     }
 
     @Override
-    public Contact findContactFromDTO(ContactDTO contact) {
+    public Contact findContactFromDTO(String contactEmail, String contactOwnerEmail) {
         final Map<String, Object> params = new HashMap<>();
-        params.put("contactEmail", contact.getContact().getEmail());
-        params.put("contactOwnerEmail", contact.getContactOwner().getEmail());
+        params.put("contactEmail", contactEmail);
+        params.put("contactOwnerEmail", contactOwnerEmail);
 
-        return matchOne("e.contact.email=:contactEmail and e.contactOwner.email=:contactOwnerEmail", params);
+        return matchOne("e.contactEmail=:contactEmail and e.contactOwnerEmail=:contactOwnerEmail", params);
     }
 
+    @Override
+    public void removeContact(String contactEmail, String contactOwnerEmail) {
+        entityManager().getTransaction().begin();
+        entityManager().createQuery("delete from Contact c where c.contactEmail=:contactEmail and c.contactOwnerEmail=:contactOwnerEmail")
+                .setParameter("contactEmail", contactEmail)
+                .setParameter("contactOwnerEmail", contactOwnerEmail)
+                .executeUpdate();
+        entityManager().getTransaction().commit();
+    }
 }

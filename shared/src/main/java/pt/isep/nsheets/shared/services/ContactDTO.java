@@ -5,27 +5,26 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class ContactDTO implements Serializable {
 
-    private UserDTO contact;
-    private UserDTO contactOwner;
+    private String contactEmail;
+    private String contactOwnerEmail;
     private boolean waitingAcceptance;
     private boolean accepted;
 
     /**
      *
-     * @param contact
-     * @param contactOwner
+     * @param contactEmail
+     * @param contactOwnerEmail
      * @param waitingAcceptance
      * @param accepted
-     * @param blacklist
      * @throws IllegalArgumentException
      */
-    public ContactDTO(UserDTO contact, UserDTO contactOwner, boolean waitingAcceptance, boolean accepted) throws IllegalArgumentException {
-        if (contact == null) {
+    public ContactDTO(String contactEmail, String contactOwnerEmail, boolean waitingAcceptance, boolean accepted) throws IllegalArgumentException {
+        if (contactEmail == null || contactOwnerEmail == null) {
             throw new IllegalArgumentException("Name of Contact is Null");
         }
-        this.contact = contact;
+        this.contactEmail = contactEmail;
 
-        this.contactOwner = contactOwner;
+        this.contactOwnerEmail = contactOwnerEmail;
         this.waitingAcceptance = waitingAcceptance;
         this.accepted = accepted;
     }
@@ -36,12 +35,12 @@ public class ContactDTO implements Serializable {
     public ContactDTO() {
     }
 
-    public UserDTO getContact() {
-        return contact;
+    public String getContact() {
+        return contactEmail;
     }
 
-    public UserDTO getContactOwner() {
-        return contactOwner;
+    public String getContactOwner() {
+        return contactOwnerEmail;
     }
 
     public boolean isWaitingAcceptance() {

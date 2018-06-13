@@ -29,7 +29,7 @@ public class User implements AggregateRoot<Long>, Serializable {
     @Id
     @GeneratedValue
     private Long pk = null;
-    
+
     @Column(unique = true)
     private String email;
     private String name;
@@ -38,8 +38,7 @@ public class User implements AggregateRoot<Long>, Serializable {
     private String pictureName;
     private boolean superUser;
     private boolean loggedIn;
-
-    private List<User> blacklist;
+    private List<String> blacklist;
 
     public User(String email, String name, String nickname, String password, String pictureName, boolean superUser) throws IllegalArgumentException {
         if (email == null || name == null || nickname == null || password == null) {
@@ -85,7 +84,7 @@ public class User implements AggregateRoot<Long>, Serializable {
         return this.password.equals(password);
     }
 
-    public List<User> getBlacklist() {
+    public List<String> getBlacklist() {
         return blacklist;
     }
 
@@ -128,11 +127,11 @@ public class User implements AggregateRoot<Long>, Serializable {
         if (!this.pictureName.equals(that.pictureName)) {
             return false;
         }
-        
+
         if (this.superUser != that.superUser) {
             return false;
         }
-        
+
         if (!this.blacklist.equals(that.blacklist)) {
             return false;
         }
@@ -156,7 +155,7 @@ public class User implements AggregateRoot<Long>, Serializable {
     public static User fromDTO(UserDTO dto) throws IllegalArgumentException {
         return new User(dto.getEmail(), dto.getName(), dto.getNickname(), dto.getPassword(), dto.getPictureName(), dto.isSuperuser());
     }
-    
+
     public static User fromDTOHashPassword(UserDTO dto) throws IllegalArgumentException {
         return new User(dto.getEmail(), dto.getName(), dto.getNickname(), DigestUtils.sha256Hex(dto.getPassword()), dto.getPictureName(), dto.isSuperuser());
     }
