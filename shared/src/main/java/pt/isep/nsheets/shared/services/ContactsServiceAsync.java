@@ -12,13 +12,13 @@ public interface ContactsServiceAsync {
 
     void allAvailableContacts(String email, AsyncCallback<ArrayList<ContactDTO>> callback);
 
-    void acceptInvitation(ContactDTO contact, UserDTO currentUser, AsyncCallback<Void> callback);
+    void acceptInvitation(String currentUserEmail, String otherUserEmail, AsyncCallback<Void> callback);
 
-    void denyInvitation(ContactDTO contact, UserDTO currentUser, AsyncCallback<Void> callback);
+    void denyInvitation(String currentUserEmail, String otherUserEmail, AsyncCallback<Void> callback);
 
-    void blockUser(UserDTO user, AsyncCallback<Void> callback);
+    void blockUser(String currentUserEmail, String userToBlockEmail, AsyncCallback<Void> callback);
 
-    void unblockUser(UserDTO user, AsyncCallback<Void> callback);
+    void unblockUser(String currentUserEmail, String userToBlockEmail, AsyncCallback<Void> callback);
 
     void sendInvitation(String emailReceiver, String emailSender, AsyncCallback<Void> callback);
 

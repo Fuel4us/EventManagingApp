@@ -51,6 +51,8 @@ import gwt.material.design.client.ui.table.MaterialDataTable;
 import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import pt.isep.nsheets.shared.ext.Extension;
 import pt.isep.nsheets.shared.ext.ExtensionManager;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s1.extensions.Conditional;
@@ -64,6 +66,7 @@ import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleServiceAs
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetController;
+import pt.isep.nsheets.client.lapr4.red.s2.ipc.n1160600.workbook.application.SearchAndReplaceController;
 import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.core.formula.Function;
 import pt.isep.nsheets.shared.core.formula.FunctionParameter;
@@ -95,13 +98,29 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialTextBox searchBox;
     @UiField
-    MaterialIcon searchButton;
+    MaterialLink searchButton;
     @UiField
     MaterialModal searchModal;
     @UiField
     MaterialTitle searchTitle;
     @UiField
     MaterialTextArea searchTextArea;
+
+    @UiField
+    MaterialLink searchAndReplaceButton;
+
+    @UiField
+    MaterialButton findNextButton;
+    @UiField
+    MaterialButton replaceButton;
+    @UiField
+    MaterialButton replaceAllButton;
+    @UiField
+    MaterialWindow searchAndReplaceWindow;
+    @UiField
+    MaterialTextBox replaceWindowFirstBox;
+    @UiField
+    MaterialTextArea replaceWindowResultBox;
 
     @UiField
     MaterialLink saveButton, click_chart;
@@ -284,6 +303,59 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         customTable.getView().refresh();
     }
 
+    private void openSearchAndReplaceWindow() {
+        String expression = searchBox.getText();
+        SearchAndReplaceController controller = new SearchAndReplaceController();
+        controller.setSpreadsheet(this.customTable.getRow(0).getData().sheet);
+        controller.searchAll(expression);
+        replaceButton.setEnabled(true);
+        replaceWindowFirstBox.setEnabled(true);
+        searchAndReplaceWindow.open();
+        Cell c = controller.getCurrent();
+        if (c != null) {
+            replaceWindowResultBox.setText("Content found on cell " + c.getAddress().toString() + ": " + c.getContent());
+        } else {
+            replaceWindowResultBox.setText("No matches found");
+            replaceButton.setEnabled(false);
+            replaceWindowFirstBox.setEnabled(false);
+        }
+        findNextButton.addClickHandler(event -> {
+
+            Cell cell = controller.getNext();
+            if (cell != null) {
+                replaceWindowResultBox.setText("Content found on cell " + cell.getAddress().toString() + ": " + cell.getContent());
+            } else {
+                replaceWindowResultBox.setText("There's no more matches for your expression");
+            }
+        });
+        replaceButton.addClickHandler(event -> {
+            Cell cell = controller.getCurrent();
+            try {
+                String s = replaceWindowFirstBox.getText();
+                controller.replace(s, cell);
+            } catch (FormulaCompilationException ex) {
+                Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+                MaterialToast.fireToast("Error replacing formula");
+            }finally {
+                customTable.getView().setRedraw(true);
+                customTable.getView().refresh();
+            }
+        });
+        
+        replaceAllButton.addClickHandler(event ->{
+            try {
+                String s = replaceWindowFirstBox.getText();
+                controller.replaceAll(s);
+            } catch (FormulaCompilationException ex) {
+                Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+                MaterialToast.fireToast("Error replacing formula");
+            }finally {
+                customTable.getView().setRedraw(true);
+                customTable.getView().refresh();
+            }
+        });
+    }
+
     interface Binder extends UiBinder<Widget, WorkbookView> {
     }
 
@@ -295,9 +367,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         if (c != null) {
             backgroundcolorLst.setSelectedValue(Color.values()[c.getBackgroungColor()]);
             fontcolorLst.setSelectedValue(Color.values()[c.getFontColor()]);
-            textAlignLst.setSelectedIndex(c.getTextALIGN()+1);
+            textAlignLst.setSelectedIndex(c.getTextALIGN() + 1);
             fontsizeLst.setSelectedValue(c.getFontSize());
-        }else{
+        } else {
             backgroundcolorLst.setSelectedValue(Color.WHITE);
             fontcolorLst.setSelectedValue(Color.BLACK);
             textAlignLst.setSelectedIndex(1);
@@ -658,6 +730,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             }
             macroModal.close();
         });
+
+        searchAndReplaceButton.addClickHandler(event -> {
+            openSearchAndReplaceWindow();
+        });
     }
 
     private String getParameters(Language lang) {
@@ -740,7 +816,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     public void addConfirmationHandler(ClickHandler cMDB) {
         conditionalModalDoneButton.addClickHandler(cMDB);
     }
-    
+
     @Override
     public void deleteConfirmationHandler(ClickHandler cMDB) {
         conditionalModalDeleteButton.addClickHandler(cMDB);

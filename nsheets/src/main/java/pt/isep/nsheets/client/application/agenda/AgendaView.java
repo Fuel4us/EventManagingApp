@@ -89,7 +89,7 @@ public class AgendaView extends ViewImpl implements AgendaPresenter.MyView {
 
     @UiHandler("btnEdit")
     void editBtn(ClickEvent e) {
-
+    //With BUGS
         materialPlanEmptyState.clear();
 
         AgendaDTO agendaDTOSelect = (AgendaDTO) comboAgendas.getSingleValue();
@@ -133,6 +133,7 @@ public class AgendaView extends ViewImpl implements AgendaPresenter.MyView {
 
     @UiHandler("btnDelete")
     void deleteBtn(ClickEvent e) {
+        //With BUGS
         updateTitle.setTitle("Agendas");
         updateTitle.setDescription("Description");
 

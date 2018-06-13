@@ -18,6 +18,7 @@ import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
+import pt.isep.nsheets.client.security.CurrentUser;
 import pt.isep.nsheets.shared.services.ContactDTO;
 import pt.isep.nsheets.shared.services.ContactsService;
 import pt.isep.nsheets.shared.services.ContactsServiceAsync;
@@ -26,22 +27,33 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
 
     private MyView view;
 
+    private String currentUserEmail;
+
     interface MyView extends View {
 
         void addClickHandlerOpenModal(ClickHandler ch);
 
         void buttonClickHandlerSaveContact(ClickHandler ch);
 
-//        void buttonClickHandlerCheckEditNote(ClickHandler ch);
-//        void buttonClickHandlerEditNote(ClickHandler ch);
-//        void buttonClickHandlerRemoveNote(ClickHandler ch);
+        void buttonClickHandlerAcceptInvite(ClickHandler ch);
+
+        void buttonClickHandlerDenyInvite(ClickHandler ch);
+
+        void buttonClickHandlerBlockInvite(ClickHandler ch);
+
+        void buttonClickHandlerUnblockInvite(ClickHandler ch);
+
         void openModalToAddContact();
 
-        void setContents(ArrayList<ContactDTO> contents);
+        void setContacts(ArrayList<ContactDTO> contents);
+
+        void setInvites(ArrayList<ContactDTO> contents);
 
         String titleContact();
 
-        String textContact();
+        String selectedContact();
+
+        String selectedInvite();
 
         void closeModalToAddContact();
     }
@@ -52,8 +64,10 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
     }
 
     @Inject
-    ContactsPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+    ContactsPresenter(EventBus eventBus, MyView view, MyProxy proxy, CurrentUser currentUser) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
+
+        currentUserEmail = currentUser.getUser().getEmail();
 
         this.view = view;
 
@@ -74,88 +88,110 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
 
                 @Override
                 public void onSuccess(Void result) {
-                    MaterialToast.fireToast("New Contact Created");
+                    MaterialToast.fireToast("Invite Sent!");
 
-                    refreshView();
+                    refreshViewContacts();
+                    refreshViewInvites();
                 }
             };
 
-            contactsSvc.sendInvitation("1160557@isep.ipp.pt", "1160557@isep.ipp.pt", callback);
+            contactsSvc.sendInvitation(this.view.titleContact(), currentUserEmail, callback);
 
             this.view.closeModalToAddContact();
         });
 
-//        this.view.buttonClickHandlerCheckEditNote(event -> {
-//            NotesServiceAsync notesSvc = GWT.create(NotesService.class);
-//
-//            // Set up the callback object.
-//            AsyncCallback<NoteDTO> callback = new AsyncCallback<NoteDTO>() {
-//                @Override
-//                public void onFailure(Throwable caught) {
-//                    MaterialToast.fireToast("Error! " + caught.getMessage());
-//                }
-//
-//                @Override
-//                public void onSuccess(NoteDTO result) {
-//                    MaterialToast.fireToast("Note Edited - Check");
-//
-//                    refreshView();
-//                }
-//            };
-//
-//            NoteDTO notesDto = new NoteDTO(this.view.titleNote(), this.view.textNote());
-//            notesSvc.addNote(notesDto, callback);
-//
-//        });
-//        
-//        this.view.buttonClickHandlerEditNote(event -> {
-//            NotesServiceAsync notesSvc = GWT.create(NotesService.class);
-//
-//            // Set up the callback object.
-//            AsyncCallback<NoteDTO> callback = new AsyncCallback<NoteDTO>() {
-//                @Override
-//                public void onFailure(Throwable caught) {
-//                    MaterialToast.fireToast("Error! " + caught.getMessage());
-//                }
-//
-//                @Override
-//                public void onSuccess(NoteDTO result) {
-//                    MaterialToast.fireToast("Note Edited");
-//
-//                    refreshView();
-//                }
-//            };
-//
-////            NoteDTO notesDto = new NoteDTO(this.view.titleNote(), this.view.textNote());
-////            notesSvc.addNote(notesDto, callback);
-//
-//        });
-//        
-//        this.view.buttonClickHandlerRemoveNote(event -> {
-//            NotesServiceAsync notesSvc = GWT.create(NotesService.class);
-//
-//            // Set up the callback object.
-//            AsyncCallback<NoteDTO> callback = new AsyncCallback<NoteDTO>() {
-//                @Override
-//                public void onFailure(Throwable caught) {
-//                    MaterialToast.fireToast("Error! " + caught.getMessage());
-//                }
-//
-//                @Override
-//                public void onSuccess(NoteDTO result) {
-//                    MaterialToast.fireToast("Note Removed");
-//
-//                    refreshView();
-//                }
-//            };
-//
-//            NoteDTO notesDto = new NoteDTO(this.view.titleNote(), this.view.textNote());
-//            notesSvc.addNote(notesDto, callback);
-//
-//        });
+        this.view.buttonClickHandlerAcceptInvite(event -> {
+            ContactsServiceAsync contactsSvc = GWT.create(ContactsService.class);
+
+            // Set up the callback object.
+            AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error! " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(Void result) {
+                    MaterialToast.fireToast("Invite accepted!");
+
+                    refreshViewContacts();
+                    refreshViewInvites();
+                }
+            };
+
+            contactsSvc.acceptInvitation(currentUserEmail, this.view.selectedInvite(), callback);
+            
+        });
+
+        this.view.buttonClickHandlerDenyInvite(event -> {
+            ContactsServiceAsync contactsSvc = GWT.create(ContactsService.class);
+
+            // Set up the callback object.
+            AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error! " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(Void result) {
+                    MaterialToast.fireToast("Invite denied!");
+
+                    refreshViewContacts();
+                    refreshViewInvites();
+                }
+            };
+
+            contactsSvc.denyInvitation(currentUserEmail, this.view.selectedInvite(), callback);
+        });
+
+        this.view.buttonClickHandlerBlockInvite(event -> {
+            ContactsServiceAsync contactsSvc = GWT.create(ContactsService.class);
+
+            // Set up the callback object.
+            AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error! " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(Void result) {
+                    MaterialToast.fireToast("Invites from user blocked!");
+
+                    refreshViewContacts();
+                    refreshViewInvites();
+                }
+            };
+
+            contactsSvc.blockUser(currentUserEmail, this.view.selectedInvite(), callback);
+        });
+
+        this.view.buttonClickHandlerUnblockInvite(event -> {
+            ContactsServiceAsync contactsSvc = GWT.create(ContactsService.class);
+
+            // Set up the callback object.
+            AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error! " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(Void result) {
+                    MaterialToast.fireToast("Invites from user unblocked!");
+
+                    refreshViewContacts();
+                    refreshViewInvites();
+                }
+            };
+
+            contactsSvc.unblockUser(currentUserEmail, this.view.selectedInvite(), callback);
+        });
+
     }
 
-    private void refreshView() {
+    private void refreshViewContacts() {
         ContactsServiceAsync contactsSvc = GWT.create(ContactsService.class);
 
         // Set up the callback object.
@@ -167,12 +203,33 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
 
             @Override
             public void onSuccess(ArrayList<ContactDTO> result) {
-                view.setContents(result);
+                view.setContacts(result);
+
             }
         };
 
         //receção
-        contactsSvc.allAvailableContacts("1160557@isep.ipp.pt", callback);
+        contactsSvc.allAvailableContacts(currentUserEmail, callback);
+    }
+
+    private void refreshViewInvites() {
+        ContactsServiceAsync contactsSvc = GWT.create(ContactsService.class);
+
+        // Set up the callback object.
+        AsyncCallback<ArrayList<ContactDTO>> callback = new AsyncCallback<ArrayList<ContactDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                MaterialToast.fireToast("Error! " + caught.getMessage());
+            }
+
+            @Override
+            public void onSuccess(ArrayList<ContactDTO> result) {
+                view.setInvites(result);
+            }
+        };
+
+        //receção
+        contactsSvc.allInvitations(currentUserEmail, callback);
     }
 
     @Override
@@ -181,6 +238,7 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
 
         SetPageTitleEvent.fire("Contacts", "Make your Contacts", "", "", this);
 
-        refreshView();
+        refreshViewContacts();
+        refreshViewInvites();
     }
 }
