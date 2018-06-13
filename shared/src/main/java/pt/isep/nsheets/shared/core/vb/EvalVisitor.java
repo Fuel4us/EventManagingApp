@@ -19,6 +19,11 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     public EvalVisitor(Map<String, Value> cells) {
         this.cells = cells;
     }
+    
+//    @Override
+//    public Value visitFunction(VbParser.FunctionContext ctx) {
+//        
+//    }
 
     @Override
     public Value visitDeclaration(VbParser.DeclarationContext ctx) {
