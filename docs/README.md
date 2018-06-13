@@ -61,29 +61,29 @@ This is a table that should display the overall planning of the team. This is si
 | Group | Student                      | Sprint1                                        | Sprint2                                      | Sprint3 							          |
 |------|------------------------------|------------------------------------------------|----------------------------------------------|----------------------------------------------|
 | White  | [John Doe](white/s4567890/) | [Core00.0](white/s4567890/sp1)            | [IPC00.0](white/s45678901/sp2)           | [Lang00.0](white/s4567890/sp3) |
-| Red  | [Tiago Rios](red/1161292/) | [Core01.1](red/1161292/sp1) | [IPC01.2](red/1161292/sp2) | 	 |
-| Red  | [João Reis](red/1160600/) | [Core03.1](red/1160600/sp1) | [IPC02.2](red/1160600/sp2) |		|
-| Red  | [José Monteiro](red/1160630/) | [Core04.1](red/1160630/sp1) | [IPC03.2](red/1160630/sp2) |		|
-| Red  | [Gonçalo Silva](red/1161140/) | [Core06.1](red/1161140/sp1) | [IPC04.2](red/1161140/sp2) |		|
-| Red  | [Pedro Vieira](red/1160634/) | [Core07.1](red/1160634/sp1) | [IPC08.2](red/1160634/sp2) |		|
+| Red  | [Tiago Rios](red/1161292/) | [Core01.1](red/1161292/sp1) | [IPC01.2](red/1161292/sp2) | [Lang02.3](red/1161292/sp3) |
+| Red  | [João Reis](red/1160600/) | [Core03.1](red/1160600/sp1) | [IPC02.2](red/1160600/sp2) | [Lang03.2](red/1160600/sp3) |
+| Red  | [José Monteiro](red/1160630/) | [Core04.1](red/1160630/sp1) | [IPC03.2](red/1160630/sp2) | [Lang08.2](red/1160630/sp3) |
+| Red  | [Gonçalo Silva](red/1161140/) | [Core06.1](red/1161140/sp1) | [IPC04.2](red/1161140/sp2) | [Lang07.3](red/1161140/sp3) |
+| Red  | [Pedro Vieira](red/1160634/) | [Core07.1](red/1160634/sp1) | [IPC08.2](red/1160634/sp2) | [Lang06.2](red/1160634/sp3) |
 | Red  | [Tiago Babo](red/1160760/) | [Core05.1](red/1160760/sp1) |								 |		|
-| Red  | [José Santo](red/1160629/) | [Core02.1](red/1160629/sp1) |	[IPC05.2](red/1160629/sp2)						 |		|
+| Red  | [José Santo](red/1160629/) | [Core02.1](red/1160629/sp1) |	[IPC05.2](red/1160629/sp2) | [Lang01.3](red/1160629/sp3) |
 | Red  | [Bernardo Carreira](red/1150990/) | [Core08.1](red/1150990/sp1) |								 |		|
-| Green | [Carlos Figueiredo](green/1140317/) | [IPC06.1](green/1140317/sp1) | [Lang04.2](green/1140317/sp2) |		|
-| Green | [Diogo Monteiro](green/1140302/) | [IPC02.1](green/1140302/sp1) | [Lang05.2](green/1140302/sp2) |		|
-| Green | [Gonçalo Fonseca](green/1150503/) | [IPC03.1](green/1150503/sp1) | [Lang07.2](green/1150503/sp2) |		|
-| Green | [Hilário Coelho](green/1160557/) | [IPC01.1](green/1160557/sp1) | [Lang03.2](green/1160557/sp2) |		|	
-| Green | [Mário Vaz](green/1160832/) | [IPC07.1](green/1160832/sp1) | [Lang08.1](green/1160832/sp2) |		|
-| Green | [Leandro Pinto](green/1160815/) | [IPC08.1](green/1160815/sp1) | [Lang02.2](green/1160815/sp2) |		|
-| Green | [Pedro Rodrigues](green/1140572/) | [IPC06.1](green/1140572/sp1) | [Lang01.2](green/1140572/sp2) |		|
-| Green | [Rúben Ribeiro](green/1160998/) | [IPC05.1](green/1160998/sp1) | [Lang06.1](green/1160998/sp2) |		|
+| Green | [Carlos Figueiredo](green/1140317/) | [IPC06.1](green/1140317/sp1) | [Lang04.2](green/1140317/sp2) | [Core08.2](green/1140317/sp2) |
+| Green | [Diogo Monteiro](green/1140302/) | [IPC02.1](green/1140302/sp1) | [Lang05.2](green/1140302/sp2) | [Core03.2](green/1140302/sp3) |
+| Green | [Gonçalo Fonseca](green/1150503/) | [IPC03.1](green/1150503/sp1) | [Lang07.2](green/1150503/sp2) | [Core02.3](green/1150503/sp3) |
+| Green | [Hilário Coelho](green/1160557/) | [IPC01.1](green/1160557/sp1) | [Lang03.2](green/1160557/sp2) | [Core01.3](green/1160557/sp3) |	
+| Green | [Mário Vaz](green/1160832/) | [IPC07.1](green/1160832/sp1) | [Lang08.1](green/1160832/sp2) | [Core06.3](green/1160832/sp3) |
+| Green | [Leandro Pinto](green/1160815/) | [IPC08.1](green/1160815/sp1) | [Lang02.2](green/1160815/sp2) | [Core07.3](green/1160815/sp3) |
+| Green | [Pedro Rodrigues](green/1140572/) | [IPC06.1](green/1140572/sp1) | [Lang01.2](green/1140572/sp2) | [Core05.2](green/1140572/sp3) |
+| Green | [Rúben Ribeiro](green/1160998/) | [IPC05.1](green/1160998/sp1) | [Lang06.1](green/1160998/sp2) | [Core04.3](green/1160998/sp3) |
 | Blue | [Ana Mafalda](blue/1161611/) | [Lang04.1](blue/1161611/sp1) | [Core03.2](blue/1161611/sp2) |		|
-| Blue | [Hernâni Gil](blue/1050475/) | [Lang03.1](blue/1050475/sp1) | [Core08.1](blue/1050475/sp2) |		|
-| Blue | [João Pires](blue/1150455/) | [Lang02.1](blue/1150455/sp1) | [Core01.2](blue/1150455/sp2) |		|
-| Blue | [João Pereira](blue/1150478/) | [Lang05.1](blue/1150478/sp1) | [Core02.2](blue/1150478/sp2) |		|
-| Blue | [Josué Lapa](blue/1160713/) | [Lang07.1](blue/1160713/sp1) | [Core05.1](blue/1160713/sp2) |		|
-| Blue | [Pedro Alves](blue/1150372/) | [Lang01.1](blue/1150372/sp1) | [Core06.2](blue/1150372/sp2) |		|
-| Blue | [Tiago Correia](blue/1140403/) | [Lang06.1](blue/1150372/sp1) | [Core07.2](blue/1150372/sp2) |		|
+| Blue | [Hernâni Gil](blue/1050475/) | [Lang03.1](blue/1050475/sp1) | [Core08.1](blue/1050475/sp2) | [IPC01.3](blue/1050475/sp3) |
+| Blue | [João Pires](blue/1150455/) | [Lang02.1](blue/1150455/sp1) | [Core01.2](blue/1150455/sp2) | [IPC07.2](blue/1150455/sp3) |
+| Blue | [João Pereira](blue/1150478/) | [Lang05.1](blue/1150478/sp1) | [Core02.2](blue/1150478/sp2) | [IPC06.3](blue/1150478/sp3) |
+| Blue | [Josué Lapa](blue/1160713/) | [Lang07.1](blue/1160713/sp1) | [Core05.1](blue/1160713/sp2) | [IPC08.3](blue/1160713/sp3) |
+| Blue | [Pedro Alves](blue/1150372/) | [Lang01.1](blue/1150372/sp1) | [Core06.2](blue/1150372/sp2) | [IPC03.3](blue/1150372/sp3) |
+| Blue | [Tiago Correia](blue/1140403/) | [Lang06.1](blue/1150372/sp1) | [Core07.2](blue/1150372/sp2) | [IPC02.3](blue/1150372/sp3) |
 
 # 5. Requirements
 

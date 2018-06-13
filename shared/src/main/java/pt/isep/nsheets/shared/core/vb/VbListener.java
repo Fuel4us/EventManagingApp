@@ -54,6 +54,17 @@ public interface VbListener extends ParseTreeListener {
 	void exitStat_block_if(@NotNull VbParser.Stat_block_ifContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link VbParser#end_method}.
+	 * @param ctx the parse tree
+	 */
+	void enterEnd_method(@NotNull VbParser.End_methodContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link VbParser#end_method}.
+	 * @param ctx the parse tree
+	 */
+	void exitEnd_method(@NotNull VbParser.End_methodContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link VbParser#atomExpr}.
 	 * @param ctx the parse tree
 	 */
@@ -85,6 +96,17 @@ public interface VbListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitType(@NotNull VbParser.TypeContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link VbParser#typeOfFunction}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeOfFunction(@NotNull VbParser.TypeOfFunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link VbParser#typeOfFunction}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeOfFunction(@NotNull VbParser.TypeOfFunctionContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link VbParser#parExpr}.
@@ -120,6 +142,17 @@ public interface VbListener extends ParseTreeListener {
 	void exitWhile_stat(@NotNull VbParser.While_statContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link VbParser#function}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunction(@NotNull VbParser.FunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link VbParser#function}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunction(@NotNull VbParser.FunctionContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link VbParser#block}.
 	 * @param ctx the parse tree
 	 */
@@ -129,6 +162,17 @@ public interface VbListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBlock(@NotNull VbParser.BlockContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link VbParser#init_method}.
+	 * @param ctx the parse tree
+	 */
+	void enterInit_method(@NotNull VbParser.Init_methodContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link VbParser#init_method}.
+	 * @param ctx the parse tree
+	 */
+	void exitInit_method(@NotNull VbParser.Init_methodContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link VbParser#if_stat}.
@@ -173,6 +217,17 @@ public interface VbListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAssignment(@NotNull VbParser.AssignmentContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link VbParser#nameOfMethod}.
+	 * @param ctx the parse tree
+	 */
+	void enterNameOfMethod(@NotNull VbParser.NameOfMethodContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link VbParser#nameOfMethod}.
+	 * @param ctx the parse tree
+	 */
+	void exitNameOfMethod(@NotNull VbParser.NameOfMethodContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link VbParser#orExpr}.
@@ -250,6 +305,17 @@ public interface VbListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStat_block_while(@NotNull VbParser.Stat_block_whileContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link VbParser#returnMethod}.
+	 * @param ctx the parse tree
+	 */
+	void enterReturnMethod(@NotNull VbParser.ReturnMethodContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link VbParser#returnMethod}.
+	 * @param ctx the parse tree
+	 */
+	void exitReturnMethod(@NotNull VbParser.ReturnMethodContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link VbParser#notExpr}.

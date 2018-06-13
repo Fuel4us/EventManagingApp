@@ -148,7 +148,11 @@ governing permissions and limitations under the License. #L% -->
         </m:MaterialRow>
         <m:MaterialRow marginTop="20">
             <m:MaterialTextBox ui:field="searchBox" placeholder="Enter your regular expression" label="Enter your regular expression" title="Search Spreadsheet Cells" active="true" grid="s11" iconType="SEARCH"/>
-            <m:MaterialIcon ui:field="searchButton" iconType="SEARCH" iconColor="BLUE" waves="DEFAULT" circle="true" grid="s1"/>
+           <m:MaterialIcon iconType="SEARCH" iconColor="BLUE" waves="DEFAULT" circle="true" grid="s1" activates="dropdownSearch"/>
+            <m:MaterialDropDown activator="dropdownSearch" constrainWidth="false">
+                <m:MaterialLink ui:field="searchButton" fontSize="0.9em" waves="DEFAULT" textColor="BLACK" iconType="SEARCH" iconPosition="LEFT" text="Search" />
+                <m:MaterialLink ui:field="searchAndReplaceButton" fontSize="0.9em" waves="DEFAULT" textColor="BLACK" iconType="SEARCH" iconPosition="LEFT" text="Search and Replace" />
+            </m:MaterialDropDown>
         </m:MaterialRow>
         <m:MaterialModal ui:field="searchModal" type="DEFAULT" dismissible="true">
             <m:MaterialModalContent>
@@ -308,7 +312,21 @@ governing permissions and limitations under the License. #L% -->
             </m:MaterialPanel>       
         </ma:window.MaterialWindow>
         
-        
+        <ma:window.MaterialWindow ui:field="searchAndReplaceWindow" width="70%" title="Search and replace">
+            <m:MaterialPanel padding="32" textAlign="CENTER" height="300px">
+                <m:MaterialRow grid="s6 m10">
+                    <m:MaterialTextBox
+                        ui:field="replaceWindowFirstBox" label="Enter the text you wish to replace"
+                        active="true" grid="s11" />
+                    <m:MaterialTextArea ui:field="replaceWindowResultBox"/>
+                </m:MaterialRow>
+                <m:MaterialRow grid="s6 m2">
+                    <m:MaterialButton ui:field="findNextButton" width="100%;" text="Next" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK"/>
+                    <m:MaterialButton ui:field="replaceButton" width="100%;" text="Replace" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK"/>
+                    <m:MaterialButton ui:field="replaceAllButton" width="100%;" text="Replace All" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK"/>
+                </m:MaterialRow>
+            </m:MaterialPanel>       
+        </ma:window.MaterialWindow>
     </g:HTMLPanel>
 
 </ui:UiBinder>

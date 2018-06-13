@@ -51,6 +51,14 @@ public class VbBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements VbV
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitEnd_method(@NotNull VbParser.End_methodContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitAtomExpr(@NotNull VbParser.AtomExprContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -68,6 +76,14 @@ public class VbBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements VbV
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitType(@NotNull VbParser.TypeContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitTypeOfFunction(@NotNull VbParser.TypeOfFunctionContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -99,7 +115,23 @@ public class VbBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements VbV
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitFunction(@NotNull VbParser.FunctionContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitBlock(@NotNull VbParser.BlockContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitInit_method(@NotNull VbParser.Init_methodContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -132,6 +164,14 @@ public class VbBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements VbV
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitAssignment(@NotNull VbParser.AssignmentContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitNameOfMethod(@NotNull VbParser.NameOfMethodContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -188,6 +228,14 @@ public class VbBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements VbV
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitStat_block_while(@NotNull VbParser.Stat_block_whileContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitReturnMethod(@NotNull VbParser.ReturnMethodContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
