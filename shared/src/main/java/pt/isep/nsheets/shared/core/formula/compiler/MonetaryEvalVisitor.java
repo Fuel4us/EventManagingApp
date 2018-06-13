@@ -66,9 +66,7 @@ public class MonetaryEvalVisitor extends MonetaryBaseVisitor<Expression> {
             char sign = ' ';
             try {
                 value = operand.getValue().toDouble();
-                MaterialToast.fireToast("Value from expression: " + Double.toString(value));
                 sign = ctx.getChild(1).getText().charAt(0);
-                MaterialToast.fireToast("Sign: " + sign);
             } catch (IllegalValueTypeException ex) {
                 Logger.getLogger(MonetaryEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -131,9 +129,7 @@ public class MonetaryEvalVisitor extends MonetaryBaseVisitor<Expression> {
 
             switch (sign) {
                 case '\u20AC':
-                    MaterialToast.fireToast("NÃO CONVERTE!!!");
                     value = value * MonetaryConversion.EuroToDollar;
-                    MaterialToast.fireToast("LeftValue: " + Double.toString(value));
                     number = Double.toString(value);
                     return new Literal(Value.parseValue(number));
                 case '\u00A3':
