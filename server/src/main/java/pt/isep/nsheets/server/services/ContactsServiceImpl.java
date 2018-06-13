@@ -87,36 +87,36 @@ public class ContactsServiceImpl extends RemoteServiceServlet implements Contact
     }
 
     @Override
-    public void acceptInvitation(ContactDTO contact, UserDTO currentUser) {
+    public void acceptInvitation(String currentUserEmail, String otherUserEmail) {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
         ContactsController ctrl = new ContactsController();
-        ctrl.acceptInvitation(contact, currentUser);
+        ctrl.acceptInvitation(currentUserEmail, otherUserEmail);
 
     }
 
     @Override
-    public void denyInvitation(ContactDTO contact, UserDTO currentUser) {
+    public void denyInvitation(String currentUserEmail, String otherUserEmail) {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
         ContactsController ctrl = new ContactsController();
-        ctrl.denyInvitation(contact, currentUser);
+        ctrl.denyInvitation(currentUserEmail, otherUserEmail);
     }
 
     @Override
-    public void blockUser(UserDTO user) {
+    public void blockUser(String currentUserEmail, String userToBlockEmail) {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
         ContactsController ctrl = new ContactsController();
-        ctrl.blockUser(user);
+        ctrl.blockUser(currentUserEmail, userToBlockEmail);
     }
 
     @Override
-    public void unblockUser(UserDTO user) {
+    public void unblockUser(String currentUserEmail, String userToBlockEmail) {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
         ContactsController ctrl = new ContactsController();
-        ctrl.unblockUser(user);
+        ctrl.unblockUser(currentUserEmail, userToBlockEmail);
     }
 
     /**

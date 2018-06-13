@@ -1,7 +1,6 @@
 package pt.isep.nsheets.shared.services;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("serial")
