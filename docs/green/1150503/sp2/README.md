@@ -73,16 +73,16 @@ Therefore:
 
 ## 4.2. Requirements Realization
 
-![SD](SSD.jpg)
+![SD](SequenceDiagram.jpg)
 
 
 ## 4.3. Classes
 
-**Workbook** 
+**Vb.g4** 
 
-**WorkbookDTO**
+**Core.VB**
 
-**ExportServicesImpl**  
+**EvalVisitor**  
 
 ## 4.4. Design Patterns and Best Practices
 
@@ -101,10 +101,10 @@ After that I had to connect the export to pdf with my controller so I could expo
 
 The code for this sprint:  
 Project **Server**    
-- pt.isep.nsheets.server.**lapr4.green.s1.ipc.n1150503** contains the controllers 
+- pt.isep.nsheets.server.**lapr4.green.s2.lang.n1150503** contains the controllers 
 
 Project **NShests** 
-- Changed: **pt.isep.nsheets.client.application.export.**
+- Changed: **Vb.g4/EvalVisitorVb**
 
 # 6. Integration/Demonstration
 

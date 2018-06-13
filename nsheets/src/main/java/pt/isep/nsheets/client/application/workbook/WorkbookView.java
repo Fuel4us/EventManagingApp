@@ -707,7 +707,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
                 String result = "";
                 try {
-                    activeCell.setContent("!" + macroTextArea.getText());
+                    activeCell.setContentByMacro(macroTextArea.getText());
                     Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
                     if (extensionCond != null) {
 
