@@ -14,16 +14,15 @@ public class UserService {
         final UserRepository userRepository = PersistenceContext.repositories().users();
         return userRepository.findAll();
     }
-    
-    
 
     public User addUser(UserDTO dto) throws DataConcurrencyException, DataIntegrityViolationException {
 
         final UserRepository userRepository = PersistenceContext.repositories().users();
-        
-        User wb= User.fromDTO(dto);
+
+        User wb = User.fromDTO(dto);
         userRepository.save(wb);
-        
+
         return wb;
     }
+
 }

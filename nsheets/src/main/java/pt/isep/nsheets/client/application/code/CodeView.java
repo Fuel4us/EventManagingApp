@@ -3,19 +3,9 @@ package pt.isep.nsheets.client.application.code;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwtplatform.mvp.client.TabPanel;
 import com.gwtplatform.mvp.client.ViewImpl;
-import gwt.material.design.addins.client.emptystate.MaterialEmptyState;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialTextArea;
-import gwt.material.design.client.ui.MaterialTextBox;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.inject.Inject;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
@@ -28,6 +18,13 @@ import pt.isep.nsheets.shared.core.vb.EvalVisitor;
 import pt.isep.nsheets.shared.core.vb.Value;
 import pt.isep.nsheets.shared.core.vb.VbLexer;
 import pt.isep.nsheets.shared.core.vb.VbParser;
+
+import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 class CodeView extends ViewImpl implements CodePresenter.MyView {
 
@@ -62,11 +59,8 @@ class CodeView extends ViewImpl implements CodePresenter.MyView {
                 + "Log \"The variable x has the value \" + x");
 
         runButton.addClickHandler(event -> {
-
             Map<String, Value> cells = new HashMap<>();
 
-//            String cn = "";
-//
             for (Cell c : Settings.getInstance().getWorkbook().getSpreadsheet(0)) {
                 try {
                     cells.put(c.toString(), new Value(Double.valueOf(c.getValue().toString())));
@@ -76,40 +70,21 @@ class CodeView extends ViewImpl implements CodePresenter.MyView {
             }
 
             try {
-                //OutputText.setText(cn);
                 VbLexer lexer = new VbLexer(new ANTLRInputStream(CodeArea.getText()));
                 VbParser parser = new VbParser(new CommonTokenStream(lexer));
                 ParseTree tree = parser.parse();
                 EvalVisitor visitor = new EvalVisitor(cells);
                 visitor.visit(tree);
 
-//            //teste
-//            try {
-//                OutputText.setText(Settings.getInstance().getWorkbook().getSpreadsheet(0).getCell(0, 0).toString() + ": "+ Settings.getInstance().getWorkbook().getSpreadsheet(0).getCell(0, 0).getContent().toString());
-//            } catch (Exception e) {
-//                OutputText.setText("Failed");
-//            }
-//            String codeAread = CodeArea.getText();
-                //String output = "";
-
                 for (Entry<String, Value> c : cells.entrySet()) {
                     try {
                         Settings.getInstance().getWorkbook().getSpreadsheet(0).getCell(new Address(c.getKey())).setContent(c.getValue().toString());
-                        //output += c.getKey() + ": " + c.getValue().toString() + "\n";
                     } catch (FormulaCompilationException ex) {
                         Logger.getLogger(CodeView.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
 
                 OutputText.setText(visitor.getOutput());
-                //OutputText.setText(output);
-                //teste
-                //OutputText.setText(Settings.getInstance().getWorkbook().getSpreadsheet(0).getCell(new Address("A1")).getContent());
-//            System.out.println("Valor $A1: " + cells.entrySet().iterator().next().getValue().asDouble());
-//
-//            System.out.println("Output:\n");
-//
-//            System.out.println(visitor.getOutput());
             } catch (IndexOutOfBoundsException | RecognitionException | ClassCastException ex) {
                 OutputText.setText("Syntax Error");
             }

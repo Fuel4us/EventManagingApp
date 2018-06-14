@@ -29,6 +29,7 @@
                 <m:MaterialButton ui:field="renameButton" text="Rename" waves="GREEN" backgroundColor="WHITE" textColor="BLACK" iconType="EDIT" iconPosition="RIGHT" iconColor="BLUE"/>
                 <m:MaterialButton ui:field="deleteButton" text="Delete" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="DELETE" iconPosition="RIGHT" iconColor="RED"/>
                 <m:MaterialButton ui:field="cancelButton" text="Cancel" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="CANCEL" iconPosition="RIGHT" iconColor="RED"/>
+                <m:MaterialButton ui:field="swichStateButton" text="Switch state" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="SWAP_VERTICAL_CIRCLE" iconPosition="RIGHT" iconColor="RED"/>
             </m:MaterialModalContent>
         </m:MaterialModal>
         

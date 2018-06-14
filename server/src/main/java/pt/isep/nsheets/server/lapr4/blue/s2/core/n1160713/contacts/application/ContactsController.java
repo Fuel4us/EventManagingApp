@@ -47,6 +47,6 @@ public class ContactsController implements Controller {
     }
 
     public UserDTO findUserByEmail(String email) {
-        return new ContactsService().findUserByEmail(email);
+        return new ContactsService().findUserByEmailDTO(email);
     }
 }

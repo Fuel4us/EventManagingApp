@@ -49,7 +49,7 @@ public class UserDTO implements Serializable {
     public String getPictureName() {
         return pictureName;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 3;

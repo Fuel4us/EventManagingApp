@@ -1,145 +1,110 @@
 grammar Vb;
 
-parse
- : block EOF
- ;
+parse: block EOF;
 
-block
- : stat*
- ;
+block: stat* | function*;
 
-stat
- : assignment
- | declaration
- | if_stat
- | while_stat
- | log
- | OTHER {System.err.println("unknown char: " + $OTHER.text);}
- ;
+function: init_method stat+ returnMethod end_method;
 
-declaration
- : 'Dim' ID 'As' type 
- ;
- 
-assignment
- : ID ASSIGN expr 
- ;
+init_method: typeOfFunction 'Function' nameOfMethod 'As' type;
 
-if_stat
- : IF condition_block_if (ELSE IF condition_block_if)* (ELSE stat_block_if)?
- ;
+typeOfFunction: 'Public' | 'Private';
 
-condition_block_if
- : expr stat_block_if
- ;
+returnMethod: 'Return' expr | 'Return' ID;
 
-stat_block_if
- : OPENIF block CLOSEIF
- | stat
- ;
+end_method: 'End' 'Function';
 
-while_stat
- : WHILE expr stat_block_while
- ;
- 
-stat_block_while
- : block ENDWHILE
- ;
- 
- 
-log
- : LOG expr 
- ;
+stat:
+	assignment
+	| declaration
+	| if_stat
+	| while_stat
+	| log
+	| OTHER {System.err.println("unknown char: " + $OTHER.text);};
 
-expr
- : expr POW<assoc=right> expr           #powExpr
- | MINUS expr                           #unaryMinusExpr
- | NOT expr                             #notExpr
- | expr op=(MULT | DIV | MOD) expr      #multiplicationExpr
- | expr op=(PLUS | MINUS) expr          #additiveExpr
- | expr op=(LTEQ | GTEQ | LT | GT) expr #relationalExpr
- | expr op=(EQ | NEQ) expr              #equalityExpr
- | expr AND expr                        #andExpr
- | expr OR expr                         #orExpr
- | atom                                 #atomExpr
- ;
+nameOfMethod: ID OPAR CPAR;
 
-atom
- : OPAR expr CPAR #parExpr
- | (INT | FLOAT)  #numberAtom
- | (TRUE | FALSE) #booleanAtom
- | ID             #idAtom
- | STRING         #stringAtom
- | NIL            #nilAtom
- ;
- 
-type
- : TYPE_INT
- | TYPE_FLOAT
- | TYPE_STRING
- ;
+declaration: 'Dim' ID 'As' type;
 
-TYPE_INT : 'Integer';
-TYPE_FLOAT : 'Float';
-TYPE_STRING : 'String';
+assignment: ID ASSIGN expr;
 
-OR : '||';
-AND : '&&';
-EQ : '==';
-NEQ : '<>';
-GT : '>';
-LT : '<';
-GTEQ : '>=';
-LTEQ : '<=';
-PLUS : '+';
-MINUS : '-';
-MULT : '*';
-DIV : '/';
-MOD : '%';
-POW : '^';
-NOT : '!';
+if_stat:
+	IF condition_block_if (ELSE IF condition_block_if)* (
+		ELSE stat_block_if
+	)?;
 
-SCOL : ';';
-ASSIGN : '=';
-OPAR : '(';
-CPAR : ')';
-OPENIF : 'Then';
-CLOSEIF : 'End' ' ' 'If';
-ENDWHILE : 'End' ' ' 'While';
+condition_block_if: expr stat_block_if;
 
-TRUE : 'true';
-FALSE : 'false';
-NIL : 'nil';
-IF : 'If';
-ELSE : 'Else';
-WHILE : 'While';
-LOG : 'Log';
+stat_block_if: OPENIF block CLOSEIF | stat;
 
-ID
- : ('$')? [a-zA-Z_] [a-zA-Z_0-9]*
- ;
+while_stat: WHILE expr stat_block_while;
 
-INT
- : [0-9]+
- ;
+stat_block_while: block ENDWHILE;
 
-FLOAT
- : [0-9]+ '.' [0-9]* 
- | '.' [0-9]+
- ;
+log: LOG expr;
 
-STRING
- : '"' (~["\r\n] | '""')* '"'
- ;
+expr:
+	expr POW <assoc = right> expr				# powExpr
+	| MINUS expr								# unaryMinusExpr
+	| NOT expr									# notExpr
+	| expr op = (MULT | DIV | MOD) expr			# multiplicationExpr
+	| expr op = (PLUS | MINUS) expr				# additiveExpr
+	| expr op = (LTEQ | GTEQ | LT | GT) expr	# relationalExpr
+	| expr op = (EQ | NEQ) expr					# equalityExpr
+	| expr AND expr								# andExpr
+	| expr OR expr								# orExpr
+	| atom										# atomExpr;
 
-COMMENT
- : '#' ~[\r\n]* -> skip
- ;
+atom:
+	OPAR expr CPAR		# parExpr
+	| (INT | FLOAT)		# numberAtom
+	| (TRUE | FALSE)	# booleanAtom
+	| ID				# idAtom
+	| STRING			# stringAtom
+	| NIL				# nilAtom;
 
-SPACE
- : [ \t\r\n] -> skip
- ;
+type: TYPE_INT | TYPE_FLOAT | TYPE_STRING;
 
-OTHER
- : . 
- ;
+TYPE_INT: 'Integer';
+TYPE_FLOAT: 'Float';
+TYPE_STRING: 'String';
+
+OR: '||';
+AND: '&&';
+EQ: '==';
+NEQ: '<>';
+GT: '>';
+LT: '<';
+GTEQ: '>=';
+LTEQ: '<=';
+PLUS: '+';
+MINUS: '-';
+MULT: '*';
+DIV: '/';
+MOD: '%';
+POW: '^';
+NOT: '!';
+
+SCOL: ';';
+ASSIGN: '=';
+OPAR: '(';
+CPAR: ')';
+OPENIF: 'Then';
+CLOSEIF: 'End' ' ' 'If';
+ENDWHILE: 'End' ' ' 'While';
+
+TRUE: 'true';
+FALSE: 'false';
+NIL: 'nil';
+IF: 'If';
+ELSE: 'Else';
+WHILE: 'While';
+LOG: 'Log';
+
+ID: ('$')? [a-zA-Z_] [a-zA-Z_0-9]*;
+INT: [0-9]+;
+FLOAT: [0-9]+ '.' [0-9]* | '.' [0-9]+;
+STRING: '"' (~["\r\n] | '""')* '"';
+COMMENT: '#' ~[\r\n]* -> skip;
+SPACE: [ \t\r\n] -> skip;
+OTHER: .;
