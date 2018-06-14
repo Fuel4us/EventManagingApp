@@ -319,6 +319,10 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         if(!checkIfGVExists(gvName))
             this.globalVariables.add(new GlobalVariable(new Value(), gvName));
     }
+    
+    public List<GlobalVariable> globalVariables(){
+        return this.globalVariables;
+    }
 	/*
  * GENERAL
  */

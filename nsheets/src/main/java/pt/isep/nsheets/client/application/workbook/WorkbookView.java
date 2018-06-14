@@ -42,6 +42,8 @@ import com.gwtplatform.mvp.client.ViewImpl;
 import com.google.gwt.user.client.ui.Panel;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
 import gwt.material.design.addins.client.window.MaterialWindow;
+import gwt.material.design.client.constants.IconPosition;
+import gwt.material.design.client.constants.IconType;
 
 import gwt.material.design.client.constants.TextAlign;
 import gwt.material.design.client.ui.*;
@@ -72,6 +74,7 @@ import pt.isep.nsheets.shared.core.formula.Function;
 import pt.isep.nsheets.shared.core.formula.FunctionParameter;
 import pt.isep.nsheets.shared.core.formula.lang.Language;
 import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
+import pt.isep.nsheets.shared.lapr4.green.n1160815.formula.lang.GlobalVariable;
 import pt.isep.nsheets.shared.services.*;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
@@ -227,7 +230,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox rangeConditionalEnd;
     @UiField
     MaterialIcon conditionalModalDeleteButton;
-
+    
+    @UiField
+    MaterialCollapsibleBody colapsBody;
+    
     @UiField
     MaterialTextBox nameModal;
     @UiField
@@ -621,6 +627,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             };
 
             workbooksSvc.addWorkbookDescription(Settings.getInstance().getWorkbook().toDTO(), callback);
+            updateCollapsible();
         });
 
         // Set the visible range of the table for pager (later)
@@ -734,7 +741,24 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             openSearchAndReplaceWindow();
         });
     }
-
+    
+    private void updateCollapsible(){
+        colapsBody.clear();
+        
+        for(GlobalVariable g : Settings.getInstance().getWorkbook().globalVariables()){
+            MaterialRow rowToAdd = new MaterialRow();
+            
+            MaterialLabel label = new MaterialLabel(g.getGvName());
+            MaterialLink link = new MaterialLink(IconType.CREATE);
+            link.setIconPosition(IconPosition.RIGHT);
+            
+            rowToAdd.add(label);
+            rowToAdd.add(link);
+            
+            colapsBody.add(rowToAdd);
+        }
+    }
+    
     private String getParameters(Language lang) {
         String par = "Parameters: \n";
         try {
