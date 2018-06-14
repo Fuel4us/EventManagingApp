@@ -82,7 +82,6 @@ public class MessagesServiceImpl extends RemoteServiceServlet implements Message
 
     }
 
-    @Override
     public ArrayList<NotificationDTO> getNotifications(String username) {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
