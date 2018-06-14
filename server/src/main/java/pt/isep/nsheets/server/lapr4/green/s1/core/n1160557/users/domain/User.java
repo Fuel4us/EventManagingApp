@@ -4,6 +4,7 @@ package pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.domain;
  *
  * @author alexandrebraganca
  */
+import com.google.gwt.dev.util.collect.HashSet;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,8 +13,10 @@ import javax.persistence.Id;
 import eapli.framework.domain.AggregateRoot;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Column;
 import org.apache.commons.codec.digest.DigestUtils;
+import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.services.UserDTO;
 
 /**
@@ -39,6 +42,7 @@ public class User implements AggregateRoot<Long>, Serializable {
     private boolean superUser;
     private boolean loggedIn;
     private List<String> blacklist;
+    private Set<Workbook> workbooks = new HashSet<>();
 
     public User(String email, String name, String nickname, String password, String pictureName, boolean superUser) throws IllegalArgumentException {
         if (email == null || name == null || nickname == null || password == null) {
@@ -82,6 +86,10 @@ public class User implements AggregateRoot<Long>, Serializable {
 
     public boolean isLoggedIn() {
         return loggedIn;
+    }
+
+    public Iterable<Workbook> getWorkbooks() {
+        return this.workbooks;
     }
 
     public void login() {
