@@ -73,15 +73,8 @@ public class ContactsService {
 
     public void denyInvitation(String currentUserEmail, String otherUserEmail) {
         final ContactsRepository contactsRepository = PersistenceContext.repositories().contacts();
-        Contact foundContact = contactsRepository.findContactFromDTO(otherUserEmail, currentUserEmail);
-        foundContact.deny();
-        try {
-            contactsRepository.save(foundContact);
-        } catch (DataConcurrencyException ex) {
-            Logger.getLogger(ContactsService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DataIntegrityViolationException ex) {
-            Logger.getLogger(ContactsService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        contactsRepository.removeContact(otherUserEmail, currentUserEmail);
     }
 
     public void blockUser(String currentUser, String userToBlock) {

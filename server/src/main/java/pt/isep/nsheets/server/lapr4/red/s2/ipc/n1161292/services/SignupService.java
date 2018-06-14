@@ -12,11 +12,14 @@ import pt.isep.nsheets.shared.services.UserDTO;
  * @author Tiago João Santos Rios, 1161292@isep.ipp.pt
  */
 public class SignupService {
-    
+
     public User signupUser(UserDTO dto) throws DataConcurrencyException, DataIntegrityViolationException {
         final UserRepository userRepository = PersistenceContext.repositories().users();
-        
-        return userRepository.save(User.fromDTOHashPassword(dto));
+
+        User newUser = User.fromDTOHashPassword(dto);
+        newUser.logout();
+
+        return userRepository.save(newUser);
     }
-    
+
 }

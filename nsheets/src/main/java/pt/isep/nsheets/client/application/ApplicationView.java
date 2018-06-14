@@ -29,32 +29,35 @@ import com.gwtplatform.mvp.client.ViewImpl;
 
 import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialPanel;
+import gwt.material.design.client.ui.MaterialRow;
 import gwt.material.design.client.ui.animate.MaterialAnimation;
 import gwt.material.design.client.ui.animate.Transition;
 
 public class ApplicationView extends ViewImpl implements ApplicationPresenter.MyView {
 
-	@UiField
-	HTMLPanel menu;
-	@UiField
-	HTMLPanel main;
-	
+    @UiField
+    HTMLPanel menu;
+    @UiField
+    HTMLPanel main;
+
     @UiField
     MaterialPanel panel, titlePanel;
     @UiField
-    MaterialLabel title, description;	
+    MaterialLabel title, description;
+    @UiField
+    static MaterialRow tab_row;
 
-	interface Binder extends UiBinder<Widget, ApplicationView> {
-	}
+    interface Binder extends UiBinder<Widget, ApplicationView> {
+    }
 
-	@Inject
-	ApplicationView(Binder uiBinder) {
-		initWidget(uiBinder.createAndBindUi(this));
+    @Inject
+    ApplicationView(Binder uiBinder) {
+        initWidget(uiBinder.createAndBindUi(this));
 
-		bindSlot(ApplicationPresenter.SLOT_MENU, menu);
-		bindSlot(ApplicationPresenter.SLOT_CONTENT, main);
-	}
-	
+        bindSlot(ApplicationPresenter.SLOT_MENU, menu);
+        bindSlot(ApplicationPresenter.SLOT_CONTENT, main);
+    }
+
     @Override
     public void setPageTitle(String title, String description, String link, String specification) {
         this.title.setText(title);
@@ -62,6 +65,10 @@ public class ApplicationView extends ViewImpl implements ApplicationPresenter.My
 
         new MaterialAnimation().transition(Transition.BOUNCEINLEFT).animate(this.title);
         new MaterialAnimation().transition(Transition.BOUNCEINLEFT).animate(this.description);
-    }	
+    }
+
+    public static MaterialRow getTabRow() {
+        return tab_row;
+    }
 
 }

@@ -29,4 +29,13 @@ public class JpaContactsRepository extends NSheetsJpaRepositoryBase<Contact, Lon
         return matchOne("e.contactEmail=:contactEmail and e.contactOwnerEmail=:contactOwnerEmail", params);
     }
 
+    @Override
+    public void removeContact(String contactEmail, String contactOwnerEmail) {
+        entityManager().getTransaction().begin();
+        entityManager().createQuery("delete from Contact c where c.contactEmail=:contactEmail and c.contactOwnerEmail=:contactOwnerEmail")
+                .setParameter("contactEmail", contactEmail)
+                .setParameter("contactOwnerEmail", contactOwnerEmail)
+                .executeUpdate();
+        entityManager().getTransaction().commit();
+    }
 }

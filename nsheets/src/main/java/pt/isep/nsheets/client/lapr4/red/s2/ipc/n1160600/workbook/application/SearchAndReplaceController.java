@@ -10,9 +10,15 @@ public class SearchAndReplaceController {
 
     private int index = 0;
     private List<Cell> cellList = new ArrayList<>();
-    public Spreadsheet spreadsheet;
+    private Spreadsheet spreadsheet;
+    private String expression;
 
+    public SearchAndReplaceController(Spreadsheet spreadsheet) {
+     this.spreadsheet = spreadsheet;   
+    }
+    
     public void searchAll(String expression) {
+        cellList.clear();
         for (int c = 0; c < spreadsheet.getColumnCount(); c++) {
             for (int r = 0; r < spreadsheet.getRowCount(); r++) {
                 Cell cell = spreadsheet.getCell(c, r);
@@ -21,6 +27,7 @@ public class SearchAndReplaceController {
                 }
             }
         }
+        this.expression = expression;
     }
 
     public void setSpreadsheet(Spreadsheet spreadsheet) {
@@ -29,7 +36,7 @@ public class SearchAndReplaceController {
 
     public String replacePossibility(String expression, Cell cell) {
         String aux = cell.getContent();
-        return aux.replaceFirst(aux, expression);
+        return aux.replaceFirst(this.expression, expression);
     }
 
     public String replace(String expression, Cell cell) throws FormulaCompilationException {

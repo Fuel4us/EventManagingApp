@@ -19,11 +19,34 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     public EvalVisitor(Map<String, Value> cells) {
         this.cells = cells;
     }
-    
-//    @Override
-//    public Value visitFunction(VbParser.FunctionContext ctx) {
-//        
-//    }
+
+
+    public Value visitTypeOfFunction(VbParser.TypeOfFunctionContext ctx){
+        String id = ctx.getText();
+
+        Value value;
+
+        if(id.equals("Public")) {
+            value = new Value("Public");
+            return memory.put(id, value);
+        }
+        if(id.equals("Private")) {
+            value = new Value("Private");
+            return memory.put(id, value);
+        }
+
+        value = new Value("");
+        return memory.put(id, value);
+    }
+
+    public Value visitNameOfMethod(VbParser.NameOfMethodContext ctx) {
+        String id = ctx.ID().getText();
+
+        Value value;
+        value = new Value("");
+
+        return memory.put(id, value);
+    }
 
     @Override
     public Value visitDeclaration(VbParser.DeclarationContext ctx) {

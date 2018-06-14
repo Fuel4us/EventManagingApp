@@ -1,0 +1,12 @@
+@startuml  UseCase.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+User -> (US2: Replace all)
+User -> (US1: Search and replace)
+
+
+@enduml

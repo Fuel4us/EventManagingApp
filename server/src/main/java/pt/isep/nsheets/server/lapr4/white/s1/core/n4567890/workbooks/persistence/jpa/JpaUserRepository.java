@@ -19,4 +19,12 @@ public class JpaUserRepository extends NSheetsJpaRepositoryBase<User, Long> impl
 
         return matchOne("e.email=:email", params);
     }
+
+    @Override
+    public User findByUsername(String nickname) {
+        final Map<String, Object> params = new HashMap<>();
+        params.put("nickname", nickname);
+
+        return matchOne("e.nickname=:nickname", params);
+    }
 }

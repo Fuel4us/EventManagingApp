@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -120,7 +121,7 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
             };
 
             contactsSvc.acceptInvitation(currentUserEmail, this.view.selectedInvite(), callback);
-            
+
         });
 
         this.view.buttonClickHandlerDenyInvite(event -> {
@@ -238,7 +239,20 @@ public class ContactsPresenter extends Presenter<ContactsPresenter.MyView, Conta
 
         SetPageTitleEvent.fire("Contacts", "Make your Contacts", "", "", this);
 
-        refreshViewContacts();
-        refreshViewInvites();
+        timer();
+    }
+
+    private void timer() {
+        // Create a new timer
+        Timer t = new Timer() {
+            @Override
+            public void run() {
+                refreshViewContacts();
+                refreshViewInvites();
+            }
+        };
+
+        // Schedule the timer to run once in 1 second.
+        t.scheduleRepeating(1000);
     }
 }

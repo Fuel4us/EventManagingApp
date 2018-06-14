@@ -1,0 +1,35 @@
+@startuml
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+boundary WorkbookView
+control SearchAndReplaceController
+entity Spreadsheet
+entity Cell
+
+box "NSheets Client"
+participant WorkbookView
+participant SearchAndReplaceController
+end box
+box "NSheets Shared"
+participant Spreadsheet
+participant Cell
+end box
+
+User -> WorkbookView : user inserts expression
+WorkbookView --> SearchAndReplaceController : create()
+WorkbookView -> SearchAndReplaceController : searchAll(expression)
+SearchAndReplaceController -> Spreadsheet : getCells()
+loop
+User->WorkbookView: find next
+WorkbookView -> SearchAndReplaceController : getNextCell()
+WorkbookView --> User : shows cell with desired content
+User->WorkbookView : replace cell content
+WorkbookView -> SearchAndReplaceController: replace(newExpression)
+SearchAndReplaceController->Cell : setContent(expression)
+end
+@enduml

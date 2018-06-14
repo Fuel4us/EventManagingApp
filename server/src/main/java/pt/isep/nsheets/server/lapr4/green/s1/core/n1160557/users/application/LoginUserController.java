@@ -1,9 +1,15 @@
 package pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.application;
 
+import eapli.framework.persistence.DataConcurrencyException;
+import eapli.framework.persistence.DataIntegrityViolationException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.codec.digest.DigestUtils;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.domain.User;
+import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.persistence.UserRepository;
+import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
 import pt.isep.nsheets.shared.services.UserDTO;
 
 /**
@@ -20,13 +26,24 @@ public class LoginUserController {
 //            new User("1160600@isep.ipp.pt", "João", "reis98", "123Asd", "", false),
 //            new User("1160629@isep.ipp.pt", "José Pedro", "espirito_santo97", "123Asd", "", false)
 //    );
-
     public LoginUserController() {
     }
 
     public UserDTO attemptLogin(String email, String password) {
+
+        final UserRepository userRepo = PersistenceContext.repositories().users();
+
         for (User u : new ListUserController().listUsers()) {
             if (u.getEmail().equals(email) && u.verifyPassword(DigestUtils.sha256Hex(password))) {
+                u.login();
+                try {
+                    userRepo.save(u);
+                } catch (DataConcurrencyException ex) {
+                    Logger.getLogger(LoginUserController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (DataIntegrityViolationException ex) {
+                    Logger.getLogger(LoginUserController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
                 return u.toDTO();
             }
         }

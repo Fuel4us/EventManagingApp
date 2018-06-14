@@ -17,6 +17,9 @@ import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.addins.client.bubble.MaterialBubble;
 import gwt.material.design.addins.client.combobox.MaterialComboBox;
 import gwt.material.design.addins.client.emptystate.MaterialEmptyState;
+import gwt.material.design.addins.client.fileuploader.MaterialFileUploader;
+import gwt.material.design.addins.client.fileuploader.base.UploadFile;
+import gwt.material.design.addins.client.fileuploader.events.SuccessEvent;
 
 import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.constants.ImageType;
@@ -67,6 +70,9 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
     MaterialButton searchBtn2, searchBtn3, sendButton1, sendButton2, sendButton3;
 
     @UiField
+    MaterialFileUploader uploadBtn1, uploadBtn2, uploadBtn3;
+
+    @UiField
     MaterialCard messageCard1, messageCard2, messageCard3;
 
     @UiField
@@ -114,6 +120,33 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
     ChatView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
 
+        uploadBtn1.setUrl(GWT.getModuleBaseURL() + "uploadServlet");
+
+        uploadBtn1.addSuccessHandler(new SuccessEvent.SuccessHandler<UploadFile>() {
+            @Override
+            public void onSuccess(SuccessEvent<UploadFile> event) {
+                txtMessage1.setText("/image/" + GWT.getHostPageBaseURL() + "uploadedFiles/" + event.getTarget().getName());
+            }
+        });
+
+        uploadBtn2.setUrl(GWT.getModuleBaseURL() + "uploadServlet");
+
+        uploadBtn2.addSuccessHandler(new SuccessEvent.SuccessHandler<UploadFile>() {
+            @Override
+            public void onSuccess(SuccessEvent<UploadFile> event) {
+                txtMessage2.setText("/image/" + GWT.getHostPageBaseURL() + "uploadedFiles/" + event.getTarget().getName());
+            }
+        });
+
+        uploadBtn3.setUrl(GWT.getModuleBaseURL() + "uploadServlet");
+
+        uploadBtn3.addSuccessHandler(new SuccessEvent.SuccessHandler<UploadFile>() {
+            @Override
+            public void onSuccess(SuccessEvent<UploadFile> event) {
+                txtMessage3.setText("/image/" + GWT.getHostPageBaseURL() + "uploadedFiles/" + event.getTarget().getName());
+            }
+        });
+
 //        buildDynamicTab();
     }
 
@@ -123,6 +156,7 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
 //        dynamicTabs.add(newTabItem(index));
 //        dynamicTabs.setTabIndex(index - 1);
 //    }
+
     public void showNotifications(ArrayList<NotificationDTO> notifications) {
         if (!notifications.isEmpty()) {
             for (NotificationDTO n : notifications) {
@@ -286,9 +320,20 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
         MaterialLabel userLabel = new MaterialLabel();
         userLabel.setText(messageuser);
 
+        //in case of message
         MaterialLabel textLabel = new MaterialLabel();
-        textLabel.setText(m.getText());
-        textLabel.setFontSize("1.6em");
+        //in case of image
+        MaterialImage image = new MaterialImage();
+
+        if (m.getText().startsWith("/image/")) {
+            image.setUrl(m.getText().substring(7));
+            image.setType(ImageType.DEFAULT);
+            image.setMarginTop(8);
+            image.setShadow(1);
+        } else {
+            textLabel.setText(m.getText());
+            textLabel.setFontSize("1.6em");
+        }
 
         MaterialLabel dateLabel = new MaterialLabel();
         dateLabel.setText(m.getDate().toString());
@@ -312,6 +357,7 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
         bubble.add(userLabel);
         bubble.add(textLabel);
         bubble.add(dateLabel);
+        bubble.add(image);
 
         row.add(avatar);
         row.add(bubble);
@@ -425,6 +471,21 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
     @Override
     public void buttonClickHandlerPrivateChat3(ClickHandler ch) {
         sendButton3.addClickHandler(ch);
+    }
+
+    @Override
+    public void buttonClickHandlerUploadImage1(ClickHandler ch) {
+        uploadBtn1.addClickHandler(ch);
+    }
+
+    @Override
+    public void buttonClickHandlerUploadImage2(ClickHandler ch) {
+        uploadBtn2.addClickHandler(ch);
+    }
+
+    @Override
+    public void buttonClickHandlerUploadImage3(ClickHandler ch) {
+        uploadBtn3.addClickHandler(ch);
     }
 
     @Override

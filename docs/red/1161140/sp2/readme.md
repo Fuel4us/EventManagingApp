@@ -13,6 +13,12 @@ We can further specify this textual requirements:
 
 ## Analysis
 
+For this use case, it's necessary to implement upload service so that a file can be read by the server.
+
+Besides that, it's necessary an XML parser to read the file and convert it to Java objects.
+
+Finally, the created workbook object needs to be set as the active workbook, so that the user can resume their work.
+
 **Use Case**
 
 ![US](us.png)
@@ -26,6 +32,10 @@ We can further specify this textual requirements:
 ![Domain Model](dm.png)
 
 ## Design
+
+**Tests**
+
+Since no domain classes were used and the controller and services needed a real file to work, no test methods are viable.
 
 **Requirements Realization**
 
