@@ -18,5 +18,5 @@ public interface WorkbooksServiceAsync {
     
     void searchWorkbooks(String name, AsyncCallback<ArrayList<WorkbookDTO>> callback);
     
-    //void changeState(boolean state, WorkbookDTO workbookDTO, AsyncCallback<WorkbookDTO> callback);
+    void changeState(boolean state, WorkbookDTO workbookDTO, AsyncCallback<WorkbookDTO> callback);
 }
