@@ -1,0 +1,22 @@
+@startuml design
+
+skinparam monochrome true
+skinparam shadowing false
+hide footbox
+
+actor User
+boundary CodeView
+control CodePresenter
+
+box "Client"
+participant CodeView
+participant CodePresenter
+end box
+
+box "Shared"
+control EvalVisitor
+end box
+
+CodeView -> CodePresenter : onReveal()
+
+@enduml

@@ -1,0 +1,15 @@
+@startuml analysis
+
+skinparam monochrome true
+skinparam shadowing false
+hide footbox
+
+actor User
+
+User -> Browser : Creates a function
+Browser ->> Shared :
+
+Shared -->> Browser : return
+Browser -> Browser : display
+
+@enduml
