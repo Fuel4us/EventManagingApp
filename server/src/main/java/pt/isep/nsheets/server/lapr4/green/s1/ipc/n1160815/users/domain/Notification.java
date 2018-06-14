@@ -22,6 +22,10 @@ public class Notification implements AggregateRoot<Long>, Serializable {
      * notification username
      */
     private String username;
+    /**
+     * user who sends the message
+     */
+    private String sender;
 
     /**
      * Text of the notification
@@ -32,11 +36,13 @@ public class Notification implements AggregateRoot<Long>, Serializable {
      * Constructor of the notification with all the arguments
      *
      * @param username
+     * @param from
      * @param text Text of the notification
      */
-    public Notification(String username, String text) {
+    public Notification(String username, String from, String text) {
         this.username = username;
-        this.text = text;
+        this.sender = from;
+        this.text = text;       
     }
 
     /**
@@ -63,11 +69,11 @@ public class Notification implements AggregateRoot<Long>, Serializable {
     }
 
     public NotificationDTO toDTO() {
-        return new NotificationDTO(this.text, this.username);
+        return new NotificationDTO(this.text, this.sender, this.username);
     }
 
     public static Notification fromDTO(NotificationDTO dto) throws IllegalArgumentException {
-        return new Notification(dto.getUsername(), dto.getText());
+        return new Notification(dto.getUsername(), dto.getSender(), dto.getText());
     }
 
     @Override
@@ -83,6 +89,10 @@ public class Notification implements AggregateRoot<Long>, Serializable {
         }
         final Notification other = (Notification) obj;
         if (!this.text.equals(other.text)) {
+            return false;
+        }
+
+        if (!this.sender.equals(other.sender)) {
             return false;
         }
         return (this.username == null ? other.username != null : !this.username.equals(other.username));

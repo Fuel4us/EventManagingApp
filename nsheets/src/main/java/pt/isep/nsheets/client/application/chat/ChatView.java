@@ -157,10 +157,11 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
 //        dynamicTabs.setTabIndex(index - 1);
 //    }
 
+    @Override
     public void showNotifications(ArrayList<NotificationDTO> notifications) {
         if (!notifications.isEmpty()) {
             for (NotificationDTO n : notifications) {
-                MaterialToast.fireToast("Message Notification\n\n" + n.getUsername() + ": " + n.getText());
+                MaterialToast.fireToast("Message Notification: " + n.getUsername() + " from " + n.getSender());
             }
         }
     }

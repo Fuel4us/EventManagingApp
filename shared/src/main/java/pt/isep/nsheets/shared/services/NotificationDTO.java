@@ -6,10 +6,12 @@ import java.io.Serializable;
 public class NotificationDTO implements Serializable {
 
     private String username;
+    private String sender;
     private String text;
 
-    public NotificationDTO(String username, String text) {
+    public NotificationDTO(String username, String from, String text) {
         this.username = username;
+        this.sender = from;
         this.text = text;
     }
 
@@ -22,6 +24,10 @@ public class NotificationDTO implements Serializable {
 
     public String getText() {
         return text;
+    }
+
+    public String getSender() {
+        return sender;
     }
 
 }

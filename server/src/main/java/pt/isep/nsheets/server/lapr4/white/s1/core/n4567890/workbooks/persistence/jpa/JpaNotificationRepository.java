@@ -25,4 +25,13 @@ public class JpaNotificationRepository extends NSheetsJpaRepositoryBase<Notifica
         return match("e.username=:username", params);
     }
 
+    @Override
+    public void removeNotificationsFromUser(String username) {
+        entityManager().getTransaction().begin();
+        entityManager().createQuery("delete from Notification n where n.username=:username")
+                .setParameter("username", username)
+                .executeUpdate();
+        entityManager().getTransaction().commit();
+    }
+
 }

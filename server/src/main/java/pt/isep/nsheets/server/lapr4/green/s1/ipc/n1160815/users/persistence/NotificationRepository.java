@@ -6,4 +6,6 @@ import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.domain.Notificat
 public interface NotificationRepository extends Repository<Notification, Long> {
 
     public Iterable<Notification> findAllFromUser(String email);
+
+    public void removeNotificationsFromUser(String username);
 }

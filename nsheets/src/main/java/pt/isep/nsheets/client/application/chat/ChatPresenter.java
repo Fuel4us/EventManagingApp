@@ -51,7 +51,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
         String textPrivateChat3();
 
         void showNotifications(ArrayList<NotificationDTO> notifications);
-        
+
         void buttonClickHandlerUploadImage1(ClickHandler ch);
 
         void buttonClickHandlerUploadImage2(ClickHandler ch);
@@ -69,7 +69,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
     @Inject
     ChatPresenter(EventBus eventBus, MyView view, MyProxy proxy, CurrentUser currentUser) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
-        
+
         refreshMessages();
 
         this.user = currentUser;
@@ -135,7 +135,6 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
             messagesSvc.addMessage(mDTO, callback);
         });
 
-        
 //        //####################################IMAGE UPLOAD####################################
 //
 //        this.view.buttonClickHandlerUploadImage1(e -> {
@@ -197,8 +196,6 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 //            MessagesDTO mDTO = new MessagesDTO(view.textPrivateChat3(), new Date(), this.user.getUser().getNickname(), CHAT_INDEX_PRIVATE_3);
 //            messagesSvc.addMessage(mDTO, callback);
 //        });
-
-
     }
 
     private void refreshMessages() {
