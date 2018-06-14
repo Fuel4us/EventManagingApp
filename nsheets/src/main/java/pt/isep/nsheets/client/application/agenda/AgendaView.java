@@ -2,7 +2,9 @@ package pt.isep.nsheets.client.application.agenda;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -89,46 +91,16 @@ public class AgendaView extends ViewImpl implements AgendaPresenter.MyView {
 
     @UiHandler("btnEdit")
     void editBtn(ClickEvent e) {
-    //With BUGS
+        //With BUGS
         materialPlanEmptyState.clear();
 
+        //falta editar name e description 
         AgendaDTO agendaDTOSelect = (AgendaDTO) comboAgendas.getSingleValue();
         updateTitle.setTitle(agendaDTOSelect.getName());
         updateTitle.setDescription(agendaDTOSelect.getDescription());
-
-        for (CalendarEventDTO calendarEventDTO : agendaDTOSelect.getListEvents()) {
-            card = new MaterialCard();
-            materialPlanEmptyState.add(card);
-
-            MaterialCardContent content = new MaterialCardContent();
-            card.add(content);
-
-            MaterialCardTitle title = new MaterialCardTitle();
-            title.setText(calendarEventDTO.getName());
-            content.add(title);
-
-            MaterialLabel descriptionLabel = new MaterialLabel();
-            descriptionLabel.setText(calendarEventDTO.getDescription());
-            content.add(descriptionLabel);
-
-            DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd/MM/yyyy");
-            DateTimeFormat timeFormat = DateTimeFormat.getFormat("HH:mm");
-
-            MaterialLabel dateLabel = new MaterialLabel();
-            dateLabel.setText(dateFormat.format(calendarEventDTO.getDate()));
-            content.add(dateLabel);
-
-            MaterialLabel timeLabel = new MaterialLabel();
-            timeLabel.setText(timeFormat.format(calendarEventDTO.getTime()));
-            content.add(timeLabel);
-
-            MaterialLabel durationLabel = new MaterialLabel();
-            durationLabel.setText(calendarEventDTO.getDuration().toString() + " minutes");
-            content.add(durationLabel);
-
-            MaterialButton deleteButton = deleteOption(true);
-            content.add(deleteButton);
-        }
+        
+        MaterialToast.fireToast("Edit WITH BUGS!!");
+        createCards(agendaDTOSelect, true);
     }
 
     @UiHandler("btnDelete")
@@ -140,6 +112,7 @@ public class AgendaView extends ViewImpl implements AgendaPresenter.MyView {
         materialPlanEmptyState.clear();
         comboAgendas.remove(comboAgendas.getSelectedIndex());
 
+        MaterialToast.fireToast("Delet With BUGS!!");
         btnEdit.setEnabled(false);
         btnDelete.setEnabled(false);
 
@@ -191,39 +164,7 @@ public class AgendaView extends ViewImpl implements AgendaPresenter.MyView {
         updateTitle.setTitle(agendaDTOSelect.getName());
         updateTitle.setDescription(agendaDTOSelect.getDescription());
 
-        for (CalendarEventDTO calendarEventDTO : agendaDTOSelect.getListEvents()) {
-            card = new MaterialCard();
-            materialPlanEmptyState.add(card);
-
-            MaterialCardContent content = new MaterialCardContent();
-            card.add(content);
-
-            MaterialCardTitle title = new MaterialCardTitle();
-            title.setText(calendarEventDTO.getName());
-            content.add(title);
-
-            MaterialLabel descriptionLabel = new MaterialLabel();
-            descriptionLabel.setText(calendarEventDTO.getDescription());
-            content.add(descriptionLabel);
-
-            DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd/MM/yyyy");
-            DateTimeFormat timeFormat = DateTimeFormat.getFormat("HH:mm");
-
-            MaterialLabel dateLabel = new MaterialLabel();
-            dateLabel.setText(dateFormat.format(calendarEventDTO.getDate()));
-            content.add(dateLabel);
-
-            MaterialLabel timeLabel = new MaterialLabel();
-            timeLabel.setText(timeFormat.format(calendarEventDTO.getTime()));
-            content.add(timeLabel);
-
-            MaterialLabel durationLabel = new MaterialLabel();
-            durationLabel.setText(calendarEventDTO.getDuration().toString() + " minutes");
-            content.add(durationLabel);
-
-            MaterialButton deleteButton = deleteOption(false);
-            content.add(deleteButton);
-        }
+        createCards(agendaDTOSelect, false);
 
         btnEdit.setEnabled(true);
         btnDelete.setEnabled(true);
@@ -261,17 +202,57 @@ public class AgendaView extends ViewImpl implements AgendaPresenter.MyView {
         calendarEventServiceAsync.getCalendarEvents(asyncCallback);
     }
 
-    private MaterialButton deleteOption(boolean b) {
+    private MaterialButton deleteOption(boolean b, MaterialCard card) {
         MaterialButton deleteButton = new MaterialButton();
+
         deleteButton.setIconType(IconType.DELETE);
         deleteButton.setType(ButtonType.FLAT);
         deleteButton.setText("Delete");
-        deleteButton.addClickHandler(event -> materialPlanEmptyState.remove(this.card));
+        deleteButton.addClickHandler((ClickEvent event) -> {
+            materialPlanEmptyState.remove(card);
+        });
+
         deleteButton.setEnabled(b);
         return deleteButton;
     }
 
     public void closeModal() {
         this.modal.close();
+    }
+
+    private void createCards(AgendaDTO agendaDTOSelect, boolean bool) {
+        for (CalendarEventDTO calendarEventDTO : agendaDTOSelect.getListEvents()) {
+            card = new MaterialCard();
+            materialPlanEmptyState.add(card);
+
+            MaterialCardContent content = new MaterialCardContent();
+            card.add(content);
+
+            MaterialCardTitle title = new MaterialCardTitle();
+            title.setText(calendarEventDTO.getName());
+            content.add(title);
+
+            MaterialLabel descriptionLabel = new MaterialLabel();
+            descriptionLabel.setText(calendarEventDTO.getDescription());
+            content.add(descriptionLabel);
+
+            DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd/MM/yyyy");
+            DateTimeFormat timeFormat = DateTimeFormat.getFormat("HH:mm");
+
+            MaterialLabel dateLabel = new MaterialLabel();
+            dateLabel.setText(dateFormat.format(calendarEventDTO.getDate()));
+            content.add(dateLabel);
+
+            MaterialLabel timeLabel = new MaterialLabel();
+            timeLabel.setText(timeFormat.format(calendarEventDTO.getTime()));
+            content.add(timeLabel);
+
+            MaterialLabel durationLabel = new MaterialLabel();
+            durationLabel.setText(calendarEventDTO.getDuration().toString() + " minutes");
+            content.add(durationLabel);
+
+            MaterialButton deleteButton = deleteOption(bool, card);
+            content.add(deleteButton);
+        }
     }
 }

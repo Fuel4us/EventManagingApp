@@ -3,7 +3,6 @@ package pt.isep.nsheets.shared.services;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import pt.isep.nsheets.shared.services.CalendarEventDTO;
 
 /**
  *
@@ -73,6 +72,24 @@ public class AgendaDTO implements Serializable {
 
     public boolean removeEvents(CalendarEventDTO event) {
         return listEvents.remove(event);
+    }
+
+    public boolean addEvent(CalendarEventDTO calendarDTOSelect) {
+        for (CalendarEventDTO event : listEvents) {
+            if (calendarDTOSelect.equals(event)) {
+                return false;
+            }
+        }
+        return listEvents.add(calendarDTOSelect);
+    }
+
+    public boolean removeEvent(CalendarEventDTO calendarDTOSelect) {
+        for (CalendarEventDTO event : listEvents) {
+            if (calendarDTOSelect.equals(event)) {
+                return listEvents.remove(event);
+            }
+        }
+        return false;
     }
 
 }
