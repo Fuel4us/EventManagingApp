@@ -5,6 +5,7 @@ import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.CellImpl;
 import pt.isep.nsheets.shared.core.IllegalValueTypeException;
 import pt.isep.nsheets.shared.core.Value;
+import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
 import pt.isep.nsheets.shared.ext.CellExtension;
 import pt.isep.nsheets.shared.ext.Extension;

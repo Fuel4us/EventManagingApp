@@ -32,6 +32,9 @@
                 </m:MaterialRow>
                 <m:MaterialRow grid="s6 m2">
                     <m:MaterialButton ui:field="sendButton1" width="100%;" text="Send" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK"/>
+                    <ma:fileuploader.MaterialFileUploader ui:field="uploadBtn1" maxFileSize="20" shadow="0">
+                        <ma:fileuploader.MaterialUploadLabel title="Upload Image"/>
+                    </ma:fileuploader.MaterialFileUploader>
                 </m:MaterialRow>
             </m:MaterialColumn>
             
@@ -45,6 +48,9 @@
                 </m:MaterialRow>
                 <m:MaterialRow grid="s6 m2">
                     <m:MaterialButton ui:field="sendButton2" width="100%;" text="Send" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK"/>
+                    <ma:fileuploader.MaterialFileUploader ui:field="uploadBtn2" maxFileSize="20" shadow="0">
+                        <ma:fileuploader.MaterialUploadLabel title="Upload Image"/>
+                    </ma:fileuploader.MaterialFileUploader>
                 </m:MaterialRow>
             </m:MaterialColumn>
             
@@ -58,6 +64,9 @@
                 </m:MaterialRow>
                 <m:MaterialRow grid="s6 m2">
                     <m:MaterialButton ui:field="sendButton3" width="100%;" text="Send" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK"/>
+                    <ma:fileuploader.MaterialFileUploader ui:field="uploadBtn3" maxFileSize="20" shadow="0">
+                        <ma:fileuploader.MaterialUploadLabel title="Upload Image"/>
+                    </ma:fileuploader.MaterialFileUploader>
                 </m:MaterialRow>
             </m:MaterialColumn>
             
