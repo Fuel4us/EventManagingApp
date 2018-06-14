@@ -46,7 +46,7 @@
                 <m:MaterialLabel ui:field="description" text="A Sophisticated Web Spreadsheet Application." fontSize="1.1em"/>
             </m:MaterialPanel>
         </m:MaterialPanel>
-        
+         <m:MaterialRow ui:field="tab_row" backgroundColor="LIGHT_BLUE" marginBottom="0"/>
     		<g:HTMLPanel ui:field="main" addStyleNames="{style.panel}" />
     	</m:MaterialContainer>
       

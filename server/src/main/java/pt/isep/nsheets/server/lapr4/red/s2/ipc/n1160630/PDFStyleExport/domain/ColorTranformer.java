@@ -322,11 +322,7 @@ public enum ColorTranformer {
      */
     public static String getHexColorByGWTColor(int color){
         
-        for(ColorTranformer color_t:values()){
-            if(color_t.ordinal()==color)
-                return color_t.hexColor;
-        }
+        return values()[color].hexColor;
         
-        return null;
     }
 }
