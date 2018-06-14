@@ -10,7 +10,7 @@ public interface UsersServiceAsync {
     
     void attemptLogin(String email, String password, AsyncCallback<UserDTO> callback);
     
-    void getWorkbook(UserDTO user, AsyncCallback<Iterable<WorkbookDTO>> callback);
-    
-    void addWorkbook(WorkbookDTO workbook, UserDTO user, AsyncCallback<Void> callback);
+//    void getWorkbook(UserDTO user, AsyncCallback<Iterable<WorkbookDTO>> callback);
+//    
+//    void addWorkbook(WorkbookDTO workbook, UserDTO user, AsyncCallback<Void> callback);
 }

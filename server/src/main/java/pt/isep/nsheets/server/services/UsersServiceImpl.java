@@ -64,24 +64,24 @@ public class UsersServiceImpl extends RemoteServiceServlet implements UsersServi
         return u;
     }
 
-    @Override
-    public void addWorkbook(WorkbookDTO workbook, UserDTO user) {
-        PersistenceContext.setSettings(getPersistenceSettings());
-        ContactsService service = new ContactsService();
-        User result = service.findUserByEmail(user.getEmail());
-        result.addWorkbook(Workbook.fromDTO(workbook));
-    }
-
-    @Override
-    public Iterable<WorkbookDTO> getWorkbook(UserDTO user) {
-        PersistenceContext.setSettings(getPersistenceSettings());
-        ContactsService service = new ContactsService();
-        User result = service.findUserByEmail(user.getEmail());
-        Iterable<Workbook> temp = result.getWorkbooks();
-        Set<WorkbookDTO> aux = new HashSet<>();
-        for (Workbook workbook : temp) {
-            aux.add(workbook.toDTO());
-        }
-        return aux;
-    }
+//    @Override
+//    public void addWorkbook(WorkbookDTO workbook, UserDTO user) {
+//        PersistenceContext.setSettings(getPersistenceSettings());
+//        ContactsService service = new ContactsService();
+//        User result = service.findUserByEmail(user.getEmail());
+//        result.addWorkbook(Workbook.fromDTO(workbook));
+//    }
+//
+//    @Override
+//    public Iterable<WorkbookDTO> getWorkbook(UserDTO user) {
+//        PersistenceContext.setSettings(getPersistenceSettings());
+//        ContactsService service = new ContactsService();
+//        User result = service.findUserByEmail(user.getEmail());
+//        Iterable<Workbook> temp = result.getWorkbooks();
+//        Set<WorkbookDTO> aux = new HashSet<>();
+//        for (Workbook workbook : temp) {
+//            aux.add(workbook.toDTO());
+//        }
+//        return aux;
+//    }
 }

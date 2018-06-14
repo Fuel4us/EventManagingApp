@@ -13,7 +13,7 @@ public interface UsersService extends RemoteService {
     
     UserDTO attemptLogin(String email, String password);
     
-    Iterable<WorkbookDTO> getWorkbook(UserDTO user);
-    
-    void addWorkbook(WorkbookDTO workbook, UserDTO user);
+//    Iterable<WorkbookDTO> getWorkbook(UserDTO user);
+//    
+//    void addWorkbook(WorkbookDTO workbook, UserDTO user);
 }

@@ -42,7 +42,8 @@ public class User implements AggregateRoot<Long>, Serializable {
     private boolean superUser;
     private boolean loggedIn;
     private List<String> blacklist;
-    private Set<Workbook> workbooks = new HashSet<>();
+    
+//    private Set<Workbook> workbooks = new HashSet<>();
 
     public User(String email, String name, String nickname, String password, String pictureName, boolean superUser) throws IllegalArgumentException {
         if (email == null || name == null || nickname == null || password == null) {
@@ -88,13 +89,13 @@ public class User implements AggregateRoot<Long>, Serializable {
         return loggedIn;
     }
 
-    public Iterable<Workbook> getWorkbooks() {
-        return this.workbooks;
-    }
-    
-    public void addWorkbook(Workbook w) {
-        this.workbooks.add(w);
-    }
+//    public Iterable<Workbook> getWorkbooks() {
+//        return this.workbooks;
+//    }
+//    
+//    public void addWorkbook(Workbook w) {
+//        this.workbooks.add(w);
+//    }
 
     public void login() {
         loggedIn = true;
