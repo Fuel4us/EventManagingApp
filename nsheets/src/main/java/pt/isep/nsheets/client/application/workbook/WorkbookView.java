@@ -305,8 +305,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
     private void openSearchAndReplaceWindow() {
         String expression = searchBox.getText();
-        SearchAndReplaceController controller = new SearchAndReplaceController();
-        controller.setSpreadsheet(this.customTable.getRow(0).getData().sheet);
+        SearchAndReplaceController controller = new SearchAndReplaceController(this.customTable.getRow(0).getData().sheet);
         controller.searchAll(expression);
         replaceButton.setEnabled(true);
         replaceWindowFirstBox.setEnabled(true);
