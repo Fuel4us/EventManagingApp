@@ -12,6 +12,7 @@ import pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.persistence.C
 import pt.isep.nsheets.server.lapr4.blue.s2.n1140403.persistence.ListNotesRepository;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.persistence.UserRepository;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.persistence.MessagesRepository;
+import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.persistence.NotificationRepository;
 //import pt.isep.nsheets.server.lapr4.green.s1.core.n1160832.spreadsheets.persistence.jpa.SpreadsheetRepository;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160629.extensions.persistence.ConfigurationRepository;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.persistence.ChartRepository;
@@ -32,7 +33,7 @@ public interface RepositoryFactory {
     UserRepository users();
 
     NoteRepository notes();
-    
+
     ListNotesRepository listNotes();
 
     ContactsRepository contacts();
@@ -53,4 +54,6 @@ public interface RepositoryFactory {
     CellStyleRepository cellstyle();
 
     PrivateChatsRepository privateChats();
+
+    NotificationRepository notifications();
 }

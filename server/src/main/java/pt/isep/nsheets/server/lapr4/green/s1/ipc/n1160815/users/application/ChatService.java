@@ -3,9 +3,11 @@ package pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.application;
 import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.domain.Message;
+import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.domain.Notification;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
 import pt.isep.nsheets.shared.services.MessagesDTO;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.persistence.MessagesRepository;
+import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.persistence.NotificationRepository;
 
 public class ChatService {
 
@@ -21,5 +23,10 @@ public class ChatService {
     public Iterable<Message> allMessages() {
         final MessagesRepository messageRepository = PersistenceContext.repositories().messages();
         return messageRepository.findAll();
+    }
+
+    public Iterable<Notification> allNotificationsFromUser(String username) {
+        final NotificationRepository notificationRepository = PersistenceContext.repositories().notifications();
+        return notificationRepository.findAllFromUser(username);
     }
 }

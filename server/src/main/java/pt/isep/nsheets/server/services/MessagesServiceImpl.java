@@ -12,12 +12,15 @@ import java.util.ArrayList;
 import java.util.Properties;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.application.AddMessageController;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.application.ListMessagesController;
+import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.application.ListNotificationsController;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.domain.Message;
+import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.domain.Notification;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;
 import pt.isep.nsheets.shared.services.DataException;
 import pt.isep.nsheets.shared.services.MessagesDTO;
 import pt.isep.nsheets.shared.services.MessagesService;
+import pt.isep.nsheets.shared.services.NotificationDTO;
 
 /**
  *
@@ -79,4 +82,19 @@ public class MessagesServiceImpl extends RemoteServiceServlet implements Message
 
     }
 
+    @Override
+    public ArrayList<NotificationDTO> getNotifications(String username) {
+        // Setup the persistence settings
+        PersistenceContext.setSettings(this.getPersistenceSettings());
+
+        ArrayList<NotificationDTO> notifications = new ArrayList<>();
+
+        ListNotificationsController ctrl = new ListNotificationsController();
+
+        Iterable<Notification> ns = ctrl.listNotifications(username);
+
+        ns.forEach(wb -> notifications.add(wb.toDTO()));
+
+        return notifications;
+    }
 }

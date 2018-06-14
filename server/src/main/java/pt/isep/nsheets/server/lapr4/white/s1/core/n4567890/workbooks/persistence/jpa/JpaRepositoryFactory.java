@@ -23,6 +23,7 @@ import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence
 import java.util.concurrent.locks.Condition;
 import pt.isep.nsheets.server.lapr4.blue.n1150372.s2.persistence.AgendaRepository;
 import pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.persistence.ContactsRepository;
+import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.persistence.NotificationRepository;
 import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160634.users.persistance.PrivateChatsRepository;
 
 /**
@@ -67,7 +68,7 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     public CalendarEventRepository calendarEvents() {
         return new JpaCalendarEventRepository(this.settings);
     }
-    
+
     @Override
     public AgendaRepository agenda() {
         return new JpaAgendaRepository(this.settings);
@@ -101,9 +102,15 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     public CellStyleRepository cellstyle() {
         return new JpaCellStyleRepository(this.settings);
     }
-    
+
     @Override
     public PrivateChatsRepository privateChats() {
         return new JpaPrivateChatsRepository(this.settings);
     }
+
+    @Override
+    public NotificationRepository notifications() {
+        return new JpaNotificationRepository(this.settings);
+    }
+
 }
