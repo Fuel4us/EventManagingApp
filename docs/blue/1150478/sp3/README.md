@@ -123,3 +123,4 @@ By memory we apply/use:
 Some Questions/Issues identified during the work in this feature increment
 
 # 8. Work Log
+* [ [Documentation] IPC06.2 - readMe.MD updated. [Implementation] IPC06.2 - implementation starting ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/8f4f673322897f0525247d5a6ef74402c5611d79)

@@ -126,11 +126,21 @@ public class ContactsService {
         contactsRepository.save(contact);
     }
 
-    public UserDTO findUserByEmail(String email) {
+    public UserDTO findUserByEmailDTO(String email) {
         final UserRepository userRepo = PersistenceContext.repositories().users();
         for (User u : userRepo.findAll()) {
             if (u.getEmail().equals(email)) {
                 return u.toDTO();
+            }
+        }
+        return null;
+    }
+    
+    public User findUserByEmail(String email) {
+        final UserRepository userRepo = PersistenceContext.repositories().users();
+        for (User u : userRepo.findAll()) {
+            if (u.getEmail().equals(email)) {
+                return u;
             }
         }
         return null;

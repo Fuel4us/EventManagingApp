@@ -45,7 +45,7 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
     HTMLPanel htmlPanel;
 
     @UiField
-    MaterialButton newWorkbookButton, saveButton, deleteButton, renameButton, cancelButton, searchButton;
+    MaterialButton newWorkbookButton, saveButton, deleteButton, renameButton, cancelButton, searchButton, swichStateButton;
 
     @UiField
     MaterialModal modal, optionModal;
@@ -75,14 +75,14 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
         cardContent.setTextColor(Color.WHITE);
 
         MaterialCardTitle cardTitle = new MaterialCardTitle();
-   
+
         cardTitle.add(new Anchor(wb.name, "#workbook"));
         cardTitle.setIconType(IconType.SETTINGS);
         cardTitle.setIconPosition(IconPosition.RIGHT);
-        
+
         MaterialLabel label = new MaterialLabel();
         label.setText(wb.description);
-        
+
         cardContent.add(cardTitle);
         cardContent.add(label);
 
@@ -163,6 +163,11 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
     }
 
     @Override
+    public void switchClickHandler(ClickHandler ch) {
+        swichStateButton.addClickHandler(ch);
+    }
+
+    @Override
     public void deleteClickHandler(ClickHandler ch) {
         deleteButton.addClickHandler(ch);
     }
@@ -185,6 +190,11 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
     @Override
     public String rename() {
         return this.renameTxt.getText();
+    }
+
+    @Override
+    public MaterialButton getSwichStateButton() {
+        return swichStateButton;
     }
 
     @Override

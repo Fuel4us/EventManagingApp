@@ -15,6 +15,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import gwt.material.design.client.ui.MaterialToast;
 
 import com.gwtplatform.mvp.client.annotations.NameToken;
+import gwt.material.design.client.ui.MaterialButton;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jdk.nashorn.internal.objects.NativeString;
@@ -64,6 +65,10 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         String title();
 
         String description();
+
+        MaterialButton getSwichStateButton();
+
+        void switchClickHandler(ClickHandler ch);
     }
 
     @NameToken(NameTokens.home)
@@ -151,6 +156,32 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                 }
             };
             workbooksSvc.renameWorkbook(rename, wdto, callback);
+            this.view.closeOptionModal();
+        });
+
+        this.view.switchClickHandler(e -> {
+            WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
+            WorkbookDTO wdto = this.view.focusedWorkbookDTO();
+            boolean state = false;
+           
+            // Set up the callback object.
+            AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error in switching!");
+                }
+
+                @Override
+                public void onSuccess(WorkbookDTO result) {
+                    try {
+                        MaterialToast.fireToast("Workbook state switched successfully!");
+                        refreshView();
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(HomeView.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            };
+            //workbooksSvc.changeState(state, wdto, callback);
             this.view.closeOptionModal();
         });
 

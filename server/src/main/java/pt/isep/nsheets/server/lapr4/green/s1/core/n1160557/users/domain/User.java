@@ -55,7 +55,7 @@ public class User implements AggregateRoot<Long>, Serializable {
         this.password = password;
         this.superUser = superUser;
         this.pictureName = pictureName;
-
+        
         this.blacklist = new ArrayList<>();
     }
 
@@ -90,6 +90,10 @@ public class User implements AggregateRoot<Long>, Serializable {
 
     public Iterable<Workbook> getWorkbooks() {
         return this.workbooks;
+    }
+    
+    public void addWorkbook(Workbook w) {
+        this.workbooks.add(w);
     }
 
     public void login() {
