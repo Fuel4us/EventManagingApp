@@ -7,10 +7,14 @@
     <ui:with field='res' type='pt.isep.nsheets.client.resources.AppResources'/>
 
     <g:HTMLPanel>
-        <m:MaterialColumn grid="s9">
-            <m:MaterialTextArea ui:field="CodeArea" label="Visual Basic code" length="600" resizeRule="AUTO"/>
-            <m:MaterialButton ui:field="runButton" text="RUN" textColor="GREEN" type="FLAT" waves="TEAL"/>
-            <m:MaterialTextArea ui:field="OutputText" label="Output Area" length="400" resizeRule="AUTO" enabled="false"/>
-        </m:MaterialColumn>
+        <m:MaterialRow>
+            <m:MaterialColumn grid="s6">
+                <m:MaterialTextArea ui:field="codeTextArea" label="Input" length="600" resizeRule="AUTO"/>
+                <m:MaterialButton ui:field="runButton" text="RUN" waves="LIGHT"/>
+            </m:MaterialColumn>
+            <m:MaterialColumn grid="s6">
+                <m:MaterialTextArea ui:field="outputTextArea" label="Output" length="300" resizeRule="AUTO" enabled="false"/>
+            </m:MaterialColumn>
+        </m:MaterialRow>
     </g:HTMLPanel>
 </ui:UiBinder>

@@ -29,11 +29,11 @@ import java.util.logging.Logger;
 class CodeView extends ViewImpl implements CodePresenter.MyView {
 
     @UiField
-    MaterialTextArea CodeArea;
+    MaterialTextArea codeTextArea;
     @UiField
     MaterialButton runButton;
     @UiField
-    MaterialTextArea OutputText;
+    MaterialTextArea outputTextArea;
 
     interface Binder extends UiBinder<Widget, CodeView> {
     }
@@ -41,22 +41,19 @@ class CodeView extends ViewImpl implements CodePresenter.MyView {
     @Inject
     CodeView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
-        initialize();
-    }
 
-    private void initialize() {
-
-        CodeArea.setText("Dim x As Integer\n"
+        codeTextArea.setText("Dim x As Integer\n"
                 + "\n"
                 + "x = 1\n"
                 + "\n"
                 + "While x <> 10\n"
                 + "\n"
+                + "Log \"The variable x has the value \" + x\n"
+                + "\n"
                 + "x = x + 1\n"
                 + "\n"
-                + "End While\n"
-                + "\n"
-                + "Log \"The variable x has the value \" + x");
+                + "End While"
+        );
 
         runButton.addClickHandler(event -> {
             Map<String, Value> cells = new HashMap<>();
@@ -70,7 +67,7 @@ class CodeView extends ViewImpl implements CodePresenter.MyView {
             }
 
             try {
-                VbLexer lexer = new VbLexer(new ANTLRInputStream(CodeArea.getText()));
+                VbLexer lexer = new VbLexer(new ANTLRInputStream(codeTextArea.getText()));
                 VbParser parser = new VbParser(new CommonTokenStream(lexer));
                 ParseTree tree = parser.parse();
                 EvalVisitor visitor = new EvalVisitor(cells);
@@ -79,14 +76,14 @@ class CodeView extends ViewImpl implements CodePresenter.MyView {
                 for (Entry<String, Value> c : cells.entrySet()) {
                     try {
                         Settings.getInstance().getWorkbook().getSpreadsheet(0).getCell(new Address(c.getKey())).setContent(c.getValue().toString());
-                    } catch (FormulaCompilationException ex) {
-                        Logger.getLogger(CodeView.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (FormulaCompilationException e) {
+                        Logger.getLogger(CodeView.class.getName()).log(Level.SEVERE, null, e);
                     }
                 }
 
-                OutputText.setText(visitor.getOutput());
-            } catch (IndexOutOfBoundsException | RecognitionException | ClassCastException ex) {
-                OutputText.setText("Syntax Error");
+                outputTextArea.setText(visitor.getOutput());
+            } catch (IndexOutOfBoundsException | RecognitionException | ClassCastException e) {
+                outputTextArea.setText("Syntax Error");
             }
         });
     }
