@@ -1,6 +1,8 @@
 package pt.isep.nsheets.shared.core.vb;
 
 import org.antlr.v4.runtime.misc.NotNull;
+import pt.isep.nsheets.shared.core.vb.compiler.VbBaseVisitor;
+import pt.isep.nsheets.shared.core.vb.compiler.VbParser;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,17 +22,34 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
         this.cells = cells;
     }
 
-
-    public Value visitTypeOfFunction(VbParser.TypeOfFunctionContext ctx){
+    public Value visitFunctionParameters(VbParser.TypeOfFunctionContext ctx) {
         String id = ctx.getText();
 
         Value value;
 
-        if(id.equals("Public")) {
+        if (id.equals("Public")) {
             value = new Value("Public");
             return memory.put(id, value);
         }
-        if(id.equals("Private")) {
+        if (id.equals("Private")) {
+            value = new Value("Private");
+            return memory.put(id, value);
+        }
+
+        value = new Value("");
+        return memory.put(id, value);
+    }
+
+    public Value visitTypeOfFunction(VbParser.TypeOfFunctionContext ctx) {
+        String id = ctx.getText();
+
+        Value value;
+
+        if (id.equals("Public")) {
+            value = new Value("Public");
+            return memory.put(id, value);
+        }
+        if (id.equals("Private")) {
             value = new Value("Private");
             return memory.put(id, value);
         }
@@ -289,7 +308,7 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
 
         return Value.VOID;
     }
-    
+
     public String getOutput() {
         return output;
     }

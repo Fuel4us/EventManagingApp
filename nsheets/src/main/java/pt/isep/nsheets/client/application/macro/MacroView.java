@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialTextArea;
-import gwt.material.design.client.ui.MaterialTextBox;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -24,8 +24,8 @@ import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.core.vb.EvalVisitor;
 import pt.isep.nsheets.shared.core.vb.Value;
-import pt.isep.nsheets.shared.core.vb.VbLexer;
-import pt.isep.nsheets.shared.core.vb.VbParser;
+import pt.isep.nsheets.shared.core.vb.compiler.VbLexer;
+import pt.isep.nsheets.shared.core.vb.compiler.VbParser;
 
 class MacroView extends ViewImpl implements MacroPresenter.MyView {
 

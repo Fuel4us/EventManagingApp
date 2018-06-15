@@ -16,8 +16,8 @@ import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.core.vb.EvalVisitor;
 import pt.isep.nsheets.shared.core.vb.Value;
-import pt.isep.nsheets.shared.core.vb.VbLexer;
-import pt.isep.nsheets.shared.core.vb.VbParser;
+import pt.isep.nsheets.shared.core.vb.compiler.VbLexer;
+import pt.isep.nsheets.shared.core.vb.compiler.VbParser;
 
 import javax.inject.Inject;
 import java.util.HashMap;
