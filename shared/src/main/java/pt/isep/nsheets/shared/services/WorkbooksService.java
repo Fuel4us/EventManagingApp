@@ -21,5 +21,5 @@ public interface WorkbooksService extends RemoteService {
         
         ArrayList<WorkbookDTO> searchWorkbooks(String name);
         
-        //void changeState(boolean state, WorkbookDTO workbookDTO);
+        void changeState(boolean state, WorkbookDTO wdto);
 }

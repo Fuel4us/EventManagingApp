@@ -76,6 +76,27 @@ governing permissions and limitations under the License. #L% -->
                 <m:MaterialButton ui:field="doneButton" iconType="DONE" iconColor="WHITE" circle="false" grid="s1" float="RIGHT" type="FLOATING"/>
             </m:MaterialPanel>
         </ma:window.MaterialWindow>
+        <!-- UI for Global Variables -->
+        <m:MaterialRow>
+            <m:MaterialCollapsible ui:field="colaps">
+                <m:MaterialCollapsibleItem>
+                    <m:MaterialCollapsibleHeader>
+                        <m:MaterialLink text="Global Variables" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
+                    </m:MaterialCollapsibleHeader>
+                    <m:MaterialCollapsibleBody ui:field="colapsBody">
+                        <!-- Just for testing -->
+                        <m:MaterialRow>
+                            <m:MaterialLabel text="Teste1"/>
+                            <m:MaterialLink ui:field="testeee" iconType="CREATE" iconPosition="RIGHT"/>
+                        </m:MaterialRow>
+                        <m:MaterialRow>
+                            <m:MaterialLabel text="Teste2"/>
+                            <m:MaterialLink ui:field="testee2" iconType="CREATE" iconPosition="RIGHT"/>
+                        </m:MaterialRow>
+                    </m:MaterialCollapsibleBody>
+                </m:MaterialCollapsibleItem>
+            </m:MaterialCollapsible>
+        </m:MaterialRow>
         <m:MaterialRow marginTop="60">
             <m:MaterialTextBox
                 m:id="fBox" ui:field="firstBox" placeholder="Enter your formula for the active cell" label="Enter your formula for the active cell"
