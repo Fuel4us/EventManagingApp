@@ -84,11 +84,11 @@ temporaryreference
     ;
 
 nameTemporary
-    :   UNDERSCORE ( LETTER )+
+    :   UNDERSCORE ( LETTER )+ 
     ;
 
 NAMEGLOBAL
-    :   ARROBA ( LETTER )+
+    :   ARROBA ( LETTER )+ ( LBRACKET NUMBER RBRACKET )?
     ;
 
 /* String literals, i.e. anything inside the delimiters */
