@@ -20,7 +20,7 @@ public class JpaWorkbookRepository extends NSheetsJpaRepositoryBase<Workbook, Lo
     public Workbook findByName(String name) {
         final Map<String, Object> params = new HashMap<>();
         params.put("name", name);
-        
+
         return matchOne("e.name=:name", params);
     }
 
@@ -36,10 +36,8 @@ public class JpaWorkbookRepository extends NSheetsJpaRepositoryBase<Workbook, Lo
     @Override
     public List<SpreadsheetImpl> getSpreadSheetByWorkbookName(String name) {
         Query query = entityManager().createQuery("SELECT s FROM Workbook w, SpreadsheetImpl s WHERE w.name=:name and s.workbook=w");
-        query.setParameter("name",name);
+        query.setParameter("name", name);
         return query.getResultList();
     }
 
-    
-    
 }

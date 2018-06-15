@@ -20,7 +20,6 @@
  */
 package pt.isep.nsheets.shared.core;
 
-import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
@@ -28,9 +27,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -54,6 +50,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
     private String name;
     private String description;
     private boolean publicState;
+    private String userName;
 
     /**
      * The spreadsheets of which the workbook consists
@@ -110,7 +107,20 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
 
         this.globalVariables = new ArrayList<GlobalVariable>();
     }
-    
+
+    public Workbook(String name, String description, boolean publicState, int sheets, String userName) {
+        this.name = name;
+        this.description = description;
+        this.publicState = publicState;
+
+        for (int i = 0; i < sheets; i++) {
+            spreadsheets.add(new SpreadsheetImpl(this,
+                    getNextSpreadsheetTitle()));
+        }
+
+        this.globalVariables = new ArrayList<GlobalVariable>();
+        this.userName = userName;
+    }
 
     public Workbook(String name, String description, List<Spreadsheet> spreadsheets) {
         this.name = name;
@@ -118,7 +128,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         this.spreadsheets = spreadsheets;
         this.globalVariables = new ArrayList<GlobalVariable>();
     }
-    
+
     public Workbook(String name, String description, boolean publicState, List<Spreadsheet> spreadsheets) {
         this.name = name;
         this.description = description;
@@ -127,6 +137,14 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         this.globalVariables = new ArrayList<GlobalVariable>();
     }
 
+    public Workbook(String name, String description, boolean publicState, List<Spreadsheet> spreadsheets, String userName) {
+        this.name = name;
+        this.description = description;
+        this.spreadsheets = spreadsheets;
+        this.publicState = publicState;
+        this.globalVariables = new ArrayList<GlobalVariable>();
+        this.userName = userName;
+    }
 
     /**
      * Creates a new workbook, using the given content matrix to create
@@ -157,6 +175,20 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         }
 
         this.globalVariables = new ArrayList<GlobalVariable>();
+    }
+
+    public Workbook(String name, String description, boolean publicState, String userName, String[][]... contents) {
+        this.name = name;
+        this.description = description;
+        this.publicState = publicState;
+
+        for (String[][] content : contents) {
+            spreadsheets.add(new SpreadsheetImpl(this,
+                    getNextSpreadsheetTitle(), content));
+        }
+
+        this.globalVariables = new ArrayList<GlobalVariable>();
+        this.userName = userName;
     }
 
     /**
@@ -243,6 +275,10 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         return name;
     }
 
+    public boolean isPublicState() {
+        return publicState;
+    }
+
     public String description() {
         return description;
     }
@@ -261,6 +297,10 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
      */
     public void addWorkbookListener(WorkbookListener listener) {
         listeners.add(listener);
+    }
+
+    public String getUserName() {
+        return userName;
     }
 
     /**
@@ -329,7 +369,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         for (Spreadsheet ss : this.spreadsheets) {
             spreadsheetDTOS.add(ss.toDTO());
         }
-        return new WorkbookDTO(this.name, this.description, this.publicState, spreadsheetDTOS);
+        return new WorkbookDTO(this.name, this.description, this.publicState, spreadsheetDTOS, this.userName);
     }
 
     public static Workbook fromDTO(WorkbookDTO dto) {
@@ -342,7 +382,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
                 spreadsheet.add(SpreadsheetImpl.fromDTO(ss, ss.columns, ss.rows));
             }
 
-            return new Workbook(dto.name, dto.description,  dto.publicState, spreadsheet);
+            return new Workbook(dto.name, dto.description, dto.publicState, spreadsheet, dto.userName);
         }
     }
 
@@ -383,8 +423,8 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
             this.globalVariables.add(new GlobalVariable(new Value(), gvName));
         }
     }
-    
-    public List<GlobalVariable> globalVariables(){
+
+    public List<GlobalVariable> globalVariables() {
         return this.globalVariables;
     }
     /*
