@@ -125,3 +125,5 @@ Some Questions/Issues identified during the work in this feature increment
 # 8. Work Log
 * [ [Documentation] IPC06.2 - readMe.MD updated. [Implementation] IPC06.2 - implementation starting ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/8f4f673322897f0525247d5a6ef74402c5611d79)
 * [ [Implementation] IPC06.2 - users now have workbooks associated ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/77afedd8e1ba50a204dac92ac237bd1ac2758ca4)
+* [ [Implementation] IPC06.2 - now users can select wich workbook is private or public ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/386c4622e755701223b7715f8aa2feed395743bf)
+* [ [Implementation] IPC06.2 - now workbooks are private for each user. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/958a111544582eeb59876803714538a69466346e)
