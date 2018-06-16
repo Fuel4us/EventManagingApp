@@ -18,6 +18,7 @@ import pt.isep.nsheets.shared.core.formula.util.ExpressionVisitor;
 public class GlobalVariable extends Literal implements Expression{
     
     String gvName;
+    Integer position;
     
     /**
      *
@@ -26,8 +27,19 @@ public class GlobalVariable extends Literal implements Expression{
     public GlobalVariable(Value gvValue, String gvName) {
         super(gvValue);
         this.gvName = gvName;
+        this.position = 0;
+    }
+    
+    public GlobalVariable(Value gvValue, String gvName, Integer position) {
+        super(gvValue);
+        this.gvName = gvName;
+        this.position = position;
     }
 
+    public Integer getPosition() {
+        return position;
+    }
+    
     public String getGvName() {
         return gvName;
     }

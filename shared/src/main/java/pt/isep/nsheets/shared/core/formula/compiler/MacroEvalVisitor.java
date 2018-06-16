@@ -174,16 +174,16 @@ public class MacroEvalVisitor extends MacroBaseVisitor<Expression>  {
                         return new CellReference(cell.getSpreadsheet(), ctx.getText());
                     case MacroParser.NAMEGLOBAL:
                         Workbook currentWorkbook = Settings.getInstance().getWorkbook();
-
                         String gvName = ctx.getChild(0).getText();
-                        if (currentWorkbook.checkIfGVExists(gvName)) {
-                            //Global variable already exits
-                            return currentWorkbook.getGlobalVariable(gvName);
-                        } else {
-                            GlobalVariable gv = new GlobalVariable(new Value(), gvName);
-                            currentWorkbook.addGlobalVariable(gvName);
-                            return gv;
-                        }
+                        Integer position = 0;
+                        
+                        if(ctx.getChildCount() == 2)
+                            position = Integer.parseInt(ctx.getChild(1).getText().split("\\[")[1].split("\\]")[0]);
+                        
+                        if (currentWorkbook.checkIfGVExists(gvName, position))
+                            return currentWorkbook.getGlobalVariable(gvName, position);
+                        else 
+                            return currentWorkbook.addGlobalVariable(gvName, position);
                     default:
                         return visit(ctx.getChild(0));
                 }
