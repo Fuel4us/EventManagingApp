@@ -49,7 +49,7 @@ function_call
 reference
 	:	CELL_REF
 		( ( COLON ) CELL_REF )?
-    |   NAMEGLOBAL
+    |   NAMEGLOBAL ARRAY?
 	;
 	
 literal
@@ -88,8 +88,10 @@ nameTemporary
     ;
 
 NAMEGLOBAL
-    :   ARROBA ( LETTER )+ ( LBRACKET NUMBER RBRACKET )?
+    :   ARROBA ( LETTER )+
     ;
+
+ARRAY : ( LBRACKET INDEX RBRACKET ) ;
 
 /* String literals, i.e. anything inside the delimiters */
 STRING  : QUOT ('\\"' | ~'"')* QUOT
@@ -107,6 +109,10 @@ NUMBER: DIGITNOTZERO ( DIGIT )* FRACTIONALPART?
 FRACTIONALPART:  COMMA  DIGIT DIGIT
                 | DOT DIGIT DIGIT?
                 ;
+
+INDEX: DIGIT
+    | DIGITNOTZERO ( DIGIT )*
+    ;
 
 
 DIGIT : '0'..'9' ;
