@@ -30,7 +30,6 @@ public class CodePresenter extends Presenter<CodePresenter.MyView, CodePresenter
     protected void onReveal() {
         super.onReveal();
 
-        SetPageTitleEvent.fire("Code", "Add Script ", "", "", this);
+        SetPageTitleEvent.fire("Visual Basic", "Run a Visual Basic script", "", "", this);
     }
 }
-

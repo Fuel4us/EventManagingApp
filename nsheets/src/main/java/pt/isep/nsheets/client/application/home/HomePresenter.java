@@ -19,6 +19,7 @@ import gwt.material.design.client.ui.MaterialButton;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
+import pt.isep.nsheets.client.application.menu.MenuView;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import pt.isep.nsheets.shared.core.Workbook;
@@ -88,6 +89,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         this.view.buttonClickHandler(e -> {
             WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
             boolean publicState = false;
+            String userName = MenuView.getUsername().toString();
             // Set up the callback object.
             AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
                 @Override
@@ -103,7 +105,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                 }
             };
 
-            WorkbookDTO wdDto = new Workbook(this.view.title(), this.view.description(), publicState, Settings.SPREADSHEET_DEFAULT).toDTO();
+            WorkbookDTO wdDto = new Workbook(this.view.title(), this.view.description(), publicState, userName, Settings.SPREADSHEET_DEFAULT).toDTO();
             workbooksSvc.addWorkbookDescription(wdDto, callback);
 
             this.view.closeModal();
@@ -241,7 +243,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
             }
         };
 
-        workbooksSvc.getWorkbooks(callback);
+        workbooksSvc.listWorkbooksPerUser(MenuView.getUsername().toString(), callback);
     }
 
     public void refreshViewAfterSearch(String workbookName) {

@@ -82,7 +82,7 @@ public class ImportXmlService {
                 }
             }
         } catch (ParserConfigurationException | IOException | SAXException e) {
-            java.util.logging.Logger.getLogger(getClass().getName()).log(java.util.logging.Level.SEVERE, null, e);
+            e.printStackTrace();
         }
 
         return workbook;

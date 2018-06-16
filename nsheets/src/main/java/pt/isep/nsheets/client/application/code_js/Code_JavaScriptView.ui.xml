@@ -29,7 +29,7 @@
         font-style: normal;
         font-variant: normal;
         font-weight: 400;
-        line-height: 20px;
+        line-height: 40px;
         
         height: inherit;
         overflow-y: auto;
@@ -64,6 +64,7 @@
         
         .card-content{
         height: inherit;
+        max-height: 450px;
         }
         
         .input-field{
@@ -121,7 +122,7 @@
                     </m:MaterialRow>
                     <m:MaterialRow textAlign="CENTER">
                         <m:MaterialCard ui:field="card" addStyleNames="{style.card}">
-                            <m:MaterialCardTitle text="Result"  textColor="BLACK"/>
+                            <m:MaterialCardTitle text="Console"  textColor="BLACK"/>
                             <m:MaterialCardContent ui:field="cardContent"/>
                         </m:MaterialCard>
                     </m:MaterialRow>

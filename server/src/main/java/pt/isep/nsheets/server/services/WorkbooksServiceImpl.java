@@ -60,6 +60,22 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
 
         return workbooks;
     }
+    
+    @Override
+    public  Iterable<WorkbookDTO> listWorkbooksPerUser(String user) {
+        // Setup the persistence settings
+        PersistenceContext.setSettings(this.getPersistenceSettings());
+
+        ArrayList<WorkbookDTO> workbooks = new ArrayList<>();
+
+        ListWorkbookDescriptionController ctrl = new ListWorkbookDescriptionController();
+
+        Iterable<Workbook> wbs = ctrl.listWorkbooksPerUser(user);
+
+        wbs.forEach(wb -> workbooks.add(wb.toDTO()));
+
+        return workbooks;
+    }
 
     @Override
     public WorkbookDTO addWorkbookDescription(WorkbookDTO wbDTO)
@@ -124,7 +140,7 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
 
         return wbs;
     }
-    
+
     @Override
     public void changeState(boolean state, WorkbookDTO wdto) {
         PersistenceContext.setSettings(this.getPersistenceSettings());
