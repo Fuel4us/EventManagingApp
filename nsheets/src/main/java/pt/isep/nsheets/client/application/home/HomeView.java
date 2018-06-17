@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 
+import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.constants.IconPosition;
 import gwt.material.design.client.constants.IconType;
@@ -28,6 +29,7 @@ import gwt.material.design.client.ui.MaterialRow;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.menu.MenuView;
+import pt.isep.nsheets.client.place.NameTokens;
 import pt.isep.nsheets.client.security.CurrentUser;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.application.Settings;

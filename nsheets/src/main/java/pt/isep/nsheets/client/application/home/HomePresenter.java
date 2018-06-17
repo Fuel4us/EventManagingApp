@@ -10,18 +10,21 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 
+import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import gwt.material.design.client.ui.MaterialToast;
 
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import gwt.material.design.client.ui.MaterialButton;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import jdk.nashorn.internal.objects.NativeString;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
+import pt.isep.nsheets.client.application.menu.MenuView;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
+import pt.isep.nsheets.client.place.ParameterTokens;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.application.Settings;
@@ -31,6 +34,7 @@ import pt.isep.nsheets.shared.services.WorkbooksService;
 public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter.MyProxy> {
 
     private MyView view;
+    private final PlaceManager placeManager;
 
     interface MyView extends View {
 
@@ -77,13 +81,18 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     }
 
     @Inject
-    HomePresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+    HomePresenter(EventBus eventBus, MyView view, MyProxy proxy, PlaceManager placeManager) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
 
         this.view = view;
+        this.placeManager = placeManager;
 
         this.view.addClickHandler(event -> {
             this.view.openModal();
+        });
+
+        MenuView.getUsername().addClickHandler(event -> {
+            this.redirectToProfilePage();
         });
 
         this.view.buttonClickHandler(e -> {
@@ -260,6 +269,15 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         SetPageTitleEvent.fire("Home", "The most recent Workbooks", "", "", this);
 
         refreshView();
+    }
+
+    private void redirectToProfilePage(){
+        String token = placeManager
+                .getCurrentPlaceRequest()
+                .getParameter(ParameterTokens.REDIRECT, NameTokens.profile);
+        PlaceRequest placeRequest = new PlaceRequest.Builder().nameToken(token).build();
+
+        placeManager.revealPlace(placeRequest);
     }
 
 }
