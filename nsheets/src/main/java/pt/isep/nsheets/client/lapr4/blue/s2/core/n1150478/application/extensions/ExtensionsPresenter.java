@@ -150,9 +150,10 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
         this.view = view;
 
         // ISTO VAI BUSCAR O VALOR DO BOOLEAN QUE TOU A FALAR
-        if (view.getMaterialSwitch1().getValue() == true) { }
+
 
         view.addConfirmationHandler(event -> {
+
             ConfigurationServiceAsync configurationSvc = GWT.create(ConfigurationService.class);
 
             AsyncCallback<ConfigurationDTO> callback = new AsyncCallback<ConfigurationDTO>() {
