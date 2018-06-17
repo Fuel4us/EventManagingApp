@@ -11,7 +11,7 @@
 
         <m:MaterialCollapsible grid="s12 m6 l8" ui:field="collapsible">
             <!-- Configuration UIs must be manually added to this Collapsible-->
-            <m:MaterialCollapsibleItem>
+            <m:MaterialCollapsibleItem ui:field="switch1_item">
                 <m:MaterialCollapsibleHeader>
                     <m:MaterialLink text="Value Colour Extension" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
                     <m:MaterialSwitch ui:field="switch1" value="true" float="RIGHT" onLabel="Enabled" offLabel="Disabled"/>
@@ -34,7 +34,7 @@
             </m:MaterialCollapsibleItem>
             <!-- Core 02.2 Implementation -> @author João Pereira_1150478@isep.ipp.pt -->
             <!-- Add Menu Option -->
-            <m:MaterialCollapsibleItem>
+            <m:MaterialCollapsibleItem ui:field="switch2_item">
                 <m:MaterialCollapsibleHeader>
                     <m:MaterialLink text="Add Menu Option" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
                     <m:MaterialSwitch ui:field="switch2" value="true" float="RIGHT" onLabel="Enabled" offLabel="Disabled"/>
@@ -49,7 +49,7 @@
                 </m:MaterialCollapsibleBody>
             </m:MaterialCollapsibleItem>
             <!-- Add Popup Option in Cells Option -->
-            <m:MaterialCollapsibleItem>
+            <m:MaterialCollapsibleItem ui:field="switch3_item">
                 <m:MaterialCollapsibleHeader>
                     <m:MaterialLink text="Add Popup Option" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
                     <m:MaterialSwitch ui:field="switch3" value="true" float="RIGHT" onLabel="Enabled" offLabel="Disabled"/>
@@ -65,7 +65,7 @@
                 </m:MaterialCollapsibleBody>
             </m:MaterialCollapsibleItem>
             <!-- Add Side Bar Option -->
-            <m:MaterialCollapsibleItem>
+            <m:MaterialCollapsibleItem ui:field="switch4_item">
                 <m:MaterialCollapsibleHeader>
                     <m:MaterialLink text="Add Side Bar" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
                     <m:MaterialSwitch ui:field="switch4" value="true" float="RIGHT" onLabel="Enabled" offLabel="Disabled"/>
