@@ -1,4 +1,4 @@
-// Generated from /Users/pedromonteiro/Desktop/REPO/shared/src/main/antlr4/pt/isep/nsheets/shared/core/js_complex/compiler/Js_complex.g4 by ANTLR 4.7.1
+// Generated from c:\Pedro\1 - isep\2 ano - 2 semestre\trabalhos\LAPR4\Projeto\repositorio_turma\shared\src\main\antlr4\pt\isep\nsheets\shared\core\js_complex\compiler\Js_complex.g4 by ANTLR 4.7.1
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;

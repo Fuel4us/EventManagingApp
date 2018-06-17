@@ -26,6 +26,12 @@ public class SearchWorkbooksController {
                 searchedWorkbooks.add(workbook);
             }
         }
+        
+        for (Workbook workbook : repo.findAll()) {
+            if ((!searchedWorkbooks.contains(workbook)) && workbook.description().toLowerCase().contains(workbookName.toLowerCase())) {
+                searchedWorkbooks.add(workbook);
+            }
+        }
         return searchedWorkbooks;
     }
 }

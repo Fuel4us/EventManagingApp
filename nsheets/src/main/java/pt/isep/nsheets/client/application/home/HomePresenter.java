@@ -132,6 +132,9 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                     }
                 }
             };
+            if(workbookName.equals("all")) {
+                refreshView();
+            } 
             refreshViewAfterSearch(workbookName);
         });
 
@@ -164,11 +167,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         this.view.switchClickHandler(e -> {
             WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
             WorkbookDTO wdto = this.view.focusedWorkbookDTO();
-            if (wdto.publicState == true) {
-                MaterialToast.fireToast("Workbook público");
-            } else {
-                MaterialToast.fireToast("Workbook privado");
-            }
             boolean state;
             if (wdto.publicState==true) {
                 state = false;
@@ -253,7 +251,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         AsyncCallback<ArrayList<WorkbookDTO>> callback = new AsyncCallback<ArrayList<WorkbookDTO>>() {
             @Override
             public void onFailure(Throwable caught) {
-                // TODO: Do something with errors.
+                MaterialToast.fireToast("error in searching");
             }
 
             @Override
