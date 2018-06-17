@@ -1,9 +1,9 @@
-**Gonçalo Fonseca** (1150503) - Sprint 1 - IPC03.1
+**Gonçalo Fonseca** (1150503) - Sprint 3 - Core02.3
 ===============================
 
 # 1. General Notes
 
-Possibilty to export a workbook to pdf
+Possibilty to enable and disable an Extension
 
 # 2. Requirements
 
