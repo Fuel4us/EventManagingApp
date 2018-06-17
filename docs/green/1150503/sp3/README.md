@@ -24,12 +24,9 @@ I created a boolean which dicatated if the user could or not use the extension. 
 
 # 4. Design
 
+## 4.1. Sequence Diagram
 
-## 4.1. Tests 
-
-
-## 4.2. Requirements Realization
-
+![SD](Extensions.jpg)
 
 ## 4.3. Classes
 
