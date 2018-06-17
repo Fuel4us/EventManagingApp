@@ -15,6 +15,8 @@ public class WorkbookDTO implements IsSerializable {
     public String description;
     public List<SpreadsheetDTO> spreadsheets = new ArrayList<>();
     public int createdSpreadsheets;
+    public boolean publicState;
+    public String userName;
     
     public WorkbookDTO() {};
     
@@ -24,10 +26,26 @@ public class WorkbookDTO implements IsSerializable {
         this.spreadsheets = spreadsheets;
         this.createdSpreadsheets = spreadsheets.size();
     }
+    public WorkbookDTO(String name, String description, boolean publicState, List<SpreadsheetDTO> spreadsheets, String userName){
+        this.name = name;
+        this.description = description;
+        this.spreadsheets = spreadsheets;
+        this.createdSpreadsheets = spreadsheets.size();
+        this.publicState = publicState;
+        this.userName = userName;
+    }
     
     public WorkbookDTO(String name, String description, int createdSpreadsheets){
         this.name = name;
         this.description = description;
         this.createdSpreadsheets = createdSpreadsheets;
+    }
+    
+    public WorkbookDTO(String name, String description, boolean publicState, int createdSpreadsheets, String userName){
+        this.name = name;
+        this.description = description;
+        this.createdSpreadsheets = createdSpreadsheets;
+        this.publicState = publicState;
+        this.userName = userName;
     }
 }

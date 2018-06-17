@@ -37,7 +37,6 @@ import pt.isep.nsheets.client.application.home.HomeModule;
 import pt.isep.nsheets.client.application.imports.ImportModule;
 import pt.isep.nsheets.client.application.listNotes.ListNotesModule;
 import pt.isep.nsheets.client.application.login.LoginModule;
-import pt.isep.nsheets.client.application.macro.MacroModule;
 import pt.isep.nsheets.client.application.menu.MenuModule;
 import pt.isep.nsheets.client.application.notes.NotesModule;
 import pt.isep.nsheets.client.application.workbook.WorkbookModule;
@@ -64,7 +63,6 @@ public class ApplicationModule extends AbstractPresenterModule {
         install(new CodeModule());
         install(new Code_JavaScriptModule());
         install(new ExtensionsModule());
-        install(new MacroModule());
         install(new ContactsModule());
         install(new AgendaModule());
         install(new ListNotesModule());

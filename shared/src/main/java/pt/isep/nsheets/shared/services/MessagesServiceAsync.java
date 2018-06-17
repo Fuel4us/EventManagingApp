@@ -13,8 +13,10 @@ import java.util.ArrayList;
  * @author Leandro
  */
 public interface MessagesServiceAsync {
-    
+
     void addMessage(MessagesDTO mDTO, AsyncCallback<MessagesDTO> callback);
-    
+
     void getMessages(AsyncCallback<ArrayList<MessagesDTO>> callback);
+
+    void getNotifications(String username, AsyncCallback<ArrayList<NotificationDTO>> callback);
 }

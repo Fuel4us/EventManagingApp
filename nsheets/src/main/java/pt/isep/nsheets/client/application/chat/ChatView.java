@@ -31,11 +31,9 @@ import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialRow;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
-import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160634.users.domain.PrivateChat;
 
 import pt.isep.nsheets.shared.services.MessagesDTO;
-import pt.isep.nsheets.shared.services.PrivateChatDTO;
-import pt.isep.nsheets.shared.services.PrivateChatsServiceAsync;
+import pt.isep.nsheets.shared.services.NotificationDTO;
 import pt.isep.nsheets.shared.services.UserDTO;
 import pt.isep.nsheets.shared.services.UsersService;
 import pt.isep.nsheets.shared.services.UsersServiceAsync;
@@ -158,6 +156,16 @@ class ChatView extends ViewImpl implements ChatPresenter.MyView {
 //        dynamicTabs.add(newTabItem(index));
 //        dynamicTabs.setTabIndex(index - 1);
 //    }
+
+    @Override
+    public void showNotifications(ArrayList<NotificationDTO> notifications) {
+        if (!notifications.isEmpty()) {
+            for (NotificationDTO n : notifications) {
+                MaterialToast.fireToast("Message Notification: " + n.getUsername() + " from " + n.getSender());
+            }
+        }
+    }
+
     @Override
     public void setContents(ArrayList<MessagesDTO> contents, UserDTO userDto) {
 

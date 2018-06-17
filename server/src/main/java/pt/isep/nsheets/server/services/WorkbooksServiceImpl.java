@@ -9,6 +9,7 @@ import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import pt.isep.nsheets.server.lapr4.blue.s3.core.n1150478.workbooks.application.ChangeStateWorkbook;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1140572.workbooks.application.DeleteWorkbookController;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1140572.workbooks.application.RenameWorkbookController;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1140572.workbooks.application.SearchWorkbooksController;
@@ -54,6 +55,22 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
         ListWorkbookDescriptionController ctrl = new ListWorkbookDescriptionController();
 
         Iterable<Workbook> wbs = ctrl.listWorkbookDescriptions();
+
+        wbs.forEach(wb -> workbooks.add(wb.toDTO()));
+
+        return workbooks;
+    }
+    
+    @Override
+    public  Iterable<WorkbookDTO> listWorkbooksPerUser(String user) {
+        // Setup the persistence settings
+        PersistenceContext.setSettings(this.getPersistenceSettings());
+
+        ArrayList<WorkbookDTO> workbooks = new ArrayList<>();
+
+        ListWorkbookDescriptionController ctrl = new ListWorkbookDescriptionController();
+
+        Iterable<Workbook> wbs = ctrl.listWorkbooksPerUser(user);
 
         wbs.forEach(wb -> workbooks.add(wb.toDTO()));
 
@@ -122,6 +139,13 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
         workbooksSearched.forEach(wb -> wbs.add(wb.toDTO()));
 
         return wbs;
+    }
+
+    @Override
+    public void changeState(boolean state, WorkbookDTO wdto) {
+        PersistenceContext.setSettings(this.getPersistenceSettings());
+        ChangeStateWorkbook cs = new ChangeStateWorkbook();
+        cs.changeStateWorkbook(state, wdto);
     }
 
 }

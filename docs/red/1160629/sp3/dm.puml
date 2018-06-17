@@ -1,0 +1,74 @@
+@startuml  dm.png
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+hide empty methods
+
+Language <|-- ExcelLanguage
+
+Language o-- Function
+Language o-- BinaryOperator
+Language o-- UnaryOperator
+
+Function <|-- Eval
+Function <|-- DoWhile
+Function <|-- WhileDo
+
+class ExcelLanguage {
+	+ExcelLanguage(String name)
+
+	#void initFunctions()
+	#void initBinaryOperators()
+	#void initUnaryOperators()
+}
+
+class Language {
+	#List<Function> functions
+	#List<BinaryOperator> binaryOperators
+	#List<UnaryOperator> unaryOperators
+	-String name
+
+	+Language(String name)
+
+	#void initFunctions()
+	#void initBinaryOperators()
+	#void initUnaryOperators()
+
+	+UnaryOperator getUnaryOperator(String identifier)
+	+BinaryOperator getBinaryOperator(String identifier)
+	+Function getFunction(String identifier)
+	+boolean hasFunction(String identifier)
+	+Function[] getFunctions()
+}
+
+interface Function {
+	+String getIdentifier()
+	+Value applyTo(Expression[] args)
+	+FunctionParameter[] getParameters()
+	+String getInformativeText()
+	+boolean isVarArg()
+}
+
+interface BinaryOperator {
+	+Value applyTo(Expression leftOperand, Expression rightOperand)
+}
+
+interface UnaryOperator {
+	+Value applyTo(Expression operand)
+	+boolean isPrefix()
+}
+
+class Eval {
+	{static} +FunctionParameter[] parameters
+}
+
+class DoWhile {
+	{static} +FunctionParameter[] parameters
+}
+
+class WhileDo {
+	{static} +FunctionParameter[] parameters
+}
+
+@enduml

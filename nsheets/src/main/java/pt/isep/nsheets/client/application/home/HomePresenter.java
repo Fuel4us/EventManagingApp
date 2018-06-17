@@ -70,7 +70,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
         String description();
 
-        MaterialButton getSwichStateButton();
+        MaterialButton getSwitchStateButton();
 
         void switchClickHandler(ClickHandler ch);
     }
@@ -97,7 +97,8 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
         this.view.buttonClickHandler(e -> {
             WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
-
+            boolean publicState = false;
+            String userName = MenuView.getUsername().toString();
             // Set up the callback object.
             AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
                 @Override
@@ -113,7 +114,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                 }
             };
 
-            WorkbookDTO wdDto = new Workbook(this.view.title(), this.view.description(), Settings.SPREADSHEET_DEFAULT).toDTO();
+            WorkbookDTO wdDto = new Workbook(this.view.title(), this.view.description(), publicState, userName, Settings.SPREADSHEET_DEFAULT).toDTO();
             workbooksSvc.addWorkbookDescription(wdDto, callback);
 
             this.view.closeModal();
@@ -140,6 +141,9 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                     }
                 }
             };
+            if(workbookName.equals("all")) {
+                refreshView();
+            } 
             refreshViewAfterSearch(workbookName);
         });
 
@@ -168,11 +172,17 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
             this.view.closeOptionModal();
         });
 
+        // ### SWITCH ### 
         this.view.switchClickHandler(e -> {
             WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
             WorkbookDTO wdto = this.view.focusedWorkbookDTO();
-            boolean state = false;
-           
+            boolean state;
+            if (wdto.publicState==true) {
+                state = false;
+            } else {
+                state = true;
+            }
+
             // Set up the callback object.
             AsyncCallback<WorkbookDTO> callback = new AsyncCallback<WorkbookDTO>() {
                 @Override
@@ -190,7 +200,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                     }
                 }
             };
-            //workbooksSvc.changeState(state, wdto, callback);
+            workbooksSvc.changeState(state, wdto, callback);
             this.view.closeOptionModal();
         });
 
@@ -240,7 +250,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
             }
         };
 
-        workbooksSvc.getWorkbooks(callback);
+        workbooksSvc.listWorkbooksPerUser(MenuView.getUsername().toString(), callback);
     }
 
     public void refreshViewAfterSearch(String workbookName) {
@@ -250,7 +260,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         AsyncCallback<ArrayList<WorkbookDTO>> callback = new AsyncCallback<ArrayList<WorkbookDTO>>() {
             @Override
             public void onFailure(Throwable caught) {
-                // TODO: Do something with errors.
+                MaterialToast.fireToast("error in searching");
             }
 
             @Override

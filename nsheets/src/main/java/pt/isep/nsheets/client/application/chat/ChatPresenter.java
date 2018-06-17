@@ -23,6 +23,7 @@ import pt.isep.nsheets.client.security.CurrentUser;
 import pt.isep.nsheets.shared.services.MessagesDTO;
 import pt.isep.nsheets.shared.services.MessagesService;
 import pt.isep.nsheets.shared.services.MessagesServiceAsync;
+import pt.isep.nsheets.shared.services.NotificationDTO;
 import pt.isep.nsheets.shared.services.UserDTO;
 
 public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter.MyProxy> {
@@ -49,6 +50,8 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 
         String textPrivateChat3();
 
+        void showNotifications(ArrayList<NotificationDTO> notifications);
+
         void buttonClickHandlerUploadImage1(ClickHandler ch);
 
         void buttonClickHandlerUploadImage2(ClickHandler ch);
@@ -66,7 +69,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
     @Inject
     ChatPresenter(EventBus eventBus, MyView view, MyProxy proxy, CurrentUser currentUser) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
-        
+
         refreshMessages();
 
         this.user = currentUser;
@@ -131,7 +134,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
             MessagesDTO mDTO = new MessagesDTO(view.textPrivateChat3(), new Date(), this.user.getUser().getNickname(), CHAT_INDEX_PRIVATE_3);
             messagesSvc.addMessage(mDTO, callback);
         });
-        
+
 //        //####################################IMAGE UPLOAD####################################
 //
 //        this.view.buttonClickHandlerUploadImage1(e -> {
@@ -193,7 +196,6 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 //            MessagesDTO mDTO = new MessagesDTO(view.textPrivateChat3(), new Date(), this.user.getUser().getNickname(), CHAT_INDEX_PRIVATE_3);
 //            messagesSvc.addMessage(mDTO, callback);
 //        });
-
     }
 
     private void refreshMessages() {
@@ -217,6 +219,23 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
         messagesSvc.getMessages(callback);
     }
 
+    private void refreshNotifications() {
+        MessagesServiceAsync messagesSvc = GWT.create(MessagesService.class);
+
+        // Set up the callback object.
+        AsyncCallback<ArrayList<NotificationDTO>> callback = new AsyncCallback<ArrayList<NotificationDTO>>() {
+            public void onFailure(Throwable caught) {
+                MaterialToast.fireToast("Error! " + caught.getMessage());
+            }
+
+            public void onSuccess(ArrayList<NotificationDTO> result) {
+                view.showNotifications(result);
+            }
+        };
+
+        messagesSvc.getNotifications(this.user.getUser().getNickname(), callback);
+    }
+
     @Override
     protected void onReveal() {
         super.onReveal();
@@ -232,6 +251,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
             @Override
             public void run() {
                 refreshMessages();
+                refreshNotifications();
             }
         };
 

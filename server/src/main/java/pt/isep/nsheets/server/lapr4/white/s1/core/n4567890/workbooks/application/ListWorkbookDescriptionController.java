@@ -8,4 +8,8 @@ public class ListWorkbookDescriptionController implements Controller {
     public Iterable<Workbook> listWorkbookDescriptions() {
         return new WorkbookDescriptionService().allWorkbooks();
     }
+    
+    public Iterable<Workbook> listWorkbooksPerUser(String user) {
+        return new WorkbookDescriptionService().allWorkbooksFromUser(user);
+    }
 }

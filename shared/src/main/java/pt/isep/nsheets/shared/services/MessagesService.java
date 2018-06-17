@@ -19,4 +19,6 @@ public interface MessagesService extends RemoteService{
     MessagesDTO addMessage(MessagesDTO mDTO) throws DataException;
     
     ArrayList<MessagesDTO> getMessages();
+    
+    ArrayList<NotificationDTO> getNotifications(String username);
 }

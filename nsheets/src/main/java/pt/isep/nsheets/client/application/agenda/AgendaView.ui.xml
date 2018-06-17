@@ -6,8 +6,6 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:m="urn:import:gwt.material.design.client.ui"
              xmlns:ma="urn:import:gwt.material.design.addins.client"
-             xmlns:demo="urn:import:gwt.material.design.demo.client.ui"
-             xmlns:m.demo="urn:import:gwt.material.design.demo.client.ui"
              xmlns:combobox="urn:import:gwt.material.design.addins.client.combobox">
 
     <ui:import field="pt.isep.nsheets.client.place.NameTokens.home"/>   
@@ -15,7 +13,6 @@
     <ui:with field="tokens" type="pt.isep.nsheets.client.place.NameTokens"/>
 
     <g:HTMLPanel>
-        
         <m:MaterialFAB>
             <m:MaterialButton type="FLOATING" iconType="BOOK" size="LARGE"/>
             <m:MaterialFABList>
@@ -41,9 +38,23 @@
             <m:MaterialButton ui:field="btnSelect" text="Select Agenda" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED" />
             <m:MaterialButton ui:field="btnEdit" text="Edit Agenda" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED" />
             <m:MaterialButton ui:field="btnDelete" text="Delete Agenda" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="POLYMER" iconPosition="RIGHT" iconColor="RED" />
-            <m:MaterialPanel ui:field="materialPlanEmptyState">
+            <m:MaterialSwitch ui:field="themeSwitch" value="false" grid="l0" float="RIGHT"/>
+            <m:MaterialLabel text="New theme:" grid="10" float="RIGHT"/>
+            <m:MaterialPanel ui:field="oldMaterialPlanEmptyState">
                 <ma:emptystate.MaterialEmptyState ui:field="emptyState" height="50vh" iconType="EVENT" iconColor="BLUE" title="No Events" description="This calendar has no events" textColor="BLUE" backgroundColor="WHITE"/>
-            </m:MaterialPanel>      
+            </m:MaterialPanel>
+            <m:MaterialPanel ui:field="newMaterialPlanEmptyState">
+                <m:MaterialDatePicker ui:field="datePicker" placeholder="Date" />
+                <m:MaterialCollapsible type="POPOUT" active="1">
+                    <m:MaterialCollapsibleItem>
+                        <m:MaterialCollapsibleHeader ui:field="collapsHeader">
+                            <m:MaterialLink text="Agenda" iconType="VIEW_AGENDA" iconPosition="LEFT" textColor="BLACK"/>
+                        </m:MaterialCollapsibleHeader>
+                        <m:MaterialCollapsibleBody ui:field="collapsBody">
+                        </m:MaterialCollapsibleBody>
+                    </m:MaterialCollapsibleItem>
+                </m:MaterialCollapsible>
+            </m:MaterialPanel>
         </m:MaterialRow>   
        
     </g:HTMLPanel>

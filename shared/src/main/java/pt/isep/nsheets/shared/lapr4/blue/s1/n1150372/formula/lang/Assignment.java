@@ -61,7 +61,7 @@ public class Assignment implements BinaryOperator {
                 
                 Value value = rightOperand.evaluate();
                 GlobalVariable gv = (GlobalVariable) leftOperand;
-                currentWorkbook.setGVValue(gv.getGvName(), value);
+                currentWorkbook.setGVValue(gv.getGvName(), value, gv.getPosition());
                 
                 return value;
             }

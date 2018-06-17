@@ -42,6 +42,8 @@ import com.gwtplatform.mvp.client.ViewImpl;
 import com.google.gwt.user.client.ui.Panel;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
 import gwt.material.design.addins.client.window.MaterialWindow;
+import gwt.material.design.client.constants.IconPosition;
+import gwt.material.design.client.constants.IconType;
 
 import gwt.material.design.client.constants.TextAlign;
 import gwt.material.design.client.ui.*;
@@ -51,6 +53,7 @@ import gwt.material.design.client.ui.table.MaterialDataTable;
 import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pt.isep.nsheets.shared.ext.Extension;
@@ -72,6 +75,7 @@ import pt.isep.nsheets.shared.core.formula.Function;
 import pt.isep.nsheets.shared.core.formula.FunctionParameter;
 import pt.isep.nsheets.shared.core.formula.lang.Language;
 import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
+import pt.isep.nsheets.shared.lapr4.green.n1160815.formula.lang.GlobalVariable;
 import pt.isep.nsheets.shared.services.*;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
@@ -227,7 +231,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox rangeConditionalEnd;
     @UiField
     MaterialIcon conditionalModalDeleteButton;
-
+    
+    @UiField
+    MaterialCollapsibleBody colapsBody;
+    
     @UiField
     MaterialTextBox nameModal;
     @UiField
@@ -621,6 +628,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             };
 
             workbooksSvc.addWorkbookDescription(Settings.getInstance().getWorkbook().toDTO(), callback);
+            updateCollapsible();
         });
 
         // Set the visible range of the table for pager (later)
@@ -734,7 +742,37 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             openSearchAndReplaceWindow();
         });
     }
+    
+    private void updateCollapsible(){
+        colapsBody.clear();
+        
+        for(String key : Settings.getInstance().getWorkbook().globalVariables().keySet()){
+            MaterialCollapsible collaps = new MaterialCollapsible();
+            MaterialCollapsibleItem item = new MaterialCollapsibleItem();
+            item.add(new MaterialCollapsibleHeader(new MaterialLink(key)));
+            int i = 0;
+            
+            for(GlobalVariable g : Settings.getInstance().getWorkbook().globalVariables().get(key)){
+                MaterialCollapsibleBody body = new MaterialCollapsibleBody();
+                
+                MaterialRow rowToAdd = new MaterialRow();
+            
+                MaterialLabel label = new MaterialLabel("[" + i + "] - " + g.getValue().toString());
+                MaterialLink link = new MaterialLink(IconType.CREATE);
+                link.setIconPosition(IconPosition.RIGHT);
 
+                rowToAdd.add(label);
+                rowToAdd.add(link);
+
+                body.add(rowToAdd);
+                item.add(body);
+                collaps.add(item);
+                i++;
+            }
+            colapsBody.add(collaps);
+        }
+    }
+    
     private String getParameters(Language lang) {
         String par = "Parameters: \n";
         try {

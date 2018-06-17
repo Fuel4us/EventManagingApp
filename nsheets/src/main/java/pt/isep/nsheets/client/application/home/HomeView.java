@@ -79,7 +79,11 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
         MaterialCardTitle cardTitle = new MaterialCardTitle();
 
         cardTitle.add(new Anchor(wb.name, "#workbook"));
-        cardTitle.setIconType(IconType.SETTINGS);
+        if(wb.publicState) {
+            cardTitle.setIconType(IconType.LOCK_OPEN);
+        } else {
+            cardTitle.setIconType(IconType.LOCK);
+        }
         cardTitle.setIconPosition(IconPosition.RIGHT);
 
         MaterialLabel label = new MaterialLabel();
@@ -195,7 +199,7 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
     }
 
     @Override
-    public MaterialButton getSwichStateButton() {
+    public MaterialButton getSwitchStateButton() {
         return swichStateButton;
     }
 
