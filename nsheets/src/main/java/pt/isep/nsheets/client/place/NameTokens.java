@@ -59,6 +59,8 @@ public class NameTokens {
 
     public static final String contacts = "contacts";
 
+    public static final String profile = "profile";
+
     public static String getSignup() {
         return SIGNUP;
     }
@@ -134,5 +136,7 @@ public class NameTokens {
     public static String getAgenda() {
         return agenda;
     }
+
+    public static String getProfile() {return profile; }
 
 }
