@@ -67,6 +67,7 @@ public class CellStyleExtension extends Extension {
         @Override
         public void decorate(Object o) {
             CellStyle c = CellStyleExtension.getCellStyle((Address) o);
+
             if (c != null) {
                 element.setBackgroundColor(Color.values()[c.getBackgroungColor()]);
                 element.setTextColor(Color.values()[c.getFontColor()]);
