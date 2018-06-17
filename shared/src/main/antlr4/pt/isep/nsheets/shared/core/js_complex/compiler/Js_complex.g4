@@ -9,10 +9,17 @@ stat:
 	| if_stat
 	| while_stat
 	| log
-    | func_call
+	| func_call
 	| OTHER {System.err.println("unknown char: " + $OTHER.text);};
 
-assignment: 'var'? ID ASSIGN expr SCOL;
+function:
+	FDECLARATION ID OPAR CPAR OBRACE functionblock CBRACE SCOL?;
+
+functionblock: stat* returnstatement?;
+
+returnstatement: 'return' (expr | assignment) SCOL;
+
+assignment: 'var'? ID ASSIGN (expr) SCOL;
 
 if_stat:
 	IF condition_block (ELSE IF condition_block)* (
@@ -27,6 +34,8 @@ while_stat: WHILE OPAR expr CPAR stat_block;
 
 log: LOG OPAR expr CPAR SCOL;
 
+func_call: ID OPAR CPAR SCOL;
+
 expr:
 	expr POW OPAR atom COMMA atom CPAR expr		# powExpr
 	| MINUS expr								# unaryMinusExpr
@@ -37,6 +46,7 @@ expr:
 	| expr op = (EQ | NEQ) expr					# equalityExpr
 	| expr AND expr								# andExpr
 	| expr OR expr								# orExpr
+	| func_call									# funcExpr
 	| atom										# atomExpr;
 
 atom:
@@ -45,18 +55,9 @@ atom:
 	| (TRUE | FALSE)	# booleanAtom
 	| ID				# idAtom
 	| STRING			# stringAtom
-	| NIL				# nilAtom
-    | func_call         # funcAtom;
+	| NIL				# nilAtom;
 
-function: FDECLARATION ID OPAR CPAR OBRACE functionblock CBRACE SCOL?;
 
-functionblock: stat* returnstatement?;
-
-returnstatement:
-    'return' (expr | assignment) SCOL ;
-
-func_call:
-    ID OPAR CPAR SCOL;
 
 OR: '||';
 AND: '&&';
@@ -78,8 +79,8 @@ POW: 'Math.pow';
 COMMA: ',';
 SCOL: ';';
 ASSIGN: '=';
-OPAR: '(' ;
-CPAR: ')' ;
+OPAR: '(';
+CPAR: ')';
 OBRACE: '{';
 CBRACE: '}';
 

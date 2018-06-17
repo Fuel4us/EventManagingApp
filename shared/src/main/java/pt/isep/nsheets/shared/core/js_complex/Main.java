@@ -33,9 +33,9 @@ public class Main {
 //        String output1 = "console.log(\"$A1 + 1 = \" + ($A1 + 1)); $A1 = \"teste\"; console.log(\"$A1 is now 'teste': \" + $A1); $A1 = 1; console.log(\"$A1 is now '1' = \" + $A1); while($A1 < 10){ $A1 = $A1 * 2; } console.log(\"The variable $A1 has the value \" + $A1);";
         
 String output2 = "var j = 7; "
-        + "function test2(){return 32;}\n"
+        + "function test2(){console.log(\"olá\");}\n"
         + "function test(){";
-        Js_complexLexer lexer = new Js_complexLexer(new ANTLRInputStream(output2+"var k = test2(); console.log(k);}"));
+        Js_complexLexer lexer = new Js_complexLexer(new ANTLRInputStream(output2+"test2(); console.log(j);};"));
        
         Js_complexParser parser = new Js_complexParser(new CommonTokenStream(lexer));
         ParseTree tree = parser.parse();

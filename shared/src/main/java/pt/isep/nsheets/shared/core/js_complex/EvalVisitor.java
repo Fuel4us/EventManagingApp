@@ -27,6 +27,7 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
     private Map<String, String> functions;
     private Map<String, Value> block_memory;
     private String output = "";
+    private boolean func_created = true;
 
     //receives current sheet cells
     public EvalVisitor(Map<String, Value> cells, Map<String, String> functions) {
@@ -43,7 +44,7 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
     public Value visitAssignment(AssignmentContext ctx) {
         String id = ctx.ID().getText();
         Value value;
-        
+
         System.out.println("Assigment: ");
 
         if (this.visit(ctx.expr()).isDouble()) {
@@ -287,11 +288,6 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitFuncAtom(@NotNull FuncAtomContext ctx) {
-        return this.visit(ctx.func_call());
-    }
-
-    @Override
     public Value visitFunc_call(@NotNull Func_callContext ctx) {
 
         String func_id = ctx.ID().getText();
@@ -299,13 +295,33 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
         if (function_content != null) {
 //Verificar se o retorno for void, não pode fazer atribuição
 //TO DO how to call a function  
-            String functionToVisit = "function " + func_id + "(){" + function_content + "}";
+
+            if (ctx.getParent().getParent().getParent() instanceof FunctionContext) {
+                FunctionContext parent = (FunctionContext) ctx.getParent().getParent().getParent();
+                if (parent.ID().getText().equals(func_id)) {
+//                consoleError("You cannot invoke yourself");
+//                return Value.VOID;
+                    throw new RuntimeException("Invoke itself");
+                }
+            } else if (ctx.getParent().getParent().getParent().getParent().getParent() instanceof FunctionContext) {
+                FunctionContext parent = (FunctionContext) ctx.getParent().getParent().getParent().getParent().getParent();
+                if (parent.ID().getText().equals(func_id)) {
+//                consoleError("You cannot invoke yourself");
+//                return Value.VOID;
+                    throw new RuntimeException("Invoke itself");
+                }
+            }
+
+            String functionToVisit = "function " + func_id + "(){ " + function_content + " }";
             Js_complexLexer lexer = new Js_complexLexer(new ANTLRInputStream(functionToVisit));
             Js_complexParser parser = new Js_complexParser(new CommonTokenStream(lexer));
-            ParseTree tree = parser.parse();
+            ParseTree tree = parser.block();
             Value value = this.visit(tree);
-            if (value == Value.VOID) {
-                throw new RuntimeException("The function return is VOID");
+
+            if (ctx.getParent().getParent() instanceof AssignmentContext) {
+                if (value == Value.VOID) {
+                    throw new RuntimeException("The function return is VOID");
+                }
             }
             return value;
         } else {
@@ -317,15 +333,23 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
     public Value visitFunctionblock(@NotNull FunctionblockContext ctx) {
         // A função verifica o retorno, e se ele for void desconsidera, senão retorna esse valor
 //        this.visit(ctx.stat());
-        ctx.stat().forEach((stat) -> {
-            this.visit(stat);
-        });
 
-        if (ctx.returnstatement() == null) {
-            return Value.VOID;
-        }
+//        FunctionContext parent = (FunctionContext) ctx.getParent();
+        Value returnValue;
+//
+//        if (functions.containsKey(parent.ID().getText())) {
+            ctx.stat().forEach((stat) -> {
+                this.visit(stat);
+            });
 
-        Value returnValue = this.visit(ctx.returnstatement());
+            if (ctx.returnstatement() == null) {
+                return Value.VOID;
+            }
+
+            returnValue = this.visit(ctx.returnstatement());
+//        } else {
+//            returnValue = Value.VOID;
+//        }
 
         return returnValue;
     }
@@ -344,30 +368,33 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
     @Override
     public Value visitFunction(@NotNull FunctionContext ctx) {
         String id = ctx.ID().getText();
-
+        Value return_value;
         if (id.startsWith("$")) {
             throw new RuntimeException("The function id canNOT start with $ ");
         }
         block_memory = new HashMap<>();
         if (functions.containsKey(id)) {
-            System.out.println(ctx.functionblock().getText());
-            Value v = this.visit(ctx.functionblock());
+
+            return_value = this.visit(ctx.functionblock());
 
             this.block_memory.clear();
-            return v;
 
         } else {
-
             functions.put(id, getFullText(ctx.functionblock()));
+            
             if (ctx.CBRACE().getText().length() != 1) {
                 String error = "You should close your function!";
                 consoleError(error);
                 return Value.VOID;
             }
-            Value v = this.visit(ctx.functionblock());
+            
+                return_value = this.visit(ctx.functionblock());
+            
+
             this.block_memory.clear();
-            return v;
+
         }
+        return return_value;
 
     }
 
@@ -386,4 +413,5 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
         }
         return ctx.start.getInputStream().getText(Interval.of(ctx.start.getStartIndex(), ctx.stop.getStopIndex()));
     }
+
 }
