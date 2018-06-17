@@ -2,9 +2,11 @@ package pt.isep.nsheets.client.application.agenda;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -15,28 +17,22 @@ import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.addins.client.combobox.MaterialComboBox;
 import gwt.material.design.addins.client.emptystate.MaterialEmptyState;
 import gwt.material.design.client.constants.ButtonType;
+import gwt.material.design.client.constants.DatePickerContainer;
 import gwt.material.design.client.constants.IconType;
-import gwt.material.design.client.ui.MaterialButton;
-import gwt.material.design.client.ui.MaterialCard;
-import gwt.material.design.client.ui.MaterialCardContent;
-import gwt.material.design.client.ui.MaterialCardTitle;
-import gwt.material.design.client.ui.MaterialLabel;
-import gwt.material.design.client.ui.MaterialModal;
-import gwt.material.design.client.ui.MaterialPanel;
-import gwt.material.design.client.ui.MaterialTextBox;
-import gwt.material.design.client.ui.MaterialTitle;
-import gwt.material.design.client.ui.MaterialToast;
+import gwt.material.design.client.ui.*;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import javax.inject.Inject;
+
 import pt.isep.nsheets.shared.services.AgendaDTO;
 import pt.isep.nsheets.shared.services.CalendarEventDTO;
 import pt.isep.nsheets.shared.services.CalendarEventService;
 import pt.isep.nsheets.shared.services.CalendarEventServiceAsync;
 
 /**
- *
  * @author Pedro Alves 1150372@isep.ipp.pt
  */
 public class AgendaView extends ViewImpl implements AgendaPresenter.MyView {
@@ -75,7 +71,29 @@ public class AgendaView extends ViewImpl implements AgendaPresenter.MyView {
     MaterialCard card;
 
     @UiField
-    MaterialPanel materialPlanEmptyState;
+    MaterialPanel oldMaterialPlanEmptyState;
+
+    @UiField
+    MaterialPanel newMaterialPlanEmptyState;
+
+    @UiField
+    MaterialCollapsibleHeader collapsHeader;
+    @UiField
+    MaterialCollapsibleBody collapsBody;
+    @UiField
+    MaterialDatePicker datePicker;
+    @UiField
+    MaterialSwitch themeSwitch;
+
+    private AgendaDTO agendaDTOSelect;
+
+    private final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd/MM/yyyy");
+
+    private final DateTimeFormat timeFormat = DateTimeFormat.getFormat("HH:mm");
+
+    private final int HOURS = 24;
+
+    private final int DOUBLE_DIGIT = 10;
 
     /**
      * Form view constructor.
@@ -87,20 +105,145 @@ public class AgendaView extends ViewImpl implements AgendaPresenter.MyView {
         initWidget(uiBinder.createAndBindUi(this));
         btnEdit.setEnabled(false);
         btnDelete.setEnabled(false);
+
+        newTheme();
+    }
+
+    private void newTheme() {
+        datePicker();
+        agendaCollapsible();
+        newMaterialPlanEmptyState.setVisible(false);
+    }
+
+    private void datePicker() {
+        datePicker.setPlaceholder("Date");
+        datePicker.setDateMin(new Date());
+        datePicker.setContainer(DatePickerContainer.BODY);
+        datePicker.setDate(new Date());
+
+        //sempre que se altera o valor do datePicker
+        datePicker.addValueChangeHandler(new ValueChangeHandler<Date>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Date> event) {
+                datePicker.addValueChangeHandler(new ValueChangeHandler<Date>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<Date> event) {
+                        updateAgendaCollapsible();
+                    }
+                });
+            }
+        });
+
+        //sempre que se fecha o datePicker (que é o mesmo que alterar)
+        datePicker.addCloseHandler(new CloseHandler<MaterialDatePicker>() {
+            @Override
+            public void onClose(CloseEvent<MaterialDatePicker> event) {
+                updateAgendaCollapsible();
+            }
+        });
+
+        newMaterialPlanEmptyState.add(datePicker);
+    }
+
+    private void agendaCollapsible() {
+        //preenchimento da tabela com as horas de um dia
+        String name;
+
+        for (int i = 0; i < HOURS; i++) {
+            MaterialCollapsible collaps = new MaterialCollapsible();
+            MaterialCollapsibleItem item = new MaterialCollapsibleItem();
+
+            //para ficar "00, 01, 02, 03, ..."
+            if (i < DOUBLE_DIGIT) {
+                name = "0" + Integer.toString(i);
+
+                item.add(new MaterialCollapsibleHeader(new MaterialLink(name)));
+
+                //caso tenha alguma agenda selecionada
+                if (agendaDTOSelect != null)
+
+                    //envia o "nome" da hora (tipo 00, 13, 23)
+                    item = addEvent(item, name);
+
+            } else {
+                name = Integer.toString(i);
+
+                item.add(new MaterialCollapsibleHeader(new MaterialLink(name)));
+
+                //caso tenha alguma agenda selecionada
+                if (agendaDTOSelect != null)
+
+                    //envia o "nome" da hora (tipo 00, 13, 23)
+                    item = addEvent(item, name);
+            }
+
+            collaps.add(item);
+            collapsBody.add(collaps);
+        }
+    }
+
+    private MaterialCollapsibleItem addEvent(MaterialCollapsibleItem item, String name) {
+
+        //saca todos os eventos
+        for (CalendarEventDTO calendarEventDTO : agendaDTOSelect.getListEvents()) {
+
+            //verifica se o evento é no dia especificado
+            if (calendarEventDTO.getDate().equals(datePicker.getDate())) {
+
+                //verifica se o evento ocorre à mesma altura que o "nome" dado da hora
+                if ((timeFormat.format(calendarEventDTO.getTime()).split(":")[0]).equals(name)) {
+                    MaterialCollapsibleBody body = new MaterialCollapsibleBody();
+
+                    MaterialRow rowToAdd = new MaterialRow();
+
+                    MaterialCollapsibleHeader eventName = new MaterialCollapsibleHeader(new MaterialLink(calendarEventDTO.getName()));
+                    MaterialLabel eventDescription = new MaterialLabel(calendarEventDTO.getDescription());
+                    MaterialLabel eventTime = new MaterialLabel(timeFormat.format(calendarEventDTO.getTime()));
+                    MaterialLabel eventDuration = new MaterialLabel(Integer.toString(calendarEventDTO.getDuration()) + " minutes");
+
+                    rowToAdd.add(eventName);
+                    rowToAdd.add(eventDescription);
+                    rowToAdd.add(eventTime);
+                    rowToAdd.add(eventDuration);
+
+
+                    body.add(rowToAdd);
+
+                    //double click handler
+                    body.addDoubleClickHandler(doubleClickEvent -> editFunction());
+
+                    item.add(body);
+                }
+            }
+        }
+        return item;
+    }
+
+    private void updateAgendaCollapsible() {
+        collapsHeader.setTitle(dateFormat.format(datePicker.getDate()));
+
+        collapsBody.clear();
+
+        agendaCollapsible();
     }
 
     @UiHandler("btnEdit")
     void editBtn(ClickEvent e) {
-        //With BUGS
-        materialPlanEmptyState.clear();
+        editFunction();
+    }
 
-        //falta editar name e description 
-        AgendaDTO agendaDTOSelect = (AgendaDTO) comboAgendas.getSingleValue();
+    private void editFunction() {
+        //With BUGS
+        oldMaterialPlanEmptyState.clear();
+        //newMaterialPlanEmptyState.clear();
+
+        //falta editar name e description
+        agendaDTOSelect = (AgendaDTO) comboAgendas.getSingleValue();
         updateTitle.setTitle(agendaDTOSelect.getName());
         updateTitle.setDescription(agendaDTOSelect.getDescription());
-        
+
         MaterialToast.fireToast("Edit WITH BUGS!!");
-        createCards(agendaDTOSelect, true);
+        createCards(true);
     }
 
     @UiHandler("btnDelete")
@@ -109,7 +252,9 @@ public class AgendaView extends ViewImpl implements AgendaPresenter.MyView {
         updateTitle.setTitle("Agendas");
         updateTitle.setDescription("Description");
 
-        materialPlanEmptyState.clear();
+        oldMaterialPlanEmptyState.clear();
+        //newMaterialPlanEmptyState.clear();
+
         comboAgendas.remove(comboAgendas.getSelectedIndex());
 
         MaterialToast.fireToast("Delet With BUGS!!");
@@ -158,13 +303,14 @@ public class AgendaView extends ViewImpl implements AgendaPresenter.MyView {
 
     @UiHandler("btnSelect")
     void selectAgenda(ClickEvent e) {
-        materialPlanEmptyState.clear();
+        oldMaterialPlanEmptyState.clear();
+        //newMaterialPlanEmptyState.clear();
 
-        AgendaDTO agendaDTOSelect = (AgendaDTO) comboAgendas.getSingleValue();
+        agendaDTOSelect = (AgendaDTO) comboAgendas.getSingleValue();
         updateTitle.setTitle(agendaDTOSelect.getName());
         updateTitle.setDescription(agendaDTOSelect.getDescription());
 
-        createCards(agendaDTOSelect, false);
+        createCards(false);
 
         btnEdit.setEnabled(true);
         btnDelete.setEnabled(true);
@@ -173,6 +319,21 @@ public class AgendaView extends ViewImpl implements AgendaPresenter.MyView {
     @UiHandler("cancelButton")
     void cancelCreateWindow(ClickEvent e) {
         modal.close();
+    }
+
+    @UiHandler("themeSwitch")
+    void onValueChange(ValueChangeEvent<Boolean> e) {
+        String output;
+        if (e.getValue()) {
+            oldMaterialPlanEmptyState.setVisible(false);
+            newMaterialPlanEmptyState.setVisible(true);
+            output = "New";
+        } else {
+            newMaterialPlanEmptyState.setVisible(false);
+            oldMaterialPlanEmptyState.setVisible(true);
+            output = "Old";
+        }
+        MaterialToast.fireToast(output + " theme!");
     }
 
     private void getCalendarsAvailables() {
@@ -209,7 +370,7 @@ public class AgendaView extends ViewImpl implements AgendaPresenter.MyView {
         deleteButton.setType(ButtonType.FLAT);
         deleteButton.setText("Delete");
         deleteButton.addClickHandler((ClickEvent event) -> {
-            materialPlanEmptyState.remove(card);
+            oldMaterialPlanEmptyState.remove(card);
         });
 
         deleteButton.setEnabled(b);
@@ -220,10 +381,10 @@ public class AgendaView extends ViewImpl implements AgendaPresenter.MyView {
         this.modal.close();
     }
 
-    private void createCards(AgendaDTO agendaDTOSelect, boolean bool) {
+    private void createCards(boolean bool) {
         for (CalendarEventDTO calendarEventDTO : agendaDTOSelect.getListEvents()) {
             card = new MaterialCard();
-            materialPlanEmptyState.add(card);
+            oldMaterialPlanEmptyState.add(card);
 
             MaterialCardContent content = new MaterialCardContent();
             card.add(content);
@@ -235,9 +396,6 @@ public class AgendaView extends ViewImpl implements AgendaPresenter.MyView {
             MaterialLabel descriptionLabel = new MaterialLabel();
             descriptionLabel.setText(calendarEventDTO.getDescription());
             content.add(descriptionLabel);
-
-            DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd/MM/yyyy");
-            DateTimeFormat timeFormat = DateTimeFormat.getFormat("HH:mm");
 
             MaterialLabel dateLabel = new MaterialLabel();
             dateLabel.setText(dateFormat.format(calendarEventDTO.getDate()));

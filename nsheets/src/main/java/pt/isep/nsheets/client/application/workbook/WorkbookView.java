@@ -53,6 +53,7 @@ import gwt.material.design.client.ui.table.MaterialDataTable;
 import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pt.isep.nsheets.shared.ext.Extension;
@@ -745,18 +746,66 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     private void updateCollapsible(){
         colapsBody.clear();
         
-        for(GlobalVariable g : Settings.getInstance().getWorkbook().globalVariables()){
-            MaterialRow rowToAdd = new MaterialRow();
+        for(String key : Settings.getInstance().getWorkbook().globalVariables().keySet()){
+            MaterialCollapsible collaps = new MaterialCollapsible();
+            MaterialCollapsibleItem item = new MaterialCollapsibleItem();
+            item.add(new MaterialCollapsibleHeader(new MaterialLink(key)));
+            int i = 0;
             
-            MaterialLabel label = new MaterialLabel(g.getGvName());
-            MaterialLink link = new MaterialLink(IconType.CREATE);
-            link.setIconPosition(IconPosition.RIGHT);
+            for(GlobalVariable g : Settings.getInstance().getWorkbook().globalVariables().get(key)){
+                MaterialCollapsibleBody body = new MaterialCollapsibleBody();
+                
+                MaterialRow rowToAdd = new MaterialRow();
             
-            rowToAdd.add(label);
-            rowToAdd.add(link);
-            
-            colapsBody.add(rowToAdd);
+                MaterialLabel label = new MaterialLabel("[" + i + "] - " + g.getValue().toString());
+                MaterialModal changeModal = createModal(key, g.getValue().toString(), i);
+                label.add(changeModal);
+                
+                rowToAdd.addClickHandler(event -> {
+                    changeModal.open();
+                });
+                
+                rowToAdd.add(label);
+
+                body.add(rowToAdd);
+                item.add(body);
+                collaps.add(item);
+                i++;
+            }
+            colapsBody.add(collaps);
         }
+    }
+    
+    private MaterialModal createModal(String globalName, String value, Integer position){
+        MaterialModal changeModal = new MaterialModal();
+                    
+        MaterialModalContent content = new MaterialModalContent();
+
+        MaterialLabel valueLabel = new MaterialLabel("Actual Value: " + value);
+        MaterialTextBox changeValue = new MaterialTextBox();
+        
+        MaterialButton button = new MaterialButton();
+        button.setText("CHANGE");
+        button.setIconType(IconType.SAVE);
+        button.setIconPosition(IconPosition.RIGHT);
+        
+        button.addClickHandler(event -> {
+            String newValue = changeValue.getText();
+            Settings.getInstance().getWorkbook().globalVariables().get(globalName).get(position).setValue(new Value(newValue));
+            changeModal.close();
+            updateCollapsible();
+            
+            customTable.getView().setRedraw(true);
+            customTable.getView().refresh();
+        });
+        
+        content.add(valueLabel);
+        content.add(changeValue);
+        content.add(button);
+
+        changeModal.add(content);
+        
+        return changeModal;
     }
     
     private String getParameters(Language lang) {

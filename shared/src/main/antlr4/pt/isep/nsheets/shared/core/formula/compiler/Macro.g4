@@ -4,165 +4,142 @@ grammar Macro;
 	//package pt.isep.nsheets.shared.core.formula.compiler;
 }
 
-expression
-	: expression comparison
-	    | expression comment
-	    | comparison
-	    | comment
-	;
+expression:
+	expression comparison
+	| expression comment
+	| comparison
+	| comment;
 
-comment
-    : COMMENT
-    ;
+comparison: 
+	concatenation ((EQ | NEQ | GT | LT | LTEQ | GTEQ) concatenation)?;
 
-comparison
-	: concatenation
-		( ( EQ | NEQ | GT | LT | LTEQ | GTEQ ) concatenation )?
-	;
+comment: 
+	COMMENT;
 
-block
-        : manyexpressions
-        | FOR forexpression
-        ;
+concatenation: 
+	(MINUS)? atom
+	| concatenation PERCENT
+	| <assoc = right> concatenation POWER concatenation
+	| concatenation ( MULTI | DIV) concatenation
+	| concatenation ( PLUS | MINUS) concatenation
+	| concatenation AMP concatenation
+	| block;
 
-forexpression
-        : assignment SEMI comparison (SEMI concatenation)+ FCHA
-        ;
+atom:
+	function_call
+	| reference
+	| assignment
+	| literal
+	| LPAR concatenation RPAR
+	| temporaryreference;
 
-concatenation
-        : ( MINUS )? atom
-        | concatenation PERCENT
-        | <assoc=right> concatenation POWER concatenation
-        | concatenation ( MULTI | DIV ) concatenation
-        | concatenation ( PLUS | MINUS ) concatenation
-        | concatenation AMP concatenation
-        | block
-        ;
+block: 
+	manyexpressions 
+	| FOR forexpression;
 
-atom
-	:	function_call
-	|	reference
-    |   assignment
-	|	literal
-	|	LPAR concatenation RPAR
-    |   temporaryreference
-	;
+manyexpressions:
+	ICHA comparison (SEMI comparison)* FCHA;
 
-function_call
-	:	FUNCTION LPAR
-		comparison RPAR
-	;
+forexpression: 
+	assignment SEMI comparison (SEMI concatenation)+ FCHA;
 
-reference
-	:	CELL_REF
-		( ( COLON ) CELL_REF )?
-    |   NAMEGLOBAL
-	;
+function_call: 
+	FUNCTION LPAR comparison RPAR;
 
-literal
-	:	NUMBER
-	|	STRING
-    |   nameTemporary
-    |   NAMEGLOBAL
-	;
+reference: 
+	CELL_REF ( ( COLON) CELL_REF)? | NAMEGLOBAL;
 
-manyexpressions
-	:	ICHA comparison (SEMI comparison)* FCHA
-	;
+assignment: 
+	reference ASSIGN concatenation;
 
-assignment
-	:	reference ASSIGN concatenation
-	;
+literal: 
+	NUMBER | STRING | nameTemporary | NAMEGLOBAL;
 
+temporaryreference: 
+	nameTemporary ASSIGN concatenation;
 
-LETTER: ('a'..'z'|'A'..'Z') ;
+LETTER: 
+	('a' ..'z' | 'A' ..'Z');
 
-FUNCTION : ( LETTER )+
-	;
+FUNCTION: 
+	( LETTER)+;
 
-CELL_REF
-	:	( ABS )? LETTER ( LETTER )?
-		( ABS )? ( DIGIT )+
-	;
+CELL_REF: 
+	( ABS)? LETTER ( LETTER)? ( ABS)? ( DIGIT)+;
+
+nameTemporary: 
+	UNDERSCORE ( LETTER)+;
+
+NAMEGLOBAL: 
+	ARROBA ( LETTER)+;
 
 
-temporaryreference
-    :	nameTemporary ASSIGN concatenation
-    ;
 
-nameTemporary
-    :   UNDERSCORE ( LETTER )+
-    ;
 
-NAMEGLOBAL
-    :   ARROBA ( LETTER )+
-    ;
 
 /* String literals, i.e. anything inside the delimiters */
-STRING  : QUOT ('\\"' | ~'"')* QUOT
-        ;
+STRING: 
+	QUOT ('\\"' | ~'"')* QUOT;
 
-
-QUOT: '"'
-	;
+QUOT: 
+	'"';
 
 /* Numeric literals */
-NUMBER: DIGITNOTZERO ( DIGIT )* FRACTIONALPART?
-        | DIGIT FRACTIONALPART
-        ;
+NUMBER:
+	DIGITNOTZERO (DIGIT)* FRACTIONALPART?
+	| DIGIT FRACTIONALPART;
 
-FRACTIONALPART:  COMMA  DIGIT DIGIT
-                | DOT DIGIT DIGIT?
-                ;
+FRACTIONALPART: 
+	(COMMA|DOT) DIGIT DIGIT?;
 
+DIGIT: '0' ..'9';
 
-DIGIT : '0'..'9' ;
-DIGITNOTZERO : '1'..'9' ;
+DIGITNOTZERO: '1' ..'9';
 
 /* Comparison operators */
-EQ	: '=' ;
-NEQ	: '<>' ;
-LTEQ	: '<=' ;
-GTEQ	: '>=' ;
-GT	: '>' ;
-LT	: '<' ;
+EQ: '=';
+NEQ: '<>';
+LTEQ: '<=';
+GTEQ: '>=';
+GT: '>';
+LT: '<';
 
 /* Text operators */
-AMP	: '&' ;
+AMP: '&';
 
 /* Arithmetic operators */
-PLUS	: '+' ;
-MINUS	: '-' ;
-MULTI	: '*' ;
-DIV	: '/' ;
-POWER	: '^' ;
-PERCENT : '%' ;
+PLUS: '+';
+MINUS: '-';
+MULTI: '*';
+DIV: '/';
+POWER: '^';
+PERCENT: '%';
 
 /* Reference operators */
-fragment ABS : '$' ;
-fragment EXCL:  '!'  ;
-COLON	: ':' ;
-UNDERSCORE : '_' ;
-ARROBA : '@' ;
+fragment ABS: '$';
+fragment EXCL: '!';
+COLON: ':';
+UNDERSCORE: '_';
+ARROBA: '@';
 
 /* Miscellaneous operators */
-COMMA	: ',' ;
-DOT     : '.' ;
-SEMI	: ';' ;
-LPAR	: '(' ;
-RPAR	: ')' ;
-ICHA	: '{' ;
-FCHA	: '}' ;
-LBRACKET : '[' ;
-RBRACKET : ']' ;
+COMMA: ',';
+DOT: '.';
+SEMI: ';';
+LPAR: '(';
+RPAR: ')';
+ICHA: '{';
+FCHA: '}';
+LBRACKET: '[';
+RBRACKET: ']';
 
 /* Assignment Operator */
-ASSIGN 	: ':=' ;
+ASSIGN: ':=';
 
 /* For Operator */
-FOR : 'FOR{';
+FOR: 'FOR{';
 
 /* White-space (ignored) */
-WS: ( ' ' | '\r' '\n' | '\n' | '\t' ) -> skip ;
+WS: ( ' ' | '\r' '\n' | '\n' | '\t') -> skip;
 
-COMMENT: SEMI ~[\r\n]* ->skip ;
+COMMENT: SEMI ~[\r\n]* -> skip;

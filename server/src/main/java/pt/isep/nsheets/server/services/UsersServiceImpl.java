@@ -1,12 +1,18 @@
 package pt.isep.nsheets.server.services;
 
 import com.google.gwt.dev.util.collect.HashSet;
+import eapli.framework.persistence.DataConcurrencyException;
+import eapli.framework.persistence.DataIntegrityViolationException;
+import pt.isep.nsheets.server.lapr4.blue.n1050475.s3.application.EditProfileController;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.application.LoginUserController;
 import java.util.ArrayList;
 import java.util.Properties;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.application.ContactsService;
 
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.application.ListUserController;
@@ -62,6 +68,25 @@ public class UsersServiceImpl extends RemoteServiceServlet implements UsersServi
         UserDTO u = ctrl.attemptLogin(email, password);
 
         return u;
+    }
+
+    @Override
+    public UserDTO editProfile(UserDTO userDTO) {
+        EditProfileController ctrl = new EditProfileController();
+        try {
+            return ctrl.editProfile(userDTO);
+        } catch (DataConcurrencyException |DataIntegrityViolationException  e) {
+            Logger.getLogger(UsersServiceImpl.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        return null;
+    }
+
+    @Override
+    public void deleteUser(String email) {
+        EditProfileController ctrl = new EditProfileController();
+
+        ctrl.deleteProfile(email);
     }
 
 //    @Override

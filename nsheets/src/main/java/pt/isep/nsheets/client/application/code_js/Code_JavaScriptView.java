@@ -24,11 +24,11 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Cell;
-import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
-import pt.isep.nsheets.shared.core.js.EvalVisitor;
-import pt.isep.nsheets.shared.core.vb.Value;
-import pt.isep.nsheets.shared.core.js.JsLexer;
-import pt.isep.nsheets.shared.core.js.JsParser;
+//import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
+//import pt.isep.nsheets.shared.core.js.EvalVisitor;
+//import pt.isep.nsheets.shared.core.vb.Value;
+//import pt.isep.nsheets.shared.core.js_complex.compiler.;
+//import pt.isep.nsheets.shared.core.js.JsParser;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -36,6 +36,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
+import pt.isep.nsheets.shared.core.js_complex.EvalVisitor;
+import pt.isep.nsheets.shared.core.js_complex.compiler.Js_complexLexer;
+import pt.isep.nsheets.shared.core.js_complex.compiler.Js_complexParser;
+import pt.isep.nsheets.shared.core.vb.Value;
 
 class Code_JavaScriptView extends ViewImpl implements Code_JavaScriptPresenter.MyView {
 
@@ -133,11 +139,12 @@ class Code_JavaScriptView extends ViewImpl implements Code_JavaScriptPresenter.M
 
         try {
 
-            JsLexer lexer = new JsLexer(new ANTLRInputStream(codeArea.getText()));
+            Js_complexLexer lexer = new Js_complexLexer(new ANTLRInputStream(codeArea.getText()));
             
-            JsParser parser = new JsParser(new CommonTokenStream(lexer));
+            Js_complexParser parser = new Js_complexParser(new CommonTokenStream(lexer));
             ParseTree tree = parser.parse();
-            EvalVisitor visitor = new EvalVisitor(cells);
+            //TODO add function block as parameter
+            EvalVisitor visitor = new EvalVisitor(cells, null);
             visitor.visit(tree);
 
             for (Entry<String, Value> c : cells.entrySet()) {

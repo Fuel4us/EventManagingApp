@@ -1,0 +1,19 @@
+@startuml  analysis3.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+database Database order 100
+
+User -> Browser : Edits an Agenda
+Browser ->> Server : updateAgenda()
+Server -> Database : updateAgenda()
+
+Database -->> Server : return
+Server -->> Browser : return
+Browser -> User : Informs user of the success of the operation
+
+@enduml

@@ -54,12 +54,12 @@ public class NameTokens {
     public static final String search = "search";
 
     public static final String SIGNUP = "signup";
-
-    public static final String macro = "macro";
     
     public static final String listNotes = "listNotes";
 
     public static final String contacts = "contacts";
+
+    public static final String profile = "profile";
 
     public static String getSignup() {
         return SIGNUP;
@@ -67,10 +67,6 @@ public class NameTokens {
 
     public static String getSearch() {
         return search;
-    }
-
-    public static String getMacro() {
-        return macro;
     }
     
     public static String getListNotes(){
@@ -140,5 +136,7 @@ public class NameTokens {
     public static String getAgenda() {
         return agenda;
     }
+
+    public static String getProfile() {return profile; }
 
 }

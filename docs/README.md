@@ -76,7 +76,7 @@ This is a table that should display the overall planning of the team. This is si
 | Green | [Mário Vaz](green/1160832/) | [IPC07.1](green/1160832/sp1) | [Lang08.1](green/1160832/sp2) | [Core06.3](green/1160832/sp3) |
 | Green | [Leandro Pinto](green/1160815/) | [IPC08.1](green/1160815/sp1) | [Lang02.2](green/1160815/sp2) | [Core07.2](green/1160815/sp3) |
 | Green | [Pedro Rodrigues](green/1140572/) | [IPC06.1](green/1140572/sp1) | [Lang01.2](green/1140572/sp2) | [Core05.2](green/1140572/sp3) |
-| Green | [Rúben Ribeiro](green/1160998/) | [IPC05.1](green/1160998/sp1) | [Lang06.1](green/1160998/sp2) | [Core04.3](green/1160998/sp3) |
+| Green | [Rúben Ribeiro](green/1160998/) | [IPC05.1](green/1160998/sp1) | [Lang06.1](green/1160998/sp2) | [Core04.2](green/1160998/sp3) |
 | Blue | [Ana Mafalda](blue/1161611/) | [Lang04.1](blue/1161611/sp1) | [Core03.2](blue/1161611/sp2) |		|
 | Blue | [Hernâni Gil](blue/1050475/) | [Lang03.1](blue/1050475/sp1) | [Core08.1](blue/1050475/sp2) | [IPC01.3](blue/1050475/sp3) |
 | Blue | [João Pires](blue/1150455/) | [Lang02.1](blue/1150455/sp1) | [Core01.2](blue/1150455/sp2) | [IPC07.2](blue/1150455/sp3) |

@@ -26,7 +26,10 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -81,7 +84,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
      * Value is the name and global variable is the actual number value of the
      * variable
      */
-    private List<GlobalVariable> globalVariables;
+    private Map<String, List<GlobalVariable>> globalVariables;
 
     /**
      * Creates a new empty workbook.
@@ -105,7 +108,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
                     getNextSpreadsheetTitle()));
         }
 
-        this.globalVariables = new ArrayList<GlobalVariable>();
+        this.globalVariables = new LinkedHashMap<>();
     }
 
     public Workbook(String name, String description, boolean publicState, int sheets, String userName) {
@@ -118,7 +121,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
                     getNextSpreadsheetTitle()));
         }
 
-        this.globalVariables = new ArrayList<GlobalVariable>();
+        this.globalVariables = new LinkedHashMap<>();
         this.userName = userName;
     }
 
@@ -126,7 +129,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         this.name = name;
         this.description = description;
         this.spreadsheets = spreadsheets;
-        this.globalVariables = new ArrayList<GlobalVariable>();
+        this.globalVariables = new LinkedHashMap<>();
     }
 
     public Workbook(String name, String description, boolean publicState, List<Spreadsheet> spreadsheets) {
@@ -134,7 +137,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         this.description = description;
         this.spreadsheets = spreadsheets;
         this.publicState = publicState;
-        this.globalVariables = new ArrayList<GlobalVariable>();
+        this.globalVariables = new LinkedHashMap<>();
     }
 
     public Workbook(String name, String description, boolean publicState, List<Spreadsheet> spreadsheets, String userName) {
@@ -142,7 +145,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         this.description = description;
         this.spreadsheets = spreadsheets;
         this.publicState = publicState;
-        this.globalVariables = new ArrayList<GlobalVariable>();
+        this.globalVariables = new LinkedHashMap<>();
         this.userName = userName;
     }
 
@@ -161,7 +164,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
                     getNextSpreadsheetTitle(), content));
         }
 
-        this.globalVariables = new ArrayList<GlobalVariable>();
+        this.globalVariables = new LinkedHashMap<>();
     }
 
     public Workbook(String name, String description, boolean publicState, String[][]... contents) {
@@ -174,7 +177,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
                     getNextSpreadsheetTitle(), content));
         }
 
-        this.globalVariables = new ArrayList<GlobalVariable>();
+        this.globalVariables = new LinkedHashMap<>();
     }
 
     public Workbook(String name, String description, boolean publicState, String userName, String[][]... contents) {
@@ -187,7 +190,7 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
                     getNextSpreadsheetTitle(), content));
         }
 
-        this.globalVariables = new ArrayList<GlobalVariable>();
+        this.globalVariables = new LinkedHashMap<>();
         this.userName = userName;
     }
 
@@ -386,47 +389,33 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         }
     }
 
-    public boolean checkIfGVExists(String gvName) {
-        for (GlobalVariable tempGV : this.globalVariables) {
-            if (tempGV.getGvName().equals(gvName)) {
-                return true;
-            }
-        }
-
-        return false;
-
-        //return globalVariables.containsKey(gvName);
+    public boolean checkIfGVExists(String gvName, Integer position) {
+        return this.globalVariables.containsKey(gvName) && this.globalVariables.get(gvName).size() > position;
     }
 
-    public GlobalVariable getGlobalVariable(String gvName) {
-        for (GlobalVariable tempGV : this.globalVariables) {
-            if (tempGV.getGvName().equals(gvName)) {
-                return tempGV;
-            }
-        }
-
-        return null;
-
-        //return globalVariables.
+    public GlobalVariable getGlobalVariable(String gvName, int position) {
+        return this.globalVariables.get(gvName).get(position);
     }
 
-    public void setGVValue(String gvName, Value gvValue) {
-        for (GlobalVariable tempGV : this.globalVariables) {
-            if (tempGV.getGvName().equals(gvName)) {
-                tempGV.setValue(gvValue);
-            }
-        }
+    public void setGVValue(String gvName, Value gvValue, int position) {
+        this.globalVariables.get(gvName).get(position).setValue(gvValue);
     }
 
-    public void addGlobalVariable(String gvName) {
-        if (!checkIfGVExists(gvName)) {
-            this.globalVariables.add(new GlobalVariable(new Value(), gvName));
+    public GlobalVariable addGlobalVariable(String gvName, int position) {
+        if (!this.globalVariables.containsKey(gvName)) {
+            this.globalVariables.put(gvName, new LinkedList<>());
         }
+        
+        for(int i = this.globalVariables.get(gvName).size(); i <= position; i++)
+            this.globalVariables.get(gvName).add(i, new GlobalVariable(new Value(), gvName, i));
+        
+        return getGlobalVariable(gvName, position);
     }
-
-    public List<GlobalVariable> globalVariables() {
+    
+    public Map<String, List<GlobalVariable>> globalVariables(){
         return this.globalVariables;
     }
+    
     /*
  * GENERAL
      */

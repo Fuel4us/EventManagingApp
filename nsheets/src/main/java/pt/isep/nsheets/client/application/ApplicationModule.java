@@ -30,13 +30,13 @@ import pt.isep.nsheets.client.application.code.CodeModule;
 import pt.isep.nsheets.client.application.contacts.ContactsModule;
 import pt.isep.nsheets.client.application.code_js.Code_JavaScriptModule;
 import pt.isep.nsheets.client.application.export.ExportModule;
+import pt.isep.nsheets.client.application.profile.ProfileModule;
 import pt.isep.nsheets.client.lapr4.blue.s2.core.n1150478.application.extensions.ExtensionsModule;
 import pt.isep.nsheets.client.application.form.FormModule;
 import pt.isep.nsheets.client.application.home.HomeModule;
 import pt.isep.nsheets.client.application.imports.ImportModule;
 import pt.isep.nsheets.client.application.listNotes.ListNotesModule;
 import pt.isep.nsheets.client.application.login.LoginModule;
-import pt.isep.nsheets.client.application.macro.MacroModule;
 import pt.isep.nsheets.client.application.menu.MenuModule;
 import pt.isep.nsheets.client.application.notes.NotesModule;
 import pt.isep.nsheets.client.application.workbook.WorkbookModule;
@@ -63,10 +63,10 @@ public class ApplicationModule extends AbstractPresenterModule {
         install(new CodeModule());
         install(new Code_JavaScriptModule());
         install(new ExtensionsModule());
-        install(new MacroModule());
         install(new ContactsModule());
         install(new AgendaModule());
         install(new ListNotesModule());
+        install(new ProfileModule());
 
         bindPresenter(ApplicationPresenter.class, ApplicationPresenter.MyView.class, ApplicationView.class, ApplicationPresenter.MyProxy.class);
     }
