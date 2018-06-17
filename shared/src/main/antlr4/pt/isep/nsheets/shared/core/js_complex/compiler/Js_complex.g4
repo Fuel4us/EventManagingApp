@@ -2,7 +2,7 @@ grammar Js_complex;
 
 parse: block EOF;
 
-block: (stat | function)*;
+block: (stat | function | func_call)*;
 
 stat:
 	assignment

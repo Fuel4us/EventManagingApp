@@ -5,7 +5,9 @@
  */
 package pt.isep.nsheets.shared.core.js_complex;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -29,17 +31,19 @@ public class Main {
         Map<String, Value> teste = new HashMap<>();
         teste.put(cells.entrySet().iterator().next().getKey(), cells.entrySet().iterator().next().getValue());
         System.out.println("Valor $A1: " + cells.entrySet().iterator().next().getValue());
+        List<Function> function = new ArrayList<>();
+        function.add(new Function("func1", "console.log(\"olá\");"));
         
 //        String output1 = "console.log(\"$A1 + 1 = \" + ($A1 + 1)); $A1 = \"teste\"; console.log(\"$A1 is now 'teste': \" + $A1); $A1 = 1; console.log(\"$A1 is now '1' = \" + $A1); while($A1 < 10){ $A1 = $A1 * 2; } console.log(\"The variable $A1 has the value \" + $A1);";
         
 String output2 = "var j = 7; "
         + "function test2(){console.log(\"olá\");}\n"
         + "function test(){";
-        Js_complexLexer lexer = new Js_complexLexer(new ANTLRInputStream(output2+"test2(); console.log(j);};"));
+        Js_complexLexer lexer = new Js_complexLexer(new ANTLRInputStream("func1();"));
        
         Js_complexParser parser = new Js_complexParser(new CommonTokenStream(lexer));
         ParseTree tree = parser.parse();
-        pt.isep.nsheets.shared.core.js_complex.EvalVisitor visitor = new pt.isep.nsheets.shared.core.js_complex.EvalVisitor(cells, null);
+        pt.isep.nsheets.shared.core.js_complex.EvalVisitor visitor = new pt.isep.nsheets.shared.core.js_complex.EvalVisitor(cells, function);
         visitor.visit(tree);
 
         System.out.println("Output:\n");

@@ -6,7 +6,12 @@ import pt.isep.nsheets.shared.core.vb.Value;
 
 import java.util.HashMap;
 import java.util.List;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -16,6 +21,9 @@ import pt.isep.nsheets.shared.core.js_complex.compiler.Js_complexBaseVisitor;
 import pt.isep.nsheets.shared.core.js_complex.compiler.Js_complexLexer;
 import pt.isep.nsheets.shared.core.js_complex.compiler.Js_complexParser;
 import pt.isep.nsheets.shared.core.js_complex.compiler.Js_complexParser.*;
+import pt.isep.nsheets.shared.services.DataException;
+import pt.isep.nsheets.shared.services.FunctionService;
+import pt.isep.nsheets.shared.services.FunctionServiceAsync;
 
 public class EvalVisitor extends Js_complexBaseVisitor<Value> {
 
@@ -24,20 +32,22 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
 
     private Map<String, Value> memory = new HashMap<>();
     private Map<String, Value> cells;
-    private Map<String, String> functions;
+    private List<Function> functions;
+    private List<Function> newFunctions;
     private Map<String, Value> block_memory;
     private String output = "";
     private boolean func_created = true;
+    private FunctionService fservice;
 
     //receives current sheet cells
-    public EvalVisitor(Map<String, Value> cells, Map<String, String> functions) {
+    public EvalVisitor(Map<String, Value> cells, List<Function> functions) {
         this.cells = cells;
-
         if (functions == null) {
-            functions = new HashMap<>();
+            this.functions = new ArrayList<>();
+        } else {
+            this.functions = functions;
         }
-
-        this.functions = functions;
+        this.newFunctions = new ArrayList<>();
     }
 
     @Override
@@ -291,12 +301,13 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
     public Value visitFunc_call(@NotNull Func_callContext ctx) {
 
         String func_id = ctx.ID().getText();
-        String function_content = functions.get(func_id);
+        Function f = verifyFuncExists(functions, newFunctions, func_id);
+        String function_content = f.getFunctionBody();
         if (function_content != null) {
 //Verificar se o retorno for void, não pode fazer atribuição
 //TO DO how to call a function  
-
-            if (ctx.getParent().getParent().getParent() instanceof FunctionContext) {
+            if (ctx.getParent().getParent() instanceof BlockContext) {
+            } else if (ctx.getParent().getParent().getParent() instanceof FunctionContext) {
                 FunctionContext parent = (FunctionContext) ctx.getParent().getParent().getParent();
                 if (parent.ID().getText().equals(func_id)) {
 //                consoleError("You cannot invoke yourself");
@@ -312,7 +323,7 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
                 }
             }
 
-            String functionToVisit = "function " + func_id + "(){ " + function_content + " }";
+            String functionToVisit = f.getFunction();
             Js_complexLexer lexer = new Js_complexLexer(new ANTLRInputStream(functionToVisit));
             Js_complexParser parser = new Js_complexParser(new CommonTokenStream(lexer));
             ParseTree tree = parser.block();
@@ -338,15 +349,15 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
         Value returnValue;
 //
 //        if (functions.containsKey(parent.ID().getText())) {
-            ctx.stat().forEach((stat) -> {
-                this.visit(stat);
-            });
+        ctx.stat().forEach((stat) -> {
+            this.visit(stat);
+        });
 
-            if (ctx.returnstatement() == null) {
-                return Value.VOID;
-            }
+        if (ctx.returnstatement() == null) {
+            return Value.VOID;
+        }
 
-            returnValue = this.visit(ctx.returnstatement());
+        returnValue = this.visit(ctx.returnstatement());
 //        } else {
 //            returnValue = Value.VOID;
 //        }
@@ -368,20 +379,21 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
     @Override
     public Value visitFunction(@NotNull FunctionContext ctx) {
         String id = ctx.ID().getText();
-        Value return_value;
+        Value return_value = null;
         if (id.startsWith("$")) {
             throw new RuntimeException("The function id canNOT start with $ ");
         }
         block_memory = new HashMap<>();
-        if (functions.containsKey(id)) {
+        if (verifyFuncExists(functions, newFunctions, id) != null) {
 
             return_value = this.visit(ctx.functionblock());
 
-            this.block_memory.clear();
-
         } else {
-            functions.put(id, getFullText(ctx.functionblock()));
+
             
+            Function f = new Function(id, getFullText(ctx.functionblock()));
+            newFunctions.add(f);
+
             if (ctx.CBRACE().getText().length() != 1) {
                 String error = "You should close your function!";
                 consoleError(error);
@@ -389,11 +401,9 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
             }
             
                 return_value = this.visit(ctx.functionblock());
-            
-
-            this.block_memory.clear();
 
         }
+        this.block_memory.clear();
         return return_value;
 
     }
@@ -402,8 +412,31 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
         return output;
     }
 
+    public List<Function> newFunctions() {
+        return newFunctions;
+    }
+
     private void consoleError(String msg) {
         output += "\n!ERROR!: " + msg + "\n";
+    }
+
+    private void consoleSuccess(String msg) {
+        output += "\n!Success!: " + msg + "\n";
+    }
+
+    private Function verifyFuncExists(List<Function> list1, List<Function> list2, String id) {
+        for (Function func1 : list1) {
+            if (func1.getFunctionId().equals(id)) {
+                return func1;
+            }
+        }
+        for (Function func1 : list2) {
+            if (func1.getFunctionId().equals(id)) {
+                return func1;
+            }
+        }
+
+        return null;
     }
 
     public static String getFullText(ParserRuleContext ctx) {
