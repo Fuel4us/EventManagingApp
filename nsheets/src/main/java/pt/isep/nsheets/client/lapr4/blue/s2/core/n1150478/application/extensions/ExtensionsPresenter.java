@@ -3,6 +3,8 @@ package pt.isep.nsheets.client.lapr4.blue.s2.core.n1150478.application.extension
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -16,13 +18,7 @@ import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.constants.Display;
 import gwt.material.design.client.constants.IconType;
 import gwt.material.design.client.constants.TextAlign;
-import gwt.material.design.client.ui.MaterialButton;
-import gwt.material.design.client.ui.MaterialImage;
-import gwt.material.design.client.ui.MaterialLabel;
-import gwt.material.design.client.ui.MaterialLink;
-import gwt.material.design.client.ui.MaterialSideNavPush;
-import gwt.material.design.client.ui.MaterialTextBox;
-import gwt.material.design.client.ui.MaterialToast;
+import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.html.ListItem;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,6 +89,14 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
 
         MaterialComboBox getComboBars();
 
+        MaterialSwitch getMaterialSwitch1();
+
+        MaterialSwitch getMaterialSwitch2();
+
+        MaterialSwitch getMaterialSwitch3();
+
+        MaterialSwitch getMaterialSwitch4();
+
     }
 
     @NameToken(NameTokens.extensions)
@@ -144,6 +148,9 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
     ExtensionsPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
         this.view = view;
+
+        // ISTO VAI BUSCAR O VALOR DO BOOLEAN QUE TOU A FALAR
+        if (view.getMaterialSwitch1().getValue() == true) { }
 
         view.addConfirmationHandler(event -> {
             ConfigurationServiceAsync configurationSvc = GWT.create(ConfigurationService.class);

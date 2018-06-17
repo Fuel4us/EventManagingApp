@@ -14,6 +14,7 @@
             <m:MaterialCollapsibleItem>
                 <m:MaterialCollapsibleHeader>
                     <m:MaterialLink text="Value Colour Extension" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
+                    <m:MaterialSwitch ui:field="switch1" value="true" float="RIGHT" onLabel="Enabled" offLabel="Disabled"/>
                 </m:MaterialCollapsibleHeader>
                 <m:MaterialCollapsibleBody>
                     <m:MaterialLabel text="Colour Configuration" fontSize="3em"/>
@@ -36,6 +37,7 @@
             <m:MaterialCollapsibleItem>
                 <m:MaterialCollapsibleHeader>
                     <m:MaterialLink text="Add Menu Option" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
+                    <m:MaterialSwitch ui:field="switch2" value="true" float="RIGHT" onLabel="Enabled" offLabel="Disabled"/>
                 </m:MaterialCollapsibleHeader>
                 <m:MaterialCollapsibleBody backgroundColor="GREY_LIGHTEN_2">
                     <m:MaterialLabel text="Add Menu Option" fontSize="3em"/>
@@ -50,6 +52,7 @@
             <m:MaterialCollapsibleItem>
                 <m:MaterialCollapsibleHeader>
                     <m:MaterialLink text="Add Popup Option" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
+                    <m:MaterialSwitch ui:field="switch3" value="true" float="RIGHT" onLabel="Enabled" offLabel="Disabled"/>
                 </m:MaterialCollapsibleHeader>
                 <m:MaterialCollapsibleBody backgroundColor="GREY_LIGHTEN_2">
                     <m:MaterialLabel text="Add a Popup Option" fontSize="3em"/>
@@ -65,6 +68,7 @@
             <m:MaterialCollapsibleItem>
                 <m:MaterialCollapsibleHeader>
                     <m:MaterialLink text="Add Side Bar" iconType="POLYMER" iconPosition="LEFT" textColor="BLACK"/>
+                    <m:MaterialSwitch ui:field="switch4" value="true" float="RIGHT" onLabel="Enabled" offLabel="Disabled"/>
                 </m:MaterialCollapsibleHeader>
                 <m:MaterialCollapsibleBody backgroundColor="GREY_LIGHTEN_2">
                     <m:MaterialLabel text="Add Side Bar" fontSize="3em"/>
