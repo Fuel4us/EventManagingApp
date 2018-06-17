@@ -12,6 +12,11 @@ public interface UsersService extends RemoteService {
     ArrayList<UserDTO> getUsers();
     
     UserDTO attemptLogin(String email, String password);
+
+    UserDTO editProfile(UserDTO user);
+
+    void deleteUser(String email);
+
     
 //    Iterable<WorkbookDTO> getWorkbook(UserDTO user);
 //    

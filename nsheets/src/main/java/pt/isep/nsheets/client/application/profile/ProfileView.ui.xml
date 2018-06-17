@@ -1,0 +1,84 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:m="urn:import:gwt.material.design.client.ui"
+             xmlns:ma="urn:import:gwt.material.design.addins.client">
+
+    <ui:import field="pt.isep.nsheets.client.place.NameTokens.code"/>
+    <ui:with field='res' type='pt.isep.nsheets.client.resources.AppResources' />
+
+    <ui:style>
+
+
+    </ui:style>
+
+
+
+    <g:HTMLPanel>
+        <m:MaterialModal ui:field="modal" type="DEFAULT" dismissible="true" inDuration="500" outDuration="500" visible="false">
+            <m:MaterialModalContent>
+                <ma:fileuploader.MaterialFileUploader ui:field="uploader" maxFileSize="20" shadow="0">
+                    <ma:fileuploader.MaterialUploadLabel title="Upload"/>
+                </ma:fileuploader.MaterialFileUploader>
+            </m:MaterialModalContent>
+        </m:MaterialModal>
+        <m:MaterialRow>
+            <m:MaterialColumn grid="s4">
+                <m:MaterialImage ui:field="image" pixelSize="400,250"/>
+            </m:MaterialColumn>
+        </m:MaterialRow>
+        <m:MaterialRow>
+            <m:MaterialButton ui:field="editImageBtn" text="Edit Image" iconType="SECURITY"/>
+        </m:MaterialRow>
+        <m:MaterialRow>
+            <m:MaterialColumn grid="s12 m6 l7" >
+                <m:MaterialTextBox ui:field="email" label="E-mail" iconType="EMAIL" iconColor="BLUE" enabled="false"/>
+            </m:MaterialColumn>
+        </m:MaterialRow>
+
+        <m:MaterialRow>
+            <m:MaterialColumn grid="s12 m6 l7">
+                <m:MaterialTextBox ui:field="name" label="Name" iconType="PERSON" iconColor="BLUE" enabled="false"/>
+            </m:MaterialColumn>
+            <m:MaterialColumn>
+                <m:MaterialButton ui:field="editNameBtn" text="Edit" iconType="SECURITY"/>
+            </m:MaterialColumn>
+        </m:MaterialRow>
+
+        <m:MaterialRow>
+            <m:MaterialColumn grid="s12 m6 l7">
+                <m:MaterialTextBox ui:field="username" label="Username" textColor="GREEN" iconType="ACCOUNT_CIRCLE" iconColor="BLUE" type="EMAIL" enabled="false"/>
+            </m:MaterialColumn>
+            <m:MaterialColumn>
+                <m:MaterialButton ui:field="editUsernameBtn" text="Edit" iconType="SECURITY"/>
+            </m:MaterialColumn>
+        </m:MaterialRow>
+        <m:MaterialRow grid="s12 m6 l7">
+            <m:MaterialColumn>
+                <m:MaterialButton ui:field="editPasswordBtn" text="Change Password" iconType="SECURITY"/>
+            </m:MaterialColumn>
+            <m:MaterialColumn>
+                <m:MaterialButton ui:field="editBtn" text="Submit Changes" iconType="SEND"/>
+            </m:MaterialColumn>
+        </m:MaterialRow>
+        <m:MaterialRow>
+            <m:MaterialColumn grid="s12 m6 l7" >
+                <m:MaterialTextBox ui:field="oldpassword" label="Current Password" iconType="VPN_KEY" iconColor="BLUE" type="PASSWORD" visibility="HIDDEN" enabled="false"/>
+            </m:MaterialColumn>
+        </m:MaterialRow>
+        <m:MaterialRow>
+            <m:MaterialColumn grid="s12 m6 l7" >
+                <m:MaterialTextBox ui:field="newpassword" label="New Password" iconType="VPN_KEY" iconColor="BLUE" type="PASSWORD" visibility="HIDDEN" enabled="false"/>
+            </m:MaterialColumn>
+        </m:MaterialRow>
+        <m:MaterialRow grid="s12 m6 l7">
+            <m:MaterialColumn>
+                <m:MaterialButton ui:field="deleteBtn" text="DELETE ACCOUNT" iconColor="BLACK" backgroundColor="RED" iconType="DELETE_FOREVER"/>
+            </m:MaterialColumn>
+        </m:MaterialRow>
+
+
+    </g:HTMLPanel>
+
+
+</ui:UiBinder>
