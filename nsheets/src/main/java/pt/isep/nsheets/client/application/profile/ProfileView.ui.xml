@@ -75,7 +75,22 @@
             <m:MaterialColumn>
                 <m:MaterialButton ui:field="deleteBtn" text="DELETE ACCOUNT" iconColor="BLACK" backgroundColor="RED" iconType="DELETE_FOREVER"/>
             </m:MaterialColumn>
+            <m:MaterialColumn>
+                <m:MaterialButton ui:field="usersBtn" text="Manage Users" iconColor="BLACK" backgroundColor="RED" iconType="EDIT"/>
+            </m:MaterialColumn>
         </m:MaterialRow>
+        <m:MaterialModal ui:field="usersModal" type="DEFAULT" dismissible="true" inDuration="200" outDuration="200" visible="false">
+            <m:MaterialRow>
+                <m:MaterialLabel text="Users List" fontSize="2em"/>
+                <m:MaterialListValueBox ui:field="usersList" grid="s12"/>
+            </m:MaterialRow>
+
+            <m:MaterialModalFooter>
+                <m:MaterialIcon ui:field="activateModalBTN" iconType="LOCK_OPEN" iconColor="GREEN" waves="DEFAULT" circle="true" grid="s1"/>
+                <m:MaterialIcon ui:field="deactivateModalBTN" iconType="LOCK" iconColor="RED" waves="DEFAULT" circle="true" grid="s1"/>
+                <m:MaterialIcon ui:field="closeModalBTN" iconType="DONE" iconColor="GREEN" waves="DEFAULT" circle="true" grid="s1"/>
+            </m:MaterialModalFooter>
+        </m:MaterialModal>
 
 
     </g:HTMLPanel>

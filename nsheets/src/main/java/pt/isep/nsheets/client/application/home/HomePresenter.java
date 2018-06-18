@@ -25,6 +25,7 @@ import pt.isep.nsheets.client.application.menu.MenuView;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import pt.isep.nsheets.client.place.ParameterTokens;
+import pt.isep.nsheets.client.security.CurrentUser;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.application.Settings;
@@ -81,7 +82,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     }
 
     @Inject
-    HomePresenter(EventBus eventBus, MyView view, MyProxy proxy, PlaceManager placeManager) {
+    HomePresenter(EventBus eventBus, MyView view, MyProxy proxy, PlaceManager placeManager, CurrentUser currentUser) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
 
         this.view = view;
@@ -92,7 +93,11 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         });
 
         MenuView.getUsername().addClickHandler(event -> {
-            this.redirectToProfilePage();
+            if(currentUser.isLoggedIn()){
+                this.redirectToProfilePage();
+            }else{
+                redirectToLoginPage();
+            }
         });
 
         this.view.buttonClickHandler(e -> {
@@ -286,6 +291,16 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                 .getCurrentPlaceRequest()
                 .getParameter(ParameterTokens.REDIRECT, NameTokens.profile);
         PlaceRequest placeRequest = new PlaceRequest.Builder().nameToken(token).build();
+
+        placeManager.revealPlace(placeRequest);
+    }
+
+    private void redirectToLoginPage(){
+        String token = placeManager
+                .getCurrentPlaceRequest()
+                .getParameter(ParameterTokens.REDIRECT, NameTokens.login);
+        PlaceRequest placeRequest = new PlaceRequest.Builder().nameToken(token).build();
+
 
         placeManager.revealPlace(placeRequest);
     }

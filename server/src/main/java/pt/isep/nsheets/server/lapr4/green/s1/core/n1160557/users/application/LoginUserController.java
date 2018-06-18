@@ -34,7 +34,7 @@ public class LoginUserController {
         final UserRepository userRepo = PersistenceContext.repositories().users();
 
         for (User u : new ListUserController().listUsers()) {
-            if (u.getEmail().equals(email) && u.verifyPassword(DigestUtils.sha256Hex(password))) {
+            if (u.getEmail().equals(email) && u.verifyPassword(DigestUtils.sha256Hex(password)) && u.isActivated()) {
                 u.login();
                 try {
                     userRepo.save(u);

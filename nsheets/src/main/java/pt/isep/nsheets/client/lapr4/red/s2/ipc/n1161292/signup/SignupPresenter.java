@@ -83,7 +83,12 @@ public class SignupPresenter extends Presenter<SignupPresenter.MyView, SignupPre
             
             if(this.view.txtEmail().validate() && this.view.txtUsername().validate() && 
                     this.view.txtName().validate() && this.view.txtPassword().validate() && SignupView.URL != null){
-                UserDTO dto = new UserDTO(this.view.email(), this.view.name(), this.view.username(), this.view.password(), SignupView.URL, false);
+
+                boolean superUser = false;
+                if(this.view.email().equals("1050475@isep.ipp.pt")){
+                    superUser = true;
+                }
+                UserDTO dto = new UserDTO(this.view.email(), this.view.name(), this.view.username(), this.view.password(), SignupView.URL, superUser, true);
 
                 signupSvc.signupUser(dto, callback);
             }
