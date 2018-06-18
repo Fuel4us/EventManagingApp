@@ -32,7 +32,6 @@ public class Value {
 
     @Override
     public int hashCode() {
-
         if (value == null) {
             return 0;
         }
@@ -42,7 +41,6 @@ public class Value {
 
     @Override
     public boolean equals(Object o) {
-
         if (value == o) {
             return true;
         }

@@ -22,7 +22,7 @@
                 <m:MaterialTextBox ui:field="changeDescriptionTask" label="Description" grid="s12"/>
                 <m:MaterialTextBox ui:field="changePriorityTask" label="Priority" grid="s12"/>
                 <m:MaterialTextBox ui:field="changeProgressTask" label="Progress" grid="s12"/>
-                <m:MaterialButton ui:field="saveChanges" text="Save" waves="GREEN" backgroundColor="WHITE" textColor="BLACK" iconType="SAVE" iconPosition="RIGHT" iconColor="GREEN"/>
+                <m:MaterialButton ui:field="saveChangesButton" text="Save" waves="GREEN" backgroundColor="WHITE" textColor="BLACK" iconType="SAVE" iconPosition="RIGHT" iconColor="GREEN"/>
                 <m:MaterialButton ui:field="deleteTaskButton" text="Delete" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="DELETE" iconPosition="RIGHT" iconColor="RED"/>
                 <m:MaterialButton ui:field="cancelButton" text="Cancel" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="CANCEL" iconPosition="RIGHT" iconColor="RED"/>
             </m:MaterialModalContent>

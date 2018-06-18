@@ -12,6 +12,19 @@ import pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.domain.Tasks;
  *
  * @author Pedro Rodrigues - (1140572)
  */
-public interface TasksRepository extends Repository<Tasks, Long>{
-    
+public interface TasksRepository extends Repository<Tasks, Long> {
+
+    /**
+     *
+     * @param name
+     * @return
+     */
+    Tasks findByName(String name);
+
+    /**
+     *
+     * @param task
+     */
+    void deleteTask(Tasks task);
+
 }

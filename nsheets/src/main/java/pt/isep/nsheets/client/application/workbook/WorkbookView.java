@@ -323,9 +323,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     }
 
     private void openSearchAndReplaceWindow() {
+        String usernameTemp="";
         String expression = searchBox.getText();
         SearchAndReplaceController controller = new SearchAndReplaceController(this.customTable.getRow(0).getData().sheet);
-        controller.searchAll(expression);
+        controller.searchAll(expression,usernameTemp);
         replaceButton.setEnabled(true);
         replaceWindowFirstBox.setEnabled(true);
         searchAndReplaceWindow.open();

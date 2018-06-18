@@ -228,6 +228,10 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         spreadsheets.add(spreadsheet);
         fireSpreadsheetInserted(spreadsheet, spreadsheets.size() - 1);
     }
+    
+    public List<Spreadsheet> getSpreadSheets(){
+        return spreadsheets;
+    }
 
     /**
      * Returns the title to be used for the next spreadsheet added.

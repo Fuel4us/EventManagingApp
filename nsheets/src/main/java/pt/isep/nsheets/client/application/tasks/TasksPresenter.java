@@ -64,6 +64,9 @@ public class TasksPresenter extends Presenter<TasksPresenter.MyView, TasksPresen
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
 
         this.view = view;
+        
+        
+        
     }
 
     @Override
