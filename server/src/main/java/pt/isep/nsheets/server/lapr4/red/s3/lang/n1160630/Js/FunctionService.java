@@ -9,8 +9,6 @@ import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.Chart;
-import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.persistence.ChartRepository;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
 import pt.isep.nsheets.shared.core.js_complex.Function;
 
@@ -51,6 +49,11 @@ public class FunctionService {
         }
 
         return true;
+    }
+    
+    public void removeFunction(Function function){
+        final FunctionRepository functionRepo = PersistenceContext.repositories().functions();
+        functionRepo.delete(function);
     }
     
 }

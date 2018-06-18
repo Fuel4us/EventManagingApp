@@ -16,5 +16,6 @@ import pt.isep.nsheets.shared.core.js_complex.Function;
 public interface FunctionServiceAsync {
     void getFunctions(AsyncCallback<List<Function>> callback);
     void addFunction(Function function, AsyncCallback<Function> callback) throws DataException;
+    void removeFunction(Function function, AsyncCallback<Function> callback);
 //    void removeFunction(Function function, AsyncCallback<Function> callback);
 }

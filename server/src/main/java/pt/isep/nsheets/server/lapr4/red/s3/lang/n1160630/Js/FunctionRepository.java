@@ -13,5 +13,5 @@ import pt.isep.nsheets.shared.core.js_complex.Function;
  * @author pedromonteiro
  */
 public interface FunctionRepository extends Repository<Function, String>{
-    
+    void delete(Function function);
 }
