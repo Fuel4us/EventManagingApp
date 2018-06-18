@@ -14,7 +14,8 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     public static final double SMALL_VALUE = 0.00000000001;
 
     private Map<String, Value> memory = new HashMap<>();
-    private Map<String, Value> cells = new HashMap<>();
+    private Map<String, Value> cells;
+    private Map<String, String> method;
     private String output = "";
 
     //receives current sheet cells
@@ -22,47 +23,19 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
         this.cells = cells;
     }
 
-    public Value visitFunctionParameters(VbParser.TypeOfFunctionContext ctx) {
-        String id = ctx.getText();
-
-        Value value;
-
-        if (id.equals("Public")) {
-            value = new Value("Public");
-            return memory.put(id, value);
-        }
-        if (id.equals("Private")) {
-            value = new Value("Private");
-            return memory.put(id, value);
-        }
-
-        value = new Value("");
-        return memory.put(id, value);
+    @Override
+    public Value visitFunctionBody(VbParser.FunctionBodyContext ctx) {
+        return null;
     }
 
-    public Value visitTypeOfFunction(VbParser.TypeOfFunctionContext ctx) {
-        String id = ctx.getText();
-
-        Value value;
-
-        if (id.equals("Public")) {
-            value = new Value("Public");
-            return memory.put(id, value);
-        }
-        if (id.equals("Private")) {
-            value = new Value("Private");
-            return memory.put(id, value);
-        }
-
-        value = new Value("");
-        return memory.put(id, value);
-    }
-
-    public Value visitNameOfMethod(VbParser.NameOfMethodContext ctx) {
+    @Override
+    public Value visitFunctionName(VbParser.FunctionNameContext ctx) {
         String id = ctx.ID().getText();
+        Value value = this.visit(ctx.ID());
 
-        Value value;
-        value = new Value("");
+        if (this.visit(ctx.parameters()).toString().length() != 0) {
+            //Visit parameters
+        }
 
         return memory.put(id, value);
     }
@@ -70,8 +43,8 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     @Override
     public Value visitDeclaration(VbParser.DeclarationContext ctx) {
         String id = ctx.ID().getText();
-
         Value value;
+
         if (ctx.type().getText().equals("Integer")) {
             value = new Value(0);
             return memory.put(id, value);
@@ -88,7 +61,6 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     // assignment/id overrides
     @Override
     public Value visitAssignment(VbParser.AssignmentContext ctx) {
-
         String id = ctx.ID().getText();
         Value value = this.visit(ctx.expr());
 
@@ -102,7 +74,6 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     @Override
     public Value visitIdAtom(VbParser.IdAtomContext ctx) {
         String id = ctx.getText();
-
         Value value;
 
         if (id.startsWith("$")) {
@@ -110,9 +81,11 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
         } else {
             value = memory.get(id);
         }
+
         if (value == null) {
-            throw new RuntimeException("no such variable: " + id);
+            throw new RuntimeException("No such variable: " + id);
         }
+
         return value;
     }
 
@@ -122,6 +95,7 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
         String str = ctx.getText();
         // strip quotes
         str = str.substring(1, str.length() - 1).replace("\"\"", "\"");
+
         return new Value(str);
     }
 
@@ -150,24 +124,26 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     public Value visitPowExpr(VbParser.PowExprContext ctx) {
         Value left = this.visit(ctx.expr(0));
         Value right = this.visit(ctx.expr(1));
+
         return new Value(Math.pow(left.asDouble(), right.asDouble()));
     }
 
     @Override
     public Value visitUnaryMinusExpr(VbParser.UnaryMinusExprContext ctx) {
         Value value = this.visit(ctx.expr());
+
         return new Value(-value.asDouble());
     }
 
     @Override
     public Value visitNotExpr(VbParser.NotExprContext ctx) {
         Value value = this.visit(ctx.expr());
+
         return new Value(!value.asBoolean());
     }
 
     @Override
     public Value visitMultiplicationExpr(@NotNull VbParser.MultiplicationExprContext ctx) {
-
         Value left = this.visit(ctx.expr(0));
         Value right = this.visit(ctx.expr(1));
 
@@ -179,13 +155,12 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
             case VbParser.MOD:
                 return new Value(left.asDouble() % right.asDouble());
             default:
-                throw new RuntimeException("unknown operator: " + VbParser.tokenNames[ctx.op.getType()]);
+                throw new RuntimeException("Unknown operator: " + VbParser.tokenNames[ctx.op.getType()]);
         }
     }
 
     @Override
     public Value visitAdditiveExpr(@NotNull VbParser.AdditiveExprContext ctx) {
-
         Value left = this.visit(ctx.expr(0));
         Value right = this.visit(ctx.expr(1));
 
@@ -197,13 +172,12 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
             case VbParser.MINUS:
                 return new Value(left.asDouble() - right.asDouble());
             default:
-                throw new RuntimeException("unknown operator: " + VbParser.tokenNames[ctx.op.getType()]);
+                throw new RuntimeException("Unknown operator: " + VbParser.tokenNames[ctx.op.getType()]);
         }
     }
 
     @Override
     public Value visitRelationalExpr(@NotNull VbParser.RelationalExprContext ctx) {
-
         Value left = this.visit(ctx.expr(0));
         Value right = this.visit(ctx.expr(1));
 
@@ -223,7 +197,6 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
 
     @Override
     public Value visitEqualityExpr(@NotNull VbParser.EqualityExprContext ctx) {
-
         Value left = this.visit(ctx.expr(0));
         Value right = this.visit(ctx.expr(1));
 
@@ -245,6 +218,7 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     public Value visitAndExpr(VbParser.AndExprContext ctx) {
         Value left = this.visit(ctx.expr(0));
         Value right = this.visit(ctx.expr(1));
+
         return new Value(left.asBoolean() && right.asBoolean());
     }
 
@@ -252,6 +226,7 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     public Value visitOrExpr(VbParser.OrExprContext ctx) {
         Value left = this.visit(ctx.expr(0));
         Value right = this.visit(ctx.expr(1));
+
         return new Value(left.asBoolean() || right.asBoolean());
     }
 
@@ -260,21 +235,18 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     public Value visitLog(VbParser.LogContext ctx) {
         Value value = this.visit(ctx.expr());
         this.output += value.toString() + "\n";
+
         return value;
     }
 
     // if override
     @Override
     public Value visitIf_stat(VbParser.If_statContext ctx) {
-
         List<VbParser.Condition_block_ifContext> conditions = ctx.condition_block_if();
-
         boolean evaluatedBlock = false;
 
         for (VbParser.Condition_block_ifContext condition : conditions) {
-
             Value evaluated = this.visit(condition.expr());
-
             if (evaluated.asBoolean()) {
                 evaluatedBlock = true;
                 // evaluate this block whose expr==true
@@ -294,14 +266,11 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     // while override
     @Override
     public Value visitWhile_stat(VbParser.While_statContext ctx) {
-
         Value value = this.visit(ctx.expr());
 
         while (value.asBoolean()) {
-
             // evaluate the code block
             this.visit(ctx.stat_block_while());
-
             // evaluate the expression
             value = this.visit(ctx.expr());
         }

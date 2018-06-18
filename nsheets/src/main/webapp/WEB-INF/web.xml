@@ -192,6 +192,17 @@
         <url-pattern>/nsheets/signupService</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>functionServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.FunctionServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>functionServiceServlet</servlet-name>
+        <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
+        <url-pattern>/nsheets/functionService</url-pattern>
+    </servlet-mapping>
+
     <!-- Servlet for Import -->
     <servlet>
         <servlet-name>pt.isep.nsheets.nsheets ImportService</servlet-name>

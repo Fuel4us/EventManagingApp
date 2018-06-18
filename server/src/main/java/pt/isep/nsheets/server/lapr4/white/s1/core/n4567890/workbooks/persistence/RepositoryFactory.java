@@ -19,6 +19,7 @@ import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.persistence.Chart
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.persistence.NoteRepository;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1161140.calendar.persistence.CalendarEventRepository;
 import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160634.users.persistance.PrivateChatsRepository;
+import pt.isep.nsheets.server.lapr4.red.s3.lang.n1160630.Js.FunctionRepository;
 
 /**
  * @author Paulo Gandra Sousa
@@ -56,4 +57,6 @@ public interface RepositoryFactory {
     PrivateChatsRepository privateChats();
 
     NotificationRepository notifications();
+    
+    FunctionRepository functions();
 }

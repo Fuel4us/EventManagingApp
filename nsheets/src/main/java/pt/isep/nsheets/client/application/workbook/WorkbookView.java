@@ -758,11 +758,14 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 MaterialRow rowToAdd = new MaterialRow();
             
                 MaterialLabel label = new MaterialLabel("[" + i + "] - " + g.getValue().toString());
-                MaterialLink link = new MaterialLink(IconType.CREATE);
-                link.setIconPosition(IconPosition.RIGHT);
-
+                MaterialModal changeModal = createModal(key, g.getValue().toString(), i);
+                label.add(changeModal);
+                
+                rowToAdd.addClickHandler(event -> {
+                    changeModal.open();
+                });
+                
                 rowToAdd.add(label);
-                rowToAdd.add(link);
 
                 body.add(rowToAdd);
                 item.add(body);
@@ -771,6 +774,38 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             }
             colapsBody.add(collaps);
         }
+    }
+    
+    private MaterialModal createModal(String globalName, String value, Integer position){
+        MaterialModal changeModal = new MaterialModal();
+                    
+        MaterialModalContent content = new MaterialModalContent();
+
+        MaterialLabel valueLabel = new MaterialLabel("Actual Value: " + value);
+        MaterialTextBox changeValue = new MaterialTextBox();
+        
+        MaterialButton button = new MaterialButton();
+        button.setText("CHANGE");
+        button.setIconType(IconType.SAVE);
+        button.setIconPosition(IconPosition.RIGHT);
+        
+        button.addClickHandler(event -> {
+            String newValue = changeValue.getText();
+            Settings.getInstance().getWorkbook().globalVariables().get(globalName).get(position).setValue(new Value(newValue));
+            changeModal.close();
+            updateCollapsible();
+            
+            customTable.getView().setRedraw(true);
+            customTable.getView().refresh();
+        });
+        
+        content.add(valueLabel);
+        content.add(changeValue);
+        content.add(button);
+
+        changeModal.add(content);
+        
+        return changeModal;
     }
     
     private String getParameters(Language lang) {

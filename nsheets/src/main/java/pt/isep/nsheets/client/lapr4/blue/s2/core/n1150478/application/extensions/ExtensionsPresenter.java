@@ -3,6 +3,8 @@ package pt.isep.nsheets.client.lapr4.blue.s2.core.n1150478.application.extension
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -16,13 +18,7 @@ import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.constants.Display;
 import gwt.material.design.client.constants.IconType;
 import gwt.material.design.client.constants.TextAlign;
-import gwt.material.design.client.ui.MaterialButton;
-import gwt.material.design.client.ui.MaterialImage;
-import gwt.material.design.client.ui.MaterialLabel;
-import gwt.material.design.client.ui.MaterialLink;
-import gwt.material.design.client.ui.MaterialSideNavPush;
-import gwt.material.design.client.ui.MaterialTextBox;
-import gwt.material.design.client.ui.MaterialToast;
+import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.html.ListItem;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,6 +89,21 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
 
         MaterialComboBox getComboBars();
 
+        MaterialSwitch getMaterialSwitch1();
+
+        MaterialSwitch getMaterialSwitch2();
+
+        MaterialSwitch getMaterialSwitch3();
+
+        MaterialSwitch getMaterialSwitch4();
+
+        MaterialCollapsibleItem getSwitch1_Item();
+
+        MaterialCollapsibleItem getSwitch2_Item();
+
+        MaterialCollapsibleItem getSwitch3_Item();
+
+        MaterialCollapsibleItem getSwitch4_Item();
     }
 
     @NameToken(NameTokens.extensions)
@@ -144,6 +155,9 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
     ExtensionsPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
         this.view = view;
+
+        // ISTO VAI BUSCAR O VALOR DO BOOLEAN QUE TOU A FALAR
+        if (view.getMaterialSwitch1().getValue() == true) { }
 
         view.addConfirmationHandler(event -> {
             ConfigurationServiceAsync configurationSvc = GWT.create(ConfigurationService.class);
@@ -207,29 +221,33 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
         getView().getMenuButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                String name = getView().getMenuName().getText();
-                if (name.isEmpty()) {
-                    MaterialToast.fireToast("The name of new menu option is empty! Please write one.");
-                } else if (getMenuNames().contains(name)) {
-                    MaterialToast.fireToast("This menu option already exists! Please write another name.");
-                } else {
-                    IconType icon = getView().getIconMenuChoosed();
-                    ListItem newItem = new ListItem();
-                    MaterialLink ls = new MaterialLink();
-                    ls.setText(name);
-                    ls.setTextColor(Color.BLACK);
-                    ls.setTextAlign(TextAlign.CENTER);
-                    ls.setIconType(icon);
-                    newItem.add(ls);
-                    addMenuName(name);
-
-                    if (MenuView.getNavBar().getActivates().equals("sideBar")) {
-                        MenuView.getSideNav().add(newItem);
-                        MaterialToast.fireToast("Menu Option created on the original side bar!");
+                if(view.getMaterialSwitch2().getValue()) {
+                    String name = getView().getMenuName().getText();
+                    if (name.isEmpty()) {
+                        MaterialToast.fireToast("The name of new menu option is empty! Please write one.");
+                    } else if (getMenuNames().contains(name)) {
+                        MaterialToast.fireToast("This menu option already exists! Please write another name.");
                     } else {
-                        getSides().get(getView().getComboBars().getSelectedIndex()).add(newItem);
-                        MaterialToast.fireToast("Menu Option created on the new side bar!");
+                        IconType icon = getView().getIconMenuChoosed();
+                        ListItem newItem = new ListItem();
+                        MaterialLink ls = new MaterialLink();
+                        ls.setText(name);
+                        ls.setTextColor(Color.BLACK);
+                        ls.setTextAlign(TextAlign.CENTER);
+                        ls.setIconType(icon);
+                        newItem.add(ls);
+                        addMenuName(name);
+
+                        if (MenuView.getNavBar().getActivates().equals("sideBar")) {
+                            MenuView.getSideNav().add(newItem);
+                            MaterialToast.fireToast("Menu Option created on the original side bar!");
+                        } else {
+                            getSides().get(getView().getComboBars().getSelectedIndex()).add(newItem);
+                            MaterialToast.fireToast("Menu Option created on the new side bar!");
+                        }
                     }
+                } else {
+                    MaterialToast.fireToast("ta foder oh");
                 }
             }
         });
@@ -301,6 +319,46 @@ public class ExtensionsPresenter extends Presenter<ExtensionsPresenter.MyView, E
                 MenuView.getNavBar().setActivates(createdBar);
                 MenuView.getPanel().add(getSides().get(getView().getComboBars().getSelectedIndex()));
                 MaterialToast.fireToast("SideBar changed!", "rounded");
+            }
+        });
+
+        getView().getSwitch1_Item().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent clickEvent) {
+                if(!view.getMaterialSwitch1().getValue()) {
+                    MaterialToast.fireToast("Extension is disabled!");
+                    clickEvent.stopPropagation();
+                }
+            }
+        });
+
+        getView().getSwitch2_Item().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent clickEvent) {
+                if(!view.getMaterialSwitch2().getValue()) {
+                    MaterialToast.fireToast("Extension is disabled!");
+                    clickEvent.stopPropagation();
+                }
+            }
+        });
+
+        getView().getSwitch3_Item().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent clickEvent) {
+                if(!view.getMaterialSwitch3().getValue()) {
+                    MaterialToast.fireToast("Extension is disabled!");
+                    clickEvent.stopPropagation();
+                }
+            }
+        });
+
+        getView().getSwitch4_Item().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent clickEvent) {
+                if(!view.getMaterialSwitch4().getValue()) {
+                    MaterialToast.fireToast("Extension is disabled!");
+                    clickEvent.stopPropagation();
+                }
             }
         });
     }

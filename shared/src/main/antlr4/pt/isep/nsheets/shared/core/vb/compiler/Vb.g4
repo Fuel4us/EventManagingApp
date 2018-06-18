@@ -2,17 +2,29 @@ grammar Vb;
 
 parse: block EOF;
 
-block: stat* | function*;
+block: stat* | function* | procedure*;
 
-function: init_method stat+ returnMethod end_method;
+function: initFunction functionBody returnFunction endFunction;
 
-init_method: typeOfFunction 'Function' nameOfMethod 'As' type;
+initFunction: 'Function' functionName 'As' type;
 
-typeOfFunction: 'Public' | 'Private';
+functionBody: stat*;
 
-returnMethod: 'Return' expr | 'Return' ID;
+functionName: ID OPAR parameters CPAR;
 
-end_method: 'End' 'Function';
+returnFunction: 'Return' ID;
+
+endFunction: 'End' 'Function';
+
+procedure: initProcedure stat+ endProcedure;
+
+initProcedure: 'Sub' procedureName;
+
+procedureName: ID OPAR parameters CPAR;
+
+endProcedure: 'End' 'Sub';
+
+parameters: type ID COMMA parameters | type ID;
 
 stat:
 	assignment
@@ -21,8 +33,6 @@ stat:
 	| while_stat
 	| log
 	| OTHER {System.err.println("unknown char: " + $OTHER.text);};
-
-nameOfMethod: ID OPAR CPAR;
 
 declaration: 'Dim' ID 'As' type;
 
@@ -85,6 +95,7 @@ MOD: '%';
 POW: '^';
 NOT: '!';
 
+COMMA: ',';
 SCOL: ';';
 ASSIGN: '=';
 OPAR: '(';

@@ -1,16 +1,28 @@
 package pt.isep.nsheets.client.application.code_js;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.client.constants.Color;
+import gwt.material.design.client.constants.IconPosition;
+import gwt.material.design.client.constants.IconType;
+import gwt.material.design.client.constants.WavesType;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialCard;
 import gwt.material.design.client.ui.MaterialCardContent;
+import gwt.material.design.client.ui.MaterialCollapsible;
+import gwt.material.design.client.ui.MaterialCollapsibleBody;
+import gwt.material.design.client.ui.MaterialCollapsibleHeader;
+import gwt.material.design.client.ui.MaterialCollapsibleItem;
+import gwt.material.design.client.ui.MaterialIcon;
+import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialRow;
 import gwt.material.design.client.ui.MaterialTab;
 import gwt.material.design.client.ui.MaterialTextArea;
@@ -32,6 +44,7 @@ import pt.isep.nsheets.shared.core.Cell;
 
 import javax.inject.Inject;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
@@ -39,9 +52,13 @@ import java.util.logging.Logger;
 
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import pt.isep.nsheets.shared.core.js_complex.EvalVisitor;
+import pt.isep.nsheets.shared.core.js_complex.Function;
 import pt.isep.nsheets.shared.core.js_complex.compiler.Js_complexLexer;
 import pt.isep.nsheets.shared.core.js_complex.compiler.Js_complexParser;
 import pt.isep.nsheets.shared.core.vb.Value;
+import pt.isep.nsheets.shared.services.DataException;
+import pt.isep.nsheets.shared.services.FunctionService;
+import pt.isep.nsheets.shared.services.FunctionServiceAsync;
 
 class Code_JavaScriptView extends ViewImpl implements Code_JavaScriptPresenter.MyView {
 
@@ -63,11 +80,11 @@ class Code_JavaScriptView extends ViewImpl implements Code_JavaScriptPresenter.M
     @UiField
     MaterialTab tab;
 
+    @UiField
+    MaterialCollapsible functions_area;
+
     @UiHandler("compile_btn")
     void click_chart(ClickEvent e) {
-//        MaterialToast.fireToast(text_area.getValue());
-//        cardContent.add(new MaterialLabel(text_area.getText()));
-
         cardContent.clear();
         MaterialTextArea result = new MaterialTextArea();
         result.setTextColor(Color.BLACK);
@@ -107,12 +124,15 @@ class Code_JavaScriptView extends ViewImpl implements Code_JavaScriptPresenter.M
         runButton.addClickHandler(event -> {
             runHandler(OutputText, CodeArea);
         });
+
+        runHandler(OutputText, CodeArea);
     }
 
     private void animateCards() {
         animate(text_area, Transition.SLIDEINUP, 1500, 0);
         animate(card, Transition.SLIDEINRIGHT, 1500, 200);
         animate(compile_btn, Transition.SLIDEINDOWN, 1500, 0);
+        animate(functions_area, Transition.SLIDEINUP, 1500, 200);
     }
 
     private void animate(Widget widget, Transition transition, int time, int delay) {
@@ -126,7 +146,7 @@ class Code_JavaScriptView extends ViewImpl implements Code_JavaScriptPresenter.M
     }
 
     private void runHandler(HasText outputArea, HasText codeArea) {
-        
+
         Map<String, Value> cells = new HashMap<>();
 
         for (Cell c : Settings.getInstance().getWorkbook().getSpreadsheet(0)) {
@@ -140,27 +160,118 @@ class Code_JavaScriptView extends ViewImpl implements Code_JavaScriptPresenter.M
         try {
 
             Js_complexLexer lexer = new Js_complexLexer(new ANTLRInputStream(codeArea.getText()));
-            
+
             Js_complexParser parser = new Js_complexParser(new CommonTokenStream(lexer));
             ParseTree tree = parser.parse();
-            //TODO add function block as parameter
-            EvalVisitor visitor = new EvalVisitor(cells, null);
-            visitor.visit(tree);
 
-            for (Entry<String, Value> c : cells.entrySet()) {
-                try {
-                    Settings.getInstance().getWorkbook().getSpreadsheet(0).getCell(new Address(c.getKey())).setContent(c.getValue().toString());
-                } catch (FormulaCompilationException ex) {
-                    Logger.getLogger(Code_JavaScriptView.class.getName()).log(Level.SEVERE, null, ex);
+            FunctionServiceAsync functionSrv = GWT.create(FunctionService.class);
+
+            AsyncCallback<List<Function>> callback = new AsyncCallback<List<Function>>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    throw new RuntimeException("Occured an error accessign the database");
                 }
-            }
 
-            outputArea.setText(visitor.getOutput());
-            MaterialToast.fireToast(codeArea.getText());
+                @Override
+                public void onSuccess(List<Function> result) {
+                    MaterialToast.fireToast(result.size() + " Functions Loaded");
+
+                    EvalVisitor visitor = new EvalVisitor(cells, result);
+                    visitor.visit(tree);
+
+                    for (Entry<String, Value> c : cells.entrySet()) {
+                        try {
+                            Settings.getInstance().getWorkbook().getSpreadsheet(0).getCell(new Address(c.getKey())).setContent(c.getValue().toString());
+                        } catch (FormulaCompilationException ex) {
+                            Logger.getLogger(Code_JavaScriptView.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    outputArea.setText(visitor.getOutput());
+                    MaterialToast.fireToast(codeArea.getText());
+                    fillFunctions(result);
+                    try {
+                        AsyncCallback<Function> callback2 = new AsyncCallback<Function>() {
+                            @Override
+                            public void onFailure(Throwable caught) {
+                                throw new RuntimeException("Occured an error accessign the database");
+                            }
+
+                            @Override
+                            public void onSuccess(Function result) {
+                                MaterialToast.fireToast("Function " + result.getFunctionId() + " successfully added!");
+
+                                AsyncCallback<List<Function>> callback = new AsyncCallback<List<Function>>() {
+                                    @Override
+                                    public void onFailure(Throwable caught) {
+                                        throw new RuntimeException("Occured an error accessign the database");
+                                    }
+
+                                    @Override
+                                    public void onSuccess(List<Function> result) {
+                                        MaterialToast.fireToast(result.size() + " Functions Loaded");
+                                        fillFunctions(result);
+                                    }
+                                };
+                                
+                                functionSrv.getFunctions(callback);
+                            }
+
+                        };
+                        for (Function function : visitor.newFunctions()) {
+                            functionSrv.addFunction(function, callback2);
+                        }
+                    } catch (DataException ex) {
+                        Logger.getLogger(EvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+
+            };
+
+            functionSrv.getFunctions(callback);
 
         } catch (IndexOutOfBoundsException | RecognitionException | ClassCastException ex) {
-            outputArea.setText("Syntax Error: "+ex);
+            outputArea.setText("Syntax Error: " + ex);
         }
+    }
+
+    public void fillFunctions(List<Function> functions) {
+
+        functions_area.clear();
+
+        for (Function function : functions) {
+            MaterialCollapsibleItem item = new MaterialCollapsibleItem();
+
+            MaterialCollapsibleHeader header = new MaterialCollapsibleHeader();
+            header.setWaves(WavesType.DEFAULT);
+            header.setBackgroundColor(Color.BLUE_LIGHTEN_1);
+            MaterialLink link = new MaterialLink();
+            link.setText(function.getFunctionId());
+            link.setIconType(IconType.FUNCTIONS);
+            link.setIconPosition(IconPosition.LEFT);
+            link.setTextColor(Color.WHITE);
+
+//            MaterialButton btn = new MaterialButton();
+//            btn.setIconType(IconType.DELETE);
+//            btn.setIconColor(Color.WHITE);
+//            btn.setWaves(WavesType.DEFAULT);
+//            btn.setCircle(true);
+            header.add(link);
+//            header.add(btn);
+
+            MaterialCollapsibleBody body = new MaterialCollapsibleBody();
+            link = new MaterialLink(function.getFunctionBody());
+            link.setTextColor(Color.BLACK);
+            body.add(link);
+            item.add(header);
+            item.add(body);
+
+            functions_area.add(item);
+
+        }
+
+        functions_area.reload();
+
     }
 
 }

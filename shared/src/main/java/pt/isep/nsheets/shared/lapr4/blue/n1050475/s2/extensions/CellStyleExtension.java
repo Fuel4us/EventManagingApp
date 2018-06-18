@@ -3,6 +3,7 @@ package pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions;
 import com.google.gwt.dom.client.Style;
 import gwt.material.design.client.base.MaterialWidget;
 import gwt.material.design.client.constants.TextAlign;
+import gwt.material.design.client.ui.MaterialToast;
 import org.apache.xalan.xsltc.dom.AdaptiveResultTreeImpl;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Cell;
@@ -66,25 +67,25 @@ public class CellStyleExtension extends Extension {
 
         @Override
         public void decorate(Object o) {
-            CellStyle c = CellStyleExtension.getCellStyle((Address) o);
+                CellStyle c = CellStyleExtension.getCellStyle((Address) o);
 
-            if (c != null) {
-                element.setBackgroundColor(Color.values()[c.getBackgroungColor()]);
-                element.setTextColor(Color.values()[c.getFontColor()]);
-                if(c.getTextALIGN() == -1){
-                    element.setTextAlign(TextAlign.LEFT);
-                }else if(c.getTextALIGN() == 1){
-                    element.setTextAlign(TextAlign.RIGHT);
+                if (c != null) {
+                    element.setBackgroundColor(Color.values()[c.getBackgroungColor()]);
+                    element.setTextColor(Color.values()[c.getFontColor()]);
+                    if(c.getTextALIGN() == -1){
+                        element.setTextAlign(TextAlign.LEFT);
+                    }else if(c.getTextALIGN() == 1){
+                        element.setTextAlign(TextAlign.RIGHT);
+                    }else{
+                        element.setTextAlign(TextAlign.CENTER);
+                    }
+                    element.setFontSize(c.getFontSize(), Style.Unit.PX);
                 }else{
+                    element.setBackgroundColor(Color.WHITE);
+                    element.setTextColor(Color.BLACK);
                     element.setTextAlign(TextAlign.CENTER);
+                    element.setFontSize(12, Style.Unit.PX);
                 }
-                element.setFontSize(c.getFontSize(), Style.Unit.PX);
-            }else{
-                element.setBackgroundColor(Color.WHITE);
-                element.setTextColor(Color.BLACK);
-                element.setTextAlign(TextAlign.CENTER);
-                element.setFontSize(12, Style.Unit.PX);
-            }
         }
     }
 }
