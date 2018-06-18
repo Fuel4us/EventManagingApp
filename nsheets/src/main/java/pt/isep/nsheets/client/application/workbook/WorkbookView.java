@@ -171,7 +171,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialTextBox basicWizardTextBox;
     @UiField
-    MaterialTextBox basicWizardTextBox2;
+    MaterialTextBox basicWizardTextBox2, txtComment;
+    
 
     /*
     Style UI objects by 1050475
