@@ -65,7 +65,18 @@ class ProfileView extends ViewImpl implements ProfilePresenter.MyView {
     @UiField
     MaterialButton editBtn;
     @UiField
-    MaterialButton deleteBtn;
+    MaterialButton deleteBtn;@UiField
+    MaterialIcon userinfoBTN;
+    @UiField
+    MaterialImage userImage;
+    @UiField
+    MaterialTextBox userEmail;
+    @UiField
+    MaterialTextBox userName;
+    @UiField
+    MaterialTextBox userUsername;
+    @UiField
+    MaterialIcon closeUserProfileModalBTN;
     @UiField
     MaterialButton usersBtn;
     @UiField
@@ -84,6 +95,11 @@ class ProfileView extends ViewImpl implements ProfilePresenter.MyView {
     MaterialIcon deactivateModalBTN;
     @UiField
     MaterialIcon closeModalBTN;
+    @UiField
+    MaterialIcon deleteUserUserProfileModalBTN;
+    @UiField
+    MaterialModal userProfileModal;
+
 
 
 
@@ -325,6 +341,46 @@ class ProfileView extends ViewImpl implements ProfilePresenter.MyView {
                 oldpassword.setVisibility(Style.Visibility.HIDDEN);
                 newpassword.setEnabled(false);
                 newpassword.setVisibility(Style.Visibility.HIDDEN);
+            }
+        });
+
+        userinfoBTN.addClickHandler(event->{
+            if(usersList.getItemCount()>0){
+                userProfileModal.open();
+                userImage.setUrl(usersList.getSelectedValue().getPictureName());
+                userEmail.setText(usersList.getSelectedValue().getEmail());
+                userName.setText(usersList.getSelectedValue().getName());
+                userUsername.setText(usersList.getSelectedValue().getNickname());
+            }
+        });
+
+        closeUserProfileModalBTN.addClickHandler(clickEvent -> {
+            userProfileModal.close();
+        });
+
+        deleteUserUserProfileModalBTN.addClickHandler(event->{
+            UserDTO u = usersList.getSelectedValue();
+
+            if(u.getEmail().equals(currentUser.getUser().getEmail())){
+                MaterialToast.fireToast("Can't delete currentUser here");
+            }else{
+                UsersServiceAsync userSvc = GWT.create(UsersService.class);
+                AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        MaterialToast.fireToast("Error when deleting user.! " + caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        MaterialToast.fireToast("User deleted!");
+                    }
+                };
+
+                userSvc.deleteUser(u.getEmail(), callback);
+
+                userProfileModal.close();
+                usersList.removeValue(u);
             }
         });
     }

@@ -95,7 +95,37 @@
             <m:MaterialModalFooter>
                 <m:MaterialIcon ui:field="activateModalBTN" iconType="LOCK_OPEN" iconColor="GREEN" waves="DEFAULT" circle="true" grid="s1"/>
                 <m:MaterialIcon ui:field="deactivateModalBTN" iconType="LOCK" iconColor="RED" waves="DEFAULT" circle="true" grid="s1"/>
+                <m:MaterialIcon ui:field="userinfoBTN" iconType="INFO" iconColor="YELLOW" waves="DEFAULT" circle="true" grid="s1"/>
                 <m:MaterialIcon ui:field="closeModalBTN" iconType="DONE" iconColor="GREEN" waves="DEFAULT" circle="true" grid="s1"/>
+            </m:MaterialModalFooter>
+        </m:MaterialModal>
+        <m:MaterialModal ui:field="userProfileModal" type="DEFAULT" dismissible="false" inDuration="600" outDuration="600" visible="false">
+            <m:MaterialRow>
+                <m:MaterialColumn grid="s4">
+                    <m:MaterialImage ui:field="userImage" pixelSize="400,250"/>
+                </m:MaterialColumn>
+            </m:MaterialRow>
+            <m:MaterialRow>
+                <m:MaterialColumn grid="s12 m6 l7" >
+                    <m:MaterialTextBox ui:field="userEmail" label="E-mail" iconType="EMAIL" iconColor="BLUE" enabled="false"/>
+                </m:MaterialColumn>
+            </m:MaterialRow>
+
+            <m:MaterialRow>
+                <m:MaterialColumn grid="s12 m6 l7">
+                    <m:MaterialTextBox ui:field="userName" label="Name" iconType="PERSON" iconColor="BLUE" enabled="false"/>
+                </m:MaterialColumn>
+            </m:MaterialRow>
+
+            <m:MaterialRow>
+                <m:MaterialColumn grid="s12 m6 l7">
+                    <m:MaterialTextBox ui:field="userUsername" label="Username" textColor="GREEN" iconType="ACCOUNT_CIRCLE" iconColor="BLUE" type="EMAIL" enabled="false"/>
+                </m:MaterialColumn>
+            </m:MaterialRow>
+
+            <m:MaterialModalFooter>
+                <m:MaterialIcon ui:field="deleteUserUserProfileModalBTN" iconType="DELETE_FOREVER" iconColor="RED" waves="DEFAULT" circle="true" grid="s1"/>
+                <m:MaterialIcon ui:field="closeUserProfileModalBTN" iconType="DONE" iconColor="GREEN" waves="DEFAULT" circle="true" grid="s1"/>
             </m:MaterialModalFooter>
         </m:MaterialModal>
 
