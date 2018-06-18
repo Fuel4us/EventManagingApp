@@ -41,9 +41,26 @@ public class User implements AggregateRoot<Long>, Serializable {
     private String pictureName;
     private boolean superUser;
     private boolean loggedIn;
+    private boolean state;
     private List<String> blacklist;
     
 //    private Set<Workbook> workbooks = new HashSet<>();
+
+    public User(String email, String name, String nickname, String password, String pictureName, boolean superUser, boolean state) throws IllegalArgumentException {
+        if (email == null || name == null || nickname == null || password == null) {
+            throw new IllegalArgumentException("email or name or nickname or password must be non-null");
+        }
+
+        this.email = email;
+        this.name = name;
+        this.nickname = nickname;
+        this.password = password;
+        this.superUser = superUser;
+        this.pictureName = pictureName;
+        this.state = state;
+        
+        this.blacklist = new ArrayList<>();
+    }
 
     public User(String email, String name, String nickname, String password, String pictureName, boolean superUser) throws IllegalArgumentException {
         if (email == null || name == null || nickname == null || password == null) {
@@ -56,7 +73,8 @@ public class User implements AggregateRoot<Long>, Serializable {
         this.password = password;
         this.superUser = superUser;
         this.pictureName = pictureName;
-        
+        this.state = true;
+
         this.blacklist = new ArrayList<>();
     }
 
@@ -89,6 +107,22 @@ public class User implements AggregateRoot<Long>, Serializable {
         return loggedIn;
     }
 
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void setNickname(String nickname){
+        this.nickname = nickname;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    public void setPictureName(String pictureName){
+        this.pictureName = pictureName;
+    }
+
 //    public Iterable<Workbook> getWorkbooks() {
 //        return this.workbooks;
 //    }
@@ -104,6 +138,12 @@ public class User implements AggregateRoot<Long>, Serializable {
     public void logout() {
         loggedIn = false;
     }
+
+    public boolean isActivated(){ return state;}
+
+    public void activate() { state = true; }
+
+    public void deactivate() {state = false; }
 
     public boolean verifyPassword(String password) {
         return this.password.equals(password);
@@ -174,14 +214,14 @@ public class User implements AggregateRoot<Long>, Serializable {
     }
 
     public UserDTO toDTO() {
-        return new UserDTO(this.email, this.name, this.nickname, this.password, this.pictureName, this.superUser);
+        return new UserDTO(this.email, this.name, this.nickname, this.password, this.pictureName, this.superUser, this.state);
     }
 
     public static User fromDTO(UserDTO dto) throws IllegalArgumentException {
-        return new User(dto.getEmail(), dto.getName(), dto.getNickname(), dto.getPassword(), dto.getPictureName(), dto.isSuperuser());
+        return new User(dto.getEmail(), dto.getName(), dto.getNickname(), dto.getPassword(), dto.getPictureName(), dto.isSuperuser(), dto.isActivate());
     }
 
     public static User fromDTOHashPassword(UserDTO dto) throws IllegalArgumentException {
-        return new User(dto.getEmail(), dto.getName(), dto.getNickname(), DigestUtils.sha256Hex(dto.getPassword()), dto.getPictureName(), dto.isSuperuser());
+        return new User(dto.getEmail(), dto.getName(), dto.getNickname(), DigestUtils.sha256Hex(dto.getPassword()), dto.getPictureName(), dto.isSuperuser(), dto.isActivate());
     }
 }
