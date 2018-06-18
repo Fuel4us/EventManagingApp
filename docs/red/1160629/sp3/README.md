@@ -1,4 +1,4 @@
-﻿**José Santo** (1160629) - Sprint 1 - Core02.1
+﻿**José Santo** (1160629) - Sprint 3 - Lang01.3
 ===============================
 
 # 1. Requirements
