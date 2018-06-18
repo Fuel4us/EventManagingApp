@@ -11,6 +11,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
+import gwt.material.design.addins.client.combobox.MaterialComboBox;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialInput;
 import gwt.material.design.client.ui.MaterialModal;
@@ -30,6 +31,9 @@ import pt.isep.nsheets.shared.services.ExportService;
 import pt.isep.nsheets.shared.services.ExportServiceAsync;
 
 class ExportView extends ViewImpl implements ExportPresenter.MyView {
+
+    @UiField
+    MaterialComboBox addElementsSelect;
 
     @UiField
     MaterialButton export_pdf;
@@ -59,9 +63,6 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
     MaterialRadioButton dotted2, double_2, solid2, dashed2;
 
     @UiField
-    MaterialRadioButton macros, chars, comments, images;
-
-    @UiField
     MaterialModal modal;
 
     @UiField
@@ -78,7 +79,13 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
     private int range;
     private final List<MaterialRadioButton> radiolist;
 
-    private final List<MaterialRadioButton> radioListComplete;
+    @Inject
+    ExportView(Binder uiBinder) {
+        initWidget(uiBinder.createAndBindUi(this));
+        dotted.setValue(Boolean.TRUE);
+        radiolist = createMaterialRadioButtonArray();
+        addElementsSelect = addOptionsComboBox();
+    }
 
     @UiHandler("style_export_pdf")
     void openOverlay(ClickEvent event) {
@@ -160,14 +167,6 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
 
     }
 
-    @Inject
-    ExportView(Binder uiBinder) {
-        initWidget(uiBinder.createAndBindUi(this));
-        dotted.setValue(Boolean.TRUE);
-        radiolist = createMaterialRadioButtonArray();
-        radioListComplete = createMaterialRadioButtonCompleteArray();
-    }
-
     @Override
     public void csvButtonClickHandler(ClickHandler ch) {
         export_csv.addClickHandler(ch);
@@ -208,6 +207,16 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
         return modal_complete;
     }
 
+    private MaterialComboBox addOptionsComboBox() {
+        MaterialComboBox combo = new MaterialComboBox();
+        combo.addItem("MACROS");
+        combo.addItem("COMMENTS");
+        combo.addItem("CHARS");
+        combo.addItem(new String("IMAGES"));
+
+        return combo;
+    }
+
     interface Binder extends UiBinder<Widget, ExportView> {
     }
 
@@ -218,18 +227,6 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
         list.add(double_);
         list.add(solid);
         list.add(dashed);
-
-        return list;
-
-    }
-
-    private List<MaterialRadioButton> createMaterialRadioButtonCompleteArray() {
-
-        List<MaterialRadioButton> list = new ArrayList<>();
-        list.add(dotted2);
-        list.add(double_2);
-        list.add(solid2);
-        list.add(dashed2);
 
         return list;
 

@@ -7,8 +7,6 @@ import java.util.List;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleDTO;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
-
-
 /**
  *
  * @author Rúben (1160998)
@@ -16,13 +14,18 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 @RemoteServiceRelativePath("ExportService")
 public interface ExportService extends RemoteService {
 
-      //void exportWorkbook(WorkbookDTO workbookDTO, String type);
+    //void exportWorkbook(WorkbookDTO workbookDTO, String type);
+    boolean exportWorkbookAsCSV(WorkbookDTO workbookDTO);
 
-      boolean exportWorkbookAsCSV(WorkbookDTO workbookDTO);
-      boolean exportWorkbookAsXML(WorkbookDTO workbookDTO);
-      boolean exportWorkbookAsPDF(WorkbookDTO workbookDTO);
-      boolean exportWorkbookAsCSL(WorkbookDTO workbookDTO);
-      boolean exportStyledWorkbookPDF(List<CellStyleDTO> list, WorkbookDTO workbookDTO, String style,String color, int range);
+    boolean exportWorkbookAsXML(WorkbookDTO workbookDTO);
+
+    boolean exportWorkbookAsPDF(WorkbookDTO workbookDTO);
+
+    boolean exportWorkbookAsCSL(WorkbookDTO workbookDTO);
+
+    boolean exportStyledWorkbookPDF(List<CellStyleDTO> list, WorkbookDTO workbookDTO, String style, String color, int range);
+
+    boolean exportCompleteWorkbookPDF(List<CellStyleDTO> list, WorkbookDTO workbookDTO, String style, String color, int range);
 
 //    String[][] exportPartOfSpreadsheet(Spreadsheet spreadsheet, int beginColumn, int beginRow, int endColumn, int endRow);
 }
