@@ -1,5 +1,7 @@
 package pt.isep.nsheets.shared.application;
 
+import java.util.ArrayList;
+import java.util.List;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
@@ -29,6 +31,7 @@ public class Settings {
     }
     
     private Workbook workbook;
+    private List<Workbook> openWorkbooks = new ArrayList<>();
     
     private Settings(){
         workbook = new Workbook("Title", "Tile", SPREADSHEET_DEFAULT);
@@ -40,5 +43,27 @@ public class Settings {
     
     public void updateWorkbook(WorkbookDTO workbook) {
         this.workbook = Workbook.fromDTO(workbook);
+    }
+    
+    public List<Workbook> getOpenedWorkbooks() {
+        return this.openWorkbooks;
+    }
+    
+    public void addOpenWorkbook(Workbook workbook) {
+        for(Workbook w : this.openWorkbooks) {
+            if(w.name().equals(workbook.name()))
+                return;
+        }
+        
+        this.openWorkbooks.add(workbook);
+    }
+    
+    public void closeOpenedWorkbook(Workbook workbook) {
+        for(int i = 0; i < this.openWorkbooks.size(); i++) {
+            if(this.openWorkbooks.get(i).name().equals(workbook.name())) {
+                this.openWorkbooks.remove(i);
+                return;
+            }
+        }
     }
 }
