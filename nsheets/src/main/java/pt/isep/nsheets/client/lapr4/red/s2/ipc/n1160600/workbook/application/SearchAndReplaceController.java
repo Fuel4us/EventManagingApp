@@ -15,14 +15,13 @@ public class SearchAndReplaceController {
     private Spreadsheet spreadsheet;
     private String expression;
     private Iterable<Workbook> workbookList;
-    private WorkbookDescriptionService workbookService;
     
 
     public SearchAndReplaceController(Spreadsheet spreadsheet) {
      this.spreadsheet = spreadsheet;   
     }
     
-    public void searchAll(String expression, String username) {
+    /*public void searchAll(String expression, String username) {
         int cont=0, numSheets=0;
         workbookList=workbookService.allWorkbooksFromUser(username);
         cellList.clear();
@@ -40,7 +39,7 @@ public class SearchAndReplaceController {
             }
         }        
         this.expression = expression;
-    }
+    }*/
 
     public void setSpreadsheet(Spreadsheet spreadsheet) {
         this.spreadsheet = spreadsheet;

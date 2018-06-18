@@ -50,6 +50,7 @@ import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.table.MaterialDataTable;
+import pt.isep.nsheets.client.security.CurrentUser;
 import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
@@ -321,12 +322,12 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         customTable.getView().setRedraw(true);
         customTable.getView().refresh();
     }
-
-    private void openSearchAndReplaceWindow() {
-        String usernameTemp="";
-        String expression = searchBox.getText();
-        SearchAndReplaceController controller = new SearchAndReplaceController(this.customTable.getRow(0).getData().sheet);
-        controller.searchAll(expression,usernameTemp);
+/*
+    private void openSearchAndReplaceWindow(CurrentUser currentUser) {
+        //String usernameTemp=currentUser.getUser().getNickname();
+        //String expression = searchBox.getText();
+        //SearchAndReplaceController controller = new SearchAndReplaceController(this.customTable.getRow(0).getData().sheet);
+        //controller.searchAll(expression,usernameTemp);
         replaceButton.setEnabled(true);
         replaceWindowFirstBox.setEnabled(true);
         searchAndReplaceWindow.open();
@@ -374,7 +375,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             }
         });
     }
-
+*/
     interface Binder extends UiBinder<Widget, WorkbookView> {
     }
 
@@ -456,7 +457,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     }
 
     @Inject
-    WorkbookView(Binder uiBinder) {
+    WorkbookView(Binder uiBinder,  CurrentUser currentUser) {
 
         initWidget(uiBinder.createAndBindUi(this));
 
@@ -782,7 +783,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         });
 
         searchAndReplaceButton.addClickHandler(event -> {
-            openSearchAndReplaceWindow();
+            //openSearchAndReplaceWindow(currentUser);
         });
     }
 
