@@ -9,7 +9,7 @@
 
     <ui:style>
 
-        @external textarea,.input-field label,  .btn-toolbar, .card-content, .input-field, .collapsible-body;
+        @external textarea,.input-field label,  .btn-toolbar, .card-content, .input-field, .collapsible-body, .collapsible li, .collapsible-header;
         
         .tab{
         border-radius: 5rem!important;
@@ -82,12 +82,25 @@
         margin: auto;
         }
         
-        .collapsible-body{
+        .collapse .collapsible-body{
         font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
         font-style: normal;
         font-variant: normal;
         line-height: 20px;
+        border:none;
         }
+        
+        
+        .collapse .collapsible-header{
+        border-radius: 1rem;
+        font-weight: bold;
+        }
+        
+        .collapsible li{
+        border-radius: 1rem;
+        margin-top: 0.7rem!important;
+        }
+        
         
     </ui:style>
 

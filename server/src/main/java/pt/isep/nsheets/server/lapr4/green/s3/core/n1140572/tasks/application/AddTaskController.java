@@ -3,15 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pt.isep.nsheets.shared.services;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
+package pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.application;
 
 /**
  *
  * @author Pedro Rodrigues - (1140572)
  */
-public interface TasksServiceAsync {
-
-    void findByName(String name, AsyncCallback<TasksDTO> callback);
+public class AddTaskController {
+    
+    
+    
 }

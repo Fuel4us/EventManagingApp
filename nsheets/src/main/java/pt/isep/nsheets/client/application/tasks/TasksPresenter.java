@@ -5,6 +5,7 @@
  */
 package pt.isep.nsheets.client.application.tasks;
 
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -28,25 +29,51 @@ public class TasksPresenter extends Presenter<TasksPresenter.MyView, TasksPresen
 
     interface MyView extends View {
 
+        String search();
+
+        String rename();
+
+        String changeDescription();
+
+        int changePriority();
+
+        int changeProgress();
+
+        void openOptionModal();
+
+        void closeOptionModal();
+
+        void saveChangesClickHandler(ClickHandler ch);
+
+        void deleteClickHandler(ClickHandler ch);
+
+        void cancelClickHandler(ClickHandler ch);
+
+        void addClickHandler(ClickHandler ch);
+
+        void searchClickHandler(ClickHandler ch);
     }
 
     @NameToken(NameTokens.tasks)
     @ProxyStandard
     interface MyProxy extends ProxyPlace<TasksPresenter> {
     }
-    
+
     @Inject
-    TasksPresenter(EventBus eventBus, TasksPresenter.MyView view, TasksPresenter.MyProxy proxy, CurrentUser currentUser){
+    TasksPresenter(EventBus eventBus, TasksPresenter.MyView view, TasksPresenter.MyProxy proxy, CurrentUser currentUser) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
-        
+
         this.view = view;
+        
+        
+        
     }
 
     @Override
     protected void onReveal() {
         super.onReveal();
 
-        SetPageTitleEvent.fire("Tasks", "Make your Tasks", "", "", this);
+        SetPageTitleEvent.fire("Tasks", "Manage your Tasks", "", "", this);
 
         timer();
     }
