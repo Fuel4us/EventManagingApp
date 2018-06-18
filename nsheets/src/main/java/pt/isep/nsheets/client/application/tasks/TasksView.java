@@ -94,7 +94,7 @@ public class TasksView extends ViewImpl implements TasksPresenter.MyView {
                     renameTask.setText(result.getName());
                     changeDescriptionTask.setText(result.getDescription());
                     changePriorityTask.setText(Integer.toString(result.getPriorityLevel()));
-                    changePriorityTask.setText(Integer.toString(result.getPriorityLevel()));
+                    changeProgressTask.setText(Integer.toString(result.getProgress()));
                     openOptionModal();
 
                     tasksDTO = result;
