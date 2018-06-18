@@ -2,7 +2,9 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:m="urn:import:gwt.material.design.client.ui"
-             xmlns:ma="urn:import:gwt.material.design.addins.client">
+             xmlns:ma="urn:import:gwt.material.design.addins.client"
+             xmlns:combobox="urn:import:gwt.material.design.addins.client.combobox">
+    
 
     <ui:with field='res' type='pt.isep.nsheets.client.resources.AppResources' />
     
@@ -129,6 +131,8 @@
             
             <m:MaterialButton ui:field="style_export_pdf" text="Styled Export to PDF" waves="LIGHT" textColor="WHITE" iconType="PICTURE_AS_PDF" iconPosition="RIGHT" marginRight="10" marginTop="10"/>
             
+            <m:MaterialButton ui:field="complete_export_pdf" text="Complete Export to PDF" waves="LIGHT" textColor="WHITE" iconType="PICTURE_AS_PDF" iconPosition="RIGHT" marginRight="10" marginTop="10"/>
+
         </m:MaterialRow>
         
         
@@ -178,6 +182,51 @@
             </m:MaterialModalContent>
             <m:MaterialModalFooter addStyleNames="{style.footer}">
                 <m:MaterialButton ui:field="close" text="Close PDF Styler" iconType="CLOSE" type="FLAT" addStyleNames="{style.footer_btn}"/>
+            </m:MaterialModalFooter>
+        </m:MaterialModal>
+        
+        <m:MaterialModal ui:field="modal_complete"  type="BOTTOM_SHEET"  textColor="WHITE" addStyleNames="{style.overlay}">
+            <m:MaterialModalContent addStyleNames="{style.modal}">
+                <m:MaterialCard addStyleNames="{style.card} {style.row}" >
+                    <m:MaterialCardTitle  text="PDF COMPLETE"  textColor="BLACK" addStyleNames="{style.title}" />
+                    <m:MaterialRow grid="s12 m12 l6">
+                        <m:MaterialColumn grid="s12">
+                            <m:MaterialLabel text="Line Configuration" addStyleNames="{style.label-title} {style.label}"/>
+                        </m:MaterialColumn>
+                        <m:MaterialColumn grid="s12">
+                            <m:MaterialLink  text="Line Type" textColor="BLACK" iconType="LINE_STYLE" iconPosition="LEFT" addStyleNames="{style.label}" />
+                                
+                            <m:MaterialRadioButton  ui:field="dotted2" formValue="dotted" name="color" text="Dotted" type="GAP" addStyleNames="{style.label} {style.radio_btn}"/>
+                               
+                            <m:MaterialRadioButton ui:field="double_2" formValue="double" name="color" text="Double" type="GAP" addStyleNames="{style.label} {style.radio_btn}"/>
+                               
+                            <m:MaterialRadioButton ui:field="solid2" formValue="solid" name="color" text="Solid" type="GAP"  addStyleNames="{style.label} {style.radio_btn}"/>
+                               
+                            <m:MaterialRadioButton ui:field="dashed2" formValue="dashed" name="color" text="Dashed" type="GAP"  addStyleNames="{style.label} {style.radio_btn}"/>
+                        </m:MaterialColumn>
+                        <m:MaterialColumn grid="s12">
+                            <m:MaterialLink  text="Line Size" textColor="BLACK" iconType="VIEW_DAY" iconPosition="LEFT" addStyleNames="{style.label}" />
+                            <m:MaterialRange ui:field="rangeSetValue2" min="1" max="10" value="1"  addStyleNames="{style.label} {style.range}"/>
+                        </m:MaterialColumn>
+                        <m:MaterialColumn grid="s12">
+                            <m:MaterialLink  text="Line Color" textColor="BLACK" iconType="COLOR_LENS" addStyleNames="{style.label}" iconPosition="LEFT"/>
+                            <m:MaterialInput ui:field="color_line2" type="COLOR" addStyleNames="{style.input} {style.label}"/>
+                        </m:MaterialColumn >
+                        
+                        <!-- Novas implementações -->
+                        <m:MaterialColumn grid="s12">
+                            <m:MaterialLink  text="ADD ELEMENTS" textColor="BLACK" iconType="LINE_STYLE" iconPosition="LEFT" addStyleNames="{style.label}" />
+                            <combobox:MaterialComboBox closeOnSelect="false" multiple="true" ui:field="addElementsSelect" placeholder="Elements">
+                            </combobox:MaterialComboBox>
+                        </m:MaterialColumn>
+                        <m:MaterialColumn textAlign="CENTER" grid="s12">
+                            <m:MaterialButton ui:field="save_complete" text="Generate PDF" waves="LIGHT" addStyleNames="{style.btn}" iconType="SAVE"/>
+                        </m:MaterialColumn>
+                    </m:MaterialRow>
+                </m:MaterialCard>                 
+            </m:MaterialModalContent>
+            <m:MaterialModalFooter addStyleNames="{style.footer}">
+                <m:MaterialButton ui:field="close_complete" text="Close PDF Styler" iconType="CLOSE" type="FLAT" addStyleNames="{style.footer_btn}"/>
             </m:MaterialModalFooter>
         </m:MaterialModal>
         

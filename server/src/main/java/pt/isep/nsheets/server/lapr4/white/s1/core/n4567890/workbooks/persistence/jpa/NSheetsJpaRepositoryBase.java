@@ -42,4 +42,12 @@ abstract class NSheetsJpaRepositoryBase<T, K extends Serializable> extends JpaTx
         }
         return this.emFactory;
     }
+
+
+    
+    
+    
+    
+    
+    
 }

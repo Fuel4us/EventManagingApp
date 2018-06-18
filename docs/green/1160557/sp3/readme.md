@@ -1,98 +1,73 @@
 **Hilário Coelho** (1160557) - Sprint 3 - Core 01.3
 ===============================
 
-# 1. Requirements
+# 1. General Notes
+
+Got some help from Gonçalo Fonseca
+
+# 2. Requirements
+
 *Core01.3 - Full Extension Mechanism - Description:*
 "It should be possible to open several workbooks at the same time. It should be possible to make references between workbooks in the formulas."
 
-*Specification of the User Stories:* 
 
-```
-US01
-	As an user,
-	I want to add spreadsheets, by clicking in the button settings and Add Spreadsheet.
-```
+# 3. Analysis
 
-```
-US02
-	As an user,
-	I want to edit the current Workbook, like the name, description and delete it.
-```
+Upodated Settings class to support a list of workbooks which is gonna hold all opened workbooks.
 
-# 2. Analysis
+Solving strategies: 
 
-## 2.1 Analysis Diagrams
+When an user opens a workbook, the workbook is stored in the List of settings class with all the other previosuly opened workbooks. An user can closes a previosly opened workbook anytime by pressing the close button.
 
-**Use Cases**
+When a workbook is *revealed*, the page renders a collection of all opened workbooks.
 
-![Use Cases](UserStories.jpg)
+For this feature increment, since it is the third I needed to: 
 
-**Domain Model**
+- Understand how to store the opened workbooks.
 
-![Domain Model](domainModel.jpg)
+- Understand how to get the current workbook.
 
-# 3. Design
-
-##3.1 SSD For Use Cases
-
-**For UC1**
-
-![UC1 Design](SSD_UC1.jpg)
-
-**For UC2**
-
-![UC2 Design](SSD_UC2.jpg)
-
-##3.2 Classes
-
-**WorkBook** and its classes:
-```
-	- WorkbookPresenter;
-	- WorkbookView;
-	- WorkbookView.ui.xml.
-```
+# 4. Design
 
 
-**SpreadSheet** and its classes:
-```
-	- SpreadSheetImpl;
-	- SpreadSheetExtension;
-```
+## 4.1. Tests
+ 
+Tests:
+
+the functional tests shall verify if: 
+When an user enters a workbook, it is being stored in the collection list
+When an user enters another workbook, the list displays all previously opened workbooks
+When an user closes a workbook, the closed workbook is being removed from the list
+
+## 4.2. Requirements Realization
+
+## 4.3. Classes
+
+## 4.4. Design Patterns and Best Practices
+- MVP
+- Singleton
+
+# 5. Implementation
+
+Para a implementação deste UC primeiro tive de adaptar a UI do workbook de modo a mostrar todas as workbooks abertas. Tive de obter a workbook aberta e grava-la numa lista que persistisse entre mudanças de página (a classe *Settings*) e renderizar a lista quando uma workbook é aberta. Também foi necessário adicionar um botão para remover as workbooks abertas.
+
+# 6. Integration/Demonstration
 
 
-# 4. Implementation
+# 7. Final Remarks 
 
-*If required you should present in this section more details about the implementation. For instance, configuration files, grammar files, etc. You may also explain the organization of you code. You may reference important commits.*
+Visto o UC anterior não ter sido feito e haver muitas deficiências no nosso programa, foi-me impossível fazer a segunda parte do UC, ou seja, referenciar células de outras workbooks. Os principais problemas que detetei:
+Não haver múltiplas spreadsheets para uma workbook
+As alterações nas workbooks não serem persistidas na base de dados
+Quando se altera uma workbook, todas as outras são também alteradas da mesma forma.
 
-**For US1**
+# 8. Work Log
 
-		- It should have been implemented the creation of a list of spreadsheet and the method addSpreadSheet().
-		- It was implemented the button, add SpreadSheet, after the button Settings of the WorkBook was created.
+Commits:
 
-**For US2**
+[Documentation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/1d67bf96daf9a70dd6af412e71e65a38b937c21b)
 
-		- After the creation of the button Settings of the WorkBook, it was created another button to a modal called Edit WorkBook.
-		- The current Name and the Description of the WorkBook where optained by the methods getName() ad getDescription() in the class WorkBookView.
-        -It was created a method setProperties to edit the name and description.
+[Open Workbooks List](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/9ff73ebb19c5015824c144d3d2c489b1bd49345d)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+[Documentation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/9c0feb93241c963a6e0392ac75bb0cce6ddffb4b)
 

@@ -1,0 +1,31 @@
+@startuml design2
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+boundary WorkbookView
+boundary WorkbookPresenter
+
+box "NSheets Client"
+participant WorkbookView
+end box
+
+box "NSheets Shared"
+participant Workbook
+participant GlobalVariable
+end box
+
+User -> WorkbookView : onReveal() / navigate to page
+User -> WorkbookView : click on a global variable
+WorkbookView -> User : asks user for insert new value
+User -> WorkbookView : user inserts new value
+
+WorkbookView -> Workbook : globalVariables().get(globalName).get(position)
+WorkbookView -> GlobalVariable : setValue(Value.parseValue(newValue, new Value.Type[]{}));
+
+WorkbookView -> WorkbookView : updateCollapsible()
+WorkbookView -> WorkbookView : return
+@enduml

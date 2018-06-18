@@ -12,6 +12,17 @@ public class UserDTO implements Serializable {
     private String password;
     private String pictureName;
     private boolean superUser;
+    private boolean state;
+
+    public UserDTO(String email, String name, String nickname, String password, String pictureName, boolean superUser, boolean state) {
+        this.email = email;
+        this.name = name;
+        this.nickname = nickname;
+        this.password = password;
+        this.pictureName = pictureName;
+        this.superUser = superUser;
+        this.state = state;
+    }
 
     public UserDTO(String email, String name, String nickname, String password, String pictureName, boolean superUser) {
         this.email = email;
@@ -20,6 +31,7 @@ public class UserDTO implements Serializable {
         this.password = password;
         this.pictureName = pictureName;
         this.superUser = superUser;
+        this.state = true;
     }
 
     // It is mandatory to have a default constructor with no arguments to be serializable!
@@ -48,6 +60,12 @@ public class UserDTO implements Serializable {
 
     public String getPictureName() {
         return pictureName;
+    }
+
+    public boolean isActivate() { return state; }
+
+    public void setState(boolean state){
+        this.state = state;
     }
 
     @Override

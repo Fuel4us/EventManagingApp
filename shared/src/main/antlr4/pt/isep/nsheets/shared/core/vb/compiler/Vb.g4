@@ -2,29 +2,29 @@ grammar Vb;
 
 parse: block EOF;
 
-block: stat* | function* | procedure*;
+block: stat*;
 
-function: initFunction functionBody returnFunction endFunction;
+function: initFunction stat* returnFunction endFunction;
 
 initFunction: 'Function' functionName 'As' type;
 
-functionBody: stat*;
-
-functionName: ID OPAR parameters CPAR;
+functionName: ID OPAR /*parameters*/ CPAR;
 
 returnFunction: 'Return' ID;
 
 endFunction: 'End' 'Function';
 
-procedure: initProcedure stat+ endProcedure;
+functionCall: functionName;
+
+parameters: type ID COMMA parameters | type ID;
+
+/*procedure: initProcedure stat* endProcedure;
 
 initProcedure: 'Sub' procedureName;
 
-procedureName: ID OPAR parameters CPAR;
+procedureName: ID OPAR CPAR;
 
-endProcedure: 'End' 'Sub';
-
-parameters: type ID COMMA parameters | type ID;
+endProcedure: 'End' 'Sub';*/
 
 stat:
 	assignment
@@ -32,6 +32,8 @@ stat:
 	| if_stat
 	| while_stat
 	| log
+	| function
+	| functionCall
 	| OTHER {System.err.println("unknown char: " + $OTHER.text);};
 
 declaration: 'Dim' ID 'As' type;

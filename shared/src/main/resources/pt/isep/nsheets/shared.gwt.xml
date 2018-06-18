@@ -3,7 +3,8 @@
     <inherits name="com.google.gwt.user.User"/>
     <inherits name="gwt.material.design.Resources"/>
     <inherits name="gwt.material.design.Resources"/>
-    
+    <inherits name="org.antlr.v4.antlr4-runtime"/>
+
     <source path="client"/>
     <source path="shared"/>
 

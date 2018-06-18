@@ -20,6 +20,11 @@ public class Js_controller implements Controller {
 
         return f;
     }
+    
+    public Function removeFunction(Function function){
+        new FunctionService().removeFunction(function);
+        return function;
+    }
 
     public Iterable<Function> getFunctions() {
         return new FunctionService().allFunctions();

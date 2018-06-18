@@ -75,6 +75,7 @@ import pt.isep.nsheets.client.application.menu.MenuView;
 import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Spreadsheet;
+import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core.CellStyle;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtension;
 import pt.isep.nsheets.shared.lapr4.green.n1160557.s2.services.CellRangeDTO;
@@ -140,6 +141,8 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         MaterialTextBox getDescriptionModal();
 
         MaterialModal getModal();
+        
+        MaterialCollection getOpenWorkbooksCollection();
     }
 
     private WorkbookDTO wDTO;
@@ -178,6 +181,31 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
     }
 
     PlaceManager placeManager;
+    
+    private void listOpenedWorkbooks() {
+        getView().getOpenWorkbooksCollection().clear();
+        List<Workbook> workbooks = Settings.getInstance().getOpenedWorkbooks();
+        
+        for(Workbook w : workbooks) {
+            MaterialCollectionItem item = new MaterialCollectionItem();
+            MaterialLabel lbl = new MaterialLabel();
+            lbl.setText(w.name());
+            item.add(lbl);
+            
+            MaterialCollectionSecondary itemClose = new MaterialCollectionSecondary();
+            MaterialButton closeBtn = new MaterialButton();
+            closeBtn.setText("Close");
+            closeBtn.addClickHandler(e -> {
+                Settings.getInstance().closeOpenedWorkbook(w);
+            });
+            
+            itemClose.add(closeBtn);
+            
+            item.add(itemClose);
+
+            getView().getOpenWorkbooksCollection().add(item);
+        }
+    }
 
     @Override
     protected void onReset() {
@@ -259,6 +287,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
             }
         });
 
+        listOpenedWorkbooks();
     }
 
     void setProperties(String name, String descr) {
@@ -276,6 +305,8 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 
         MaterialToast.fireToast("Workbook page updated");
         conditionalService();
+
+        listOpenedWorkbooks();
     }
 
     private void redirectToChartPage() {
@@ -519,7 +550,7 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
 
     private void refreshWorkbooks() {
         WorkbooksServiceAsync workbookSvc = GWT.create(WorkbooksService.class);
-
+        
         AsyncCallback<ArrayList<WorkbookDTO>> callback = new AsyncCallback<ArrayList<WorkbookDTO>>() {
             public void onFailure(Throwable caught) {
 
