@@ -25,6 +25,7 @@ import pt.isep.nsheets.server.lapr4.blue.n1150372.s2.persistence.AgendaRepositor
 import pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.persistence.ContactsRepository;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.persistence.NotificationRepository;
 import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160634.users.persistance.PrivateChatsRepository;
+import pt.isep.nsheets.server.lapr4.red.s3.lang.n1160630.Js.FunctionRepository;
 
 /**
  *
@@ -111,6 +112,11 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     @Override
     public NotificationRepository notifications() {
         return new JpaNotificationRepository(this.settings);
+    }
+
+    @Override
+    public FunctionRepository functions() {
+        return new JpaFunctionRepository(this.settings);
     }
 
 }
