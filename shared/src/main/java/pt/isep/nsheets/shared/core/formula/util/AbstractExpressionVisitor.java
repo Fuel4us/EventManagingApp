@@ -24,6 +24,7 @@ import pt.isep.nsheets.shared.core.formula.BinaryOperation;
 import pt.isep.nsheets.shared.core.formula.Expression;
 import pt.isep.nsheets.shared.core.formula.FunctionCall;
 import pt.isep.nsheets.shared.core.formula.Literal;
+import pt.isep.nsheets.shared.core.formula.NaryOperation;
 import pt.isep.nsheets.shared.core.formula.Reference;
 import pt.isep.nsheets.shared.core.formula.UnaryOperation;
 
@@ -64,13 +65,13 @@ public abstract class AbstractExpressionVisitor implements ExpressionVisitor {
 		return call;
 	}
         
-//        public Object visitNaryOperation(NaryOperation operation) {
-//            Expression[] operands=operation.getOperands();
-//        
-//            for (Expression expr: operands) {
-//                expr.accept(this);
-//            }
-//        
-//            return operation;
-//        }
+        public Object visitNaryOperation(NaryOperation operation) {
+            Expression[] operands=operation.getOperands();
+        
+            for (Expression expr: operands) {
+                expr.accept(this);
+            }
+        
+            return operation;
+        }
 }

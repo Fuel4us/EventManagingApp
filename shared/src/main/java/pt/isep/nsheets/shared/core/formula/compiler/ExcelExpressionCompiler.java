@@ -51,6 +51,8 @@ public class ExcelExpressionCompiler implements ExpressionCompiler {
      */
     public static final char FORMULA_STARTER = '=';
 
+    public static final String compilerName = "ExcelFormula";
+    
     private Language language = null;
 
     /**
@@ -86,7 +88,7 @@ public class ExcelExpressionCompiler implements ExpressionCompiler {
         if (parser.getNumberOfSyntaxErrors() > 0) {
             throw new FormulaCompilationException(formulaErrorListener.getErrorMessage());
         }
-        
+
         // Visit the expression and returns it
         FormulaEvalVisitor eval = new FormulaEvalVisitor(cell, language);
         Expression result = eval.visit(tree);
@@ -117,5 +119,10 @@ public class ExcelExpressionCompiler implements ExpressionCompiler {
             buf = new StringBuilder();
             buf.append("line ").append(line).append(":").append(charPositionInLine).append(": ").append(msg);
         }
+    }
+
+    @Override
+    public String compilerName() {
+        return compilerName;
     }
 }

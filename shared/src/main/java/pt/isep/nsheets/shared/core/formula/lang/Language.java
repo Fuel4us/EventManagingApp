@@ -27,6 +27,7 @@ import java.util.List;
 //import pt.isep.nsheets.shared.CleanSheets;
 import pt.isep.nsheets.shared.core.formula.BinaryOperator;
 import pt.isep.nsheets.shared.core.formula.Function;
+import pt.isep.nsheets.shared.core.formula.NaryOperator;
 import pt.isep.nsheets.shared.core.formula.UnaryOperator;
 import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.Assignment;
 import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.For;
@@ -60,7 +61,10 @@ public class Language {
      */
     protected List<Function> functions = new ArrayList<Function>();
 
+    protected List<NaryOperator> naryOperators = new ArrayList<NaryOperator>();
+    
     private final String name;
+    private String starter;
 
     public String getName() {
         return this.name;
@@ -106,6 +110,10 @@ public class Language {
         unaryOperators.add(new Negator());
         unaryOperators.add(new Percent());
     }
+    
+    protected void initNaryOperators() {
+
+    }
 
     /**
      * Creates a new language.
@@ -115,6 +123,23 @@ public class Language {
         initFunctions();
         initBinaryOperators();
         initUnaryOperators();
+    }
+    
+    /**
+     * Creates a new language.
+     */
+    public Language(String name, String starter) {
+        this.name = name;
+        this.starter= starter;
+        initFunctions();
+        initBinaryOperators();
+        initUnaryOperators();
+        initNaryOperators();
+    }
+    
+    public Language() {
+        name = "";
+        starter="";
     }
 
 //	private Language() {
@@ -244,4 +269,17 @@ public class Language {
     public Function[] getFunctions() {
         return functions.toArray(new Function[functions.size()]);
     }
+    
+    /**
+     * @param identifier
+     * @return
+     * @throws UnknownElementException
+     */
+    public NaryOperator getNaryOperator(String identifier) throws UnknownElementException {
+        for (NaryOperator operator : naryOperators)
+            if (identifier.equalsIgnoreCase(operator.getIdentifier()))
+                return operator;
+        throw new UnknownElementException(identifier);
+    }
+    
 }

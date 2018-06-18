@@ -1,0 +1,19 @@
+@startuml 
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+User->HomePresenter : Enter the name or description in the text box, and chooses private or public workbooks
+HomePresenter->HomePresenter : getText()
+HomePresenter->HomePresenter : getChoosenState()
+HomePresenter -> WorkbookServicesAsync : searchWorkbook(text, choosenState, callback)
+WorkbookServicesAsync -> WorkbookServices: searchWorkbook(text, choosenState)
+WorkbookServices -> SearchWorkbooksController : searchedWorkbooksList : searchWorkbook(text, choosenState)
+SearchWorkbooksController->WorkbookRepositoty : workbooksList : findAll()
+HomePresenter->HomePresenter : refreshViewAfterSearch(text, choosenState) 
+HomePresenter-->User : List the workbooks that contains the name introduced and notify with success
+@enduml

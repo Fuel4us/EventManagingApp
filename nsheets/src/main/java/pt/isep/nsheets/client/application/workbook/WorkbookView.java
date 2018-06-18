@@ -71,11 +71,15 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetController;
 import pt.isep.nsheets.client.lapr4.red.s2.ipc.n1160600.workbook.application.SearchAndReplaceController;
 import pt.isep.nsheets.shared.application.Settings;
+import pt.isep.nsheets.shared.core.formula.Expression;
 import pt.isep.nsheets.shared.core.formula.Function;
 import pt.isep.nsheets.shared.core.formula.FunctionParameter;
+import pt.isep.nsheets.shared.core.formula.compiler.ExpressionCompiler;
+import pt.isep.nsheets.shared.core.formula.compiler.MacroCompilerManager;
 import pt.isep.nsheets.shared.core.formula.lang.Language;
 import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
 import pt.isep.nsheets.shared.lapr4.green.n1160815.formula.lang.GlobalVariable;
+import pt.isep.nsheets.shared.lapr4.red.s3.lang.n1160634.macro.domain.Macro;
 import pt.isep.nsheets.shared.services.*;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
@@ -253,6 +257,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialIcon macroModalDoneButton;
     @UiField
     MaterialIcon macroModalCloseButton;
+    @UiField
+    MaterialListValueBox<Macro> macroList;
     
     @UiField
     MaterialCollection openWorkbooks;
@@ -716,27 +722,48 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         macroModalDoneButton.addClickHandler(event -> {
             if (activeCell != null) {
 
-                String result = "";
+//                String result = "";
+//                try {
+//                    activeCell.setContentByMacro(macroTextArea.getText());
+//                    Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
+//                    if (extensionCond != null) {
+//
+//                        Conditional cond = ConditionalFormattingExtension.containsCondition((CellImpl) activeCell);
+//
+//                        if (cond != null) {
+//                            boolean flag = ConditionalFormattingExtension.setOperation((CellImpl) activeCell, cond.getCondOperator(), cond.getCondValue());
+//                            MaterialToast.fireToast("Update Cell. Conditional this " + activeCell.getAddress().toString() + " " + cond.getCondOperator() + " " + cond.getCondValue().toString() + " is " + flag);
+//
+//                        }
+//                    }
+//                } catch (FormulaCompilationException e) {
+//                    result = e.getMessage();
+//                } finally {
+//                    customTable.getView().setRedraw(true);
+//                    customTable.getView().refresh();
+//
+//                    this.setActiveCell(activeCell);
+//                }
+                
+                Macro macroAux = macroList.getSelectedValue();
+
+                macroAux.addCommand(macroTextArea.getText());
+
+                ExpressionCompiler compiler = MacroCompilerManager.getInstance().getCompiler(macroAux.language().getName());
+
                 try {
-                    activeCell.setContentByMacro(macroTextArea.getText());
-                    Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
-                    if (extensionCond != null) {
+                    Expression expression = compiler.compile(activeCell, macroAux.commands());
 
-                        Conditional cond = ConditionalFormattingExtension.containsCondition((CellImpl) activeCell);
+                    Value value = expression.evaluate();
 
-                        if (cond != null) {
-                            boolean flag = ConditionalFormattingExtension.setOperation((CellImpl) activeCell, cond.getCondOperator(), cond.getCondValue());
-                            MaterialToast.fireToast("Update Cell. Conditional this " + activeCell.getAddress().toString() + " " + cond.getCondOperator() + " " + cond.getCondValue().toString() + " is " + flag);
-
-                        }
-                    }
-                } catch (FormulaCompilationException e) {
-                    result = e.getMessage();
-                } finally {
+                    activeCell.setContent(value.toString());
                     customTable.getView().setRedraw(true);
                     customTable.getView().refresh();
 
-                    this.setActiveCell(activeCell);
+                    MaterialToast.fireToast("Result of Macro : " + value.toString());
+
+                } catch (FormulaCompilationException | IllegalValueTypeException ex) {
+                    MaterialToast.fireToast(ex.getMessage());
                 }
             }
             macroModal.close();

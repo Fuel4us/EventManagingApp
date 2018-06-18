@@ -171,7 +171,7 @@ governing permissions and limitations under the License. #L% -->
         </m:MaterialRow>
         <m:MaterialRow marginTop="20">
             <m:MaterialTextBox ui:field="searchBox" placeholder="Enter your regular expression" label="Enter your regular expression" title="Search Spreadsheet Cells" active="true" grid="s11" iconType="SEARCH"/>
-           <m:MaterialIcon iconType="SEARCH" iconColor="BLUE" waves="DEFAULT" circle="true" grid="s1" activates="dropdownSearch"/>
+            <m:MaterialIcon iconType="SEARCH" iconColor="BLUE" waves="DEFAULT" circle="true" grid="s1" activates="dropdownSearch"/>
             <m:MaterialDropDown activator="dropdownSearch" constrainWidth="false">
                 <m:MaterialLink ui:field="searchButton" fontSize="0.9em" waves="DEFAULT" textColor="BLACK" iconType="SEARCH" iconPosition="LEFT" text="Search" />
                 <m:MaterialLink ui:field="searchAndReplaceButton" fontSize="0.9em" waves="DEFAULT" textColor="BLACK" iconType="SEARCH" iconPosition="LEFT" text="Search and Replace" />
@@ -210,6 +210,12 @@ governing permissions and limitations under the License. #L% -->
                 <m:MaterialModalContent>
                     <m:MaterialRow>
                         <m:MaterialTitle ui:field="macroTitle" title="Edit Macro"/>
+                    </m:MaterialRow>
+                    <m:MaterialRow>
+                        <m:MaterialLabel text="macro List of current Workbook: "/>
+                    </m:MaterialRow>
+                    <m:MaterialRow>
+                        <m:MaterialListValueBox ui:field="macroList"/>
                     </m:MaterialRow>
                     <m:MaterialRow>
                         <m:MaterialTextArea ui:field="macroTextArea"/>
