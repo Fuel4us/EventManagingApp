@@ -1,38 +1,33 @@
-@startuml  design1.png
-skinparam handwritten true
-skinparam monochrome true
+@startuml  analysis.png
 skinparam packageStyle rect
 skinparam defaultFontName FG Virgil
 skinparam shadowing false
 
 actor User
-boundary ExportView
-control ExportPresenter
-control ExportService
-control ExportCSLController
-control Settings
-entity Workbook
 
-box "NSheets Client"
-participant ExportView
-participant ExportPresenter
-end box
+User -> Browser : select workbook
+User -> Browser : type in formula
+User -> Browser : click button
 
-box "Server"
-participant Settings
-participant Workbook
-participant ExportService
-entity WorkbookDTO
-participant ExportCSLController
-end box
+Browser ->> Cell : setContent(formula)
 
+Cell ->> Cell : storeContent(formula)
 
+Cell -> FormulaCompiler : compile(this, formula)
 
-User -> ExportPresenter : buttonClicked() / navigate to page
-ExportPresenter ->> Settings : getWorkbook
-ExportPresenter ->> Workbook : toDTO()
-ExportPresenter ->> ExportService : exportWorkbookAsCLS(WorkbookDTO workbookDTO)
-ExportService ->> WorkbookDTO : fromDTO();
-ExportService -> ExportCSLController : exportWorkbook(Workbook workbook)
+FormulaCompiler -> ExcelExpressionCompiler : compile(cell, formula)
+
+ExcelExpressionCompiler -> FormulaEvalVisitor : visit()
+
+FormulaEvalVisitor -> FormulaEvalVisitor : visitFunction_call()
+
+Cell -> Cell : reevaluate()
+
+Cell -> FunctionCall : evaluate()
+
+FunctionCall -> Function : applyTo()
+
+Browser -> Browser : refresh cell
+
 
 @enduml

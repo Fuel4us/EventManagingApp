@@ -1,6 +1,4 @@
 @startuml  analysis.png
-skinparam handwritten true
-skinparam monochrome true
 skinparam packageStyle rect
 skinparam defaultFontName FG Virgil
 skinparam shadowing false
@@ -8,12 +6,14 @@ skinparam shadowing false
 actor User
 
 User -> Browser : select workbook
-User -> Browser : navigate to export page
-User -> Browser : click export to cls button
+User -> Browser : type in formula
+User -> Browser : evaluate
 
-Browser ->> Server : getWorkbook()
+Browser ->> Server : set cell content
 
-Server ->> ExportService : exportWorkbookAsCLS()
+Server ->> Formula : evaluate formula
 
-Server -> Browser : save CLS file
+Formula ->> Function : apply function
+
+Server -> Browser : update cell view
 @enduml
