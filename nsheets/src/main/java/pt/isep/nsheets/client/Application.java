@@ -25,6 +25,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.Bootstrapper;
 import com.gwtplatform.mvp.client.PreBootstrapper;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import gwt.material.design.client.constants.IconType;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,7 +43,7 @@ public class Application implements Bootstrapper {
 			});
 		}
 	}
-
+        
 	private final PlaceManager placeManager;
 
 	@Inject
