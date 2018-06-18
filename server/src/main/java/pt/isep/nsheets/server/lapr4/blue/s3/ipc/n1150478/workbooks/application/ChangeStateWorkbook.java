@@ -1,4 +1,4 @@
-package pt.isep.nsheets.server.lapr4.blue.s3.core.n1150478.workbooks.application;
+package pt.isep.nsheets.server.lapr4.blue.s3.ipc.n1150478.workbooks.application;
 
 import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
@@ -16,6 +16,10 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
  */
 public class ChangeStateWorkbook {
     WorkbookRepository repo = PersistenceContext.repositories().workbooks();
+    
+    public ChangeStateWorkbook(){
+        
+    }
 
     public void changeStateWorkbook(boolean state, WorkbookDTO workbookDTO) {
         Workbook workbook = repo.findByName(workbookDTO.name);

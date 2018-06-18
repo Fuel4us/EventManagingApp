@@ -129,7 +129,7 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
     }
 
     @Override
-    public void setContents(ArrayList<WorkbookDTO> contents
+    public void or(ArrayList<WorkbookDTO> contents
     ) {
         int colCount = 1;
 
