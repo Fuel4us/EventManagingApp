@@ -1,0 +1,19 @@
+@startuml  analysis.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+User -> Browser : select workbook
+User -> Browser : navigate to export page
+User -> Browser : click export to cls button
+
+Browser ->> Server : getWorkbook()
+
+Server ->> ExportService : exportWorkbookAsCLS()
+
+Server -> Browser : save CLS file
+@enduml
