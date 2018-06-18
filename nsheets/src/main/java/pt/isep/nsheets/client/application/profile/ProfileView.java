@@ -274,13 +274,15 @@ class ProfileView extends ViewImpl implements ProfilePresenter.MyView {
         });
 
         MenuView.getLogout().addClickHandler(event ->{
+            if(currentUser.isLoggedIn()) {
                 clearfields();
                 currentUser.setLoggedIn(false);
 
-            oldpassword.setEnabled(false);
-            oldpassword.setVisibility(Style.Visibility.HIDDEN);
-            newpassword.setEnabled(false);
-            newpassword.setVisibility(Style.Visibility.HIDDEN);
+                oldpassword.setEnabled(false);
+                oldpassword.setVisibility(Style.Visibility.HIDDEN);
+                newpassword.setEnabled(false);
+                newpassword.setVisibility(Style.Visibility.HIDDEN);
+            }
         });
 
 
