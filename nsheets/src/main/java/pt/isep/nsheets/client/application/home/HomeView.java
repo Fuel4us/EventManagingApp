@@ -26,6 +26,7 @@ import gwt.material.design.client.ui.MaterialColumn;
 import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialRow;
+import gwt.material.design.client.ui.MaterialSwitch;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.menu.MenuView;
@@ -33,6 +34,7 @@ import pt.isep.nsheets.client.place.NameTokens;
 import pt.isep.nsheets.client.security.CurrentUser;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.application.Settings;
+import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.services.WorkbooksService;
 import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
 
@@ -54,6 +56,9 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
 
     @UiField
     MaterialTextBox name, description, renameTxt, searchTxt;
+
+    @UiField
+    MaterialSwitch switchEvent;
 
     @Inject
     HomeView(Binder uiBinder, CurrentUser currentUser) {
@@ -81,7 +86,7 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
         MaterialCardTitle cardTitle = new MaterialCardTitle();
 
         cardTitle.add(new Anchor(wb.name, "#workbook"));
-        if(wb.publicState) {
+        if (wb.publicState) {
             cardTitle.setIconType(IconType.LOCK_OPEN);
         } else {
             cardTitle.setIconType(IconType.LOCK);
@@ -112,6 +117,8 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
 
                     wdto = result;
                     Settings.getInstance().updateWorkbook(result);
+                    
+                    Settings.getInstance().addOpenWorkbook(Workbook.fromDTO(result));
                 }
             };
 
@@ -203,6 +210,11 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
     @Override
     public MaterialButton getSwitchStateButton() {
         return swichStateButton;
+    }
+
+    @Override
+    public MaterialSwitch getSwitchEvent() {
+        return switchEvent;
     }
 
     @Override

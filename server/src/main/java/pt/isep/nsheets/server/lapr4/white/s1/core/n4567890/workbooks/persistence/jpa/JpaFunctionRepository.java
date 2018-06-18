@@ -21,4 +21,14 @@ public class JpaFunctionRepository extends NSheetsJpaRepositoryBase<Function, St
     JpaFunctionRepository(PersistenceSettings settings) {
         super(settings);
     }
+
+    @Override
+    public void delete(Function entity) {
+        super.delete(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+   
+    
+    
 }

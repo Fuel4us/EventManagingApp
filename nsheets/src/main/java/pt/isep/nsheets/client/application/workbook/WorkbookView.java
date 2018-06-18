@@ -253,6 +253,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialIcon macroModalDoneButton;
     @UiField
     MaterialIcon macroModalCloseButton;
+    
+    @UiField
+    MaterialCollection openWorkbooks;
 
     @Override
     public MaterialModal getModal() {
@@ -489,6 +492,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                     this.setActiveCell(activeCell);
                 }
             }
+            updateCollapsible();
             // Window.alert("Hello");
         });
 
@@ -629,7 +633,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             };
 
             workbooksSvc.addWorkbookDescription(Settings.getInstance().getWorkbook().toDTO(), callback);
-            updateCollapsible();
         });
 
         // Set the visible range of the table for pager (later)
@@ -792,7 +795,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         
         button.addClickHandler(event -> {
             String newValue = changeValue.getText();
-            Settings.getInstance().getWorkbook().globalVariables().get(globalName).get(position).setValue(new Value(newValue));
+            Settings.getInstance().getWorkbook().globalVariables().get(globalName).get(position).setValue(Value.parseValue(newValue, new Value.Type[]{}));
             changeModal.close();
             updateCollapsible();
             
@@ -1043,5 +1046,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiHandler("cancelButtonModal")
     void cancelModal(ClickEvent e) {
         modal.close();
+    }
+    
+    @Override
+    public MaterialCollection getOpenWorkbooksCollection() {
+        return this.openWorkbooks;
     }
 }

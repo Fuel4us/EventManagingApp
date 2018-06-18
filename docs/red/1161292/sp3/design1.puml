@@ -1,0 +1,64 @@
+@startuml design1
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+boundary WorkbookView
+boundary WorkbookPresenter
+
+box "NSheets Client"
+participant WorkbookView
+participant WorkbookPresenter
+end box
+
+box "NSheets Shared"
+participant FormulaEvalVisitor
+participant workbook
+participant BinaryOperator
+participant Assignment
+end box
+
+User -> WorkbookView : onReveal() / navigate to page
+User -> WorkbookView : click on a cell
+User -> WorkbookView : add a formula with global variables
+
+WorkbookView -> WorkbookPresenter : conditionalFormattingAction()
+loop allSelectedCells
+WorkbookPresenter -> WorkbookPresenter : applyConditionToCell()
+end
+
+WorkbookPresenter ->> FormulaEvalVisitor : visitExpression()
+
+FormulaEvalVisitor -> FormulaEvalVisitor: visitReference()
+
+alt user added array index
+FormulaEvalVisitor -> FormulaEvalVisitor: position = ctx.getChild(1).getText()
+else
+FormulaEvalVisitor -> FormulaEvalVisitor: position = 0
+end
+
+alt variable already exists
+FormulaEvalVisitor -> workbook : getGlobalVariable(gvName, position)
+else variable does not exists
+FormulaEvalVisitor -> workbook : addGlobalVariable(gvName, position)
+end
+
+FormulaEvalVisitor -> FormulaEvalVisitor : visitAssignment()
+
+FormulaEvalVisitor -> BinaryOperator : new BinaryOperation()
+
+BinaryOperator -> Assignment : applyTo()
+
+alt instanceof GlobalVariable
+Assignment -> workbook : setGVValue(gvName, value, position)
+end
+
+Assignment -> BinaryOperator : return value
+
+BinaryOperator -> FormulaEvalVisitor : return value
+
+FormulaEvalVisitor -> WorkbookView : value
+@enduml

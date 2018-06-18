@@ -19,6 +19,6 @@ public interface FunctionService extends RemoteService{
     
     List<Function> getFunctions();
     Function addFunction(Function function) throws DataException;
-//    boolean removeFunction(Function function);
+    Function removeFunction(Function function);
     
 }
