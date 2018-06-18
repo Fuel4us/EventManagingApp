@@ -7,7 +7,7 @@ hide footbox
 actor User
 
 User -> Browser : Creates a function
-Browser ->> Shared :
+Browser ->> Shared : visit()
 
 Shared -->> Browser : return
 Browser -> Browser : display
