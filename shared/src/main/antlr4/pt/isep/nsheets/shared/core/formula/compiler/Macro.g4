@@ -4,115 +4,64 @@ grammar Macro;
 	//package pt.isep.nsheets.shared.core.formula.compiler;
 }
 
-stat :
-	expression
-	| functionimpl;
+macro: line+;
 
-expression:
-	expression comparison
-	| expression comment
-	| expression functioncall
-	| comparison
-	| comment
-	| functioncall;
+line: expression;
 
-functionimpl:
-	functionimpl 'Macro' FUNCTION ICHA expression FCHA
-	| 'Macro' FUNCTION ICHA expression FCHA;
-
-functionimplbody:
-	expression functionimplreturn?;
-
-functionimplreturn:
-	'return' (assignment|concatenation);
+expression: comparison;
 
 comparison:
 	concatenation ((EQ | NEQ | GT | LT | LTEQ | GTEQ) concatenation)?;
 
-comment:
-	COMMENT;
-
-functioncall:
-	'Call' FUNCTION;
-
-concatenation:
+concatenation: 
 	(MINUS)? atom
 	| concatenation PERCENT
 	| <assoc = right> concatenation POWER concatenation
 	| concatenation ( MULTI | DIV) concatenation
 	| concatenation ( PLUS | MINUS) concatenation
-	| concatenation AMP concatenation
-	| block;
+	| concatenation AMP concatenation;
 
 atom:
-	function_call
+	macro_c
+	| function_call
 	| reference
-	| assignment
 	| literal
-	| LPAR concatenation RPAR
-	| temporaryreference;
+	| LPAR comparison RPAR
+	| block
+	| attribution;
 
-block:
-	manyexpressions 
-	| FOR forexpression;
+block: LBRACKET comparison (SEMI comparison)* RBRACKET;
 
-manyexpressions:
-	ICHA comparison (SEMI comparison)* FCHA;
-
-forexpression:
-	assignment SEMI comparison (SEMI concatenation)+ FCHA;
+attribution: ( reference | VAR) ATTRIB concatenation;
 
 function_call:
-	FUNCTION LPAR comparison RPAR;
+	FUNCTION LPAR (comparison ( SEMI comparison)*)? (RPAR| RBRACKET)
+	| macro_c RPAR;
 
-reference:
-	CELL_REF ( ( COLON) CELL_REF)? | NAMEGLOBAL;
+macro_c: MACRO LPAR STRING RPAR;
 
-assignment:
-	reference ASSIGN concatenation;
+reference: CELL_REF ( ( COLON) CELL_REF)?;
 
-literal:
-	NUMBER | STRING | nameTemporary | NAMEGLOBAL;
+literal: NUMBER | STRING;
 
-temporaryreference:
-	nameTemporary ASSIGN concatenation;
+fragment LETTER: ('a' ..'z' | 'A' ..'Z');
 
+VAR: UNDER LETTER (LETTER | NUMBER)*;
 
+FUNCTION: '=' ( LETTER)+;
 
-
-
-
-FUNCTION:
-	( LETTER)+;
-
-LETTER:
-	('a' ..'z' | 'A' ..'Z');
-
-CELL_REF:
-	( ABS)? LETTER ( LETTER)? ( ABS)? ( DIGIT)+;
-
-nameTemporary:
-	UNDERSCORE ( LETTER)+;
-
-NAMEGLOBAL:
-	ARROBA ( LETTER)+;
+CELL_REF: ( ABS)? LETTER ( LETTER)? ( ABS)? ( DIGIT)+;
 
 /* String literals, i.e. anything inside the delimiters */
+
 STRING: QUOT ('\\"' | ~'"')* QUOT;
 
 QUOT: '"';
 
 /* Numeric literals */
-NUMBER:
-	DIGITNOTZERO (DIGIT)* FRACTIONALPART?
-	| DIGIT FRACTIONALPART;
+NUMBER: ( DIGIT)+ ( COMMA ( DIGIT)+)?;
 
-FRACTIONALPART:
-	(COMMA|DOT) DIGIT DIGIT?;
-
-DIGIT: '0' ..'9';
-
-DIGITNOTZERO: '1' ..'9';
+fragment DIGIT: '0' ..'9';
 
 /* Comparison operators */
 EQ: '=';
@@ -137,27 +86,21 @@ PERCENT: '%';
 fragment ABS: '$';
 fragment EXCL: '!';
 COLON: ':';
-UNDERSCORE: '_';
-ARROBA: '@';
+ATTRIB: ':=';
 
 /* Miscellaneous operators */
 COMMA: ',';
-DOT: '.';
 SEMI: ';';
 LPAR: '(';
 RPAR: ')';
-ICHA: '{';
-FCHA: '}';
-LBRACKET: '[';
-RBRACKET: ']';
-
-/* Assignment Operator */
-ASSIGN: ':=';
-
-/* For Operator */
-FOR: 'FOR{';
+LBRACKET: '{';
+RBRACKET: '}';
+STARTER: '|';
+MACRO: 'macro';
+UNDER: '_';
 
 /* White-space (ignored) */
 WS: ( ' ' | '\r' '\n' | '\n' | '\t') -> skip;
 
-COMMENT: SEMI ~[\r\n]* -> skip;
+/* comment line (ignored) */
+LINECOMMENT: SEMI ~[\r\n]* -> skip; 

@@ -100,7 +100,7 @@ public interface Cell extends Comparable<Cell>, Extensible<Cell>, Serializable {
      */
     public void setContent(String content) throws FormulaCompilationException;
 
-    public void setContentByMacro(String content) throws FormulaCompilationException;
+//    public void setContentByMacro(String content) throws FormulaCompilationException;
 
     /**
      * Clears the content of the cell.

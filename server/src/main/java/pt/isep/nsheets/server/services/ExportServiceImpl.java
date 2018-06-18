@@ -50,6 +50,13 @@ public class ExportServiceImpl extends RemoteServiceServlet implements ExportSer
     public boolean exportStyledWorkbookPDF(List<CellStyleDTO> list, WorkbookDTO workbookDTO, String style,String color, int range) {
         return new ExportStyledPDFController().buildPDF(list, workbookDTO, style,color, range);
     }
+    
+    @Override
+    public boolean exportCompleteWorkbookPDF(List<CellStyleDTO> list, WorkbookDTO workbookDTO, String style,String color, int range) {
+        return new ExportStyledPDFController().buildPDF(list, workbookDTO, style,color, range); //falta acrescentar merdar e alterar
+    }
+    
+    
 
 
 }
