@@ -15,4 +15,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("tasksService")
 public interface TasksService extends RemoteService {
 
+    TasksDTO findByName(String name) throws DataException;
+    
+    void deleteTask(String name);
 }
