@@ -82,7 +82,14 @@
         <m:MaterialModal ui:field="usersModal" type="DEFAULT" dismissible="true" inDuration="200" outDuration="200" visible="false">
             <m:MaterialRow>
                 <m:MaterialLabel text="Users List" fontSize="2em"/>
-                <m:MaterialListValueBox ui:field="usersList" grid="s12"/>
+            </m:MaterialRow>
+            <m:MaterialRow>
+                <m:MaterialColumn grid="s8 m6 10">
+                    <m:MaterialListValueBox ui:field="usersList" />
+                </m:MaterialColumn>
+                <m:MaterialColumn  grid="s5" textAlign="CENTER">
+                    <m:MaterialLabel ui:field="userState" text="state" textAlign="CENTER" backgroundColor="BLUE_GREY_LIGHTEN_4"/>
+                </m:MaterialColumn>
             </m:MaterialRow>
 
             <m:MaterialModalFooter>

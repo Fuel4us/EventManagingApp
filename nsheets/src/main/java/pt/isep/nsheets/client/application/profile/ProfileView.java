@@ -13,6 +13,7 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import eapli.framework.presentation.console.Menu;
 import gwt.material.design.addins.client.fileuploader.MaterialFileUploader;
 import gwt.material.design.client.base.validator.RegExValidator;
+import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.ui.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.xpath.operations.Bool;
@@ -73,6 +74,8 @@ class ProfileView extends ViewImpl implements ProfilePresenter.MyView {
     MaterialModal modal;
     @UiField
     MaterialModal usersModal;
+    @UiField
+    MaterialLabel userState;
     @UiField
     MaterialListValueBox<UserDTO> usersList;
     @UiField
@@ -175,12 +178,25 @@ class ProfileView extends ViewImpl implements ProfilePresenter.MyView {
                         for (UserDTO u : result) {
                             usersList.addItem(u, u.getEmail());
                         }
+
+                        userState.setText("state");
+                        userState.setBackgroundColor(Color.BLUE_GREY_DARKEN_4);
                     }
                 };
 
                 userSvc.getUsers(callback);
 
                 usersModal.open();
+            }
+        });
+
+        usersList.addValueChangeHandler(event->{
+            if(usersList.getSelectedValue().isActivate()){
+                userState.setText("enable");
+                userState.setBackgroundColor(Color.GREEN);
+            }else{
+                userState.setText("disable");
+                userState.setBackgroundColor(Color.RED);
             }
         });
 
@@ -360,8 +376,14 @@ class ProfileView extends ViewImpl implements ProfilePresenter.MyView {
             @Override
             public void onSuccess(Boolean result) {
                 String s = "disable";
+
                 if(result){
                     s = "enable";
+                    userState.setText(s);
+                    userState.setBackgroundColor(Color.GREEN);
+                }else{
+                    userState.setText(s);
+                    userState.setBackgroundColor(Color.RED);
                 }
                 MaterialToast.fireToast("User state changed to "+ s);
             }
