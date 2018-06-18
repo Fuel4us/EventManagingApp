@@ -68,7 +68,28 @@ public class MacroEvalVisitor extends MacroBaseVisitor<Expression>  {
         }
         return visit(ctx.getChild(0));
     }
+    
+    @Override
+    public Expression visitFunctionimpl(MacroParser.FunctionimplContext ctx){
+        
+        if(ctx.getChildCount() == 5) {
+            return visit(ctx.getChild(3));
+        }
+        return visit(ctx.getChild(0));
+    }
+    
+    @Override
+    public Expression visitFunctionimplbody(MacroParser.FunctionimplbodyContext ctx){
+        
+        return visit(ctx.getChild(0));
+    }
 
+    @Override
+    public Expression visitFunctionimplreturn(MacroParser.FunctionimplreturnContext ctx){
+        
+        return visit(ctx.getChild(1));
+    }
+    
     @Override
     public Expression visitConcatenation(MacroParser.ConcatenationContext ctx
     ) {
@@ -108,8 +129,7 @@ public class MacroEvalVisitor extends MacroBaseVisitor<Expression>  {
     }
     
     @Override
-    public Expression visitAtom(MacroParser.AtomContext ctx
-    ) {
+    public Expression visitAtom(MacroParser.AtomContext ctx) {
         if (ctx.getChildCount() == 3) {
             return visit(ctx.getChild(1));
         }
@@ -117,105 +137,105 @@ public class MacroEvalVisitor extends MacroBaseVisitor<Expression>  {
         return visitChildren(ctx);
     }
     
-    @Override
-    public Expression visitBlock(MacroParser.BlockContext ctx) {
-        if (ctx.getChildCount() == 1) {
-            return visit(ctx.manyexpressions());
-        } else {
-            return visit(ctx.forexpression());
-        }
-    }
+//    @Override
+//    public Expression visitBlock(MacroParser.BlockContext ctx) {
+//        if (ctx.getChildCount() == 1) {
+//            return visit(ctx.manyexpressions());
+//        } else {
+//            return visit(ctx.forexpression());
+//        }
+//    }
     
-    @Override
-    public Expression visitManyexpressions(MacroParser.ManyexpressionsContext ctx) {
-        Function function = null;
-        try {
-            // function = Language.getInstance().getFunction(ctx.getChild(0).getText());
-            function = this.language.getFunction(ctx.getChild(0).getText());
-        } catch (UnknownElementException ex) {
-            Logger.getLogger(MacroEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        if (function != null) {
-            try {
-                List<Expression> args = new ArrayList<>();
-                if (ctx.getChildCount() > 2) {
-                    for (int nChild = 1; nChild < ctx.getChildCount() - 1; nChild += 2) {
-                        args.add(visit(ctx.getChild(nChild)));
-                    }
-                }
-                Expression[] argArray = args.toArray(new Expression[args.size()]);
-                // return new FunctionCall(function, argArray);
-                return new Literal(function.applyTo(argArray));
-            } catch (IllegalValueTypeException ex) {
-                Logger.getLogger(MacroEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        MaterialToast.fireToast("RETURN NULL_Many expressions");
-        return null;
-    }
+//    @Override
+//    public Expression visitManyexpressions(MacroParser.ManyexpressionsContext ctx) {
+//        Function function = null;
+//        try {
+//            // function = Language.getInstance().getFunction(ctx.getChild(0).getText());
+//            function = this.language.getFunction(ctx.getChild(0).getText());
+//        } catch (UnknownElementException ex) {
+//            Logger.getLogger(MacroEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        if (function != null) {
+//            try {
+//                List<Expression> args = new ArrayList<>();
+//                if (ctx.getChildCount() > 2) {
+//                    for (int nChild = 1; nChild < ctx.getChildCount() - 1; nChild += 2) {
+//                        args.add(visit(ctx.getChild(nChild)));
+//                    }
+//                }
+//                Expression[] argArray = args.toArray(new Expression[args.size()]);
+//                // return new FunctionCall(function, argArray);
+//                return new Literal(function.applyTo(argArray));
+//            } catch (IllegalValueTypeException ex) {
+//                Logger.getLogger(MacroEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//        MaterialToast.fireToast("RETURN NULL_Many expressions");
+//        return null;
+//    }
     
-    @Override
-    public Expression visitForexpression(MacroParser.ForexpressionContext ctx) {
-        Function function = null;
-        try {
-            function = this.language.getFunction(ctx.getParent().getChild(0).getText());
-        } catch (UnknownElementException ex) {
-            MaterialToast.fireToast("ERROR getParent ForExpression.");
-        }
+//    @Override
+//    public Expression visitForexpression(MacroParser.ForexpressionContext ctx) {
+//        Function function = null;
+//        try {
+//            function = this.language.getFunction(ctx.getParent().getChild(0).getText());
+//        } catch (UnknownElementException ex) {
+//            MaterialToast.fireToast("ERROR getParent ForExpression.");
+//        }
+//
+//        List<Expression> args = new ArrayList<>();
+//
+//        for (int i = 0; i < ctx.getChildCount(); i += 2) {
+//            args.add(visit(ctx.getChild(i)));
+//        }
+//
+//        Expression[] argArray = args.toArray(new Expression[args.size()]);
+//        try {
+//            if (function != null) {
+//                MaterialToast.fireToast("Apply To");
+//                //return new FunctionCall(function, argArray);  dava
+//                return new Literal(function.applyTo(argArray));
+//            } else {
+//                MaterialToast.fireToast("FUNCTION NULL");
+//            }
+//        } catch (IllegalValueTypeException ex) {
+//            Logger.getLogger(MacroEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        MaterialToast.fireToast("RETURN NULL FOREXPRESSION");
+//        return new Literal(new Value());
+//    }
 
-        List<Expression> args = new ArrayList<>();
-
-        for (int i = 0; i < ctx.getChildCount(); i += 2) {
-            args.add(visit(ctx.getChild(i)));
-        }
-
-        Expression[] argArray = args.toArray(new Expression[args.size()]);
-        try {
-            if (function != null) {
-                MaterialToast.fireToast("Apply To");
-                //return new FunctionCall(function, argArray);  dava
-                return new Literal(function.applyTo(argArray));
-            } else {
-                MaterialToast.fireToast("FUNCTION NULL");
-            }
-        } catch (IllegalValueTypeException ex) {
-            Logger.getLogger(MacroEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        MaterialToast.fireToast("RETURN NULL FOREXPRESSION");
-        return new Literal(new Value());
-    }
-
-    @Override
-    public Expression visitFunction_call(MacroParser.Function_callContext ctx) {
-        // Convert function call
-        Function function = null;
-        try {
-            // function = Language.getInstance().getFunction(ctx.getChild(0).getText());
-            function = this.language.getFunction(ctx.getChild(0).getText());
-        } catch (UnknownElementException ex) {
-            Logger.getLogger(MacroEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        if (function != null) {
-            try {
-                List<Expression> args = new ArrayList<>();
-                if (ctx.getChildCount() > 3) {
-                    for (int nChild = 2; nChild < ctx.getChildCount() - 1; nChild += 2) {
-                        args.add(visit(ctx.getChild(nChild)));
-                    }
-                }
-                Expression[] argArray = args.toArray(new Expression[args.size()]);
-                return new FunctionCall(function, argArray);
-            } catch (IllegalFunctionCallException ex) {
-                addVisitError(ex.getMessage());
-                MaterialToast.fireToast("ERRO FUNCTION_CALLL visit childs");
-            }
-        }
-        MaterialToast.fireToast("RETURN NULL_FUNCTION_CALL");
-        return null;
-    }
+//    @Override
+//    public Expression visitFunction_call(MacroParser.Function_callContext ctx) {
+//        // Convert function call
+//        Function function = null;
+//        try {
+//            // function = Language.getInstance().getFunction(ctx.getChild(0).getText());
+//            function = this.language.getFunction(ctx.getChild(0).getText());
+//        } catch (UnknownElementException ex) {
+//            Logger.getLogger(MacroEvalVisitor.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        if (function != null) {
+//            try {
+//                List<Expression> args = new ArrayList<>();
+//                if (ctx.getChildCount() > 3) {
+//                    for (int nChild = 2; nChild < ctx.getChildCount() - 1; nChild += 2) {
+//                        args.add(visit(ctx.getChild(nChild)));
+//                    }
+//                }
+//                Expression[] argArray = args.toArray(new Expression[args.size()]);
+//                return new FunctionCall(function, argArray);
+//            } catch (IllegalFunctionCallException ex) {
+//                addVisitError(ex.getMessage());
+//                MaterialToast.fireToast("ERRO FUNCTION_CALLL visit childs");
+//            }
+//        }
+//        MaterialToast.fireToast("RETURN NULL_FUNCTION_CALL");
+//        return null;
+//    }
 
     @Override
     public Expression visitReference(MacroParser.ReferenceContext ctx) {

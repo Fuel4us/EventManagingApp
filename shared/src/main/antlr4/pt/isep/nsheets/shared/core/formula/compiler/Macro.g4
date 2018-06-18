@@ -4,19 +4,38 @@ grammar Macro;
 	//package pt.isep.nsheets.shared.core.formula.compiler;
 }
 
+stat :
+	expression
+	| functionimpl;
+
 expression:
 	expression comparison
 	| expression comment
+	| expression functioncall
 	| comparison
-	| comment;
+	| comment
+	| functioncall;
 
-comparison: 
+functionimpl:
+	functionimpl 'Macro' FUNCTION ICHA expression FCHA
+	| 'Macro' FUNCTION ICHA expression FCHA;
+
+functionimplbody:
+	expression functionimplreturn?;
+
+functionimplreturn:
+	'return' (assignment|concatenation);
+
+comparison:
 	concatenation ((EQ | NEQ | GT | LT | LTEQ | GTEQ) concatenation)?;
 
-comment: 
+comment:
 	COMMENT;
 
-concatenation: 
+functioncall:
+	'Call' FUNCTION;
+
+concatenation:
 	(MINUS)? atom
 	| concatenation PERCENT
 	| <assoc = right> concatenation POWER concatenation
@@ -33,63 +52,62 @@ atom:
 	| LPAR concatenation RPAR
 	| temporaryreference;
 
-block: 
+block:
 	manyexpressions 
 	| FOR forexpression;
 
 manyexpressions:
 	ICHA comparison (SEMI comparison)* FCHA;
 
-forexpression: 
+forexpression:
 	assignment SEMI comparison (SEMI concatenation)+ FCHA;
 
-function_call: 
+function_call:
 	FUNCTION LPAR comparison RPAR;
 
-reference: 
+reference:
 	CELL_REF ( ( COLON) CELL_REF)? | NAMEGLOBAL;
 
-assignment: 
+assignment:
 	reference ASSIGN concatenation;
 
-literal: 
+literal:
 	NUMBER | STRING | nameTemporary | NAMEGLOBAL;
 
-temporaryreference: 
+temporaryreference:
 	nameTemporary ASSIGN concatenation;
 
-LETTER: 
-	('a' ..'z' | 'A' ..'Z');
 
-FUNCTION: 
+
+
+
+
+FUNCTION:
 	( LETTER)+;
 
-CELL_REF: 
+LETTER:
+	('a' ..'z' | 'A' ..'Z');
+
+CELL_REF:
 	( ABS)? LETTER ( LETTER)? ( ABS)? ( DIGIT)+;
 
-nameTemporary: 
+nameTemporary:
 	UNDERSCORE ( LETTER)+;
 
-NAMEGLOBAL: 
+NAMEGLOBAL:
 	ARROBA ( LETTER)+;
 
-
-
-
-
 /* String literals, i.e. anything inside the delimiters */
-STRING: 
-	QUOT ('\\"' | ~'"')* QUOT;
+STRING: QUOT ('\\"' | ~'"')* QUOT;
 
-QUOT: 
-	'"';
+QUOT: '"';
 
 /* Numeric literals */
 NUMBER:
 	DIGITNOTZERO (DIGIT)* FRACTIONALPART?
 	| DIGIT FRACTIONALPART;
 
-FRACTIONALPART: 
+FRACTIONALPART:
 	(COMMA|DOT) DIGIT DIGIT?;
 
 DIGIT: '0' ..'9';
