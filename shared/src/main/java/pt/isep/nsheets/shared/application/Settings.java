@@ -45,6 +45,7 @@ public class Settings {
         this.workbook = Workbook.fromDTO(workbook);
     }
     
+    
     public List<Workbook> getOpenedWorkbooks() {
         return this.openWorkbooks;
     }

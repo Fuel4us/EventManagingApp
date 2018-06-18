@@ -7,9 +7,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import pt.isep.nsheets.server.lapr4.blue.s3.core.n1150478.workbooks.application.ChangeStateWorkbook;
+import pt.isep.nsheets.server.lapr4.blue.s3.ipc.n1150478.workbooks.application.ChangeStateWorkbook;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1140572.workbooks.application.DeleteWorkbookController;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1140572.workbooks.application.RenameWorkbookController;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1140572.workbooks.application.SearchWorkbooksController;
@@ -137,7 +135,7 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
         ArrayList<Workbook> workbooksSearched = ctrl.searchWorkbooks(name);
 
         for (Workbook w : workbooksSearched) {
-            if (state==true) {
+            if (state == true) {
                 if (!w.isPublicState()) {
                     wbs.add(w.toDTO());
                 }

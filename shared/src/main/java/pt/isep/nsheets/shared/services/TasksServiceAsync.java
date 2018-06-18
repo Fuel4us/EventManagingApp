@@ -5,10 +5,13 @@
  */
 package pt.isep.nsheets.shared.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 /**
  *
  * @author Pedro Rodrigues - (1140572)
  */
 public interface TasksServiceAsync {
-    
+
+    void findByName(String name, AsyncCallback<TasksDTO> callback);
 }
