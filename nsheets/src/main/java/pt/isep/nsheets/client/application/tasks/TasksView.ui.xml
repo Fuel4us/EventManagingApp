@@ -5,9 +5,35 @@
              xmlns:ma="urn:import:gwt.material.design.addins.client">
              
     <ui:import field="pt.isep.nsheets.client.place.NameTokens.home"/>         
-    <ui:with field='res' type='pt.isep.nsheets.client.resources.AppResources' />
+    <ui:with field='res' type='pt.isep.nsheets.client.resources.AppResources'/>
     
     <g:HTMLPanel ui:field="htmlPanel">
-    </g:HTMLPanel>
     
+        <m:MaterialRow marginTop="30">
+            <m:MaterialTextBox
+                m:id="fBox" ui:field="searchTask" placeholder="Search Task" label="Search Task"
+                active="true" grid="s10"/>
+            <m:MaterialButton ui:field="searchButton" waves="GREEN" backgroundColor="WHITE" type="FLOATING" iconType="SEARCH" iconColor="GREEN" size="LARGE"/>
+        </m:MaterialRow>
+        
+        <m:MaterialModal ui:field="optionModal" type="DEFAULT" grid="s12">
+            <m:MaterialModalContent>
+                <m:MaterialTextBox ui:field="renameTask" label="Name" grid="s12"/>
+                <m:MaterialTextBox ui:field="changeDescriptionTask" label="Description" grid="s12"/>
+                <m:MaterialTextBox ui:field="changePriorityTask" label="Priority" grid="s12"/>
+                <m:MaterialTextBox ui:field="changeProgressTask" label="Progress" grid="s12"/>
+                <m:MaterialButton ui:field="saveChanges" text="Save" waves="GREEN" backgroundColor="WHITE" textColor="BLACK" iconType="SAVE" iconPosition="RIGHT" iconColor="GREEN"/>
+                <m:MaterialButton ui:field="deleteTaskButton" text="Delete" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="DELETE" iconPosition="RIGHT" iconColor="RED"/>
+                <m:MaterialButton ui:field="cancelButton" text="Cancel" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="CANCEL" iconPosition="RIGHT" iconColor="RED"/>
+            </m:MaterialModalContent>
+        </m:MaterialModal>
+    
+        <m:MaterialFAB>
+            <m:MaterialButton type="FLOATING" iconType="SETTINGS" size="LARGE"/>
+            <m:MaterialFABList>
+                <m:MaterialButton ui:field="addTaskButton" type="FLOATING" waves="LIGHT" iconType="ADD" tooltip="New Task" tooltipPosition="LEFT"/>
+            </m:MaterialFABList>
+        </m:MaterialFAB>
+        
+    </g:HTMLPanel>
 </ui:UiBinder>
