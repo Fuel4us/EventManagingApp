@@ -1,0 +1,20 @@
+@startuml analysis1
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+User -> Browser : Navigate to Main Page
+User -> Browser : Navigate to Workbook
+
+User -> Browser : Create a Global Variable
+Browser -> Shared : visitExpression()
+Shared -> Shared : new BinaryOperation(assignment)
+Shared -> Shared : assignValue()
+
+Shared -> Browser : return
+Browser -> Browser : Shows the Global Variable created
+@enduml
