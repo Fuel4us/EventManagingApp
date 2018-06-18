@@ -69,3 +69,5 @@ Commits:
 
 [Open Workbooks List](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/9ff73ebb19c5015824c144d3d2c489b1bd49345d)
 
+[Documentation](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/9c0feb93241c963a6e0392ac75bb0cce6ddffb4b)
+
