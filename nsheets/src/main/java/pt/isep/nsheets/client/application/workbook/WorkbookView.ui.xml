@@ -241,7 +241,7 @@ governing permissions and limitations under the License. #L% -->
                     <m:MaterialListValueBox ui:field="textAlignLst" helperText="text align"/>
                 </m:MaterialColumn>
                 <m:MaterialColumn>
-                    <m:MaterialTextBox ui:field="txtComment" helperText="Insert the Comment here"/>
+                    <m:MaterialTextBox ui:field="txtComment" label="Insert the Comment here"/>
                 </m:MaterialColumn>
 
             </m:MaterialColumn>
