@@ -55,33 +55,7 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
     @Inject
     ProfilePresenter(EventBus eventBus, MyView view, MyProxy proxy) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
-
-
-
-        /*this.view.editButtonClickHandler(e -> {
-            UsersServiceAsync userService = GWT.create(UsersService.class);
-
-            AsyncCallback<UserDTO> callback = new AsyncCallback<UserDTO>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                    MaterialToast.fireToast("Error when editing user.! " + caught.getMessage());
-                }
-
-                @Override
-                public void onSuccess(UserDTO result) {
-                    MaterialToast.fireToast("Profile edited with success! Welcome, " + result.getName());
-                }
-            };
-
-            if(this.view.txtEmail().validate() && this.view.txtUsername().validate() &&
-                    this.view.txtName().validate() && this.view.txtOldpassword().validate() && this.view.txtNewPassword().validate() && ProfileView.URL != null){
-                UserDTO dto = new UserDTO(this.view.email(), this.view.name(), this.view.username(), this.view.newpassword(), ProfileView.URL, false);
-
-                userService.editProfile(dto, callback);
-            }
-        });*/
-
-        //submissionHandler();
+        
     }
 
     @Override
@@ -90,32 +64,5 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
 
         SetPageTitleEvent.fire("Profile", "Edit Profile ", "", "", this);
     }
-/*
-    public void submissionHandler() {
-        this.view.submitButtonClickHandler(e -> {
-            UsersServiceAsync userService = GWT.create(UserService.class);
-
-            AsyncCallback<UserDTO> callback = new AsyncCallback<UserDTO>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                    MaterialToast.fireToast("Error when editing user.! " + caught.getMessage());
-                }
-
-                @Override
-                public void onSuccess(UserDTO result) {
-                    MaterialToast.fireToast("Profile edited with success! Welcome, " + result.getName());
-                }
-            };
-
-            if(this.view.txtEmail().validate() && this.view.txtUsername().validate() &&
-                    this.view.txtName().validate() && this.view.txtOldpassword().validate() && this.view.txtNewPassword().validate() && ProfileView.URL != null){
-                UserDTO dto = new UserDTO(this.view.email(), this.view.name(), this.view.username(), this.view.newpassword(), ProfileView.URL, false);
-
-                userService.editProfile(dto, callback);
-            }
-        });
-    } */
-
-
 }
 

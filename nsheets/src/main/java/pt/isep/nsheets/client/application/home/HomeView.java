@@ -65,8 +65,10 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
         MenuView.getLogout().clear();
         MenuView.getLogout().setText("Logout");
 
+        MenuView.getImage().setVisible(true);
         MenuView.getImage().setUrl(currentUser.getUser().getPictureName());
         MenuView.getImage().setBorder("2px solid #186AAB");
+
     }
 
     private MaterialCard createCard(WorkbookDTO wb) {

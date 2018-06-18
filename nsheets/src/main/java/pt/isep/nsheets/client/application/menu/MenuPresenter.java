@@ -12,6 +12,7 @@ import com.gwtplatform.mvp.client.HasUiHandlers;
 import gwt.material.design.client.ui.MaterialSideNavPush;
 import pt.isep.nsheets.client.place.NameTokens;
 import pt.isep.nsheets.client.place.ParameterTokens;
+import pt.isep.nsheets.client.security.CurrentUser;
 
 public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> implements MenuUiHandlers {
 
@@ -21,7 +22,7 @@ public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> impleme
 	}
 
 	@Inject
-	MenuPresenter(EventBus eventBus, MyView view, PlaceManager placeManager) {
+	MenuPresenter(EventBus eventBus, MyView view, CurrentUser currentUser, PlaceManager placeManager) {
 		super(eventBus, view);
 		this.placeManager = placeManager;
 
@@ -30,6 +31,16 @@ public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> impleme
 				redirectToLoginPage();
 			}
 
+		});
+
+		MenuView.getLogout().addClickHandler(event ->{
+			if(currentUser.isLoggedIn()){
+				currentUser.setLoggedIn(false);
+				redirectToLoginPage();
+				MenuView.getImage().setVisible(false);
+				MenuView.getUsername().setText("Login");
+				MenuView.getLogout().setText("Signup");
+			}
 		});
 
 		getView().setUiHandlers(this);
