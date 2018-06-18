@@ -253,19 +253,20 @@ public class CellImpl implements Cell, Serializable {
         fireCellCleared();
     }
 
-    public void setContentByMacro(String content) throws FormulaCompilationException {
-        MacroExpressionCompiler compiler = new MacroExpressionCompiler();
-        if(!this.content.equals(content)){
-            Formula formula = null;
-            if(content.length() > 1)
-                formula = compiler.compile(this, content);
-            this.content = content;
-            this.formula = formula;
-            updateDependencies();
-            fireContentChanged();
-            reevaluate();
-        }
-    }
+//    @Override
+//    public void setContentByMacro(String content) throws FormulaCompilationException {
+//        MacroExpressionCompiler compiler = new MacroExpressionCompiler();
+//        if(!this.content.equals(content)){
+//            Formula formula = null;
+//            if(content.length() > 1)
+//                formula = compiler.compile(this, content);
+//            this.content = content;
+//            this.formula = formula;
+//            updateDependencies();
+//            fireContentChanged();
+//            reevaluate();
+//        }
+//    }
 
     public void setContent(String content) throws FormulaCompilationException {
         if (!this.content.equals(content)) {

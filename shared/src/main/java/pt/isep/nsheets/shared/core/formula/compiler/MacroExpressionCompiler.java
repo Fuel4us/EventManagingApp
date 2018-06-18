@@ -10,37 +10,40 @@ import pt.isep.nsheets.shared.core.formula.lang.LanguageManager;
 
 import java.util.Collections;
 import java.util.List;
+import pt.isep.nsheets.shared.core.formula.lang.MacroLanguage;
 
-public class MacroExpressionCompiler {
+public class MacroExpressionCompiler implements ExpressionCompiler{
 
-    private Language language = null;
+    public static final char LINE_STARTER = '|';
 
-    /**
-     * Creates the Excel expression compiler.
-     */
+    public final String compilerName = "MacroExcel";
+
+    private MacroLanguage language = null;
+
     public MacroExpressionCompiler() {
-        language = LanguageManager.getInstance().getLanguage("macro");
+
+        this.language = (MacroLanguage) LanguageManager.getInstance().getLanguage("MacroExcel");
     }
 
+    @Override
+    public Expression compile(Cell cell, String source) throws FormulaCompilationException {
 
-    public Formula compile(Cell cell, String source) throws FormulaCompilationException {
-        // Creates the lexer and parser
+        // Create the lexer and parser
         ANTLRInputStream input = new ANTLRInputStream(source);
 
-        // create the buffer of tokens between the lexer and parser
+        // create the buffer of the tokens between the lexer and parser
         MacroLexer lexer = new MacroLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
         MacroParser parser = new MacroParser(tokens);
 
-        MacroExpressionCompiler.MacroErrorListener formulaErrorListener = new MacroExpressionCompiler.MacroErrorListener();
-        parser.removeErrorListeners(); // remove default ConsoleErrorListener
-        parser.addErrorListener(formulaErrorListener); // add ours
+        MacroExcelErrorListener excelErrorListener = new MacroExcelErrorListener();
+        parser.removeErrorListeners();
+        parser.addErrorListener(excelErrorListener);
 
-        // Attempts to match an expression
-        ParseTree tree = parser.expression();
+        ParseTree tree = parser.macro();
         if (parser.getNumberOfSyntaxErrors() > 0) {
-            throw new FormulaCompilationException(formulaErrorListener.getErrorMessage());
+            throw new FormulaCompilationException(excelErrorListener.getErrorMessage());
         }
 
         // Visit the expression and returns it
@@ -49,11 +52,21 @@ public class MacroExpressionCompiler {
         if (eval.getNumberOfErrors() > 0) {
             throw new FormulaCompilationException(eval.getErrorsMessage());
         }
-
-        return new Formula(cell, result);
+        return result;
     }
 
-    public static class MacroErrorListener extends BaseErrorListener {
+    @Override
+    public char getStarter() {
+        return LINE_STARTER;
+    }
+
+    @Override
+    public String compilerName() {
+        return compilerName;
+    }
+
+    //
+    public static class MacroExcelErrorListener extends BaseErrorListener {
 
         private StringBuilder buf;
 
@@ -62,11 +75,8 @@ public class MacroExpressionCompiler {
         }
 
         @Override
-        public void syntaxError(Recognizer<?, ?> recognizer,
-                                Object offendingSymbol,
-                                int line, int charPositionInLine,
-                                String msg,
-                                RecognitionException e) {
+        public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
+                String msg, RecognitionException e) {
             List<String> stack = ((Parser) recognizer).getRuleInvocationStack();
             Collections.reverse(stack);
 

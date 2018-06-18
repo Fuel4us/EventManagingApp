@@ -1,13 +1,18 @@
 package pt.isep.nsheets.shared.core.formula.lang;
 
-import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.Assignment;
-import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.For;
-import pt.isep.nsheets.shared.lapr4.blue.s1.n1150372.formula.lang.ManyExpressions;
-import pt.isep.nsheets.shared.lapr4.blue.s1.n1150478.formula.lang.Form;
+import pt.isep.nsheets.shared.core.formula.Function;
 
-public class ExcelLanguage extends Language {
-
-    @Override
+/**
+ *
+ * @author Pedro Marques Vieira
+ */
+public class MacroExcelLanguage extends MacroLanguage{
+    
+    public MacroExcelLanguage(String name, String starter) {
+        super(name, starter);
+    }
+    
+     @Override
     protected void initFunctions() {
         functions.add(new Average());
         functions.add(new And());
@@ -21,12 +26,7 @@ public class ExcelLanguage extends Language {
         functions.add(new Or());
         functions.add(new Sum());
         functions.add(new True());
-        functions.add(new For());
-        functions.add(new Form());
-        functions.add(new ManyExpressions());
-        functions.add(new Eval());
-        functions.add(new DoWhile());
-        functions.add(new WhileDo());
+        functions.add((Function) new MacroFunc());
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ExcelLanguage extends Language {
         binaryOperators.add(new NotEqual());
         binaryOperators.add(new RangeReference());
         binaryOperators.add(new Subtracter());
-        binaryOperators.add(new Assignment());
+        binaryOperators.add(new Attribution());
     }
 
     @Override
@@ -53,13 +53,18 @@ public class ExcelLanguage extends Language {
         unaryOperators.add(new Negator());
         unaryOperators.add(new Percent());
     }
+    
+
 
     @Override
-    protected void initNaryOperators() {
+    protected void initNaryOperators(){
         naryOperators.add(new Block());
+     
     }
     
-    public ExcelLanguage(String name) {
-        super(name);
+
+    @Override
+    public String toString() {
+    	return "MacroExcel";
     }
 }

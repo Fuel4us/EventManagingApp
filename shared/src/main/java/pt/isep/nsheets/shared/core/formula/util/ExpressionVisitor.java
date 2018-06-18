@@ -23,9 +23,9 @@ package pt.isep.nsheets.shared.core.formula.util;
 import pt.isep.nsheets.shared.core.formula.BinaryOperation;
 import pt.isep.nsheets.shared.core.formula.FunctionCall;
 import pt.isep.nsheets.shared.core.formula.Literal;
+import pt.isep.nsheets.shared.core.formula.NaryOperation;
 import pt.isep.nsheets.shared.core.formula.Reference;
 import pt.isep.nsheets.shared.core.formula.UnaryOperation;
-//import lapr4.gray.s1.lang.n3456789.formula.NaryOperation;
 
 /**
  * An interface for using the Visitor pattern for traversing expressions.
@@ -74,4 +74,11 @@ public interface ExpressionVisitor {
 	 * @return an arbitrary object
 	 */
 	public Object visitFunctionCall(FunctionCall call);
+        
+        /**
+	 * Visits the given n-ary expression.
+	 * @param operation the operation to visit
+	 * @return an arbitrary object
+	 */
+	public Object visitNaryOperation(NaryOperation operation);
 }
