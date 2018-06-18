@@ -39,36 +39,35 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     @Override
     public Value visitInitFunction(@NotNull VbParser.InitFunctionContext ctx) {
         String id = ctx.functionName().getText();
-        Value value;
+        Value value = this.visit(ctx.functionName().parametersWithType());
 
-        if (ctx.type().getText().equals("Integer")) {
-            value = new Value(0);
-            return memory.put(id, value);
-        }
-        if (ctx.type().getText().equals("Float")) {
-            value = new Value(Double.valueOf(0));
-            return memory.put(id, value);
-        }
-
-        value = new Value("");
         return memory.put(id, value);
     }
 
     @Override
+    public Value visitParametersWithType(@NotNull VbParser.ParametersWithTypeContext ctx) {
+        this.visit(ctx.type());
+        String id = ctx.ID().getText();
+        Value value;
+
+        if ((value = this.visit(ctx.parametersWithType())) == null) {
+            return memory.put(id, value);
+        }
+
+        return Value.VOID;
+    }
+
+    @Override
     public Value visitReturnFunction(@NotNull VbParser.ReturnFunctionContext ctx) {
-        return this.visit(ctx.ID());
+        String id = ctx.ID().getText();
+        Value value = new Value(0);
+
+        return memory.put(id, value);
     }
 
     @Override
     public Value visitFunctionCall(@NotNull VbParser.FunctionCallContext ctx) {
-        String functionName = ctx.functionName().ID().getText();
-
-        if (ctx.getParent().getParent().getParent() instanceof VbParser.FunctionContext) {
-            VbParser.FunctionContext parent = (VbParser.FunctionContext) ctx.getParent();
-            if (parent.initFunction().functionName().ID().getText().equals(functionName)) {
-                throw new RuntimeException("You can't invoke itself");
-            }
-        }
+        String functionName = ctx.ID().getText();
 
         VbLexer lexer = new VbLexer(new ANTLRInputStream(functionName));
         VbParser parser = new VbParser(new CommonTokenStream(lexer));
