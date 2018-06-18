@@ -66,7 +66,7 @@ The main idea for the "workflow" of this feature increment.
 
 **For US1**
 
-![SD1](sd1.png)
+![SD1](sd1.PNG)
 
 **For US2**
 
@@ -162,10 +162,11 @@ Some Questions/Issues identified during the work in this feature increment
 
 # 8. Work Log
 
-[[Documentation] IPC06.2 - readMe.MD updated. [Implementation] IPC06.2 - implementation starting ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/8f4f673322897f0525247d5a6ef74402c5611d79)
-[[Implementation] IPC06.2 - users now have workbooks associated ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/77afedd8e1ba50a204dac92ac237bd1ac2758ca4)
-[[Implementation] IPC06.2 - now users can select wich workbook is private or public ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/386c4622e755701223b7715f8aa2feed395743bf)
-[[Implementation] IPC06.2 - now workbooks are private for each user. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/958a111544582eeb59876803714538a69466346e)
-[[Implementation] IPC06.2 - Now users can filtre workbooks search by description or name. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/98ad229def0d000ad379f79991d836ea1215bc2c)
-[[Implementation] IPC06.2 - Now users can search for private or public workbooks. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/d357aeb7267b076a141a00fca2e597bb8757e23b)
-[[Documentation] IPC06.2 - SSD for user story 1 and 2 added. US diagram added. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/cd5604faf953807e472f4522c42b741d88ead9a2)
+* [ [Documentation] IPC06.2 - readMe.MD updated. [Implementation] IPC06.2 - implementation starting ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/8f4f673322897f0525247d5a6ef74402c5611d79)
+* [ [Implementation] IPC06.2 - users now have workbooks associated ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/77afedd8e1ba50a204dac92ac237bd1ac2758ca4)
+* [ [Implementation] IPC06.2 - now users can select wich workbook is private or public ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/386c4622e755701223b7715f8aa2feed395743bf)
+* [ [Implementation] IPC06.2 - now workbooks are private for each user. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/958a111544582eeb59876803714538a69466346e)
+* [ [Implementation] IPC06.2 - Now users can filtre workbooks search by description or name. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/98ad229def0d000ad379f79991d836ea1215bc2c)
+* [ [Implementation] IPC06.2 - Now users can search for private or public workbooks. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/d357aeb7267b076a141a00fca2e597bb8757e23b)
+* [ [Documentation] IPC06.2 - SSD for user story 1 and 2 added. US diagram added. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/cd5604faf953807e472f4522c42b741d88ead9a2)
+* [ [Documentation] IPC06.2 - sequence diagrams for the user stories added. [Implementation] IPC06.2 - test classes added. ] (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/a4607cecdc66487170dda82d0c69661598bc3a00)
