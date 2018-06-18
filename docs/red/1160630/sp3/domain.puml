@@ -1,0 +1,21 @@
+@startuml  domain.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+hide empty methods
+
+entity Function << Entity >>
+entity EvalVisitor
+object Value <<Value Object>>
+entity Js_complexBaseVisitor << Abstract Class >>
+
+
+EvalVisitor <|.. Js_complexBaseVisitor
+EvalVisitor --> Function
+Js_complexBaseVisitor --> Value
+
+
+@enduml
