@@ -37,19 +37,28 @@ public class NoteService {
         final NoteRepository noteRepository = PersistenceContext.repositories().notes();
 
         Note note = Note.fromDTO(noteDTO);
-        MaterialToast.fireToast("Note: ", note.getTextNote());
+        System.out.println("Note: " + note.getTextNote());
         noteRepository.save(note);
 
         return note;
     }
     
-    public Note saveNote(NoteDTO noteDTO, long id) throws DataConcurrencyException, DataIntegrityViolationException{
+    public Note saveNote(NoteDTO noteDTO, Long id) throws DataConcurrencyException, DataIntegrityViolationException{
         final NoteRepository noteRepository = PersistenceContext.repositories().notes();
 
-        Optional<Note> note = noteRepository.findOne(id);
-        noteRepository.save(note.get());
+        Note note = Note.fromDTO(noteDTO);
+        note.setPk(id);
+        noteRepository.save(note);
 
-        return note.get();
+        return note;
+    }
+    
+    public Void deleteNote(Long id){
+        final NoteRepository noteRepository = PersistenceContext.repositories().notes();
+        
+        noteRepository.deleteNote(id);
+        
+        return null;
     }
 
 }

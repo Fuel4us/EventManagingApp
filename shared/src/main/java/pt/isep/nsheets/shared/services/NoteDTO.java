@@ -13,7 +13,7 @@ public class NoteDTO implements Serializable {
     private String titleNote;
     private String textNote;
     private Date dateNote;
-    private long id;
+    private Long id;
     
     public NoteDTO(String titleNote, String textNote) throws IllegalArgumentException {
         if (titleNote == null) {
@@ -27,10 +27,10 @@ public class NoteDTO implements Serializable {
             this.textNote = textNote;
         
         this.dateNote = new Date();
-        this.id = 0;
+        this.id = null;
     }
     
-    public NoteDTO(String titleNote, String textNote, long id) throws IllegalArgumentException {
+    public NoteDTO(String titleNote, String textNote, Long id) throws IllegalArgumentException {
         if (titleNote == null) {
             throw new IllegalArgumentException("title of the Note must be non-null");
         }
@@ -98,7 +98,7 @@ public class NoteDTO implements Serializable {
         return new NoteDTO(titleNote, textNote,this.id);
     }
     
-    public long getID(){
+    public Long getID(){
         return id;
     }
 

@@ -340,6 +340,23 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
             card.setVisible(false);
             
             //Remove the Note from the DB
+            NotesServiceAsync notesSvc = GWT.create(NotesService.class);
+
+            // Set up the callback object.
+            AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error! " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(Void result) {
+                    MaterialToast.fireToast("Note Deleted");
+                }
+            };
+            
+            NoteDTO nDTO = note.clone();
+            notesSvc.deleteNote(nDTO.getID(), callback);
         });
 
         //lstCardNotes.add(card);

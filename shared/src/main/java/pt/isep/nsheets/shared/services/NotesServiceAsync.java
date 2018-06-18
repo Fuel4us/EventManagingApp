@@ -24,5 +24,7 @@ public interface NotesServiceAsync {
     void addNote(NoteDTO notesDTO, AsyncCallback<NoteDTO> callback);
 
     
-    void saveNote(NoteDTO noteDTO, long id, AsyncCallback<NoteDTO> callback);
+    void saveNote(NoteDTO noteDTO, Long id, AsyncCallback<NoteDTO> callback);
+    
+    void deleteNote(Long id, AsyncCallback<Void> callback);
 }

@@ -137,6 +137,10 @@ public class Note implements AggregateRoot<Long>, Serializable {
         return this.pk;
     }
 
+    public void setPk(Long pk) {
+        this.pk = pk;
+    }
+
     /**
      *
      * @return
