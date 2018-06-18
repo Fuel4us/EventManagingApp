@@ -49,6 +49,8 @@ governing permissions and limitations under the License. #L% -->
     </ui:style>
 
     <g:HTMLPanel>
+        <m:MaterialCollection ui:field="openWorkbooks">
+        </m:MaterialCollection>
         <m:MaterialFAB>
             <m:MaterialButton type="FLOATING" iconType="SETTINGS" size="LARGE"/>
             <m:MaterialFABList>

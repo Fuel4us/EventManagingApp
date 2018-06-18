@@ -252,6 +252,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialIcon macroModalDoneButton;
     @UiField
     MaterialIcon macroModalCloseButton;
+    
+    @UiField
+    MaterialCollection openWorkbooks;
 
     @Override
     public MaterialModal getModal() {
@@ -1042,5 +1045,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiHandler("cancelButtonModal")
     void cancelModal(ClickEvent e) {
         modal.close();
+    }
+    
+    @Override
+    public MaterialCollection getOpenWorkbooksCollection() {
+        return this.openWorkbooks;
     }
 }
