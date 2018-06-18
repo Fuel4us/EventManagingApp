@@ -26,6 +26,7 @@ import gwt.material.design.client.ui.MaterialColumn;
 import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialRow;
+import gwt.material.design.client.ui.MaterialSwitch;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.client.application.menu.MenuView;
@@ -56,6 +57,9 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
     @UiField
     MaterialTextBox name, description, renameTxt, searchTxt;
 
+    @UiField
+    MaterialSwitch switchEvent;
+
     @Inject
     HomeView(Binder uiBinder, CurrentUser currentUser) {
         initWidget(uiBinder.createAndBindUi(this));
@@ -82,7 +86,7 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
         MaterialCardTitle cardTitle = new MaterialCardTitle();
 
         cardTitle.add(new Anchor(wb.name, "#workbook"));
-        if(wb.publicState) {
+        if (wb.publicState) {
             cardTitle.setIconType(IconType.LOCK_OPEN);
         } else {
             cardTitle.setIconType(IconType.LOCK);
@@ -206,6 +210,11 @@ class HomeView extends ViewImpl implements HomePresenter.MyView {
     @Override
     public MaterialButton getSwitchStateButton() {
         return swichStateButton;
+    }
+
+    @Override
+    public MaterialSwitch getSwitchEvent() {
+        return switchEvent;
     }
 
     @Override

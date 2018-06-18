@@ -44,25 +44,50 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
     MaterialInput color_line;
 
     @UiField
+    MaterialInput color_line2;
+
+    @UiField
     MaterialButton style_export_pdf, close, save;
+
+    @UiField
+    MaterialButton complete_export_pdf, close_complete, save_complete;
 
     @UiField
     MaterialRadioButton dotted, double_, solid, dashed;
 
     @UiField
+    MaterialRadioButton dotted2, double_2, solid2, dashed2;
+
+    @UiField
+    MaterialRadioButton macros, chars, comments, images;
+
+    @UiField
     MaterialModal modal;
 
     @UiField
+    MaterialModal modal_complete;
+
+    @UiField
     MaterialRange rangeSetValue;
+
+    @UiField
+    MaterialRange rangeSetValue2;
 
     private String style;
     private String color;
     private int range;
     private final List<MaterialRadioButton> radiolist;
 
+    private final List<MaterialRadioButton> radioListComplete;
+
     @UiHandler("style_export_pdf")
     void openOverlay(ClickEvent event) {
         this.modal.open();
+    }
+
+    @UiHandler("complete_export_pdf")
+    void openOverlayComplete(ClickEvent event) {
+        this.modal_complete.open();
     }
 
     @UiHandler("save")
@@ -100,11 +125,47 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
 
     }
 
+    @UiHandler("save_complete")
+    void saveComplete(ClickEvent event) {
+
+        WorkbookDTO workbookDTO = Settings.getInstance().getWorkbook().toDTO();
+
+        color = color_line.getValue();
+        style = findSelected().getFormValue();
+        range = rangeSetValue.getValue();
+
+        ExportServiceAsync exportServiceAsync = GWT.create(ExportService.class);
+        AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                MaterialToast.fireToast("Error! " + throwable.getMessage(), "rounded");
+            }
+
+            @Override
+            public void onSuccess(Boolean result) {
+                if (result == true) {
+                    Cookies.setCookie("PDF EXPORT", "Accept the cookies");
+
+                    String url = GWT.getModuleBaseURL() + "downloadService";
+                    Window.open(url, "_blank", "status=0,toolbar=0,menubar=0,location=0");
+                    MaterialToast.fireToast("PDF exported", "rounded");
+
+                } else {
+                    MaterialToast.fireToast("Error exporting workbook");
+                }
+            }
+        };
+        //adicionar funcionalidades
+        exportServiceAsync.exportStyledWorkbookPDF(cellStyleList(), workbookDTO, style, color, range, callback);
+
+    }
+
     @Inject
     ExportView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
         dotted.setValue(Boolean.TRUE);
         radiolist = createMaterialRadioButtonArray();
+        radioListComplete = createMaterialRadioButtonCompleteArray();
     }
 
     @Override
@@ -133,8 +194,18 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
     }
 
     @Override
+    public void closeModalComplete(ClickHandler clickHandler) {
+        close_complete.addClickHandler(clickHandler);
+    }
+
+    @Override
     public MaterialModal getOverlay() {
         return modal;
+    }
+
+    @Override
+    public MaterialModal getOverlayComplete() {
+        return modal_complete;
     }
 
     interface Binder extends UiBinder<Widget, ExportView> {
@@ -147,6 +218,18 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
         list.add(double_);
         list.add(solid);
         list.add(dashed);
+
+        return list;
+
+    }
+
+    private List<MaterialRadioButton> createMaterialRadioButtonCompleteArray() {
+
+        List<MaterialRadioButton> list = new ArrayList<>();
+        list.add(dotted2);
+        list.add(double_2);
+        list.add(solid2);
+        list.add(dashed2);
 
         return list;
 

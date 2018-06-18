@@ -9,6 +9,7 @@
             <m:MaterialTextBox
                 m:id="fBox" ui:field="searchTxt" placeholder="Search Workbook" label="Search Workbook"
                 active="true" grid="s10"/>
+            <m:MaterialSwitch ui:field="switchEvent" onLabel="Private" offLabel="Public" />
             <m:MaterialButton ui:field="searchButton" waves="GREEN" backgroundColor="WHITE" type="FLOATING" iconType="SEARCH" iconColor="GREEN" size="LARGE"/>
         </m:MaterialRow>
         
