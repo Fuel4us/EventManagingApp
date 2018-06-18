@@ -142,7 +142,7 @@ public class Note implements AggregateRoot<Long>, Serializable {
      * @return
      */
     public NoteDTO toDTO() {
-        return new NoteDTO(this.titleNote, this.textNote);
+        return new NoteDTO(this.titleNote, this.textNote, this.id());
     }
 
     /**

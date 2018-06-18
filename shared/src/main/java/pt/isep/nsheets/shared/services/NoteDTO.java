@@ -13,13 +13,8 @@ public class NoteDTO implements Serializable {
     private String titleNote;
     private String textNote;
     private Date dateNote;
-
-    /**
-     * 
-     * @param titleNote must be non-null
-     * @param textNote in case of null, it is initialized as empty String
-     * @throws IllegalArgumentException
-     */
+    private long id;
+    
     public NoteDTO(String titleNote, String textNote) throws IllegalArgumentException {
         if (titleNote == null) {
             throw new IllegalArgumentException("title of the Note must be non-null");
@@ -32,6 +27,22 @@ public class NoteDTO implements Serializable {
             this.textNote = textNote;
         
         this.dateNote = new Date();
+        this.id = 0;
+    }
+    
+    public NoteDTO(String titleNote, String textNote, long id) throws IllegalArgumentException {
+        if (titleNote == null) {
+            throw new IllegalArgumentException("title of the Note must be non-null");
+        }
+        this.titleNote = titleNote;
+        
+        if(textNote == null)
+            this.textNote = "";
+        else
+            this.textNote = textNote;
+        
+        this.dateNote = new Date();
+        this.id = id;
     }
 
     /**
@@ -81,6 +92,14 @@ public class NoteDTO implements Serializable {
     public void changeTextNote(String textNote) {
         this.textNote = textNote;
         this.dateNote = new Date();
+    }
+    
+    public NoteDTO clone(){
+        return new NoteDTO(titleNote, textNote,this.id);
+    }
+    
+    public long getID(){
+        return id;
     }
 
 }
