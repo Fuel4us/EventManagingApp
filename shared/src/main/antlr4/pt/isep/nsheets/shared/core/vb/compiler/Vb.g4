@@ -8,23 +8,27 @@ function: initFunction stat* returnFunction endFunction;
 
 initFunction: 'Function' functionName 'As' type;
 
-functionName: ID OPAR /*parameters*/ CPAR;
+functionName: ID OPAR parametersWithType CPAR;
 
 returnFunction: 'Return' ID;
 
 endFunction: 'End' 'Function';
 
-functionCall: functionName;
+functionCall: ID OPAR parametersWithoutType CPAR;
 
-parameters: type ID COMMA parameters | type ID;
+parametersWithType: type ID COMMA parametersWithType | type ID;
 
-/*procedure: initProcedure stat* endProcedure;
+parametersWithoutType: ID COMMA parametersWithoutType | ID;
+
+procedure: initProcedure stat* endProcedure;
 
 initProcedure: 'Sub' procedureName;
 
 procedureName: ID OPAR CPAR;
 
-endProcedure: 'End' 'Sub';*/
+endProcedure: 'End' 'Sub';
+
+procedureCall: procedureName;
 
 stat:
 	assignment
@@ -33,7 +37,9 @@ stat:
 	| while_stat
 	| log
 	| function
+	| procedure
 	| functionCall
+	| procedureCall
 	| OTHER {System.err.println("unknown char: " + $OTHER.text);};
 
 declaration: 'Dim' ID 'As' type;
@@ -121,3 +127,10 @@ STRING: '"' (~["\r\n] | '""')* '"';
 COMMENT: '#' ~[\r\n]* -> skip;
 SPACE: [ \t\r\n] -> skip;
 OTHER: .;
+
+FUNCTION: 'Function';
+AS: 'As';
+RETURN: 'Return';
+END: 'End';
+SUB: 'Sub';
+DIM: 'Dim';
