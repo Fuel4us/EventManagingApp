@@ -60,12 +60,12 @@ public class Tasks implements AggregateRoot<Long>, Serializable {
     protected Tasks() {
     }
 
-    public Tasks(String name, String description, int priorityLevel, int progress, boolean taskCompleted) {
+    public Tasks(String name, String description, int priorityLevel) {
         this.name = name;
         this.description = description;
         this.priorityLevel = priorityLevel;
-        this.progress = progress;
-        this.taskCompleted = taskCompleted;
+        this.progress = 0;
+        this.taskCompleted = false;
         this.contacts = new ArrayList<>();
     }
 
@@ -187,6 +187,6 @@ public class Tasks implements AggregateRoot<Long>, Serializable {
     }
 
     public static Tasks fromDTO(TasksDTO tasksDTO) throws IllegalArgumentException {
-        return new Tasks(tasksDTO.getName(), tasksDTO.getDescription(), tasksDTO.getPriorityLevel(), tasksDTO.getProgress(), tasksDTO.isTaskCompleted());
+        return new Tasks(tasksDTO.getName(), tasksDTO.getDescription(), tasksDTO.getPriorityLevel());
     }
 }
