@@ -43,15 +43,11 @@ class CodeView extends ViewImpl implements CodePresenter.MyView {
         initWidget(uiBinder.createAndBindUi(this));
 
         codeTextArea.setText("Dim x As Integer\n"
-                + "\n"
                 + "x = 1\n"
                 + "\n"
                 + "While x <> 10\n"
-                + "\n"
                 + "Log \"The variable x has the value \" + x\n"
-                + "\n"
                 + "x = x + 1\n"
-                + "\n"
                 + "End While"
         );
 

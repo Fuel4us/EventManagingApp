@@ -1,7 +1,11 @@
 package pt.isep.nsheets.shared.core.vb;
 
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.misc.NotNull;
+import org.antlr.v4.runtime.tree.ParseTree;
 import pt.isep.nsheets.shared.core.vb.compiler.VbBaseVisitor;
+import pt.isep.nsheets.shared.core.vb.compiler.VbLexer;
 import pt.isep.nsheets.shared.core.vb.compiler.VbParser;
 
 import java.util.HashMap;
@@ -15,7 +19,6 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
 
     private Map<String, Value> memory = new HashMap<>();
     private Map<String, Value> cells;
-    private Map<String, String> method;
     private String output = "";
 
     //receives current sheet cells
@@ -24,25 +27,18 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitFunctionBody(VbParser.FunctionBodyContext ctx) {
-        return null;
+    public Value visitFunction(@NotNull VbParser.FunctionContext ctx) {
+        this.visit(ctx.initFunction());
+        ctx.stat().forEach((stat) -> this.visit(stat));
+        this.visit(ctx.returnFunction());
+        this.visit(ctx.endFunction());
+
+        return Value.VOID;
     }
 
     @Override
-    public Value visitFunctionName(VbParser.FunctionNameContext ctx) {
-        String id = ctx.ID().getText();
-        Value value = this.visit(ctx.ID());
-
-        if (this.visit(ctx.parameters()).toString().length() != 0) {
-            //Visit parameters
-        }
-
-        return memory.put(id, value);
-    }
-
-    @Override
-    public Value visitDeclaration(VbParser.DeclarationContext ctx) {
-        String id = ctx.ID().getText();
+    public Value visitInitFunction(@NotNull VbParser.InitFunctionContext ctx) {
+        String id = ctx.functionName().getText();
         Value value;
 
         if (ctx.type().getText().equals("Integer")) {
@@ -58,9 +54,50 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
         return memory.put(id, value);
     }
 
+    @Override
+    public Value visitReturnFunction(@NotNull VbParser.ReturnFunctionContext ctx) {
+        return this.visit(ctx.ID());
+    }
+
+    @Override
+    public Value visitFunctionCall(@NotNull VbParser.FunctionCallContext ctx) {
+        String functionName = ctx.functionName().ID().getText();
+
+        if (ctx.getParent().getParent().getParent() instanceof VbParser.FunctionContext) {
+            VbParser.FunctionContext parent = (VbParser.FunctionContext) ctx.getParent();
+            if (parent.initFunction().functionName().ID().getText().equals(functionName)) {
+                throw new RuntimeException("You can't invoke itself");
+            }
+        }
+
+        VbLexer lexer = new VbLexer(new ANTLRInputStream(functionName));
+        VbParser parser = new VbParser(new CommonTokenStream(lexer));
+        ParseTree tree = parser.block();
+        Value value = this.visit(tree);
+
+        return value;
+    }
+
+    @Override
+    public Value visitDeclaration(@NotNull VbParser.DeclarationContext ctx) {
+        String id = ctx.ID().getText();
+        Value value;
+
+        if (ctx.type().getText().equals("Integer")) {
+            value = new Value(0);
+            return memory.put(id, value);
+        }
+        if (ctx.type().getText().equals("Float")) {
+            value = new Value(Double.valueOf(0));
+            return memory.put(id, value);
+        }
+
+        throw new RuntimeException("Invalid type: " + id);
+    }
+
     // assignment/id overrides
     @Override
-    public Value visitAssignment(VbParser.AssignmentContext ctx) {
+    public Value visitAssignment(@NotNull VbParser.AssignmentContext ctx) {
         String id = ctx.ID().getText();
         Value value = this.visit(ctx.expr());
 
@@ -72,7 +109,7 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitIdAtom(VbParser.IdAtomContext ctx) {
+    public Value visitIdAtom(@NotNull VbParser.IdAtomContext ctx) {
         String id = ctx.getText();
         Value value;
 
@@ -91,7 +128,7 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
 
     // atom overrides
     @Override
-    public Value visitStringAtom(VbParser.StringAtomContext ctx) {
+    public Value visitStringAtom(@NotNull VbParser.StringAtomContext ctx) {
         String str = ctx.getText();
         // strip quotes
         str = str.substring(1, str.length() - 1).replace("\"\"", "\"");
@@ -100,28 +137,28 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitNumberAtom(VbParser.NumberAtomContext ctx) {
+    public Value visitNumberAtom(@NotNull VbParser.NumberAtomContext ctx) {
         return new Value(Double.valueOf(ctx.getText()));
     }
 
     @Override
-    public Value visitBooleanAtom(VbParser.BooleanAtomContext ctx) {
+    public Value visitBooleanAtom(@NotNull VbParser.BooleanAtomContext ctx) {
         return new Value(Boolean.valueOf(ctx.getText()));
     }
 
     @Override
-    public Value visitNilAtom(VbParser.NilAtomContext ctx) {
+    public Value visitNilAtom(@NotNull VbParser.NilAtomContext ctx) {
         return new Value(null);
     }
 
     // expr overrides
     @Override
-    public Value visitParExpr(VbParser.ParExprContext ctx) {
+    public Value visitParExpr(@NotNull VbParser.ParExprContext ctx) {
         return this.visit(ctx.expr());
     }
 
     @Override
-    public Value visitPowExpr(VbParser.PowExprContext ctx) {
+    public Value visitPowExpr(@NotNull VbParser.PowExprContext ctx) {
         Value left = this.visit(ctx.expr(0));
         Value right = this.visit(ctx.expr(1));
 
@@ -129,7 +166,7 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitUnaryMinusExpr(VbParser.UnaryMinusExprContext ctx) {
+    public Value visitUnaryMinusExpr(@NotNull VbParser.UnaryMinusExprContext ctx) {
         Value value = this.visit(ctx.expr());
 
         return new Value(-value.asDouble());
@@ -215,7 +252,7 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitAndExpr(VbParser.AndExprContext ctx) {
+    public Value visitAndExpr(@NotNull VbParser.AndExprContext ctx) {
         Value left = this.visit(ctx.expr(0));
         Value right = this.visit(ctx.expr(1));
 
@@ -223,7 +260,7 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitOrExpr(VbParser.OrExprContext ctx) {
+    public Value visitOrExpr(@NotNull VbParser.OrExprContext ctx) {
         Value left = this.visit(ctx.expr(0));
         Value right = this.visit(ctx.expr(1));
 
@@ -232,7 +269,7 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
 
     // log override
     @Override
-    public Value visitLog(VbParser.LogContext ctx) {
+    public Value visitLog(@NotNull VbParser.LogContext ctx) {
         Value value = this.visit(ctx.expr());
         this.output += value.toString() + "\n";
 
@@ -241,7 +278,7 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
 
     // if override
     @Override
-    public Value visitIf_stat(VbParser.If_statContext ctx) {
+    public Value visitIf_stat(@NotNull VbParser.If_statContext ctx) {
         List<VbParser.Condition_block_ifContext> conditions = ctx.condition_block_if();
         boolean evaluatedBlock = false;
 
@@ -265,7 +302,7 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
 
     // while override
     @Override
-    public Value visitWhile_stat(VbParser.While_statContext ctx) {
+    public Value visitWhile_stat(@NotNull VbParser.While_statContext ctx) {
         Value value = this.visit(ctx.expr());
 
         while (value.asBoolean()) {
