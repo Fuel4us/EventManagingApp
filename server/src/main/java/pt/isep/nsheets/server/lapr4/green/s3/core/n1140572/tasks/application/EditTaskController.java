@@ -10,7 +10,6 @@ import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
 import pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.domain.Tasks;
 import pt.isep.nsheets.shared.services.DataException;
-import pt.isep.nsheets.shared.services.TasksDTO;
 
 /**
  *
@@ -18,8 +17,8 @@ import pt.isep.nsheets.shared.services.TasksDTO;
  */
 public class EditTaskController implements Controller {
 
-    public Tasks editTask(TasksDTO dto) throws DataConcurrencyException, DataIntegrityViolationException {
-        return new TasksCallerService().addTask(dto);
+    public Tasks editTask(Tasks tasks) throws DataConcurrencyException, DataIntegrityViolationException {
+        return new TasksCallerService().editTask(tasks);
     }
 
     public Tasks findByName(String name) throws DataConcurrencyException, DataIntegrityViolationException, DataException {

@@ -30,23 +30,27 @@ public class JpaTasksRepository extends NSheetsJpaRepositoryBase<Tasks, Long> im
     }
 
     @Override
-    public Tasks deleteTask(Tasks task) {
+    public void deleteTask(Tasks task) {
         entityManager().getTransaction().begin();
         entityManager().createQuery("delete from Tasks t where t.id=:taskid")
                 .setParameter("taskid", task.id())
                 .executeUpdate();
         entityManager().getTransaction().commit();
-
-        return task;
     }
 
     @Override
     public Iterable<Tasks> findByAnyAttribute(String name) {
         final Map<String, Object> params = new HashMap<>();
         params.put("name", name);
-        
-        return match("e.name=:name or e.description=:name", params);
+        params.put("description", name);
 
+        return match("e.name=:name or e.description=:description", params);
+
+    }
+
+    @Override
+    public Iterable<Tasks> findTasksNotCompleted(String name) {
+        return match("e.taskCompleted=:FALSE");
     }
 
 }

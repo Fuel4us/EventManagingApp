@@ -142,18 +142,13 @@ public class TasksPresenter extends Presenter<TasksPresenter.MyView, TasksPresen
 
                 @Override
                 public void onSuccess(TasksDTO result) {
-                    MaterialToast.fireToast("New Task Created", "rounded");
+                    view.closeOptionModal();
+                    MaterialToast.fireToast("Task changed successfully!", "rounded");
                     refreshView();
                 }
             };
-            if (this.view.changeProgress().equals("100")) {
-                TasksDTO taskDTO = new TasksDTO(this.view.rename(), this.view.changeDescription(), this.view.changePriority(), this.view.changeProgress(), true);
-                tasksAsync.editTask(taskDTO, callback);
-            } else {
-                TasksDTO taskDTO = new TasksDTO(this.view.rename(), this.view.changeDescription(), this.view.changePriority(), this.view.changeProgress(), false);
-                tasksAsync.editTask(taskDTO, callback);
-            }
-            this.view.closeNewTaskModal();
+            TasksDTO taskDTO = this.view.focusedTasksDTO();
+            tasksAsync.editTask(this.view.rename(), this.view.changeDescription(), this.view.changePriority(), this.view.changeProgress(), taskDTO, callback);
         });
 
         this.view.deleteClickHandler(e -> {
@@ -169,6 +164,7 @@ public class TasksPresenter extends Presenter<TasksPresenter.MyView, TasksPresen
                 @Override
                 public void onSuccess(TasksDTO result) {
                     try {
+                        view.closeOptionModal();
                         MaterialToast.fireToast("Task deleted successfully!");
                         refreshView();
                     } catch (IllegalArgumentException ex) {
@@ -177,11 +173,10 @@ public class TasksPresenter extends Presenter<TasksPresenter.MyView, TasksPresen
                 }
             };
             taskAsync.deleteTask(taskDTO, callback);
-            this.view.closeOptionModal();
         });
 
         this.view.searchClickHandler(e -> {
-            TasksServiceAsync workbooksSvc = GWT.create(TasksService.class);
+            TasksServiceAsync tasksSvc = GWT.create(TasksService.class);
             String tasksSearch = this.view.search();
 
             // Set up the callback object.
@@ -189,13 +184,13 @@ public class TasksPresenter extends Presenter<TasksPresenter.MyView, TasksPresen
 
                 @Override
                 public void onFailure(Throwable caught) {
-                    MaterialToast.fireToast("Workbooks with that name not found!");
+                    MaterialToast.fireToast("Tasks with that name not found!");
                 }
 
                 @Override
                 public void onSuccess(ArrayList<TasksDTO> result) {
                     try {
-                        MaterialToast.fireToast("Workbooks filtered by name!");
+                        MaterialToast.fireToast("Tasks searched successfully!");
                     } catch (IllegalArgumentException ex) {
                         Logger.getLogger(TasksView.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -224,7 +219,7 @@ public class TasksPresenter extends Presenter<TasksPresenter.MyView, TasksPresen
                 view.setContents(result);
             }
         };
-
+        
         tasksAsync.listTasksNotCompleted(MenuView.getUsername().toString(), callback);
     }
 
@@ -235,12 +230,12 @@ public class TasksPresenter extends Presenter<TasksPresenter.MyView, TasksPresen
         AsyncCallback<ArrayList<TasksDTO>> callback = new AsyncCallback<ArrayList<TasksDTO>>() {
             @Override
             public void onFailure(Throwable caught) {
-                MaterialToast.fireToast("error in searching");
+                MaterialToast.fireToast("Error in searching!!!");
             }
 
             @Override
             public void onSuccess(ArrayList<TasksDTO> result) {
-                MaterialToast.fireToast("Workbooks searched!");
+                MaterialToast.fireToast("Tasks searched successfully!");
                 view.setContents(result);
             }
         };

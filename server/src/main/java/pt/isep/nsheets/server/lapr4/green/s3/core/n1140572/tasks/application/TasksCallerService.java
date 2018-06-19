@@ -25,10 +25,11 @@ public class TasksCallerService {
         return tasksRepository.findByName(name);
     }
 
-    public Tasks deleteTask(TasksDTO tasksDTO) {
+    public Tasks deleteTask(Tasks tasks) {
         final TasksRepository tasksRepository = PersistenceContext.repositories().tasks();
+        tasksRepository.deleteTask(tasks);
 
-        return tasksRepository.deleteTask(Tasks.fromDTO(tasksDTO));
+        return tasks;
     }
 
     public Iterable<Tasks> listTasksNotCompleted(String user) {
@@ -47,8 +48,15 @@ public class TasksCallerService {
 
     public Iterable<Tasks> searchTasks(String name) {
         final TasksRepository tasksRepository = PersistenceContext.repositories().tasks();
-        
+
         return tasksRepository.findByAnyAttribute(name);
     }
-    
+
+    public Tasks editTask(Tasks tasks) throws DataConcurrencyException, DataIntegrityViolationException {
+        final TasksRepository tasksRepository = PersistenceContext.repositories().tasks();
+
+        tasksRepository.save(tasks);
+        return tasks;
+    }
+
 }

@@ -7,14 +7,17 @@
     <ui:import field="pt.isep.nsheets.client.place.NameTokens.home"/>         
     <ui:with field='res' type='pt.isep.nsheets.client.resources.AppResources'/>
     
-    <g:HTMLPanel ui:field="htmlPanel">
-    
+    <m:MaterialPanel> 
+        
         <m:MaterialRow marginTop="30">
             <m:MaterialTextBox
                 m:id="fBox" ui:field="searchTask" placeholder="Search Task" label="Search Task"
                 active="true" grid="s10"/>
             <m:MaterialButton ui:field="searchButton" waves="GREEN" backgroundColor="WHITE" type="FLOATING" iconType="SEARCH" iconColor="GREEN" size="LARGE"/>
         </m:MaterialRow>
+    
+        <g:HTMLPanel ui:field="htmlPanel">
+        </g:HTMLPanel>
         
         <m:MaterialModal ui:field="optionModal" type="DEFAULT" grid="s12">
             <m:MaterialModalContent>
@@ -38,12 +41,12 @@
             </m:MaterialModalContent>
         </m:MaterialModal>
     
+    
         <m:MaterialFAB>
             <m:MaterialButton type="FLOATING" iconType="SETTINGS" size="LARGE"/>
             <m:MaterialFABList>
                 <m:MaterialButton ui:field="addTaskButton" type="FLOATING" waves="LIGHT" iconType="ADD" tooltip="New Task" tooltipPosition="LEFT"/>
             </m:MaterialFABList>
         </m:MaterialFAB>
-        
-    </g:HTMLPanel>
+    </m:MaterialPanel>
 </ui:UiBinder>

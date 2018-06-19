@@ -7,6 +7,7 @@ package pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.application;
 
 import eapli.framework.application.Controller;
 import pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.domain.Tasks;
+import pt.isep.nsheets.shared.services.DataException;
 import pt.isep.nsheets.shared.services.TasksDTO;
 
 /**
@@ -15,8 +16,9 @@ import pt.isep.nsheets.shared.services.TasksDTO;
  */
 public class DeleteTaskController implements Controller {
 
-    public Tasks deleteTask(TasksDTO taskDTO) {
-        return new TasksCallerService().deleteTask(taskDTO);
+    public Tasks deleteTask(TasksDTO taskDTO) throws DataException {
+        Tasks task = new TasksCallerService().findByName(taskDTO.name);
+        return new TasksCallerService().deleteTask(task);
     }
 
 }

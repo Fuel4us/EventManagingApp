@@ -14,17 +14,17 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("tasksService")
 public interface TasksService extends RemoteService {
-    
+
     TasksDTO findByName(String name);
-    
+
     Iterable<TasksDTO> searchTasks(String name);
 
     Iterable<TasksDTO> listTasksNotCompleted(String user);
 
     TasksDTO addTask(TasksDTO tasksDTO);
 
-    TasksDTO deleteTask(TasksDTO tasksDTO);
-    
-    TasksDTO editTask(TasksDTO tasksDTO);
+    void deleteTask(TasksDTO tasksDTO);
+
+    TasksDTO editTask(String name, String description, String priority, String progress, TasksDTO tasksDTO);
 
 }

@@ -24,5 +24,5 @@ public interface TasksServiceAsync {
 
     void deleteTask(TasksDTO tasksDTO, AsyncCallback<TasksDTO> callback);
 
-    void editTask(TasksDTO tasksDTO, AsyncCallback<TasksDTO> callback);
+    void editTask(String name, String description, String priority, String progress, TasksDTO tasksDTO, AsyncCallback<TasksDTO> callback);
 }
