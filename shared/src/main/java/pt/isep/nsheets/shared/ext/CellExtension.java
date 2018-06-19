@@ -103,10 +103,10 @@ public abstract class CellExtension implements Cell, CellListener {
 		delegate.setContent(content);
 	}
 
-//        @Override
-//	public void setContentByMacro(String content) throws FormulaCompilationException {
-//		delegate.setContentByMacro(content);
-//	}
+        @Override
+	public void setContentByMacro(String content) throws FormulaCompilationException {
+		delegate.setContentByMacro(content);
+	}
 
 	public void clear() {
 		delegate.clear();

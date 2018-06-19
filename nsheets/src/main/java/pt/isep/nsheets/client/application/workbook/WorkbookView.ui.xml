@@ -215,7 +215,7 @@ governing permissions and limitations under the License. #L% -->
                 <m:MaterialLink  ui:field="forms" targetHistoryToken="{form}" text="Forms" textColor="BLUE" iconType="POLYMER" iconPosition="LEFT"/>
             </m:MaterialColumn>
             <m:MaterialColumn>
-                <m:MaterialLink  ui:field="macro" text="Edit Macro" textColor="ORANGE" iconType="SETTINGS" iconPosition="LEFT"/>
+                <m:MaterialLink  ui:field="macroLink" text="Edit Macro" textColor="ORANGE" iconType="SETTINGS" iconPosition="LEFT"/>
             </m:MaterialColumn>
             <m:MaterialModal ui:field="macroModal" type="DEFAULT" dismissible="true">
                 <m:MaterialModalContent>
@@ -223,13 +223,21 @@ governing permissions and limitations under the License. #L% -->
                         <m:MaterialTitle ui:field="macroTitle" title="Edit Macro"/>
                     </m:MaterialRow>
                     <m:MaterialRow>
-                        <m:MaterialLabel text="macro List of current Workbook: "/>
+                        <m:MaterialLabel text="macro functions of the current Workbook: "/>
                     </m:MaterialRow>
                     <m:MaterialRow>
                         <m:MaterialListValueBox ui:field="macroList"/>
                     </m:MaterialRow>
                     <m:MaterialRow>
-                        <m:MaterialTextArea ui:field="macroTextArea"/>
+                        <m:MaterialTextArea ui:field="macroTextArea" label="Enter commands: "/>
+                    </m:MaterialRow>
+                    <m:MaterialSection/>
+                    <m:MaterialRow>
+                        <m:MaterialTextBox ui:field="saveMacroName" label="Macro Function name: "/>
+                    </m:MaterialRow>
+                    <m:MaterialRow>
+                        <m:MaterialButton ui:field="saveMacro" text="Save Macro Function"/>
+                        <m:MaterialButton ui:field="removeMacro" text="Remove current Macro Function"/>
                     </m:MaterialRow>
                 </m:MaterialModalContent>
                 <m:MaterialModalFooter>

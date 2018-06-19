@@ -40,6 +40,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import org.apache.velocity.runtime.directive.Macro;
+import pt.isep.nsheets.shared.core.formula.Expression;
 import pt.isep.nsheets.shared.core.formula.Formula;
 import pt.isep.nsheets.shared.core.formula.Reference;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
@@ -253,20 +254,19 @@ public class CellImpl implements Cell, Serializable {
         fireCellCleared();
     }
 
-//    @Override
-//    public void setContentByMacro(String content) throws FormulaCompilationException {
-//        MacroExpressionCompiler compiler = new MacroExpressionCompiler();
-//        if(!this.content.equals(content)){
-//            Formula formula = null;
-//            if(content.length() > 1)
-//                formula = compiler.compile(this, content);
-//            this.content = content;
-//            this.formula = formula;
-//            updateDependencies();
-//            fireContentChanged();
-//            reevaluate();
-//        }
-//    }
+    public void setContentByMacro(String content) throws FormulaCompilationException {
+        MacroExpressionCompiler compiler = new MacroExpressionCompiler();
+        if(!this.content.equals(content)){
+            Formula formula = null;
+            if(content.length() > 1)
+                formula = compiler.compile(this, content);
+            this.content = content;
+            this.formula = formula;
+            updateDependencies();
+            fireContentChanged();
+            reevaluate();
+        }
+    }
 
     public void setContent(String content) throws FormulaCompilationException {
         if (!this.content.equals(content)) {

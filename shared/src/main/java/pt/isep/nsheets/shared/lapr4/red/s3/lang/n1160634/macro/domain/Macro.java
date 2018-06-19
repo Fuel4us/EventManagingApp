@@ -12,24 +12,17 @@ public class Macro implements Serializable {
 
     private static final String MACRO_DEFAULTNAME = "MACRO001";
     private static final long serialVersionUID = 1L;
-
-    public String getName() {
-        return name;
-    }
-
+    
+    private Long id;
+    
     private String name;
-
-    private transient Language language;
 
     private String commandList;
 
     public Macro(String givenName) {
         this.validateName(givenName);
-        this.language = LanguageManager.getInstance().getLanguage("MacroExcel");
         this.commandList = "";
     }
-
-    private Long id;
 
     public Macro() {
     }
@@ -43,22 +36,13 @@ public class Macro implements Serializable {
         }
     }
 
+    public String getName() {
+        return name;
+    }
+    
     public String name() {
 
         return this.name;
-    }
-
-    public void changeLanguage(Language lang) {
-
-        if (!this.language.equals(lang)) {
-            this.language = lang;
-        }
-
-    }
-
-    public Language language() {
-
-        return this.language;
     }
 
     public void addCommand(String command) {
@@ -79,6 +63,6 @@ public class Macro implements Serializable {
     @Override
     public String toString() {
 
-        return this.name() + " - " + this.language().getName() + " language";
+        return this.name() + " - " + " macro function";
     }
 }
