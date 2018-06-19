@@ -51,7 +51,7 @@ Use case diagram:
 **For US1 and US2**
 
 Replace All:
-![US2](Design-Core 02.3.jpg)
+![Design-Core 02.3.jpg](Design-Core 02.3.jpg)
 
 Replace one ocurrance:
 
