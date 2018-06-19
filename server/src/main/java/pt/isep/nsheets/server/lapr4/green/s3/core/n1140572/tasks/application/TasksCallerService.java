@@ -35,7 +35,7 @@ public class TasksCallerService {
     public Iterable<Tasks> listTasksNotCompleted(String user) {
         final TasksRepository tasksRepository = PersistenceContext.repositories().tasks();
 
-        return tasksRepository.findAll();
+        return tasksRepository.findTasksNotCompleted(user);
     }
 
     public Tasks addTask(TasksDTO tasksDTO) throws DataConcurrencyException, DataIntegrityViolationException {

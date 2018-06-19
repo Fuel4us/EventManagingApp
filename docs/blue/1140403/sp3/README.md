@@ -10,9 +10,7 @@
 IPC02.3 - Global Search/Replace
 
 The application should now support "Search" and "Search and Replace" to be 
-applied for all the workbooks of the user (may they be active/open or not). It 
-should be possible to apply the search to workbooks which name matches a specific
-regular expression. 
+applied for all the workbooks of the user (may they be active/open or not). 
 
 In a more brief text:
 
@@ -47,12 +45,26 @@ Use case diagram:
 
 ![UseCase](UseCase.png)
 
+SSD's:
+SSD for US1
+![SSDUS1.jpg](SSDUS1.jpg)
+SSD for US2
+![SSDUS2.jpg](SSDUS2.jpg)
+
+
+**Domain Model (for this feature increment)**
+
+![Domain Model](CDCore02.3.jpg)
 
 **System Sequence Diagrams**
 
 **For US1 and US2**
 
-![Analysis SD](Design-Core 02.3.jpg)
+Replace one ocurrance US1:
+![Design-Core 02.3.jpg](Core02.3S1.jpg)
+
+Replace All US2:
+![Design-Core 02.3.jpg](Design-Core02.3.jpg)
 
 # 4 Design
 ## 4.1 TESTS
@@ -76,7 +88,19 @@ and changes the content of all cells.
 Following the guidelines for JPA from EAPLI we envision a scenario like the 
 following for realizing the use cases for this feature increment:
 
+Controller print:
+![codePrint.png](codePrint.png)
 
+Essentially this use case, from the previous iteration, changed in the fact that
+instead of looking for a certain expression in the cells of the active workbook,
+it should look for it in all the workbooks of the user.
+
+For that I evolved the method above, that allows the program to search and save 
+all the cells from all the User's workbooks that correspond to the expression
+introduced.
+
+From here on, since i already knew the cells that needed to be changed, all i needed
+was to change the content of the cells.
 
 ## 4.3. Classes
 
