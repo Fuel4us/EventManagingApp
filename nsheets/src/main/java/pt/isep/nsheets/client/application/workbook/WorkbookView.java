@@ -246,11 +246,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox descriptionModal;
 
     @UiField
-    MaterialLink macro;
+    MaterialLink macroLink;
     @UiField
     MaterialModal macroModal;
-    @UiField
-    MaterialTitle macroTitle;
     @UiField
     MaterialTextArea macroTextArea;
     @UiField
@@ -259,6 +257,12 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialIcon macroModalCloseButton;
     @UiField
     MaterialListValueBox<Macro> macroList;
+    @UiField
+    MaterialTextBox saveMacroName;
+    @UiField
+    MaterialButton saveMacro;
+    @UiField
+    MaterialButton removeMacro;
     
     @UiField
     MaterialCollection openWorkbooks;
@@ -421,7 +425,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         }
 
     }
-
+    
     @Override
     public void initWorkbook() {
         Spreadsheet sh = getCurrentSpreadsheet();
@@ -711,62 +715,126 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         });
 
-        macro.addClickHandler(event -> {
+        
+        macroLink.addClickHandler(event -> {
+            
+//            macroList.clear();
+//            
+//            Macro macroAux = new Macro("Macro_Func_001");
+//            
+//            macroAux.addCommand("1");
+//            
+//            macroList.addItem(macroAux, macroAux.toString());
+            
             macroModal.open();
+
         });
 
         macroModalCloseButton.addClickHandler(event -> {
             macroModal.close();
         });
 
+        macroList.addValueChangeHandler(selectEvent -> {
+
+            MaterialToast.fireToast("Selected macro function : " + macroList.getSelectedValue().name());
+            
+            macroTextArea.setText(macroList.getSelectedValue().commands());
+            
+        });
+        
         macroModalDoneButton.addClickHandler(event -> {
             if (activeCell != null) {
-
-//                String result = "";
-//                try {
-//                    activeCell.setContentByMacro(macroTextArea.getText());
-//                    Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
-//                    if (extensionCond != null) {
-//
-//                        Conditional cond = ConditionalFormattingExtension.containsCondition((CellImpl) activeCell);
-//
-//                        if (cond != null) {
-//                            boolean flag = ConditionalFormattingExtension.setOperation((CellImpl) activeCell, cond.getCondOperator(), cond.getCondValue());
-//                            MaterialToast.fireToast("Update Cell. Conditional this " + activeCell.getAddress().toString() + " " + cond.getCondOperator() + " " + cond.getCondValue().toString() + " is " + flag);
-//
-//                        }
-//                    }
-//                } catch (FormulaCompilationException e) {
-//                    result = e.getMessage();
-//                } finally {
-//                    customTable.getView().setRedraw(true);
-//                    customTable.getView().refresh();
-//
-//                    this.setActiveCell(activeCell);
-//                }
                 
-                Macro macroAux = macroList.getSelectedValue();
-
-                macroAux.addCommand(macroTextArea.getText());
-
-                ExpressionCompiler compiler = MacroCompilerManager.getInstance().getCompiler(macroAux.language().getName());
-
+                String result = "";
+                
+//                Macro macroAux = macroList.getSelectedValue();
+//                macroAux.addCommand(macroTextArea.getText());
+//                
+//                ExpressionCompiler compiler = MacroCompilerManager.getInstance().getCompiler("MacroExcel");
+                
                 try {
-                    Expression expression = compiler.compile(activeCell, macroAux.commands());
+                    
+//                    Expression expression = compiler.compile(activeCell, macroAux.commands());
+                    
+//                    Value value = expression.evaluate();
+                    
+                    activeCell.setContentByMacro(macroTextArea.getText());
+                    
+//                    activeCell.setContent(value.toString());
+                    
+                    MaterialToast.fireToast("Result of Macro function : " + macroTextArea.getText().lastIndexOf("/n") + 1);
+                    
+                    Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
+                    if (extensionCond != null) {
 
-                    Value value = expression.evaluate();
+                        Conditional cond = ConditionalFormattingExtension.containsCondition((CellImpl) activeCell);
 
-                    activeCell.setContent(value.toString());
+                        if (cond != null) {
+                            boolean flag = ConditionalFormattingExtension.setOperation((CellImpl) activeCell, cond.getCondOperator(), cond.getCondValue());
+                            MaterialToast.fireToast("Update Cell. Conditional this " + activeCell.getAddress().toString() + " " + cond.getCondOperator() + " " + cond.getCondValue().toString() + " is " + flag);
+                        }
+                    }
+                } catch (FormulaCompilationException e) {
+                    MaterialToast.fireToast(e.getMessage());
+//                } catch (IllegalValueTypeException ex) {
+//                    Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+//                    MaterialToast.fireToast(ex.getMessage());
+                } finally {
                     customTable.getView().setRedraw(true);
                     customTable.getView().refresh();
 
-                    MaterialToast.fireToast("Result of Macro : " + value.toString());
-
-                } catch (FormulaCompilationException | IllegalValueTypeException ex) {
-                    MaterialToast.fireToast(ex.getMessage());
+                    this.setActiveCell(activeCell);
                 }
+                
             }
-            macroModal.close();
+
+        });
+        
+        saveMacro.addClickHandler(event -> {
+
+            if (saveMacroName.getText().isEmpty()) {
+                MaterialToast.fireToast("Macro function name is empty!");
+            } else {
+                if (macroTextArea.getText().isEmpty()) {
+                    MaterialToast.fireToast("There are no commands to add to the macro function!");
+                } else {
+                    Macro macro = new Macro(saveMacroName.getText());
+                    macro.addCommand(macroTextArea.getText());
+
+                    boolean flag = false;
+
+                    for (Macro m : Settings.getInstance().getWorkbook().macros()) {
+                        if (m.name().equalsIgnoreCase(saveMacroName.getText())) {
+                            flag = true;
+                        }
+                    }
+
+                    if (!flag) {
+                        if (Settings.getInstance().getWorkbook().addMacro(macro)) {
+                            MaterialToast.fireToast("Macro function " + macro.name() + " added to the workbook.");
+                            
+                            macroList.addItem(macro, macro.toString());
+                            
+                            saveMacroName.clear();
+                            macroTextArea.clear();
+                        }
+                    } else {
+                        
+                        MaterialToast.fireToast("Could not add macro function: name already exists!");
+                    }
+                }
+                
+            }
+        });
+        
+        removeMacro.addClickHandler(event -> {
+            String macroName = saveMacroName.getText();
+
+            if (Settings.getInstance().getWorkbook().removeMacro(macroName)) {
+                MaterialToast.fireToast("Macro Function " + macroName + " was removed with success.");
+            } else {
+                MaterialToast.fireToast("Could not find/delete macro function " + macroName + "!");
+            }
         });
 
         searchAndReplaceButton.addClickHandler(event -> {
