@@ -25,7 +25,7 @@ public interface ExportService extends RemoteService {
 
     boolean exportStyledWorkbookPDF(List<CellStyleDTO> list, WorkbookDTO workbookDTO, String style, String color, int range);
 
-    boolean exportCompleteWorkbookPDF(List<CellStyleDTO> list, WorkbookDTO workbookDTO, String style, String color, int range);
+    boolean exportCompleteWorkbookPDF(List<Object> listOptions, List<CellStyleDTO> list, WorkbookDTO workbookDTO, String style, String color, int range);
 
 //    String[][] exportPartOfSpreadsheet(Spreadsheet spreadsheet, int beginColumn, int beginRow, int endColumn, int endRow);
 }

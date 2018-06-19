@@ -205,18 +205,25 @@
                             <m:MaterialRadioButton ui:field="dashed2" formValue="dashed" name="color" text="Dashed" type="GAP"  addStyleNames="{style.label} {style.radio_btn}"/>
                         </m:MaterialColumn>
                         <m:MaterialColumn grid="s12">
-                            <m:MaterialLink  text="Line Size" textColor="BLACK" iconType="VIEW_DAY" iconPosition="LEFT" addStyleNames="{style.label}" />
-                            <m:MaterialRange ui:field="rangeSetValue2" min="1" max="10" value="1"  addStyleNames="{style.label} {style.range}"/>
-                        </m:MaterialColumn>
-                        <m:MaterialColumn grid="s12">
                             <m:MaterialLink  text="Line Color" textColor="BLACK" iconType="COLOR_LENS" addStyleNames="{style.label}" iconPosition="LEFT"/>
                             <m:MaterialInput ui:field="color_line2" type="COLOR" addStyleNames="{style.input} {style.label}"/>
                         </m:MaterialColumn >
+                        <m:MaterialColumn grid="s12">
+                            <m:MaterialLink  text="Line Size" textColor="BLACK" iconType="VIEW_DAY" iconPosition="LEFT" addStyleNames="{style.label}" />
+                            <m:MaterialRange ui:field="rangeSetValue2" min="1" max="10" value="1"  addStyleNames="{style.label} {style.range}"/>
+                        </m:MaterialColumn>
                         
                         <!-- Novas implementações -->
                         <m:MaterialColumn grid="s12">
-                            <m:MaterialLink  text="ADD ELEMENTS" textColor="BLACK" iconType="LINE_STYLE" iconPosition="LEFT" addStyleNames="{style.label}" />
+                            <m:MaterialLink  text="ADD ELEMENTS" textColor="BLACK" iconType="ADD" iconPosition="LEFT" addStyleNames="{style.label}" />
                             <combobox:MaterialComboBox closeOnSelect="false" multiple="true" ui:field="addElementsSelect" placeholder="Elements">
+                                <m:html.Option text="Formulas"></m:html.Option>
+                                <m:html.Option enabled="false" text="Charts (disable)"></m:html.Option>
+                                <m:html.Option enabled="false" text="Comments (not implementation)"></m:html.Option>
+                                <m:html.Option enabled="false" text="Temporary Variables (not implementation)"></m:html.Option>
+                                <m:html.Option enabled="false" text="Global Variables (disable) "></m:html.Option>
+                                <m:html.Option enabled="false" text="Macros (disable)"></m:html.Option>
+                                <m:html.Option enabled="false" text="Images (disable)"></m:html.Option>
                             </combobox:MaterialComboBox>
                         </m:MaterialColumn>
                         <m:MaterialColumn textAlign="CENTER" grid="s12">
@@ -226,7 +233,7 @@
                 </m:MaterialCard>                 
             </m:MaterialModalContent>
             <m:MaterialModalFooter addStyleNames="{style.footer}">
-                <m:MaterialButton ui:field="close_complete" text="Close PDF Styler" iconType="CLOSE" type="FLAT" addStyleNames="{style.footer_btn}"/>
+                <m:MaterialButton ui:field="close_complete" text="Close Complete PDF" iconType="CLOSE" type="FLAT" addStyleNames="{style.footer_btn}"/>
             </m:MaterialModalFooter>
         </m:MaterialModal>
         

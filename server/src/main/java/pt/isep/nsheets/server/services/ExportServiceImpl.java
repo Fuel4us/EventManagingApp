@@ -2,6 +2,7 @@ package pt.isep.nsheets.server.services;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import java.util.List;
+import pt.isep.nsheets.server.lapr4.blue.n1150372.s3.application.CompletePDFController;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1140317.ExportXML.application.ExportXMLController;
 
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1150503.ExportPDF.ExportPdfController;
@@ -52,8 +53,8 @@ public class ExportServiceImpl extends RemoteServiceServlet implements ExportSer
     }
     
     @Override
-    public boolean exportCompleteWorkbookPDF(List<CellStyleDTO> list, WorkbookDTO workbookDTO, String style,String color, int range) {
-        return new ExportStyledPDFController().buildPDF(list, workbookDTO, style,color, range); //falta acrescentar merdar e alterar
+    public boolean exportCompleteWorkbookPDF(List<Object> listOptions, List<CellStyleDTO> list, WorkbookDTO workbookDTO, String style,String color, int range) {
+        return new CompletePDFController().buildPDF(listOptions, list, workbookDTO, style,color, range);
     }
     
     
