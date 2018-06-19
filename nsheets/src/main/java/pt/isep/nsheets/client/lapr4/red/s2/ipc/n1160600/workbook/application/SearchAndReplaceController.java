@@ -2,11 +2,17 @@ package pt.isep.nsheets.client.lapr4.red.s2.ipc.n1160600.workbook.application;
 
 import java.util.ArrayList;
 import java.util.List;
-import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.application.WorkbookDescriptionService;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Spreadsheet;
-import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
+import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
+import pt.isep.nsheets.shared.services.WorkbooksService;
+import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
 
 public class SearchAndReplaceController {
 
@@ -14,32 +20,35 @@ public class SearchAndReplaceController {
     private List<Cell> cellList = new ArrayList<>();
     private Spreadsheet spreadsheet;
     private String expression;
-    private Iterable<Workbook> workbookList;
+
     
 
     public SearchAndReplaceController(Spreadsheet spreadsheet) {
      this.spreadsheet = spreadsheet;   
     }
-    
-    /*public void searchAll(String expression, String username) {
-        int cont=0, numSheets=0;
-        workbookList=workbookService.allWorkbooksFromUser(username);
+
+    public void searchAll(String expression, String userNickname) {
         cellList.clear();
-        for(Workbook w: workbookList){
-            numSheets=w.getSpreadsheetCount();
-            for(Spreadsheet spread: w.getSpreadSheets()){
-                for (int c = 0; c < spread.getColumnCount(); c++) {
-                    for (int r = 0; r < spread.getRowCount(); r++) {
-                        Cell cell = spread.getCell(c, r);
-                        if (cell.getContent().contains(expression)) {
-                            cellList.add(cell);
-                        }
-                    }
-                }
+        ArrayList<WorkbookDTO> workbooksList = new ArrayList<WorkbookDTO>();
+
+        WorkbooksServiceAsync workbookServiceAsync = GWT.create(WorkbooksService.class);
+        AsyncCallback<ArrayList<WorkbookDTO>> callback = new AsyncCallback<ArrayList<WorkbookDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                MaterialToast.fireToast("Error getting users! " + caught.getMessage());
             }
-        }        
-        this.expression = expression;
-    }*/
+
+            @Override
+            public void onSuccess(ArrayList<WorkbookDTO> result) {
+                for (WorkbookDTO w : result) {
+                    workbooksList.add(w);
+                }
+
+            }
+        };
+
+        workbookServiceAsync.listWorkbooksPerUser(userNickname, callback);
+    }
 
     public void setSpreadsheet(Spreadsheet spreadsheet) {
         this.spreadsheet = spreadsheet;

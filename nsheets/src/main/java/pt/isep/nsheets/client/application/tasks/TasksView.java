@@ -79,7 +79,7 @@ public class TasksView extends ViewImpl implements TasksPresenter.MyView {
         card.add(cardContent);
 
         card.addClickHandler(e -> {
-            TasksServiceAsync tasksSvc = GWT.create(TasksService.class);
+           /* TasksServiceAsync tasksSvc = GWT.create(TasksService.class);
 
             // Set up the callback object.
             AsyncCallback<TasksDTO> callback = new AsyncCallback<TasksDTO>() {
@@ -101,7 +101,7 @@ public class TasksView extends ViewImpl implements TasksPresenter.MyView {
                 }
             };
 
-            tasksSvc.findByName(task.getName(), callback);
+            //tasksSvc.findByName(task.getName(), callback);*/
         });
 
         return card;

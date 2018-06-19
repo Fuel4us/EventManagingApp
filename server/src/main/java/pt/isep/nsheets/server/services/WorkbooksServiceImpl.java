@@ -60,7 +60,7 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
     }
 
     @Override
-    public Iterable<WorkbookDTO> listWorkbooksPerUser(String user) {
+    public ArrayList<WorkbookDTO> listWorkbooksPerUser(String user) {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
 

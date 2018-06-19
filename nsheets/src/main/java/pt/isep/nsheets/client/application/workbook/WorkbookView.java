@@ -322,12 +322,11 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         customTable.getView().setRedraw(true);
         customTable.getView().refresh();
     }
-/*
+
     private void openSearchAndReplaceWindow(CurrentUser currentUser) {
-        //String usernameTemp=currentUser.getUser().getNickname();
-        //String expression = searchBox.getText();
-        //SearchAndReplaceController controller = new SearchAndReplaceController(this.customTable.getRow(0).getData().sheet);
-        //controller.searchAll(expression,usernameTemp);
+        String expression = searchBox.getText();
+        SearchAndReplaceController controller = new SearchAndReplaceController(this.customTable.getRow(0).getData().sheet);
+        controller.searchAll(expression, currentUser.getUser().getNickname());
         replaceButton.setEnabled(true);
         replaceWindowFirstBox.setEnabled(true);
         searchAndReplaceWindow.open();
@@ -375,7 +374,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             }
         });
     }
-*/
+
     interface Binder extends UiBinder<Widget, WorkbookView> {
     }
 
@@ -457,7 +456,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     }
 
     @Inject
-    WorkbookView(Binder uiBinder,  CurrentUser currentUser) {
+    WorkbookView(Binder uiBinder, CurrentUser currentUser) {
 
         initWidget(uiBinder.createAndBindUi(this));
 
@@ -783,7 +782,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         });
 
         searchAndReplaceButton.addClickHandler(event -> {
-            //openSearchAndReplaceWindow(currentUser);
+            openSearchAndReplaceWindow(currentUser);
         });
     }
 

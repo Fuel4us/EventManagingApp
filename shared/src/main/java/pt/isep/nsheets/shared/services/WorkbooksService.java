@@ -10,8 +10,6 @@ public interface WorkbooksService extends RemoteService {
     
 	ArrayList<WorkbookDTO> getWorkbooks();
         
-        Iterable<WorkbookDTO> listWorkbooksPerUser(String user);
-        
 	WorkbookDTO addWorkbookDescription(WorkbookDTO wdDto) throws DataException;
         
         WorkbookDTO findByName(String name) throws DataException;
@@ -23,4 +21,6 @@ public interface WorkbooksService extends RemoteService {
         ArrayList<WorkbookDTO> searchWorkbooks(String name, boolean state);
         
         void changeState(boolean state, WorkbookDTO wdto);
+
+    ArrayList<WorkbookDTO> listWorkbooksPerUser(String user);
 }
