@@ -1,7 +1,9 @@
 package pt.isep.nsheets.shared.services;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -14,6 +16,7 @@ public class NoteDTO implements Serializable {
     private String textNote;
     private Date dateNote;
     private Long id;
+    private List<Boolean> activeCheckBox;
     
     public NoteDTO(String titleNote, String textNote) throws IllegalArgumentException {
         if (titleNote == null) {
@@ -28,6 +31,7 @@ public class NoteDTO implements Serializable {
         
         this.dateNote = new Date();
         this.id = null;
+        activeCheckBox = new ArrayList<>();
     }
     
     public NoteDTO(String titleNote, String textNote, Long id) throws IllegalArgumentException {
@@ -43,6 +47,7 @@ public class NoteDTO implements Serializable {
         
         this.dateNote = new Date();
         this.id = id;
+        activeCheckBox = new ArrayList<>();
     }
 
     /**
@@ -76,6 +81,10 @@ public class NoteDTO implements Serializable {
         return this.dateNote;
     }
 
+    public List<Boolean> getActiveCheckBox() {
+        return activeCheckBox;
+    }
+
     /**
      * It updates the date of the Note automatically
      * @param titleNote
@@ -92,6 +101,10 @@ public class NoteDTO implements Serializable {
     public void changeTextNote(String textNote) {
         this.textNote = textNote;
         this.dateNote = new Date();
+    }
+    
+    public void setCheckBoxValue(int i,Boolean value){
+        activeCheckBox.set(i, value);
     }
     
     public NoteDTO clone(){

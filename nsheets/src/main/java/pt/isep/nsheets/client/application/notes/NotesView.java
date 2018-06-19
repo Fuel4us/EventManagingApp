@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -46,9 +48,8 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
     }
 
     //List<MaterialCard> lstCardNotes = new ArrayList<>();
-    
     NoteDTO note;
-    
+
     @UiField
     HTMLPanel htmlPanel;
 
@@ -166,7 +167,7 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
 
     private MaterialCard createCard(NoteDTO noteDTO) {
         note = noteDTO;
-        
+
         //Buttons
         MaterialButton checkBtn, editBtn, removeBtn, createListNote, createNote;
         checkBtn = new MaterialButton("Edit", IconType.CHECK, ButtonType.FLOATING);
@@ -234,7 +235,7 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
             cardTextArea.setReadOnly(true);
             checkBtn.setVisible(false);
             cardHistory.setText(note.getDateNote().toString());
-            
+
             //Save the changes in the DB
             NotesServiceAsync notesSvc = GWT.create(NotesService.class);
 
@@ -251,11 +252,11 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
                     note = result;
                 }
             };
-            
+
             NoteDTO nDTO = note.clone();
             nDTO.changeTitleNote(cardTitle.getText());
             nDTO.changeTextNote(cardTextArea.getText());
-            notesSvc.saveNote(nDTO,nDTO.getID(), callback);
+            notesSvc.saveNote(nDTO, nDTO.getID(), callback);
         });
 
         //Edit button
@@ -284,10 +285,25 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
 
             String lines[] = note.getTextNote().split("\\r?\\n");
 
+            List<Boolean> activeCB = note.getActiveCheckBox();
+
             for (int i = 0; i < lines.length; i++) {
                 MaterialRow mRow = new MaterialRow();
 
                 MaterialCheckBox mCB = new MaterialCheckBox();
+//                if (activeCB.get(i)) {
+//                    mCB.setValue(Boolean.TRUE);
+//                }
+                
+                int aux = i;
+                
+//                mCB.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+//                    @Override
+//                    public void onValueChange(ValueChangeEvent<Boolean> event) {
+//                        note.setCheckBoxValue(aux, event.getValue());
+//                    }
+//                });
+
                 MaterialLabel mL = new MaterialLabel();
                 mL.setText(lines[i]);
 
@@ -338,7 +354,7 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
         removeBtn.addClickHandler(e -> {
             MaterialToast.fireToast("The remove button was clicked!");
             card.setVisible(false);
-            
+
             //Remove the Note from the DB
             NotesServiceAsync notesSvc = GWT.create(NotesService.class);
 
@@ -354,7 +370,7 @@ class NotesView extends ViewImpl implements NotesPresenter.MyView {
                     MaterialToast.fireToast("Note Deleted");
                 }
             };
-            
+
             NoteDTO nDTO = note.clone();
             notesSvc.deleteNote(nDTO.getID(), callback);
         });

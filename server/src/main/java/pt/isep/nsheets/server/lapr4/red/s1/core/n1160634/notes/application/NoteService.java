@@ -37,7 +37,6 @@ public class NoteService {
         final NoteRepository noteRepository = PersistenceContext.repositories().notes();
 
         Note note = Note.fromDTO(noteDTO);
-        System.out.println("Note: " + note.getTextNote());
         noteRepository.save(note);
 
         return note;
