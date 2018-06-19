@@ -5,15 +5,14 @@
  */
 package pt.isep.nsheets.shared.services;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-
+import java.io.Serializable;
 
 /**
  *
  * @author Pedro Rodrigues - (1140572)
  */
 @SuppressWarnings("serial")
-public class TasksDTO implements IsSerializable{
+public class TasksDTO implements Serializable {
 
     /**
      * Name of the task
@@ -28,12 +27,12 @@ public class TasksDTO implements IsSerializable{
     /**
      * Priority level of the task
      */
-    public int priorityLevel;
+    public String priorityLevel;
 
     /**
      * Progress of the task
      */
-    public int progress;
+    public String progress;
 
     /**
      * Indicates if a task is completed
@@ -41,50 +40,16 @@ public class TasksDTO implements IsSerializable{
     public boolean taskCompleted;
 
     public TasksDTO() {
-
     }
 
-    public TasksDTO(String name, String description, int priorityLevel, int progress, boolean taskCompleted) {
+    ;
+
+    public TasksDTO(String name, String description, String priorityLevel, String progress, boolean taskCompleted) {
         this.name = name;
         this.description = description;
         this.priorityLevel = priorityLevel;
         this.progress = progress;
         this.taskCompleted = taskCompleted;
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @return the description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * @return the priorityLevel
-     */
-    public int getPriorityLevel() {
-        return priorityLevel;
-    }
-
-    /**
-     * @return the progress
-     */
-    public int getProgress() {
-        return progress;
-    }
-
-    /**
-     * @return the taskCompleted
-     */
-    public boolean isTaskCompleted() {
-        return taskCompleted;
     }
 
 }

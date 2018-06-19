@@ -16,6 +16,7 @@ import pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.application.Add
 import pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.application.DeleteTaskController;
 import pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.application.EditTaskController;
 import pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.application.ListTasksController;
+import pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.application.SearchTasksController;
 import pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.domain.Tasks;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceSettings;
@@ -86,7 +87,14 @@ public class TasksServiceImpl extends RemoteServiceServlet implements TasksServi
 
     @Override
     public Iterable<TasksDTO> searchTasks(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PersistenceContext.setSettings(this.getPersistenceSettings());
+        SearchTasksController ctrl = new SearchTasksController();
+        ArrayList<TasksDTO> tasksDTO = new ArrayList<>();
+        Iterable<Tasks> tasks = ctrl.getTasks(name);
+
+        tasks.forEach(aux -> tasksDTO.add(aux.toDTO()));
+
+        return tasksDTO;
     }
 
     @Override
@@ -98,6 +106,22 @@ public class TasksServiceImpl extends RemoteServiceServlet implements TasksServi
         Tasks task = null;
         try {
             task = ctrl.findByName(name);
+        } catch (DataConcurrencyException | DataIntegrityViolationException | DataException ex) {
+            Logger.getLogger(TasksServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return task.toDTO();
+    }
+
+    @Override
+    public TasksDTO editTask(TasksDTO tasksDTO) {
+        PersistenceContext.setSettings(this.getPersistenceSettings());
+
+        EditTaskController ctrl = new EditTaskController();
+        Tasks task = null;
+
+        try {
+            task = ctrl.findByName(tasksDTO.name);
+            ctrl.editTask(tasksDTO);
         } catch (DataConcurrencyException | DataIntegrityViolationException | DataException ex) {
             Logger.getLogger(TasksServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }

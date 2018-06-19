@@ -40,13 +40,15 @@ public class TasksCallerService {
     public Tasks addTask(TasksDTO tasksDTO) throws DataConcurrencyException, DataIntegrityViolationException {
         final TasksRepository tasksRepository = PersistenceContext.repositories().tasks();
 
-        Tasks task = new Tasks(tasksDTO.getName(), tasksDTO.getDescription(), tasksDTO.getPriorityLevel(), tasksDTO.getProgress(), tasksDTO.isTaskCompleted());
+        Tasks task = Tasks.fromDTO(tasksDTO);
         tasksRepository.save(task);
         return task;
     }
 
     public Iterable<Tasks> searchTasks(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final TasksRepository tasksRepository = PersistenceContext.repositories().tasks();
+        
+        return tasksRepository.findByAnyAttribute(name);
     }
-
+    
 }

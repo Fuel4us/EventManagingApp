@@ -23,4 +23,6 @@ public interface TasksServiceAsync {
     void addTask(TasksDTO tasksDTO, AsyncCallback<TasksDTO> callback);
 
     void deleteTask(TasksDTO tasksDTO, AsyncCallback<TasksDTO> callback);
+
+    void editTask(TasksDTO tasksDTO, AsyncCallback<TasksDTO> callback);
 }

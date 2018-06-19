@@ -18,6 +18,8 @@ import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import gwt.material.design.client.ui.MaterialToast;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
 import pt.isep.nsheets.client.application.menu.MenuView;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
@@ -51,9 +53,9 @@ public class TasksPresenter extends Presenter<TasksPresenter.MyView, TasksPresen
 
         String changeDescription();
 
-        int changePriority();
+        String changePriority();
 
-        int changeProgress();
+        String changeProgress();
 
         void openOptionModal();
 
@@ -77,6 +79,8 @@ public class TasksPresenter extends Presenter<TasksPresenter.MyView, TasksPresen
 
         void cancel2ClickHandler(ClickHandler ch);
 
+        TasksDTO focusedTasksDTO();
+
     }
 
     @NameToken(NameTokens.tasks)
@@ -90,8 +94,11 @@ public class TasksPresenter extends Presenter<TasksPresenter.MyView, TasksPresen
 
         this.view = view;
 
-        this.view.saveClickHandler(e -> {
+        this.view.addClickHandler(e -> {
             this.view.openNewTaskModal();
+        });
+
+        this.view.saveClickHandler(e -> {
             TasksServiceAsync tasksAsync = GWT.create(TasksService.class);
             String userName = MenuView.getUsername().toString();
             //Set up the callback object.
@@ -104,18 +111,102 @@ public class TasksPresenter extends Presenter<TasksPresenter.MyView, TasksPresen
                 @Override
                 public void onSuccess(TasksDTO result) {
                     MaterialToast.fireToast("New Task Created", "rounded");
-
                     refreshView();
                 }
             };
 
-            TasksDTO taskDTO = new TasksDTO(this.view.name(), this.view.description(), Integer.parseInt(this.view.priority()), 0, false);
-            tasksAsync.addTask(taskDTO, callback);
+            if (!this.view.name().isEmpty() && !this.view.description().isEmpty() && !this.view.priority().isEmpty()) {
+                TasksDTO taskDTO = new TasksDTO(this.view.name(), this.view.description(), this.view.priority(), "0", false);
+                tasksAsync.addTask(taskDTO, callback);
+                this.view.closeNewTaskModal();
+            }
+        });
 
+        this.view.cancelClickHandler(e -> {
+            this.view.closeOptionModal();
+        });
+
+        this.view.cancel2ClickHandler(e -> {
             this.view.closeNewTaskModal();
         });
-        
-       
+
+        this.view.saveChangesClickHandler(e -> {
+            TasksServiceAsync tasksAsync = GWT.create(TasksService.class);
+            String userName = MenuView.getUsername().toString();
+            //Set up the callback object.
+            AsyncCallback<TasksDTO> callback = new AsyncCallback<TasksDTO>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Error! " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(TasksDTO result) {
+                    MaterialToast.fireToast("New Task Created", "rounded");
+                    refreshView();
+                }
+            };
+            if (this.view.changeProgress().equals("100")) {
+                TasksDTO taskDTO = new TasksDTO(this.view.rename(), this.view.changeDescription(), this.view.changePriority(), this.view.changeProgress(), true);
+                tasksAsync.editTask(taskDTO, callback);
+            } else {
+                TasksDTO taskDTO = new TasksDTO(this.view.rename(), this.view.changeDescription(), this.view.changePriority(), this.view.changeProgress(), false);
+                tasksAsync.editTask(taskDTO, callback);
+            }
+            this.view.closeNewTaskModal();
+        });
+
+        this.view.deleteClickHandler(e -> {
+            TasksServiceAsync taskAsync = GWT.create(TasksService.class);
+            TasksDTO taskDTO = this.view.focusedTasksDTO();
+            // Set up the callback object.
+            AsyncCallback<TasksDTO> callback = new AsyncCallback<TasksDTO>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Task cannot be deleted!");
+                }
+
+                @Override
+                public void onSuccess(TasksDTO result) {
+                    try {
+                        MaterialToast.fireToast("Task deleted successfully!");
+                        refreshView();
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(TasksView.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            };
+            taskAsync.deleteTask(taskDTO, callback);
+            this.view.closeOptionModal();
+        });
+
+        this.view.searchClickHandler(e -> {
+            TasksServiceAsync workbooksSvc = GWT.create(TasksService.class);
+            String tasksSearch = this.view.search();
+
+            // Set up the callback object.
+            AsyncCallback<ArrayList<TasksDTO>> callback = new AsyncCallback<ArrayList<TasksDTO>>() {
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    MaterialToast.fireToast("Workbooks with that name not found!");
+                }
+
+                @Override
+                public void onSuccess(ArrayList<TasksDTO> result) {
+                    try {
+                        MaterialToast.fireToast("Workbooks filtered by name!");
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(TasksView.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            };
+            if (tasksSearch.equals("all")) {
+                refreshView();
+            } else {
+                refreshViewAfterSearch(tasksSearch);
+            }
+        });
     }
 
     private void refreshView() {
@@ -135,6 +226,26 @@ public class TasksPresenter extends Presenter<TasksPresenter.MyView, TasksPresen
         };
 
         tasksAsync.listTasksNotCompleted(MenuView.getUsername().toString(), callback);
+    }
+
+    public void refreshViewAfterSearch(String name) {
+        TasksServiceAsync tasksAsync = GWT.create(TasksService.class);
+
+        // Set up the callback object.
+        AsyncCallback<ArrayList<TasksDTO>> callback = new AsyncCallback<ArrayList<TasksDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                MaterialToast.fireToast("error in searching");
+            }
+
+            @Override
+            public void onSuccess(ArrayList<TasksDTO> result) {
+                MaterialToast.fireToast("Workbooks searched!");
+                view.setContents(result);
+            }
+        };
+        tasksAsync.searchTasks(name, callback);
+
     }
 
     @Override

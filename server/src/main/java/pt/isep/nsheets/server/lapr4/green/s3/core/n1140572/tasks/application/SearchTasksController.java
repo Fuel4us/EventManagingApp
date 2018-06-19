@@ -20,8 +20,8 @@ public class SearchTasksController implements Controller {
         return new UserService().findByName(name);
     }
 
-    public Iterable<Tasks> getTasks() {
-        return null;
+    public Iterable<Tasks> getTasks(String name) {
+        return new TasksCallerService().searchTasks(name);
     }
 
 }

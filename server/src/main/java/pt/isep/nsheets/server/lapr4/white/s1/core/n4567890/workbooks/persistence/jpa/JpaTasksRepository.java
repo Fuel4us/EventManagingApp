@@ -36,8 +36,17 @@ public class JpaTasksRepository extends NSheetsJpaRepositoryBase<Tasks, Long> im
                 .setParameter("taskid", task.id())
                 .executeUpdate();
         entityManager().getTransaction().commit();
-        
+
         return task;
+    }
+
+    @Override
+    public Iterable<Tasks> findByAnyAttribute(String name) {
+        final Map<String, Object> params = new HashMap<>();
+        params.put("name", name);
+        
+        return match("e.name=:name or e.description=:name", params);
+
     }
 
 }

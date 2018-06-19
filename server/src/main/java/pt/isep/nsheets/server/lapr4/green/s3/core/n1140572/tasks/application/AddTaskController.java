@@ -7,6 +7,7 @@ package pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.application;
 
 import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
+import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.domain.Tasks;
 import pt.isep.nsheets.shared.services.TasksDTO;
 
@@ -17,6 +18,7 @@ import pt.isep.nsheets.shared.services.TasksDTO;
 public class AddTaskController {
 
     public Tasks addTask(TasksDTO dto) throws DataConcurrencyException, DataIntegrityViolationException {
+        MaterialToast.fireToast("ESTÁ NO CONTROLLER!!!");
         return new TasksCallerService().addTask(dto);
     }
 }

@@ -27,5 +27,7 @@ public interface TasksRepository extends Repository<Tasks, Long> {
      * @return 
      */
     Tasks deleteTask(Tasks task);
+    
+    Iterable <Tasks> findByAnyAttribute(String name);
 
 }

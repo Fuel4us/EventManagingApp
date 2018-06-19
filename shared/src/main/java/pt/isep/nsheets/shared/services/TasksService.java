@@ -24,5 +24,7 @@ public interface TasksService extends RemoteService {
     TasksDTO addTask(TasksDTO tasksDTO);
 
     TasksDTO deleteTask(TasksDTO tasksDTO);
+    
+    TasksDTO editTask(TasksDTO tasksDTO);
 
 }

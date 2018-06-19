@@ -77,8 +77,8 @@ public class TasksView extends ViewImpl implements TasksPresenter.MyView {
         MaterialLabel label2 = new MaterialLabel();
         MaterialLabel label3 = new MaterialLabel();
         label.setText(taskDTO.description);
-        label2.setText(taskDTO.priorityLevel + "");
-        label3.setText(taskDTO.progress + "");
+        label2.setText(taskDTO.priorityLevel);
+        label3.setText(taskDTO.progress);
 
         cardContent.add(cardTitle);
         cardContent.add(label);
@@ -102,15 +102,15 @@ public class TasksView extends ViewImpl implements TasksPresenter.MyView {
                     MaterialToast.fireToast(result.name);
                     renameTask.setText(result.name);
                     changeDescriptionTask.setText(result.description);
-                    changePriorityTask.setText(Integer.toString(result.priorityLevel));
-                    changeProgressTask.setText(Integer.toString(result.progress));
-                    openOptionModal();
+                    changePriorityTask.setText(result.priorityLevel);
+                    changeProgressTask.setText(result.progress);
 
                     tasksDTO = result;
                 }
             };
-            
+
             tasksSvc.findByName(taskDTO.name, callback);
+            openOptionModal();
         });
 
         return card;
@@ -161,13 +161,13 @@ public class TasksView extends ViewImpl implements TasksPresenter.MyView {
     }
 
     @Override
-    public int changePriority() {
-        return Integer.parseInt(this.changePriorityTask.getText());
+    public String changePriority() {
+        return this.changePriorityTask.getText();
     }
 
     @Override
-    public int changeProgress() {
-        return Integer.parseInt(this.changeProgressTask.getText());
+    public String changeProgress() {
+        return this.changeProgressTask.getText();
     }
 
     @Override
@@ -238,5 +238,10 @@ public class TasksView extends ViewImpl implements TasksPresenter.MyView {
     @Override
     public void cancel2ClickHandler(ClickHandler ch) {
         this.cancel2Button.addClickHandler(ch);
+    }
+
+    @Override
+    public TasksDTO focusedTasksDTO() {
+        return tasksDTO;
     }
 }
