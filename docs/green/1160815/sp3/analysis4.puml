@@ -1,0 +1,33 @@
+@startuml  analysis4.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+User -> Browser : navigate to Note page 
+Browser ->> Server : getAllNotes()
+
+database Database 
+
+Server -> Database : fetch
+
+Server -->> Browser : return
+
+Browser -> Browser : display notes
+
+
+
+User -> Browser : clicks in delete button of a note
+
+Browser -> Server : deleteNote()
+
+Server -> Database : remove()
+
+Server -->> Browser : return()
+
+Browser -> Browser : display notes
+
+@enduml

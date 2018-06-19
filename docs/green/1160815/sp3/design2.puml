@@ -1,0 +1,60 @@
+@startuml  design1.png
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+boundary NoteView
+control NotePresenter
+control NotesService
+control EditNoteController
+control NoteService
+entity NoteRepository
+database Database
+
+box "NSheets Client"
+participant NoteView
+participant NotePresenter 
+end box
+
+box "Server"
+participant NotesService
+participant EditNoteController
+participant NoteService
+participant NoteRepository
+end box
+
+box "Database"
+participant Database
+end box
+
+User -> NoteView : onReveal() / navigate to page 
+NoteView -> NotePresenter : getAllNotes()
+NotePresenter ->> NotesService : getAllNotes()
+NotesService -> EditNoteController : listNotes()
+EditNoteController -> NoteService : allNotes()
+NoteService -> NoteRepository : findAll()
+NoteRepository -> Database : fetch
+NoteRepository -->> NoteService : return
+NoteService -->> EditNoteController : return
+EditNoteController -->> NotesService : return
+NotesService ->> NotePresenter : onSuccess() 
+NotePresenter -> NoteView : setContents()
+
+User -> NoteView : createListNote
+NoteView -> NotePresenter : getNote()
+NotePresenter ->> NotesService : getNote()
+NotesService -> EditNoteController : getnote()
+EditNoteController -> NoteService : getNote()
+NoteService -> NoteRepository : getNote()
+NoteRepository -> Database : fetch
+NoteRepository -->> NoteService : return
+NoteService -->> EditNoteController : return
+EditNoteController -->> NotesService : return
+NotesService ->> NotePresenter : onSuccess() 
+NotePresenter -> NoteView : setContents()
+NoteView -> NoteView : convert()
+
+@enduml

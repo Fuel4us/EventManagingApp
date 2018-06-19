@@ -21,7 +21,7 @@ public class AddNoteController implements Controller {
      * @throws DataIntegrityViolationException
      */
     public Note addNote(NoteDTO noteDTO) throws DataConcurrencyException, DataIntegrityViolationException {
-
+        
         return new NoteService().addNote(noteDTO);
     }
 }

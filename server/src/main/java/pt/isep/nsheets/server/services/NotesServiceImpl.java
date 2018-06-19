@@ -7,6 +7,10 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import pt.isep.nsheets.server.lapr4.green.s3.core.n1160815.notes.application.DeleteNoteController;
+import pt.isep.nsheets.server.lapr4.green.s3.core.n1160815.notes.application.SaveNoteController;
 import pt.isep.nsheets.shared.services.NotesService;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.application.AddNoteController;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.application.ListNoteController;
@@ -70,6 +74,40 @@ public class NotesServiceImpl extends RemoteServiceServlet implements NotesServi
         }
         
         return note.toDTO();
+    }
+    
+    @Override
+    public NoteDTO saveNote(NoteDTO noteDTO, Long id){
+        // Setup the persistence settings
+        PersistenceContext.setSettings(this.getPersistenceSettings());
+        
+        SaveNoteController ctrl = new SaveNoteController();
+        
+        Note note = null;        
+        
+        try {
+            note = ctrl.saveNote(noteDTO,id);
+        } catch (DataConcurrencyException | DataIntegrityViolationException ex) {
+            Logger.getLogger(NotesServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return note.toDTO();
+    }
+
+    @Override
+    public Void deleteNote(Long id) {
+        // Setup the persistence settings
+        PersistenceContext.setSettings(this.getPersistenceSettings());
+        
+        DeleteNoteController ctrl = new DeleteNoteController();
+        
+        try {
+            ctrl.deleteNote(id);
+        } catch (DataConcurrencyException | DataIntegrityViolationException ex) {
+            Logger.getLogger(NotesServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
     }
 
 }
