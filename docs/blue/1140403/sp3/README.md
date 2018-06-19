@@ -45,6 +45,11 @@ Use case diagram:
 
 ![UseCase](UseCase.png)
 
+SSD's:
+
+![SSDUS1.jpg](SSDUS1.jpg)
+
+![SSDUS2.jpg](SSDUS2.jpg)
 
 **System Sequence Diagrams**
 
