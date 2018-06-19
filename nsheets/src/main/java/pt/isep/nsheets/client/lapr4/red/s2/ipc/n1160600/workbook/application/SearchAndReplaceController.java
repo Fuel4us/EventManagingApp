@@ -2,9 +2,17 @@ package pt.isep.nsheets.client.lapr4.red.s2.ipc.n1160600.workbook.application;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
+import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
+import pt.isep.nsheets.shared.services.WorkbooksService;
+import pt.isep.nsheets.shared.services.WorkbooksServiceAsync;
 
 public class SearchAndReplaceController {
 
@@ -19,19 +27,27 @@ public class SearchAndReplaceController {
      this.spreadsheet = spreadsheet;   
     }
 
-    public void searchAll(String expression) {
+    public void searchAll(String expression, String userNickname) {
         cellList.clear();
-        for (int c = 0; c < spreadsheet.getColumnCount(); c++) {
-            for (int r = 0; r < spreadsheet.getRowCount(); r++) {
+        ArrayList<WorkbookDTO> workbooksList = new ArrayList<WorkbookDTO>();
 
-                Cell cell = spreadsheet.getCell(c, r);
-
-                if (cell.getContent().contains(expression)) {
-                    cellList.add(cell);
-                }
+        WorkbooksServiceAsync workbookServiceAsync = GWT.create(WorkbooksService.class);
+        AsyncCallback<ArrayList<WorkbookDTO>> callback = new AsyncCallback<ArrayList<WorkbookDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                MaterialToast.fireToast("Error getting users! " + caught.getMessage());
             }
-        }        
-        this.expression = expression;
+
+            @Override
+            public void onSuccess(ArrayList<WorkbookDTO> result) {
+                for (WorkbookDTO w : result) {
+                    workbooksList.add(w);
+                }
+
+            }
+        };
+
+        workbookServiceAsync.listWorkbooksPerUser(userNickname, callback);
     }
 
     public void setSpreadsheet(Spreadsheet spreadsheet) {
