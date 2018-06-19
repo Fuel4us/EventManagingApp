@@ -60,19 +60,19 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
 
         if (!id.startsWith("$") && !ctx.getChild(0).getText().equals("var")) {
 
-            if(!block_memory.containsKey(id) && !memory.containsKey(id)){
+            if (!block_memory.containsKey(id) && !memory.containsKey(id)) {
                 throw new RuntimeException("Invalid assigment");
             }
-                    
-                
+
         }
 
         System.out.println(ctx.getParent().getParent().getClass().getName());
-        if (ctx.getParent().getParent() instanceof FunctionblockContext ||ctx.getParent().getParent() instanceof BlockContext) {
-            if (!id.startsWith("$")) {
-                if (memory.get(id) != null) {
-                    return memory.put(id, value);
-                }
+
+        if (!id.startsWith("$")) {
+            if (memory.get(id) != null) {
+                return memory.put(id, value);
+            }
+            if (ctx.getParent() instanceof FunctionblockContext) {
                 return block_memory.put(id, value);
             }
         }
