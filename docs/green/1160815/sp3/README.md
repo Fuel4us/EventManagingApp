@@ -113,16 +113,16 @@ Some Functional tests are:
 Following the guidelines for JPA from EAPLI we envision a scenario like the following for realizing the use cases for this feature increment.
 
 **For US1**
-![SD US1](design1.png)
+![SD US1](design1.PNG)
 
 **For US2**
-![SD US2](design2.png)
+![SD US2](design2.PNG)
 
 **For US3**
-![SD US3](design3.png)
+![SD US3](design3.PNG)
 
 **For US4**
-![SD US4](design4.png)
+![SD US4](design4.PNG)
 
 Notes:
 - It is intended that a user can have one or more ListNotes
