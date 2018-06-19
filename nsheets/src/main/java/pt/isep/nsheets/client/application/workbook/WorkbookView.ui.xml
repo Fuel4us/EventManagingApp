@@ -281,6 +281,7 @@ governing permissions and limitations under the License. #L% -->
                 <m:MaterialLink display="BLOCK" text="Sort"
                                 iconType="EDIT" textColor="BLACK"
                                 ui:field="sortLink" />
+                <m:MaterialLink display="BLOCK" text="Filter" iconType="EDIT" textColor="BLACK" ui:field="filterLink"/>
 
                 <!-- Second level -->
                 <m:MaterialLink activates="moveTo" display="BLOCK"
@@ -324,6 +325,30 @@ governing permissions and limitations under the License. #L% -->
             </ma:popupmenu.MaterialPopupMenu>
 
         </m:MaterialRow>
+        <ma:window.MaterialWindow ui:field="filterWindow" width="70%" title="Define Fiter Range">
+            <m:MaterialPanel padding="32" textAlign="CENTER" height="300px">
+                <m:MaterialRow grid="s6 m10">
+                    <m:MaterialTextBox ui:field="filterStartCellTextBox" placeholder="Enter First Cell Here" active="true" grid="s11"/>
+                    <m:MaterialTextBox ui:field="filterEndCellTextBox" placeholder="Enter Last Cell Here" active="true" grid="s11"/>
+                </m:MaterialRow>
+                <m:MaterialRow>
+                    <m:MaterialListBox ui:field="filterListBox">
+                        <m.html:Option text="equal"/>
+                        <m.html:Option text="greater than"/>
+                        <m.html:Option text="less than"/>
+                        <m.html:Option text="equal or greater than"/>
+                        <m.html:Option text="equal or less than"/>
+                        <m.html:Option text="different"/>
+                    </m:MaterialListBox>
+                </m:MaterialRow>
+                <m:MaterialRow>
+                    <m:MaterialTextBox ui:field="valueTextBox" placeholder="Enter value for comparison" active="true" grid="s11"/>
+                </m:MaterialRow>
+                <m:MaterialRow>
+                    <m:MaterialButton ui:field="filterButton" width="100%" text="Filter" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK" size="LARGE"/>
+                </m:MaterialRow>
+            </m:MaterialPanel>
+        </ma:window.MaterialWindow>
         <ma:window.MaterialWindow ui:field="window" width="70%" title="Define Sort Range">
             <m:MaterialPanel padding="32" textAlign="CENTER" height="300px">
                 <m:MaterialRow grid="s6 m10">
