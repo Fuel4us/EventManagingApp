@@ -58,6 +58,14 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
     MaterialButton btnSwitch;
     @UiField
     MaterialComboBox comboBars;
+    @UiField
+    MaterialCollapsibleItem switch1_item;
+    @UiField
+    MaterialCollapsibleItem switch2_item;
+    @UiField
+    MaterialCollapsibleItem switch3_item;
+    @UiField
+    MaterialCollapsibleItem switch4_item;
 
     interface Binder extends UiBinder<Widget, ExtensionsView> {
     }
@@ -139,6 +147,18 @@ class ExtensionsView extends ViewImpl implements ExtensionsPresenter.MyView {
     public MaterialButton getMenuButton() {
         return menuButton;
     }
+
+    @Override
+    public MaterialCollapsibleItem getSwitch1_Item() { return switch1_item; }
+
+    @Override
+    public MaterialCollapsibleItem getSwitch2_Item() { return switch2_item; }
+
+    @Override
+    public MaterialCollapsibleItem getSwitch3_Item() { return switch3_item; }
+
+    @Override
+    public MaterialCollapsibleItem getSwitch4_Item() { return switch4_item; }
 
     @Override
     public int getBgColorPosValue() {

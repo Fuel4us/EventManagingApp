@@ -4,17 +4,14 @@ grammar Macro;
 	//package pt.isep.nsheets.shared.core.formula.compiler;
 }
 
-expression:
-	expression comparison
-	| expression comment
-	| comparison
-	| comment;
+macro: line+;
 
-comparison: 
+line: expression;
+
+expression: comparison;
+
+comparison:
 	concatenation ((EQ | NEQ | GT | LT | LTEQ | GTEQ) concatenation)?;
-
-comment: 
-	COMMENT;
 
 concatenation: 
 	(MINUS)? atom
@@ -22,79 +19,49 @@ concatenation:
 	| <assoc = right> concatenation POWER concatenation
 	| concatenation ( MULTI | DIV) concatenation
 	| concatenation ( PLUS | MINUS) concatenation
-	| concatenation AMP concatenation
-	| block;
+	| concatenation AMP concatenation;
 
 atom:
-	function_call
+	macro_c
+	| function_call
 	| reference
-	| assignment
 	| literal
-	| LPAR concatenation RPAR
-	| temporaryreference;
+	| LPAR comparison RPAR
+	| block
+	| attribution;
 
-block: 
-	manyexpressions 
-	| FOR forexpression;
+block: LBRACKET comparison (SEMI comparison)* RBRACKET;
 
-manyexpressions:
-	ICHA comparison (SEMI comparison)* FCHA;
+attribution: ( reference | VAR) ATTRIB concatenation;
 
-forexpression: 
-	assignment SEMI comparison (SEMI concatenation)+ FCHA;
+function_call:
+	FUNCTION LPAR (comparison ( SEMI comparison)*)? (RPAR| RBRACKET)
+	| macro_c RPAR;
 
-function_call: 
-	FUNCTION LPAR comparison RPAR;
+macro_c: MACRO LPAR STRING RPAR;
 
-reference: 
-	CELL_REF ( ( COLON) CELL_REF)? | NAMEGLOBAL;
+reference: CELL_REF ( ( COLON) CELL_REF)?;
 
-assignment: 
-	reference ASSIGN concatenation;
+literal: NUMBER | STRING;
 
-literal: 
-	NUMBER | STRING | nameTemporary | NAMEGLOBAL;
+fragment LETTER: ('a' ..'z' | 'A' ..'Z');
 
-temporaryreference: 
-	nameTemporary ASSIGN concatenation;
+VAR: UNDER LETTER (LETTER | NUMBER)*;
 
-LETTER: 
-	('a' ..'z' | 'A' ..'Z');
+FUNCTION: '=' ( LETTER)+;
 
-FUNCTION: 
-	( LETTER)+;
-
-CELL_REF: 
-	( ABS)? LETTER ( LETTER)? ( ABS)? ( DIGIT)+;
-
-nameTemporary: 
-	UNDERSCORE ( LETTER)+;
-
-NAMEGLOBAL: 
-	ARROBA ( LETTER)+;
-
-
-
-
+CELL_REF: ( ABS)? LETTER ( LETTER)? ( ABS)? ( DIGIT)+;
 
 /* String literals, i.e. anything inside the delimiters */
-STRING: 
-	QUOT ('\\"' | ~'"')* QUOT;
 
-QUOT: 
-	'"';
+STRING: QUOT ('\\"' | ~'"')* QUOT;
+
+QUOT: '"';
 
 /* Numeric literals */
-NUMBER:
-	DIGITNOTZERO (DIGIT)* FRACTIONALPART?
-	| DIGIT FRACTIONALPART;
+NUMBER: ( DIGIT)+ ( COMMA ( DIGIT)+)?;
 
-FRACTIONALPART: 
-	(COMMA|DOT) DIGIT DIGIT?;
-
-DIGIT: '0' ..'9';
-
-DIGITNOTZERO: '1' ..'9';
+fragment DIGIT: '0' ..'9';
 
 /* Comparison operators */
 EQ: '=';
@@ -119,27 +86,21 @@ PERCENT: '%';
 fragment ABS: '$';
 fragment EXCL: '!';
 COLON: ':';
-UNDERSCORE: '_';
-ARROBA: '@';
+ATTRIB: ':=';
 
 /* Miscellaneous operators */
 COMMA: ',';
-DOT: '.';
 SEMI: ';';
 LPAR: '(';
 RPAR: ')';
-ICHA: '{';
-FCHA: '}';
-LBRACKET: '[';
-RBRACKET: ']';
-
-/* Assignment Operator */
-ASSIGN: ':=';
-
-/* For Operator */
-FOR: 'FOR{';
+LBRACKET: '{';
+RBRACKET: '}';
+STARTER: '|';
+MACRO: 'macro';
+UNDER: '_';
 
 /* White-space (ignored) */
 WS: ( ' ' | '\r' '\n' | '\n' | '\t') -> skip;
 
-COMMENT: SEMI ~[\r\n]* -> skip;
+/* comment line (ignored) */
+LINECOMMENT: SEMI ~[\r\n]* -> skip; 

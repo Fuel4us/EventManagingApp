@@ -23,70 +23,81 @@ package pt.isep.nsheets.shared.core.formula.util;
 import pt.isep.nsheets.shared.core.formula.BinaryOperation;
 import pt.isep.nsheets.shared.core.formula.FunctionCall;
 import pt.isep.nsheets.shared.core.formula.Literal;
+import pt.isep.nsheets.shared.core.formula.NaryOperation;
 import pt.isep.nsheets.shared.core.formula.Reference;
 import pt.isep.nsheets.shared.core.formula.UnaryOperation;
 //import lapr4.gray.s1.lang.n3456789.formula.NaryOperation;
 
 /**
  * A class for printing expressions on multiple lines with indentation.
+ *
  * @author Einar Pehrson
  */
 public class ExpressionTreePrinter extends AbstractExpressionVisitor {
 
-	/** The number of spaces to use for each indentation unit */
-	public static final int INDENT_DISTANCE = 3;
+    /**
+     * The number of spaces to use for each indentation unit
+     */
+    public static final int INDENT_DISTANCE = 3;
 
-	/** The current indentation count */
-	private int indentCount = 0;
+    /**
+     * The current indentation count
+     */
+    private int indentCount = 0;
 
-	/**
-	 * Creates a new expression printer.
-	 */
-	public ExpressionTreePrinter() {}
+    /**
+     * Creates a new expression printer.
+     */
+    public ExpressionTreePrinter() {
+    }
 
-	public Object visitLiteral(Literal literal) {
-		print(literal);
-		return literal;
-	}
+    public Object visitLiteral(Literal literal) {
+        print(literal);
+        return literal;
+    }
 
-	public Object visitUnaryOperation(UnaryOperation operation) {
-		print(operation.getOperator());
-		indentCount++;
-		super.visitUnaryOperation(operation);
-		indentCount--;
-		return operation;
-	}
+    public Object visitUnaryOperation(UnaryOperation operation) {
+        print(operation.getOperator());
+        indentCount++;
+        super.visitUnaryOperation(operation);
+        indentCount--;
+        return operation;
+    }
 
-	public Object visitBinaryOperation(BinaryOperation operation) {
-		print(operation.getOperator());
-		indentCount++;
-		super.visitBinaryOperation(operation);
-		indentCount--;
-		return operation;
-	}
+    public Object visitBinaryOperation(BinaryOperation operation) {
+        print(operation.getOperator());
+        indentCount++;
+        super.visitBinaryOperation(operation);
+        indentCount--;
+        return operation;
+    }
 
-	public Object visitReference(Reference reference) {
-		print(reference);
-		return reference;
-	}
+    public Object visitReference(Reference reference) {
+        print(reference);
+        return reference;
+    }
 
-	public Object visitFunctionCall(FunctionCall call) {
-		print(call.getFunction());
-		indentCount++;
-		super.visitFunctionCall(call);
-		indentCount--;
-		return call;
-	}
+    public Object visitFunctionCall(FunctionCall call) {
+        print(call.getFunction());
+        indentCount++;
+        super.visitFunctionCall(call);
+        indentCount--;
+        return call;
+    }
 
-	private void print(Object o) {
-		String indentation = "";
-		for (int i = 0; i < indentCount * INDENT_DISTANCE; i++)
-			indentation += " ";
-		System.out.println(indentation + o);
-	}
-        
-//        @Override
-//        public Object visitNaryOperation(NaryOperation operation) {
-//            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//        }
+    private void print(Object o) {
+        String indentation = "";
+        for (int i = 0; i < indentCount * INDENT_DISTANCE; i++) {
+            indentation += " ";
+        }
+        System.out.println(indentation + o);
+    }
+
+    public Object visitNaryOperation(NaryOperation operation) {
+        print(operation.getOperator());
+        indentCount++;
+        super.visitNaryOperation(operation);
+        indentCount--;
+        return operation;
+    }
 }

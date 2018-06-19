@@ -7,9 +7,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import pt.isep.nsheets.server.lapr4.blue.s3.core.n1150478.workbooks.application.ChangeStateWorkbook;
+import pt.isep.nsheets.server.lapr4.blue.s3.ipc.n1150478.workbooks.application.ChangeStateWorkbook;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1140572.workbooks.application.DeleteWorkbookController;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1140572.workbooks.application.RenameWorkbookController;
 import pt.isep.nsheets.server.lapr4.green.s1.core.n1140572.workbooks.application.SearchWorkbooksController;
@@ -60,9 +58,9 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
 
         return workbooks;
     }
-    
+
     @Override
-    public  Iterable<WorkbookDTO> listWorkbooksPerUser(String user) {
+    public ArrayList<WorkbookDTO> listWorkbooksPerUser(String user) {
         // Setup the persistence settings
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
@@ -129,14 +127,24 @@ public class WorkbooksServiceImpl extends RemoteServiceServlet implements Workbo
     }
 
     @Override
-    public ArrayList<WorkbookDTO> searchWorkbooks(String name) {
+    public ArrayList<WorkbookDTO> searchWorkbooks(String name, boolean state) {
         PersistenceContext.setSettings(this.getPersistenceSettings());
 
         SearchWorkbooksController ctrl = new SearchWorkbooksController();
         ArrayList<WorkbookDTO> wbs = new ArrayList<>();
         ArrayList<Workbook> workbooksSearched = ctrl.searchWorkbooks(name);
 
-        workbooksSearched.forEach(wb -> wbs.add(wb.toDTO()));
+        for (Workbook w : workbooksSearched) {
+            if (state == true) {
+                if (!w.isPublicState()) {
+                    wbs.add(w.toDTO());
+                }
+            } else {
+                if (w.isPublicState()) {
+                    wbs.add(w.toDTO());
+                }
+            }
+        }
 
         return wbs;
     }

@@ -1,0 +1,16 @@
+@startuml 
+
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+User -> System : Log in and redirected to home
+System --> User : List all the workbooks
+User->System : Searches for an workbook by the name, description, or if it is private or public.
+System --> User : Shows the workbook\s wich match the filters.
+
+@enduml

@@ -31,11 +31,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import pt.isep.nsheets.shared.lapr4.green.n1160815.formula.lang.GlobalVariable;
+import pt.isep.nsheets.shared.lapr4.red.s3.lang.n1160634.macro.domain.Macro;
 
 /**
  * A workbook which can contain several spreadsheets.
@@ -54,6 +56,9 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
     private String description;
     private boolean publicState;
     private String userName;
+    
+    @ElementCollection
+    private List<Macro> macros = new ArrayList<>();
 
     /**
      * The spreadsheets of which the workbook consists
@@ -223,6 +228,10 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
         spreadsheets.add(spreadsheet);
         fireSpreadsheetInserted(spreadsheet, spreadsheets.size() - 1);
     }
+    
+    public List<Spreadsheet> getSpreadSheets(){
+        return spreadsheets;
+    }
 
     /**
      * Returns the title to be used for the next spreadsheet added.
@@ -305,6 +314,8 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
     public String getUserName() {
         return userName;
     }
+    
+    
 
     /**
      * Removes the given listener from the workbook.
@@ -414,6 +425,17 @@ public class Workbook implements Iterable<Spreadsheet>, Serializable {
     
     public Map<String, List<GlobalVariable>> globalVariables(){
         return this.globalVariables;
+    }
+    
+    public List<Macro> macros() { return this.macros; }
+
+    public boolean addMacro(Macro macroDto) { return this.macros.add(macroDto); }
+
+    public boolean removeMacro(String macro) {
+        for (Macro m : macros) {
+            if (m.name().equals(macro)) return macros.remove(m);
+        }
+        return false;
     }
     
     /*

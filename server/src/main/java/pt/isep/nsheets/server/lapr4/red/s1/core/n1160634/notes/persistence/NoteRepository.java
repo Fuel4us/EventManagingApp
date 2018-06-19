@@ -9,4 +9,6 @@ import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.domain.Note;
  */
 public interface NoteRepository extends Repository<Note, Long> {
 
+    public void deleteNote(Long id);
+    
 }

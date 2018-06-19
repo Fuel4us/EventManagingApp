@@ -6,6 +6,7 @@
 package pt.isep.nsheets.shared.core.js_complex;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -51,6 +52,30 @@ public class Function implements Serializable{
 
     public boolean isCreated() {
         return created;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Function other = (Function) obj;
+        if (!Objects.equals(this.functionId, other.functionId)) {
+            return false;
+        }
+        return true;
     }
     
     

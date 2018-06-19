@@ -21,9 +21,9 @@ import pt.isep.nsheets.client.place.NameTokens;
 import gwt.material.design.client.ui.MaterialToast;
 
 /**
- * @author Gonçalo Fonseca <1150503@isep.ipp.pt>, Rubén André <1160998@isep.ipp.pt>
+ * @author Gonçalo Fonseca <1150503@isep.ipp.pt>, Rubén André
+ * <1160998@isep.ipp.pt>
  */
-
 public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPresenter.MyProxy> {
 
     @Inject
@@ -125,9 +125,13 @@ public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPre
             WorkbookDTO workbookDTO = Settings.getInstance().getWorkbook().toDTO();
             exportServiceAsync.exportWorkbookAsCSL(workbookDTO, callback);
         });
-        
-        getView().closeModal(e->{
+
+        getView().closeModal(e -> {
             this.getView().getOverlay().close();
+        });
+        
+        getView().closeModalComplete(e -> {
+            this.getView().getOverlayComplete().close();
         });
 
     }
@@ -140,6 +144,7 @@ public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPre
     }
 
     interface MyView extends View {
+
         void csvButtonClickHandler(ClickHandler clickHandler);
 
         void xmlButtonClickHandler(ClickHandler clickHandler);
@@ -147,12 +152,15 @@ public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPre
         void pdfButtonClickHandler(ClickHandler clickHandler);
 
         void cslButtonClickHandler(ClickHandler clickHandler);
-        
-        void closeModal(ClickHandler clickHandler);
-        
-        MaterialModal getOverlay();
-    }
 
+        void closeModal(ClickHandler clickHandler);
+
+        void closeModalComplete(ClickHandler clickHandler);
+
+        MaterialModal getOverlay();
+
+        MaterialModal getOverlayComplete();
+    }
 
     @NameToken(NameTokens.export)
     @ProxyStandard

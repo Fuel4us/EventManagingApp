@@ -11,6 +11,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
+import gwt.material.design.addins.client.combobox.MaterialComboBox;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialInput;
 import gwt.material.design.client.ui.MaterialModal;
@@ -32,6 +33,9 @@ import pt.isep.nsheets.shared.services.ExportServiceAsync;
 class ExportView extends ViewImpl implements ExportPresenter.MyView {
 
     @UiField
+    MaterialComboBox addElementsSelect;
+
+    @UiField
     MaterialButton export_pdf;
     @UiField
     MaterialButton export_csv;
@@ -44,25 +48,52 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
     MaterialInput color_line;
 
     @UiField
+    MaterialInput color_line2;
+
+    @UiField
     MaterialButton style_export_pdf, close, save;
+
+    @UiField
+    MaterialButton complete_export_pdf, close_complete, save_complete;
 
     @UiField
     MaterialRadioButton dotted, double_, solid, dashed;
 
     @UiField
+    MaterialRadioButton dotted2, double_2, solid2, dashed2;
+
+    @UiField
     MaterialModal modal;
 
     @UiField
+    MaterialModal modal_complete;
+
+    @UiField
     MaterialRange rangeSetValue;
+
+    @UiField
+    MaterialRange rangeSetValue2;
 
     private String style;
     private String color;
     private int range;
     private final List<MaterialRadioButton> radiolist;
 
+    @Inject
+    ExportView(Binder uiBinder) {
+        initWidget(uiBinder.createAndBindUi(this));
+        dotted.setValue(Boolean.TRUE);
+        radiolist = createMaterialRadioButtonArray();
+    }
+
     @UiHandler("style_export_pdf")
     void openOverlay(ClickEvent event) {
         this.modal.open();
+    }
+
+    @UiHandler("complete_export_pdf")
+    void openOverlayComplete(ClickEvent event) {
+        this.modal_complete.open();
     }
 
     @UiHandler("save")
@@ -100,11 +131,43 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
 
     }
 
-    @Inject
-    ExportView(Binder uiBinder) {
-        initWidget(uiBinder.createAndBindUi(this));
-        dotted.setValue(Boolean.TRUE);
-        radiolist = createMaterialRadioButtonArray();
+    @UiHandler("save_complete")
+    void saveComplete(ClickEvent event) {
+
+        WorkbookDTO workbookDTO = Settings.getInstance().getWorkbook().toDTO();
+
+        color = color_line.getValue();
+        style = findSelected().getFormValue();
+        range = rangeSetValue.getValue();
+        List<Object> listOptions = new ArrayList<>();
+        listOptions = addElementsSelect.getSelectedValues();
+
+        ExportServiceAsync exportServiceAsync = GWT.create(ExportService.class);
+        AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                MaterialToast.fireToast("Error! " + throwable.getMessage(), "rounded");
+            }
+
+            @Override
+            public void onSuccess(Boolean result) {
+                if (result == true) {
+                    Cookies.setCookie("PDF EXPORT", "Accept the cookies");
+
+                    String url = GWT.getModuleBaseURL() + "downloadService";
+                    Window.open(url, "_blank", "status=0,toolbar=0,menubar=0,location=0");
+                    MaterialToast.fireToast("PDF exported", "rounded");
+
+                } else {
+                    MaterialToast.fireToast("Error exporting workbook");
+                }
+            }
+        };
+        //adicionar funcionalidades
+        MaterialToast.fireToast("A criar pdf ...");
+        MaterialToast.fireToast("Opções selecionadas ... " + listOptions.size());
+        exportServiceAsync.exportCompleteWorkbookPDF(listOptions, cellStyleList(), workbookDTO, style, color, range, callback);
+
     }
 
     @Override
@@ -133,8 +196,18 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
     }
 
     @Override
+    public void closeModalComplete(ClickHandler clickHandler) {
+        close_complete.addClickHandler(clickHandler);
+    }
+
+    @Override
     public MaterialModal getOverlay() {
         return modal;
+    }
+
+    @Override
+    public MaterialModal getOverlayComplete() {
+        return modal_complete;
     }
 
     interface Binder extends UiBinder<Widget, ExportView> {

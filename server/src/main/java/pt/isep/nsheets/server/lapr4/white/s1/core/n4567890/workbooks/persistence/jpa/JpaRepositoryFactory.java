@@ -24,7 +24,9 @@ import java.util.concurrent.locks.Condition;
 import pt.isep.nsheets.server.lapr4.blue.n1150372.s2.persistence.AgendaRepository;
 import pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.persistence.ContactsRepository;
 import pt.isep.nsheets.server.lapr4.green.s1.ipc.n1160815.users.persistence.NotificationRepository;
+import pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.persistence.TasksRepository;
 import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160634.users.persistance.PrivateChatsRepository;
+import pt.isep.nsheets.server.lapr4.red.s3.lang.n1160630.Js.FunctionRepository;
 
 /**
  *
@@ -111,6 +113,16 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     @Override
     public NotificationRepository notifications() {
         return new JpaNotificationRepository(this.settings);
+    }
+
+    @Override
+    public FunctionRepository functions() {
+        return new JpaFunctionRepository(this.settings);
+    }
+
+    @Override
+    public TasksRepository tasks() {
+        return new JpaTasksRepository(this.settings);
     }
 
 }

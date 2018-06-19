@@ -293,6 +293,13 @@ Some Questions/Issues identified during the work in this feature increment:
 # 8. Work Log
 
 * []()
+* []()
+* []()
+* [GlobalVariables refresh is now called when done button is pressed](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/4bc5ed6eb83148b8049b551590607861c3b1cba2)
+* [Added Lang02.3 design](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/1edb68d24b5cb10125adb9c4e9b969d689525b8c)
+* [Added Lang02.3 analysis](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/b7a1889ef49c020321743bad3b99ad23a3c2edca)
+* [User can edit global variable value](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/a30e1f3bd30f0ad1f8d76d0875907deb695a1255)
+* [Updated Lang02.3 documentation. Missing diagrams](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/748732c48b63643a24bcf5d6f09eab5cf6c7f555)
 * [Fixed Assignment to treat globalvariable position](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/23c9ea57a1be8e71da357fb3de4381817f53143d)
 * [Fixed GlobalVariables attribute realted methods](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/7bdb549b3ce11043979c8b74cc47f9e1589c46f6)
 * [Application has a GlobalVariable collapsible](https://bitbucket.org/lei-isep/lapr4-18-2db/commits/0cd1d9d4267aacc3cc9400e0631e32ab84b470d4)

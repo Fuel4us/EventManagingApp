@@ -2,29 +2,33 @@ grammar Vb;
 
 parse: block EOF;
 
-block: stat* | function* | procedure*;
+block: stat*;
 
-function: initFunction functionBody returnFunction endFunction;
+function: initFunction stat* returnFunction endFunction;
 
 initFunction: 'Function' functionName 'As' type;
 
-functionBody: stat*;
-
-functionName: ID OPAR parameters CPAR;
+functionName: ID OPAR parametersWithType CPAR;
 
 returnFunction: 'Return' ID;
 
 endFunction: 'End' 'Function';
 
-procedure: initProcedure stat+ endProcedure;
+functionCall: ID OPAR parametersWithoutType CPAR;
+
+parametersWithType: type ID COMMA parametersWithType | type ID;
+
+parametersWithoutType: ID COMMA parametersWithoutType | ID;
+
+procedure: initProcedure stat* endProcedure;
 
 initProcedure: 'Sub' procedureName;
 
-procedureName: ID OPAR parameters CPAR;
+procedureName: ID OPAR CPAR;
 
 endProcedure: 'End' 'Sub';
 
-parameters: type ID COMMA parameters | type ID;
+procedureCall: procedureName;
 
 stat:
 	assignment
@@ -32,6 +36,10 @@ stat:
 	| if_stat
 	| while_stat
 	| log
+	| function
+	| procedure
+	| functionCall
+	| procedureCall
 	| OTHER {System.err.println("unknown char: " + $OTHER.text);};
 
 declaration: 'Dim' ID 'As' type;
@@ -119,3 +127,10 @@ STRING: '"' (~["\r\n] | '""')* '"';
 COMMENT: '#' ~[\r\n]* -> skip;
 SPACE: [ \t\r\n] -> skip;
 OTHER: .;
+
+FUNCTION: 'Function';
+AS: 'As';
+RETURN: 'Return';
+END: 'End';
+SUB: 'Sub';
+DIM: 'Dim';

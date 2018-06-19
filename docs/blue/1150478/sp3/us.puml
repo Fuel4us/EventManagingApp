@@ -1,0 +1,13 @@
+@startuml us
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+
+actor User
+
+User -> (US1 : CreateWorkbooks) 
+User -> (US2 : SearchWorkbooks)
+@enduml

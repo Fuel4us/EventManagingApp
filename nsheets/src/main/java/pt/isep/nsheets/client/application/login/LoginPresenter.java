@@ -17,6 +17,7 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import gwt.material.design.client.ui.MaterialToast;
 import org.apache.commons.codec.digest.DigestUtils;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
+import pt.isep.nsheets.client.application.menu.MenuView;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import pt.isep.nsheets.client.place.ParameterTokens;
@@ -68,6 +69,15 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
                     if(result != null) {
                         currentUser.setLoggedIn(true);
                         currentUser.setUser(result);
+                        MenuView.getUsername().clear();
+                        MenuView.getUsername().setText("Welcome, " + currentUser.getUser().getNickname());
+
+                        MenuView.getLogout().clear();
+                        MenuView.getLogout().setText("Logout");
+
+                        MenuView.getImage().setVisible(true);
+                        MenuView.getImage().setUrl(currentUser.getUser().getPictureName());
+                        MenuView.getImage().setBorder("2px solid #186AAB");
                         
                         MaterialToast.fireToast("Successfuly Logged In", "rounded");
                         

@@ -16,7 +16,7 @@ public interface WorkbooksServiceAsync {
 
     void deleteWorkbook(WorkbookDTO workbook, AsyncCallback<WorkbookDTO> callback);
     
-    void searchWorkbooks(String name, AsyncCallback<ArrayList<WorkbookDTO>> callback);
+    void searchWorkbooks(String name, boolean state, AsyncCallback<ArrayList<WorkbookDTO>> callback);
     
     void changeState(boolean state, WorkbookDTO workbookDTO, AsyncCallback<WorkbookDTO> callback);
     

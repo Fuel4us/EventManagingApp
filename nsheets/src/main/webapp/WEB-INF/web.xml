@@ -11,13 +11,13 @@
   
        http://www.apache.org/licenses/LICENSE-2.0
   
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-  #L%
-  -->
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+#L%
+-->
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <welcome-file-list>
@@ -69,6 +69,17 @@
     </servlet-mapping>
     
     <servlet>
+        <servlet-name>filterServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.FilterServiceImpl</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>filterServiceServlet</servlet-name>
+        <url-pattern>/nsheets/filterService</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
         <servlet-name>cellsServiceServlet</servlet-name>
         <servlet-class>pt.isep.nsheets.server.services.CellsServiceImpl</servlet-class>
     </servlet>
@@ -118,6 +129,18 @@
         <servlet-class>pt.isep.nsheets.server.services.ContactsServiceImpl</servlet-class>
     </servlet>
 
+    <!-- Servlets for the contacts -->
+    <servlet>
+        <servlet-name>tasksServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.TasksServiceImpl</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>tasksServiceServlet</servlet-name>
+        <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
+        <url-pattern>/nsheets/tasksService</url-pattern>
+    </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>contactsServiceServlet</servlet-name>
         <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
@@ -190,6 +213,17 @@
         <servlet-name>signupServiceServlet</servlet-name>
         <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
         <url-pattern>/nsheets/signupService</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>functionServiceServlet</servlet-name>
+        <servlet-class>pt.isep.nsheets.server.services.FunctionServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>functionServiceServlet</servlet-name>
+        <!-- The first "part" of the url is the name of the GWT module as in "rename-to" in .gwt.xml -->
+        <url-pattern>/nsheets/functionService</url-pattern>
     </servlet-mapping>
 
     <!-- Servlet for Import -->
