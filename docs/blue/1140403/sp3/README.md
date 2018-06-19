@@ -10,9 +10,7 @@
 IPC02.3 - Global Search/Replace
 
 The application should now support "Search" and "Search and Replace" to be 
-applied for all the workbooks of the user (may they be active/open or not). It 
-should be possible to apply the search to workbooks which name matches a specific
-regular expression. 
+applied for all the workbooks of the user (may they be active/open or not). 
 
 In a more brief text:
 
@@ -20,6 +18,7 @@ In this iteration of the use casa about "search and replace", it was required
 that now, instead of looking for a certain expression in the current workbook,
 it should now look in all the workbooks of the user.
 
+Sub-Issues:
 US1 - As a user I want to be able replace one occurrence of my desired expression 
 at a time.
 
@@ -40,39 +39,32 @@ For this feature increment I need to:
 - Understand how the application works and also understand the key aspects of GWT, since it is the main technology behind the application  
 - Understand how to integrate a relational database into the project (Will be assuming JPA since it is studied in EAPLI)  
 
-## 3.1 GWT and Project Structure
+## 3.4 Analysis Diagrams
 
-**Modules**. From the pom.xml file we can see that the application is composed of 5 modules:  
-- **server**. It is the "server part" of the web application.  
-- **shared**. It contains code that is shared between the client (i.e., web application) and the server.   
-- **nsheets**. It is the web application (i.e., Client).  
-- **util**. This is the same module as the one of EAPLI.  
-- **framework**. This is the same module as the one of EAPLI.   
-  
-From [GWT Overview](http://www.gwtproject.org/overview.html): *"The GWT SDK contains the Java API libraries, compiler, and development server. It lets you write client-side applications in Java and deploy them as JavaScript."*
+Use case diagram:
 
-Therefore:
-  - The project is totally developed in Java, event for the UI parts.
-  - GWT uses a technique know as "transpilation" to translate Java code to Javascript. This is totally transparent to the user
-  - A GWT application is comprised of "GWT modules" (see [GWT Tutorial](http://www.gwtproject.org/doc/latest/tutorial/create.html)). These GWT modules are described in .gwt.xml files.
-   The nsheets project contains a .gwt.xml file named nsheets.gwt.xml (nsheets/src/main/resources/pt/isep/nsheets/nsheets.gwt.xml). One of the important contents of the file is the specification of the entry point of the application. However, since the application uses the [GWTP framework](http://dev.arcbees.com/gwtp/) the entry point is automatically provided (no need to specify it in the .gwt.xml file). In this case what is specified is the GIN client module pt.isep.nsheets.client.gin.ClientModule:
-   
-	    <extend-configuration-property name="gin.ginjector.modules"
-                                   value="pt.isep.nsheets.client.gin.ClientModule"/>
-                                   
-   It is from this **ClientModule** that the application starts.
-   Another important content of a .gwt.xml file is setting the paths for translatable code, .i.e., java code that should be translated to javascript. Usually the default source path is the client subpackage underneath where the .gwt.xml File is stored. In this case every code inside package pt.isep.nsheets.client and pt.isep.nsheets.shared will be translated to javascript. 
-   
-	<!-- Specify the paths for translatable code                    -->
-    <source path='client'/>
-    <source path='shared'/>
-        
-   The shared package is where shared code between server and client should reside. See [GWT - What to put in the shared folder?](https://stackoverflow.com/questions/5664601/gwt-what-to-put-in-the-shared-folder?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa) and also [using GWT RPC](http://www.gwtproject.org/doc/latest/tutorial/RPC.html).
-   
-   In this project the shared, server and client (i.e, nsheets) code are separated also in Maven modules (but they could all be in the same project/maven module). 
-   
+![UseCase](UseCase.png)
+
+SSD's:
+SSD for US1
+![SSDUS1.jpg](SSDUS1.jpg)
+SSD for US2
+![SSDUS2.jpg](SSDUS2.jpg)
 
 
+**Domain Model (for this feature increment)**
+
+![Domain Model](CDCore02.3.jpg)
+
+**System Sequence Diagrams**
+
+**For US1 and US2**
+
+Replace one ocurrance US1:
+![Design-Core 02.3.jpg](Core02.3S1.jpg)
+
+Replace All US2:
+![Design-Core 02.3.jpg](Design-Core02.3.jpg)
 
 # 4 Design
 ## 4.1 TESTS
@@ -96,7 +88,19 @@ and changes the content of all cells.
 Following the guidelines for JPA from EAPLI we envision a scenario like the 
 following for realizing the use cases for this feature increment:
 
+Controller print:
+![codePrint.png](codePrint.png)
 
+Essentially this use case, from the previous iteration, changed in the fact that
+instead of looking for a certain expression in the cells of the active workbook,
+it should look for it in all the workbooks of the user.
+
+For that I evolved the method above, that allows the program to search and save 
+all the cells from all the User's workbooks that correspond to the expression
+introduced.
+
+From here on, since i already knew the cells that needed to be changed, all i needed
+was to change the content of the cells.
 
 ## 4.3. Classes
 

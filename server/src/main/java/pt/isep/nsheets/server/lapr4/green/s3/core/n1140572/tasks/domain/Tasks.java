@@ -7,12 +7,9 @@ package pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.domain;
 
 import eapli.framework.domain.AggregateRoot;
 import java.io.Serializable;
-import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.domain.Contact;
 import pt.isep.nsheets.shared.services.TasksDTO;
 
 /**
@@ -39,34 +36,33 @@ public class Tasks implements AggregateRoot<Long>, Serializable {
     /**
      * Priority level of the task
      */
-    private int priorityLevel;
+    private String priorityLevel;
 
     /**
      * Progress of the task
      */
-    private int progress;
+    private String progress;
 
     /**
      * Indicates if a task is completed
      */
     private boolean taskCompleted;
 
-    @ManyToMany
-    private ArrayList<Contact> contacts;
-
+//    @ManyToMany
+//    private ArrayList<Contact> contacts;
     /**
      * Default constructor for ORM
      */
     protected Tasks() {
     }
 
-    public Tasks(String name, String description, int priorityLevel, int progress, boolean taskCompleted) {
+    public Tasks(String name, String description, String priorityLevel, String progress, boolean taskCompleted) {
         this.name = name;
         this.description = description;
         this.priorityLevel = priorityLevel;
         this.progress = progress;
         this.taskCompleted = taskCompleted;
-        this.contacts = new ArrayList<>();
+//        this.contacts = new ArrayList<>();
     }
 
     /**
@@ -86,14 +82,14 @@ public class Tasks implements AggregateRoot<Long>, Serializable {
     /**
      * @return the priorityLevel
      */
-    public int getPriorityLevel() {
+    public String getPriorityLevel() {
         return priorityLevel;
     }
 
     /**
      * @return the progress
      */
-    public int getProgress() {
+    public String getProgress() {
         return progress;
     }
 
@@ -104,13 +100,12 @@ public class Tasks implements AggregateRoot<Long>, Serializable {
         return taskCompleted;
     }
 
-    /**
-     * @return the contacts
-     */
-    public ArrayList<Contact> getContacts() {
-        return contacts;
-    }
-
+//    /**
+//     * @return the contacts
+//     */
+//    public ArrayList<Contact> getContacts() {
+//        return contacts;
+//    }
     /**
      * @param name the name to set
      */
@@ -128,14 +123,17 @@ public class Tasks implements AggregateRoot<Long>, Serializable {
     /**
      * @param priorityLevel the priorityLevel to set
      */
-    public void setPriorityLevel(int priorityLevel) {
+    public void setPriorityLevel(String priorityLevel) {
         this.priorityLevel = priorityLevel;
     }
 
     /**
      * @param progress the progress to set
      */
-    public void setProgress(int progress) {
+    public void setProgress(String progress) {
+        if (progress.equals("100")) {
+            setTaskCompleted(true);
+        }
         this.progress = progress;
     }
 
@@ -187,6 +185,7 @@ public class Tasks implements AggregateRoot<Long>, Serializable {
     }
 
     public static Tasks fromDTO(TasksDTO tasksDTO) throws IllegalArgumentException {
-        return new Tasks(tasksDTO.getName(), tasksDTO.getDescription(), tasksDTO.getPriorityLevel(), tasksDTO.getProgress(), tasksDTO.isTaskCompleted());
+        return new Tasks(tasksDTO.name, tasksDTO.description, tasksDTO.priorityLevel, tasksDTO.progress, tasksDTO.taskCompleted);
     }
+
 }

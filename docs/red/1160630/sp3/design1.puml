@@ -1,0 +1,62 @@
+@startuml  design1
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor AuthenticatedUser
+boundary Js_complexLexer
+boundary Js_complexParser
+boundary ParseTree
+boundary Code_JavascriptView
+boundary Code_JavascriptPresenter
+boundary FunctionService
+boundary EvalVisitor
+control Js_controller
+boundary FunctionRepository
+database Database 
+
+box "NSheets Client"
+participant Code_JavascriptView
+participant Code_JavascriptPresenter 
+end box
+
+box "Antlr"
+participant Js_complexLexer
+participant Js_complexParser 
+participant ParseTree 
+participant EvalVisitor
+end box
+
+box "Server"
+participant FunctionService
+participant Js_controller
+participant FunctionRepository
+end box
+
+box "Database"
+participant Database
+end box
+
+AuthenticatedUser -> Code_JavascriptPresenter : onReveal() / navigate to page 
+Code_JavascriptPresenter -> Code_JavascriptView: shows view
+Code_JavascriptView ->> AuthenticatedUser : shows the input box
+AuthenticatedUser -> Code_JavascriptView : writes the code and clicks compile button
+Code_JavascriptView -> Settings : getActiveSpeadCells();
+Code_JavascriptView -> Js_complexLexer : new(code)
+Code_JavascriptView -> Js_complexParser : new(lexer)
+Code_JavascriptView -> ParseTree : parser.parse()
+ParseTree -> EvalVisitor:
+EvalVisitor -> EvalVisitor: run funciton 
+EvalVisitor -> EvalVisitor: verify if it exists
+EvalVisitor -> EvalVisitor: saves the function in a list;
+EvalVisitor -> EvalVisitor: finish parse
+Code_JavascriptView -> EvalVisitor: getNewFunctions();
+Code_JavascriptView -> FunctionService: saveFunctions(functions);
+FunctionService -> Js_controller: save(function);
+Js_controller -> FunctionRepository: save (function);
+FunctionRepository -> Database: save
+Code_JavascriptView --> AuthenticatedUser: shows the result and the new function(s)
+
+@enduml

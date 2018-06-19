@@ -21,6 +21,8 @@ import com.googlecode.gwt.charts.client.ColumnType;
 import com.googlecode.gwt.charts.client.DataTable;
 import com.googlecode.gwt.charts.client.corechart.ColumnChart;
 import com.googlecode.gwt.charts.client.corechart.ColumnChartOptions;
+import com.googlecode.gwt.charts.client.corechart.PieChart;
+import com.googlecode.gwt.charts.client.corechart.PieChartOptions;
 import com.googlecode.gwt.charts.client.options.Bar;
 import com.googlecode.gwt.charts.client.options.Gridlines;
 import com.googlecode.gwt.charts.client.options.HAxis;
@@ -47,6 +49,7 @@ import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.services.ChartDTO;
+import pt.isep.nsheets.shared.services.ChartType;
 import pt.isep.nsheets.shared.services.ChartsService;
 import pt.isep.nsheets.shared.services.ChartsServiceAsync;
 
@@ -59,7 +62,8 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
 
     private static final int ENTER_TIME = 700;
     private static final int EXIT_TIME = 500;
-    private ColumnChart chart;
+    private ColumnChart col_chart;
+    private PieChart pie_chart;
     private boolean edit = false;
     public static ChartDTO chartDTO;
     Spreadsheet s = Settings.getInstance().getWorkbook().getSpreadsheet(0);
@@ -88,6 +92,11 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     @Override
     public boolean isRow() {
         return switch_isRow.getValue();
+    }
+
+    @Override
+    public boolean isTypeChart() {
+        return switch_typeChart.getValue();
     }
 
     @Override
@@ -148,7 +157,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
     MaterialTextBox name_textbox, start_textbox, end_textbox;
 
     @UiField
-    MaterialSwitch switch_isRow, switch_considerFist;
+    MaterialSwitch switch_isRow, switch_considerFist, switch_typeChart;
 
     @UiField
     MaterialCardTitle chart_name;
@@ -207,8 +216,8 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
 
             @Override
             public void run() {
-                chart = new ColumnChart();
-                cardContent.add(chart);
+                col_chart = new ColumnChart();
+                cardContent.add(col_chart);
             }
         });
     }
@@ -242,14 +251,15 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
                         {"1", "2", "3"},
                         {"1", "2", "3"},
                         {"1", "2", "A"}};
-                    draw(chart_name, matrix, dto.isRow(), dto.isConsiderFirstField());
+                    draw(chart_name, matrix, dto.isRow(), dto.isConsiderFirstField(), dto.getType());
                     MaterialToast.fireToast("UNSUCESS drawing chart!");
                 }
 
                 @Override
                 public void onSuccess(ChartDTO result) {
                     chartDTO = result;
-                    draw(chart_name, result.getContent(), dto.isRow(), dto.isConsiderFirstField());
+                    MaterialToast.fireToast("Drawing chart!");
+                    draw(chart_name, result.getContent(), dto.isRow(), dto.isConsiderFirstField(), dto.getType());
                     MaterialToast.fireToast("SUCESS drawing chart!");
                 }
 
@@ -265,83 +275,101 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
            
     }
     
-    private void draw(String chart_name,String[][] matrix, boolean isRow, boolean considerFirstLine){
-        
-        DataTable dataTable = DataTable.create();
-        dataTable.addColumn(ColumnType.STRING, "Year");
-        String fieldName = "Row";
-        int start;
+    private void draw(String chart_name, String[][] matrix, boolean isRow, boolean considerFirstLine, ChartType type){
+        if(type.equals(ChartType.BAR_CHART)) {
+            DataTable dataTable = DataTable.create();
+            dataTable.addColumn(ColumnType.STRING, "Year");
+            String fieldName = "Row";
+            int start;
 
-        if (isRow) {
-            
-            char letter = 'A';
-            for (int i = 0; i < matrix[0].length; i++) {
-                dataTable.addColumn(ColumnType.NUMBER, String.valueOf(i));
-            }
-            dataTable.addRows(matrix.length);
+            if (isRow) {
 
-            if (considerFirstLine) {
-                start = 1;
-                for (int i = 0; i < matrix.length; i++) {
-                    dataTable.setValue(i, 0, String.valueOf(matrix[i][0]));
+                char letter = 'A';
+                for (int i = 0; i < matrix[0].length; i++) {
+                    dataTable.addColumn(ColumnType.NUMBER, String.valueOf(i));
                 }
+                dataTable.addRows(matrix.length);
+
+                if (considerFirstLine) {
+                    start = 1;
+                    for (int i = 0; i < matrix.length; i++) {
+                        dataTable.setValue(i, 0, String.valueOf(matrix[i][0]));
+                    }
+                } else {
+                    start = 0;
+                    for (int i = 0; i < matrix.length; i++) {
+                        dataTable.setValue(i, 0, String.valueOf(letter));
+                        letter++;
+                    }
+                }
+
+                for (int row = 0; row < matrix.length; row++) {
+                    for (int col = start; col < matrix[row].length; col++) {
+                        if (canAddColumn(matrix[row][col])) {
+                            dataTable.setValue(row, col + 1, matrix[row][col]);
+                        }
+                    }
+                }
+
             } else {
-                start = 0;
-                for (int i = 0; i < matrix.length; i++) {
-                    dataTable.setValue(i, 0, String.valueOf(letter));
+                fieldName = "Column";
+                char letter = 'A';
+                matrix = transposeMatrix(matrix);
+                for (int i = 0; i < matrix[0].length; i++) {
+                    dataTable.addColumn(ColumnType.NUMBER, String.valueOf(letter));
                     letter++;
                 }
-            }
-            
-            for (int row = 0; row < matrix.length; row++) {
-                for (int col = start; col < matrix[row].length; col++) {
-                    if (canAddColumn(matrix[row][col])) {
-                        dataTable.setValue(row, col+1 , matrix[row][col]);
+
+                dataTable.addRows(matrix.length);
+
+                if (considerFirstLine) {
+                    start = 1;
+                    for (int i = 0; i < matrix.length; i++) {
+                        dataTable.setValue(i, 0, String.valueOf(matrix[i][0]));
+                    }
+
+                } else {
+                    start = 0;
+                    for (int i = 0; i < matrix.length; i++) {
+                        dataTable.setValue(i, 0, String.valueOf(i + 1));
                     }
                 }
-            }
 
-        } else {
-            fieldName = "Column";
-            char letter = 'A';
-            matrix = transposeMatrix(matrix);
-            for (int i = 0; i < matrix[0].length; i++) {
-                dataTable.addColumn(ColumnType.NUMBER, String.valueOf(letter));
-                letter++;
-            }
 
-            dataTable.addRows(matrix.length);
-
-            if (considerFirstLine) {
-                start = 1;
-                for (int i = 0; i < matrix.length; i++) {
-                    dataTable.setValue(i, 0, String.valueOf(matrix[i][0]));
-                }
-
-            } else {
-                start = 0;
-                for (int i = 0; i < matrix.length; i++) {
-                    dataTable.setValue(i, 0, String.valueOf(i + 1));
-                }
-            }
-            
-
-            for (int row = 0; row < matrix.length; row++) {
-                for (int col = start; col < matrix[row].length; col++) {
-                    if (canAddColumn(matrix[row][col])) {
-                        dataTable.setValue(row, col+1, matrix[row][col]);
+                for (int row = 0; row < matrix.length; row++) {
+                    for (int col = start; col < matrix[row].length; col++) {
+                        if (canAddColumn(matrix[row][col])) {
+                            dataTable.setValue(row, col + 1, matrix[row][col]);
+                        }
                     }
                 }
+
             }
 
+            // Draw the chart
+            this.chart_name.setText(chart_name);
+            col_chart.draw(dataTable, getOptions_Col(fieldName, matrix));
+        }else{
+            PieChart chart = new PieChart();
+            chart.setWidth("100%");
+            chart.setHeight("100%");
+            cardContent.add(chart);
+            DataTable dataTable = DataTable.create();
+            dataTable.addColumn(ColumnType.STRING, "Number");
+            dataTable.addRows(matrix.length * matrix[0].length);
+            for(int i = 0; i < matrix[0].length; i++){
+                for(int x = 0; x < matrix.length; x++){
+                    dataTable.setValue((i * matrix.length) + x, 0, Integer.parseInt(matrix[i][x]));
+                }
+            }
+
+            chart.draw(dataTable);
         }
 
-        // Draw the chart
-        this.chart_name.setText(chart_name);
-        chart.draw(dataTable, getOptions(fieldName, matrix));
     }
 
-    private ColumnChartOptions getOptions(String HAxis_name, String[][] matrix) {
+
+    private ColumnChartOptions getOptions_Col(String HAxis_name, String[][] matrix) {
         // Grid Lines
         Gridlines lines = Gridlines.create();
         lines.setColor("fff");
@@ -487,6 +515,7 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView {
         start_textbox.setEnabled(enable);
         switch_considerFist.setEnabled(enable);
         switch_isRow.setEnabled(enable);
+        switch_typeChart.setEnabled(enable);
         chart_button.setEnabled(!enable);
 
         return true;

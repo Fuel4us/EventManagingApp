@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 
 import eapli.framework.domain.AggregateRoot;
+import java.util.ArrayList;
+import java.util.List;
 import pt.isep.nsheets.shared.services.NoteDTO;
 
 /**
@@ -28,6 +30,8 @@ public class Note implements AggregateRoot<Long>, Serializable {
 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateNote;
+    
+    private List<Boolean> activeCheckBox;
 
     /**
      *
@@ -48,6 +52,7 @@ public class Note implements AggregateRoot<Long>, Serializable {
         }
 
         this.dateNote = new Date();
+        activeCheckBox = new ArrayList<>();
     }
 
     /**
@@ -79,6 +84,10 @@ public class Note implements AggregateRoot<Long>, Serializable {
      */
     public Date getDateNote() {
         return dateNote;
+    }
+
+    public List<Boolean> getActiveCheckBox() {
+        return activeCheckBox;
     }
 
     /**
@@ -137,12 +146,16 @@ public class Note implements AggregateRoot<Long>, Serializable {
         return this.pk;
     }
 
+    public void setPk(Long pk) {
+        this.pk = pk;
+    }
+
     /**
      *
      * @return
      */
     public NoteDTO toDTO() {
-        return new NoteDTO(this.titleNote, this.textNote);
+        return new NoteDTO(this.titleNote, this.textNote, this.id());
     }
 
     /**

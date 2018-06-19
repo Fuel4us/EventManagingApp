@@ -1,7 +1,9 @@
 package pt.isep.nsheets.shared.services;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -13,13 +15,9 @@ public class NoteDTO implements Serializable {
     private String titleNote;
     private String textNote;
     private Date dateNote;
-
-    /**
-     * 
-     * @param titleNote must be non-null
-     * @param textNote in case of null, it is initialized as empty String
-     * @throws IllegalArgumentException
-     */
+    private Long id;
+    private List<Boolean> activeCheckBox;
+    
     public NoteDTO(String titleNote, String textNote) throws IllegalArgumentException {
         if (titleNote == null) {
             throw new IllegalArgumentException("title of the Note must be non-null");
@@ -32,6 +30,24 @@ public class NoteDTO implements Serializable {
             this.textNote = textNote;
         
         this.dateNote = new Date();
+        this.id = null;
+        activeCheckBox = new ArrayList<>();
+    }
+    
+    public NoteDTO(String titleNote, String textNote, Long id) throws IllegalArgumentException {
+        if (titleNote == null) {
+            throw new IllegalArgumentException("title of the Note must be non-null");
+        }
+        this.titleNote = titleNote;
+        
+        if(textNote == null)
+            this.textNote = "";
+        else
+            this.textNote = textNote;
+        
+        this.dateNote = new Date();
+        this.id = id;
+        activeCheckBox = new ArrayList<>();
     }
 
     /**
@@ -65,6 +81,10 @@ public class NoteDTO implements Serializable {
         return this.dateNote;
     }
 
+    public List<Boolean> getActiveCheckBox() {
+        return activeCheckBox;
+    }
+
     /**
      * It updates the date of the Note automatically
      * @param titleNote
@@ -81,6 +101,18 @@ public class NoteDTO implements Serializable {
     public void changeTextNote(String textNote) {
         this.textNote = textNote;
         this.dateNote = new Date();
+    }
+    
+    public void setCheckBoxValue(int i,Boolean value){
+        activeCheckBox.set(i, value);
+    }
+    
+    public NoteDTO clone(){
+        return new NoteDTO(titleNote, textNote,this.id);
+    }
+    
+    public Long getID(){
+        return id;
     }
 
 }

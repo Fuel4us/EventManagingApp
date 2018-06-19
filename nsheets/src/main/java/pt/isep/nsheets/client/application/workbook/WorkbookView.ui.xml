@@ -70,14 +70,25 @@ governing permissions and limitations under the License. #L% -->
             </m:MaterialModalContent>
         </m:MaterialModal>
         <ma:window.MaterialWindow ui:field="basicWizardWindow" width="70%" title="Basic Wizard">
-            <m:MaterialPanel padding="32" textAlign="CENTER" height="350px">
-                <m:MaterialListBox ui:field="basicWizardComboBox" placeholder="Functions"/>
-                <m:MaterialTextBox ui:field="basicWizardTextBox" placeholder="Parameters" active="true" readOnly="true"/>
-                <m:MaterialTextBox ui:field="basicWizardTextBox2" placeholder="Description" active="true" readOnly="true"/>
-                <m:MaterialButton ui:field="chooseButton" text="description" iconColor="RED" circle="false" grid="s1"/>
-                <m:MaterialButton ui:field="doneButton" iconType="DONE" iconColor="WHITE" circle="false" grid="s1" float="RIGHT" type="FLOATING"/>
-            </m:MaterialPanel>
+            
         </ma:window.MaterialWindow>
+        <m:MaterialPanel ui:field="basicWizardPanel" padding="32" textAlign="CENTER" height="350px">
+            <m:MaterialListBox ui:field="basicWizardComboBox" placeholder="Functions"/>
+            <m:MaterialTextBox ui:field="basicWizardTextBox" placeholder="Parameters" active="true" readOnly="true"/>
+            <m:MaterialTextBox ui:field="basicWizardTextBox2" placeholder="Description" active="true" readOnly="true"/>
+            <m:MaterialTextBox ui:field="basicWizardResultBox" label="Result" active="true" readOnly="true"/>
+            <m:MaterialCard ui:field="parametersCard">
+                <m:MaterialCollection ui:field="parametersCollection">
+                </m:MaterialCollection>  
+            </m:MaterialCard>
+            <!-- 
+            <m:MaterialTextBox
+                m:id="fBox" ui:field="addParameterBox" placeholder="Add a new parameter" label="Add a parameter"
+                active="true" grid="s11"/>
+            <m:MaterialButton ui:field="chooseButton" text="Add Parameter" iconColor="RED" circle="false" grid="s1"/>
+            -->
+            <m:MaterialButton ui:field="doneButton" iconType="DONE" iconColor="WHITE" circle="false" grid="s1" float="RIGHT" type="FLOATING"/>
+        </m:MaterialPanel>
         <!-- UI for Global Variables -->
         <m:MaterialRow>
             <m:MaterialCollapsible ui:field="colaps">
@@ -102,7 +113,7 @@ governing permissions and limitations under the License. #L% -->
         <m:MaterialRow marginTop="60">
             <m:MaterialTextBox
                 m:id="fBox" ui:field="firstBox" placeholder="Enter your formula for the active cell" label="Enter your formula for the active cell"
-                active="true" grid="s11" iconType="FUNCTIONS" />
+                active="true" grid="s11" iconType="FUNCTIONS" iconColor="BLUE"/>
 
             <m:MaterialIcon ui:field="firstButton" iconType="DONE" iconColor="BLUE" waves="DEFAULT" circle="true" grid="s1"/>
             <m:MaterialModal ui:field="conditionalModal" type="FIXED_FOOTER" dismissible="true" inDuration="500" outDuration="500">
@@ -289,6 +300,7 @@ governing permissions and limitations under the License. #L% -->
                 <m:MaterialLink display="BLOCK" text="Sort"
                                 iconType="EDIT" textColor="BLACK"
                                 ui:field="sortLink" />
+                <m:MaterialLink display="BLOCK" text="Filter" iconType="EDIT" textColor="BLACK" ui:field="filterLink"/>
 
                 <!-- Second level -->
                 <m:MaterialLink activates="moveTo" display="BLOCK"
@@ -332,6 +344,30 @@ governing permissions and limitations under the License. #L% -->
             </ma:popupmenu.MaterialPopupMenu>
 
         </m:MaterialRow>
+        <ma:window.MaterialWindow ui:field="filterWindow" width="70%" title="Define Fiter Range">
+            <m:MaterialPanel padding="32" textAlign="CENTER" height="300px">
+                <m:MaterialRow grid="s6 m10">
+                    <m:MaterialTextBox ui:field="filterStartCellTextBox" placeholder="Enter First Cell Here" active="true" grid="s11"/>
+                    <m:MaterialTextBox ui:field="filterEndCellTextBox" placeholder="Enter Last Cell Here" active="true" grid="s11"/>
+                </m:MaterialRow>
+                <m:MaterialRow>
+                    <m:MaterialListBox ui:field="filterListBox">
+                        <m.html:Option text="equal"/>
+                        <m.html:Option text="greater than"/>
+                        <m.html:Option text="less than"/>
+                        <m.html:Option text="equal or greater than"/>
+                        <m.html:Option text="equal or less than"/>
+                        <m.html:Option text="different"/>
+                    </m:MaterialListBox>
+                </m:MaterialRow>
+                <m:MaterialRow>
+                    <m:MaterialTextBox ui:field="valueTextBox" placeholder="Enter value for comparison" active="true" grid="s11"/>
+                </m:MaterialRow>
+                <m:MaterialRow>
+                    <m:MaterialButton ui:field="filterButton" width="100%" text="Filter" waves="DEFAULT" backgroundColor="WHITE" textColor="BLACK" size="LARGE"/>
+                </m:MaterialRow>
+            </m:MaterialPanel>
+        </ma:window.MaterialWindow>
         <ma:window.MaterialWindow ui:field="window" width="70%" title="Define Sort Range">
             <m:MaterialPanel padding="32" textAlign="CENTER" height="300px">
                 <m:MaterialRow grid="s6 m10">

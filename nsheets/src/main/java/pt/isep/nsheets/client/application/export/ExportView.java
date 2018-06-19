@@ -84,7 +84,6 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
         initWidget(uiBinder.createAndBindUi(this));
         dotted.setValue(Boolean.TRUE);
         radiolist = createMaterialRadioButtonArray();
-        addElementsSelect = addOptionsComboBox();
     }
 
     @UiHandler("style_export_pdf")
@@ -140,6 +139,8 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
         color = color_line.getValue();
         style = findSelected().getFormValue();
         range = rangeSetValue.getValue();
+        List<Object> listOptions = new ArrayList<>();
+        listOptions = addElementsSelect.getSelectedValues();
 
         ExportServiceAsync exportServiceAsync = GWT.create(ExportService.class);
         AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
@@ -163,7 +164,9 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
             }
         };
         //adicionar funcionalidades
-        exportServiceAsync.exportStyledWorkbookPDF(cellStyleList(), workbookDTO, style, color, range, callback);
+        MaterialToast.fireToast("A criar pdf ...");
+        MaterialToast.fireToast("Opções selecionadas ... " + listOptions.size());
+        exportServiceAsync.exportCompleteWorkbookPDF(listOptions, cellStyleList(), workbookDTO, style, color, range, callback);
 
     }
 
@@ -205,16 +208,6 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
     @Override
     public MaterialModal getOverlayComplete() {
         return modal_complete;
-    }
-
-    private MaterialComboBox addOptionsComboBox() {
-        MaterialComboBox combo = new MaterialComboBox();
-        combo.addItem("MACROS");
-        combo.addItem("COMMENTS");
-        combo.addItem("CHARS");
-        combo.addItem(new String("IMAGES"));
-
-        return combo;
     }
 
     interface Binder extends UiBinder<Widget, ExportView> {

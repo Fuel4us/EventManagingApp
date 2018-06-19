@@ -51,6 +51,8 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
 
         boolean isRow();
 
+        boolean isTypeChart();
+
         boolean isEditMode();
 
         void drawChart(String chart_name, ChartDTO dto);
@@ -76,14 +78,25 @@ public class ChartPresenter extends Presenter<ChartPresenter.MyView, ChartPresen
         this.view.saveDataHandler(event -> {
 
             if (view.isEditMode()) {
-                ChartView.chartDTO = new ChartDTO(view.chartName(),
-                        new Address(view.getFistCell()),
-                        new Address(view.getLastCell()),
-                        view.isRow(),
-                        view.isConsiderFirstField(),
-                        ChartType.BAR_CHART,
-                        null,
-                        null);
+                if(view.isTypeChart()) {
+                    ChartView.chartDTO = new ChartDTO(view.chartName(),
+                            new Address(view.getFistCell()),
+                            new Address(view.getLastCell()),
+                            view.isRow(),
+                            view.isConsiderFirstField(),
+                            ChartType.PIE_CHART,
+                            null,
+                            null);
+                }else{
+                    ChartView.chartDTO = new ChartDTO(view.chartName(),
+                            new Address(view.getFistCell()),
+                            new Address(view.getLastCell()),
+                            view.isRow(),
+                            view.isConsiderFirstField(),
+                            ChartType.BAR_CHART,
+                            null,
+                            null);
+                }
 
                 this.view.drawChart(view.chartName(), ChartView.chartDTO);
             }

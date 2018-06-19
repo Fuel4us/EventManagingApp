@@ -40,8 +40,10 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
 import gwt.material.design.addins.client.window.MaterialWindow;
+import gwt.material.design.client.base.MaterialWidget;
 import gwt.material.design.client.constants.IconPosition;
 import gwt.material.design.client.constants.IconType;
 
@@ -50,6 +52,7 @@ import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.table.MaterialDataTable;
+import pt.isep.nsheets.client.security.CurrentUser;
 import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
@@ -66,6 +69,7 @@ import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtensi
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleDTO;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleService;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleServiceAsync;
+import pt.isep.nsheets.shared.lapr4.green.n1140302.s3.Filter.FilterController;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetController;
@@ -78,6 +82,8 @@ import pt.isep.nsheets.shared.core.formula.compiler.ExpressionCompiler;
 import pt.isep.nsheets.shared.core.formula.compiler.MacroCompilerManager;
 import pt.isep.nsheets.shared.core.formula.lang.Language;
 import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
+import pt.isep.nsheets.shared.lapr4.green.n1140317.core.CellComment;
+import pt.isep.nsheets.shared.lapr4.green.n1140317.extensions.CellCommentExtension;
 import pt.isep.nsheets.shared.lapr4.green.n1160815.formula.lang.GlobalVariable;
 import pt.isep.nsheets.shared.lapr4.red.s3.lang.n1160634.macro.domain.Macro;
 import pt.isep.nsheets.shared.services.*;
@@ -164,8 +170,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     //uiObjects by 1140317
     @UiField
     MaterialButton addBasicWizardButton;
-    @UiField
-    MaterialButton chooseButton;
+//    @UiField
+//    MaterialButton chooseButton;
     @UiField
     MaterialButton doneButton;
     @UiField
@@ -175,8 +181,28 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialTextBox basicWizardTextBox;
     @UiField
-    MaterialTextBox basicWizardTextBox2, txtComment;
-    
+    MaterialTextBox basicWizardTextBox2;
+//    MaterialTextBox addParameterBox;
+    @UiField
+    MaterialCollection parametersCollection;
+    @UiField
+    MaterialPanel basicWizardPanel;
+    @UiField
+    MaterialTextBox basicWizardResultBox;
+    @UiField
+    MaterialTextBox  txtComment;
+
+
+    @UiField
+    MaterialButton filterButton;
+    @UiField
+    MaterialWindow filterWindow;
+    @UiField
+    MaterialLink filterLink;
+    @UiField
+    MaterialTextBox filterStartCellTextBox,filterEndCellTextBox,valueTextBox;
+    @UiField
+    MaterialListBox filterListBox;
 
     /*
     Style UI objects by 1050475
@@ -236,10 +262,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox rangeConditionalEnd;
     @UiField
     MaterialIcon conditionalModalDeleteButton;
-    
+
     @UiField
     MaterialCollapsibleBody colapsBody;
-    
+
     @UiField
     MaterialTextBox nameModal;
     @UiField
@@ -324,10 +350,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         customTable.getView().refresh();
     }
 
-    private void openSearchAndReplaceWindow() {
+    private void openSearchAndReplaceWindow(CurrentUser currentUser) {
         String expression = searchBox.getText();
         SearchAndReplaceController controller = new SearchAndReplaceController(this.customTable.getRow(0).getData().sheet);
-        controller.searchAll(expression);
+        controller.searchAll(expression, currentUser.getUser().getNickname());
         replaceButton.setEnabled(true);
         replaceWindowFirstBox.setEnabled(true);
         searchAndReplaceWindow.open();
@@ -356,20 +382,20 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             } catch (FormulaCompilationException ex) {
                 Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
                 MaterialToast.fireToast("Error replacing formula");
-            }finally {
+            } finally {
                 customTable.getView().setRedraw(true);
                 customTable.getView().refresh();
             }
         });
-        
-        replaceAllButton.addClickHandler(event ->{
+
+        replaceAllButton.addClickHandler(event -> {
             try {
                 String s = replaceWindowFirstBox.getText();
                 controller.replaceAll(s);
             } catch (FormulaCompilationException ex) {
                 Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
                 MaterialToast.fireToast("Error replacing formula");
-            }finally {
+            } finally {
                 customTable.getView().setRedraw(true);
                 customTable.getView().refresh();
             }
@@ -457,7 +483,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     }
 
     @Inject
-    WorkbookView(Binder uiBinder) {
+    WorkbookView(Binder uiBinder, CurrentUser currentUser) {
 
         initWidget(uiBinder.createAndBindUi(this));
 
@@ -504,6 +530,25 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             }
             updateCollapsible();
             // Window.alert("Hello");
+        });
+
+        filterLink.addClickHandler(event->{
+            filterWindow.open();
+        });
+
+        filterButton.addClickHandler(clickEvent -> {
+
+           FilterController controller = new FilterController();
+
+            int i = controller.getRowToDelete(filterStartCellTextBox.getText(),filterEndCellTextBox.getText(),filterListBox.getSelectedIndex(),Integer.parseInt(valueTextBox.getText()),Settings.getInstance().getWorkbook().toDTO());
+
+            if(i!=-1){
+                customTable.getRow(i).removeFromParent();
+                MaterialToast.fireToast("Successfully filtered, a row was removed");
+            }else{
+                MaterialToast.fireToast("Successfully filtered, no row needed to be removed");
+            }
+
         });
 
         searchButton.addClickHandler(event -> {
@@ -579,7 +624,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 } else {
                     MaterialToast.fireToast("nao existia");
                     //CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(),0,12));
-                    this.updateCellStyles(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(),0,12));
+                    this.updateCellStyles(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(), 0, 12));
                 }
             }
 
@@ -619,6 +664,16 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             }
         });
 
+        //1140317
+        txtComment.addValueChangeHandler(event -> {
+
+            if (activeCell != null) {
+                CellComment c = CellCommentExtension.getCellComment(activeCell.getAddress());
+
+                customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() + 1);
+            }
+        });
+        
         conditionalModalCloseButton.addClickHandler(event -> {
             conditionalModal.close();
         });
@@ -703,31 +758,28 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             basicWizardComboBox.add(function.getIdentifier());
         }
 
-        doneButton.addClickHandler(event -> {
-            int i = basicWizardComboBox.getSelectedIndex();
-            firstBox.setText(lang.getFunctions()[i].getIdentifier());
-            basicWizardWindow.close();
+        doneButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                int index = basicWizardComboBox.getSelectedIndex();
+                int size = parametersCollection.getWidgetCount();
+                String parameters = "";
+                for (int i = 0; i < size; i++) {
+                    String aux = parametersCollection.getWidget(i).getTitle();
+                    if (!aux.trim().isEmpty()) {
+                        parameters += aux;
+                        if (i < (size - 1) && !parameters.isEmpty()) {
+                            parameters += "; ";
+                        }
+                    }
+                }
+                firstBox.setText(updateResultString(lang));
+                basicWizardWindow.close();
+            }
         });
-
-        chooseButton.addClickHandler(event -> {
-            basicWizardTextBox.setText(getParameters(lang));
-            basicWizardTextBox2.setText(getDescription(lang));
-
-        });
-
         
         macroLink.addClickHandler(event -> {
-            
-//            macroList.clear();
-//            
-//            Macro macroAux = new Macro("Macro_Func_001");
-//            
-//            macroAux.addCommand("1");
-//            
-//            macroList.addItem(macroAux, macroAux.toString());
-            
             macroModal.open();
-
         });
 
         macroModalCloseButton.addClickHandler(event -> {
@@ -748,10 +800,11 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 String result = "";
                 
 //                Macro macroAux = macroList.getSelectedValue();
+
 //                macroAux.addCommand(macroTextArea.getText());
-//                
-//                ExpressionCompiler compiler = MacroCompilerManager.getInstance().getCompiler("MacroExcel");
-                
+
+//                ExpressionCompiler compiler = MacroCompilerManager.getInstance().getCompiler("MacroExel");
+
                 try {
                     
 //                    Expression expression = compiler.compile(activeCell, macroAux.commands());
@@ -838,32 +891,176 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         });
 
         searchAndReplaceButton.addClickHandler(event -> {
-            openSearchAndReplaceWindow();
+            openSearchAndReplaceWindow(currentUser);
         });
+        firstBox.getIcon().addClickHandler(event -> {
+            basicWizardWindow.open();
+        });
+
+        basicWizardComboBox.addValueChangeHandler(event -> {
+            basicWizardTextBox.setText(getParameters(lang));
+            basicWizardTextBox2.setText(getDescription(lang));
+            parametersCollection.clear();
+            try {
+                if (!lang.getFunction(basicWizardComboBox.getSelectedValue()).isVarArg()) {
+//                    chooseButton.setEnabled(false);
+                    createParameterBoxs(lang);
+                } else {
+//                    chooseButton.setEnabled(true);
+                    createInfiniteParameterBox(lang);
+                }
+            } catch (UnknownElementException ex) {
+                Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            updateResultString(lang);
+        });
+        ScrollPanel scroll = new ScrollPanel(basicWizardPanel);
+        scroll.setSize("1000px", "600px");
+        basicWizardWindow.setWidth("1010px");
+        basicWizardWindow.add(scroll);
+    }
+
+    private void createInfiniteParameterBox(Language lang) {
+        try {
+            for (FunctionParameter fp : lang.getFunction(basicWizardComboBox.getSelectedValue()).getParameters()) {
+                MaterialTextBox auxBox = new MaterialTextBox();
+                auxBox.setLabel("Add a parameter of the type  -" + fp.getName());
+                auxBox.setIconType(IconType.ADD);
+                parametersCollection.add(auxBox);
+                auxBox.getIcon().addClickHandler(event -> {
+                    if (!auxBox.getText().trim().isEmpty()) {
+                        MaterialTextBox newBox = new MaterialTextBox();
+                        newBox.setReadOnly(true);
+                        newBox.setTitle(auxBox.getText());
+                        newBox.setText(auxBox.getText());
+                        newBox.setIconType(IconType.DELETE);
+                        parametersCollection.add(newBox);
+                        newBox.getIcon().addClickHandler(newEvent -> {
+                            parametersCollection.remove(newBox);
+                            updateResultString(lang);
+                        });
+                        updateResultString(lang);
+                    } else {
+                        MaterialToast.fireToast("Empty parameter");
+                    }
+                    auxBox.setText("");
+
+                });
+            }
+        } catch (UnknownElementException ex) {
+            Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void createParameterBoxs(Language lang) {
+        try {
+            for (FunctionParameter fp : lang.getFunction(basicWizardComboBox.getSelectedValue()).getParameters()) {
+                MaterialTextBox auxBox = new MaterialTextBox();
+                auxBox.setLabel("Add a parameter of the type  -" + fp.getName());
+                IconType types[] = {IconType.ADD, IconType.EDIT};
+                auxBox.setIconType(types[0]);
+                parametersCollection.add(auxBox);
+                auxBox.getIcon().addClickHandler(event -> {
+                    if (!auxBox.getText().trim().isEmpty()) {
+                        if (auxBox.getIcon().getIconType() == types[0]) {
+                            if (!auxBox.getText().trim().isEmpty()) {
+                                auxBox.setIconType(types[1]);
+                                auxBox.setReadOnly(true);
+                                auxBox.setTitle(auxBox.getText());
+                                updateResultString(lang);
+                            } else {
+                                MaterialToast.fireToast("Empty parameter");
+                            }
+                        } else {
+                            auxBox.setIconType(types[0]);
+                            auxBox.setReadOnly(false);
+                            auxBox.setTitle("");
+                            updateResultString(lang);
+                        }
+                    }
+                });
+            }
+        } catch (UnknownElementException ex) {
+            Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private String updateResultString(Language lang) {
+        int index = basicWizardComboBox.getSelectedIndex();
+        int size = parametersCollection.getWidgetCount();
+        String parameters = "";
+        String errorMsg = "";
+        boolean error = true;
+        for (int i = 0; i < size; i++) {
+            String aux = parametersCollection.getWidget(i).getTitle();
+            if (!aux.trim().isEmpty()) {
+                parameters += aux;
+                if (i < (size - 1) && !parameters.isEmpty()) {
+                    parameters += "; ";
+                }
+            } else {
+                try {
+                    if (!lang.getFunction(basicWizardComboBox.getSelectedValue()).isVarArg()) {
+                        if(!lang.getFunction(basicWizardComboBox.getSelectedValue()).getParameters()[i].isOptional()) {
+                            errorMsg = "Missing parameter -" + lang.getFunction(basicWizardComboBox.getSelectedValue()).getParameters()[i].getName();
+                            MaterialToast.fireToast(errorMsg);
+                        }
+                    }
+                } catch (UnknownElementException ex) {
+                    Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        String result = lang.getFunctions()[index].getIdentifier() + "(" + parameters + ")";
+        if(!errorMsg.isEmpty()) {
+            basicWizardResultBox.setText(errorMsg);
+        }else {
+            if(activeCell == null) {
+                basicWizardResultBox.setText("No active cell selected");
+            }else {
+                String aux = activeCell.getContent();
+                try {
+                    activeCell.setContent("=" + result);
+                    basicWizardResultBox.setText(activeCell.getValue().toString());
+                } catch (FormulaCompilationException ex) {
+                    Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+                    MaterialToast.fireToast(ex.getMessage());
+                    basicWizardResultBox.setText("Function is not possible");
+                }
+                
+                try {
+                    activeCell.setContent(aux);
+                } catch (FormulaCompilationException ex) {  //previous content so erros shouldn't be important
+                    Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return lang.getFunctions()[index].getIdentifier() + "(" + parameters + ")";
     }
     
-    private void updateCollapsible(){
+    private void updateCollapsible() {
         colapsBody.clear();
-        
-        for(String key : Settings.getInstance().getWorkbook().globalVariables().keySet()){
+
+        for (String key : Settings.getInstance().getWorkbook().globalVariables().keySet()) {
             MaterialCollapsible collaps = new MaterialCollapsible();
             MaterialCollapsibleItem item = new MaterialCollapsibleItem();
             item.add(new MaterialCollapsibleHeader(new MaterialLink(key)));
             int i = 0;
-            
-            for(GlobalVariable g : Settings.getInstance().getWorkbook().globalVariables().get(key)){
+
+            for (GlobalVariable g : Settings.getInstance().getWorkbook().globalVariables().get(key)) {
                 MaterialCollapsibleBody body = new MaterialCollapsibleBody();
-                
+
                 MaterialRow rowToAdd = new MaterialRow();
-            
+
                 MaterialLabel label = new MaterialLabel("[" + i + "] - " + g.getValue().toString());
                 MaterialModal changeModal = createModal(key, g.getValue().toString(), i);
                 label.add(changeModal);
-                
+
                 rowToAdd.addClickHandler(event -> {
                     changeModal.open();
                 });
-                
+
                 rowToAdd.add(label);
 
                 body.add(rowToAdd);
@@ -874,39 +1071,39 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             colapsBody.add(collaps);
         }
     }
-    
-    private MaterialModal createModal(String globalName, String value, Integer position){
+
+    private MaterialModal createModal(String globalName, String value, Integer position) {
         MaterialModal changeModal = new MaterialModal();
-                    
+
         MaterialModalContent content = new MaterialModalContent();
 
         MaterialLabel valueLabel = new MaterialLabel("Actual Value: " + value);
         MaterialTextBox changeValue = new MaterialTextBox();
-        
+
         MaterialButton button = new MaterialButton();
         button.setText("CHANGE");
         button.setIconType(IconType.SAVE);
         button.setIconPosition(IconPosition.RIGHT);
-        
+
         button.addClickHandler(event -> {
             String newValue = changeValue.getText();
             Settings.getInstance().getWorkbook().globalVariables().get(globalName).get(position).setValue(Value.parseValue(newValue, new Value.Type[]{}));
             changeModal.close();
             updateCollapsible();
-            
+
             customTable.getView().setRedraw(true);
             customTable.getView().refresh();
         });
-        
+
         content.add(valueLabel);
         content.add(changeValue);
         content.add(button);
 
         changeModal.add(content);
-        
+
         return changeModal;
     }
-    
+
     private String getParameters(Language lang) {
         String par = "Parameters: \n";
         try {
@@ -1142,7 +1339,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     void cancelModal(ClickEvent e) {
         modal.close();
     }
-    
+
     @Override
     public MaterialCollection getOpenWorkbooksCollection() {
         return this.openWorkbooks;
