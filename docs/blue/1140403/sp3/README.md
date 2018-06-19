@@ -88,7 +88,19 @@ and changes the content of all cells.
 Following the guidelines for JPA from EAPLI we envision a scenario like the 
 following for realizing the use cases for this feature increment:
 
+Controller print:
+![codePrint.png](codePrint.png)
 
+Essentially this use case, from the previous iteration, changed in the fact that
+instead of looking for a certain expression in the cells of the active workbook,
+it should look for it in all the workbooks of the user.
+
+For that I evolved the method above, that allows the program to search and save 
+all the cells from all the User's workbooks that correspond to the expression
+introduced.
+
+From here on, since i already knew the cells that needed to be changed, all i needed
+was to change the content of the cells.
 
 ## 4.3. Classes
 
