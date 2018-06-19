@@ -48,6 +48,11 @@ Use case diagram:
 ![UseCase](UseCase.png)
 
 
+**System Sequence Diagrams**
+
+**For US1 and US2**
+
+![Analysis SD](Design-Core 02.3.jpg)
 
 # 4 Design
 ## 4.1 TESTS
