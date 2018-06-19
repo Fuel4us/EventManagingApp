@@ -10,9 +10,7 @@
 IPC02.3 - Global Search/Replace
 
 The application should now support "Search" and "Search and Replace" to be 
-applied for all the workbooks of the user (may they be active/open or not). It 
-should be possible to apply the search to workbooks which name matches a specific
-regular expression. 
+applied for all the workbooks of the user (may they be active/open or not). 
 
 In a more brief text:
 
@@ -52,7 +50,10 @@ Use case diagram:
 
 **For US1 and US2**
 
-![Analysis SD](Design-Core 02.3.jpg)
+Replace All:
+![US2](Design-Core 02.3.jpg)
+
+Replace one ocurrance:
 
 # 4 Design
 ## 4.1 TESTS
