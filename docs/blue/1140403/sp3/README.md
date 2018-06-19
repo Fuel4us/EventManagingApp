@@ -46,10 +46,15 @@ Use case diagram:
 ![UseCase](UseCase.png)
 
 SSD's:
-
+SSD for US1
 ![SSDUS1.jpg](SSDUS1.jpg)
-
+SSD for US2
 ![SSDUS2.jpg](SSDUS2.jpg)
+
+
+**Domain Model (for this feature increment)**
+
+![Domain Model](CDCore02.3.jpg)
 
 **System Sequence Diagrams**
 
