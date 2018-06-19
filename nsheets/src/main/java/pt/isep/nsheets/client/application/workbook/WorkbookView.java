@@ -67,6 +67,7 @@ import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtensi
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleDTO;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleService;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleServiceAsync;
+import pt.isep.nsheets.shared.lapr4.green.n1140302.s3.Filter.FilterController;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetController;
@@ -179,6 +180,18 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox basicWizardTextBox;
     @UiField
     MaterialTextBox basicWizardTextBox2, txtComment;
+
+
+    @UiField
+    MaterialButton filterButton;
+    @UiField
+    MaterialWindow filterWindow;
+    @UiField
+    MaterialLink filterLink;
+    @UiField
+    MaterialTextBox filterStartCellTextBox,filterEndCellTextBox,valueTextBox;
+    @UiField
+    MaterialListBox filterListBox;
 
 
     /*
@@ -503,6 +516,25 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             }
             updateCollapsible();
             // Window.alert("Hello");
+        });
+
+        filterLink.addClickHandler(event->{
+            filterWindow.open();
+        });
+
+        filterButton.addClickHandler(clickEvent -> {
+
+           FilterController controller = new FilterController();
+
+            int i = controller.getRowToDelete(filterStartCellTextBox.getText(),filterEndCellTextBox.getText(),filterListBox.getSelectedIndex(),Integer.parseInt(valueTextBox.getText()),Settings.getInstance().getWorkbook().toDTO());
+
+            if(i!=-1){
+                customTable.getRow(i).removeFromParent();
+                MaterialToast.fireToast("Successfully filtered, a row was removed");
+            }else{
+                MaterialToast.fireToast("Successfully filtered, no row needed to be removed");
+            }
+
         });
 
         searchButton.addClickHandler(event -> {
