@@ -1,0 +1,25 @@
+@startuml 
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+
+User->HomePresenter : Enters the name and description
+HomePresenter->HomePresenter : getName()
+HomePresenter->HomePresenter : getDescription()
+HomePresenter -> WorkbookServicesAsync : addWorkbookDescription(new WorkbookDTO(name, description, state, userName, spreadsheet_default), callback)
+WorkbookServicesAsync -> WorkbookServices: addWorkbookDescription(WorkbookDTO wdDto)
+WorkbookServices -> AddWorkbookDescriptionController : addWorkbookDescription(WorkbookDTO wdDto)
+AddWorkbookDescriptionController->WorkbookRepository : save(WorkbookDTO wdDto)
+database Database 
+WorkbookRepository->Database : save(wDto)
+HomePresenter->HomePresenter : refreshView()
+HomePresenter-->User : Shows the card of the new private workbook on the panel of Home
+
+
+@enduml
+

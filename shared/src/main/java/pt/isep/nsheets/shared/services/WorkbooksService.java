@@ -20,7 +20,7 @@ public interface WorkbooksService extends RemoteService {
         
         void deleteWorkbook(WorkbookDTO wdto);
         
-        ArrayList<WorkbookDTO> searchWorkbooks(String name);
+        ArrayList<WorkbookDTO> searchWorkbooks(String name, boolean state);
         
         void changeState(boolean state, WorkbookDTO wdto);
 }

@@ -35,6 +35,11 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
     public static final char FORMULA_STARTER = '#';
 
     private Language language = null;
+    
+    /**
+     * Compiler name
+     */
+    public static final String compilerName = "MonetaryFormula";
 
     public MonetaryExpressionCompiler() {
         language = LanguageManager.getInstance().getLanguage("monetary");
@@ -77,6 +82,11 @@ public class MonetaryExpressionCompiler implements ExpressionCompiler {
         }
 
         return result;
+    }
+
+    @Override
+    public String compilerName() {
+        return compilerName;
     }
 
     public static class MonetaryErrorListener extends BaseErrorListener {

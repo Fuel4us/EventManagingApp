@@ -9,7 +9,7 @@
 
     <ui:style>
 
-        @external textarea,.input-field label,  .btn-toolbar, .card-content, .input-field;
+        @external textarea,.input-field label,  .btn-toolbar, .card-content, .input-field, .collapsible-body, .collapsible li, .collapsible-header;
         
         .tab{
         border-radius: 5rem!important;
@@ -82,40 +82,29 @@
         margin: auto;
         }
         
+        .collapse .collapsible-body{
+        font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+        font-style: normal;
+        font-variant: normal;
+        line-height: 20px;
+        border:none;
+        }
+        
+        
+        .collapse .collapsible-header{
+        border-radius: 1rem;
+        font-weight: bold;
+        }
+        
+        .collapsible li{
+        border-radius: 1rem;
+        margin-top: 0.7rem!important;
+        }
+        
+        
     </ui:style>
 
     <g:HTMLPanel>
-        
-        <m:MaterialTab ui:field="tab" shadow="1" addStyleNames="{style.tab}">
-            <m:MaterialTabItem waves="LIGHT" >
-                <m:MaterialLink text="Javascript" href="#javascript" textColor="WHITE"/>
-            </m:MaterialTabItem>
-            <m:MaterialTabItem waves="LIGHT" >
-                <m:MaterialLink text="Javascript with parameters" href="#javascript_param" textColor="WHITE"/>
-            </m:MaterialTabItem>
-        </m:MaterialTab>
-        
-        <m:MaterialRow ui:field="tabbar"></m:MaterialRow>
-        
-        <m:MaterialPanel m:id="javascript">
-            <m:MaterialRow>
-                <m:MaterialColumn grid="s4" offset="s4">
-                    <m:MaterialTextArea ui:field="CodeArea" label="JavaScript Code" length="600" resizeRule="AUTO"/>
-                </m:MaterialColumn>
-            </m:MaterialRow>
-            <m:MaterialRow>
-                <m:MaterialColumn grid="s1" offset="s4">
-                    <m:MaterialButton ui:field="runButton" text="RUN" textColor="GREEN" type="FLAT" waves="TEAL" />
-                </m:MaterialColumn>
-            </m:MaterialRow>
-            <m:MaterialRow>
-                <m:MaterialColumn grid="s4" offset="s4">
-                    <m:MaterialTextArea ui:field="OutputText" label="Output Area" length="400" resizeRule="AUTO"/>
-                </m:MaterialColumn>
-            </m:MaterialRow>
-        </m:MaterialPanel>
-        
-        
         <m:MaterialPanel m:id="javascript_param">
             <m:MaterialRow>
                 <m:MaterialColumn grid="s12 l6">

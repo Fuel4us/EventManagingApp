@@ -50,6 +50,7 @@ import gwt.material.design.client.ui.*;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.table.MaterialDataTable;
+import pt.isep.nsheets.client.security.CurrentUser;
 import pt.isep.nsheets.shared.core.*;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 import static gwt.material.design.jquery.client.api.JQuery.$;
@@ -71,11 +72,17 @@ import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetController;
 import pt.isep.nsheets.client.lapr4.red.s2.ipc.n1160600.workbook.application.SearchAndReplaceController;
 import pt.isep.nsheets.shared.application.Settings;
+import pt.isep.nsheets.shared.core.formula.Expression;
 import pt.isep.nsheets.shared.core.formula.Function;
 import pt.isep.nsheets.shared.core.formula.FunctionParameter;
+import pt.isep.nsheets.shared.core.formula.compiler.ExpressionCompiler;
+import pt.isep.nsheets.shared.core.formula.compiler.MacroCompilerManager;
 import pt.isep.nsheets.shared.core.formula.lang.Language;
 import pt.isep.nsheets.shared.core.formula.lang.UnknownElementException;
+import pt.isep.nsheets.shared.lapr4.green.n1140317.core.CellComment;
+import pt.isep.nsheets.shared.lapr4.green.n1140317.extensions.CellCommentExtension;
 import pt.isep.nsheets.shared.lapr4.green.n1160815.formula.lang.GlobalVariable;
+import pt.isep.nsheets.shared.lapr4.red.s3.lang.n1160634.macro.domain.Macro;
 import pt.isep.nsheets.shared.services.*;
 
 // public class HomeView extends ViewImpl implements HomePresenter.MyView {
@@ -171,7 +178,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialTextBox basicWizardTextBox;
     @UiField
-    MaterialTextBox basicWizardTextBox2;
+    MaterialTextBox basicWizardTextBox2, txtComment;
+
 
     /*
     Style UI objects by 1050475
@@ -231,10 +239,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox rangeConditionalEnd;
     @UiField
     MaterialIcon conditionalModalDeleteButton;
-    
+
     @UiField
     MaterialCollapsibleBody colapsBody;
-    
+
     @UiField
     MaterialTextBox nameModal;
     @UiField
@@ -252,6 +260,11 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialIcon macroModalDoneButton;
     @UiField
     MaterialIcon macroModalCloseButton;
+    @UiField
+    MaterialListValueBox<Macro> macroList;
+
+    @UiField
+    MaterialCollection openWorkbooks;
 
     @Override
     public MaterialModal getModal() {
@@ -309,11 +322,12 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         customTable.getView().setRedraw(true);
         customTable.getView().refresh();
     }
-
-    private void openSearchAndReplaceWindow() {
-        String expression = searchBox.getText();
-        SearchAndReplaceController controller = new SearchAndReplaceController(this.customTable.getRow(0).getData().sheet);
-        controller.searchAll(expression);
+/*
+    private void openSearchAndReplaceWindow(CurrentUser currentUser) {
+        //String usernameTemp=currentUser.getUser().getNickname();
+        //String expression = searchBox.getText();
+        //SearchAndReplaceController controller = new SearchAndReplaceController(this.customTable.getRow(0).getData().sheet);
+        //controller.searchAll(expression,usernameTemp);
         replaceButton.setEnabled(true);
         replaceWindowFirstBox.setEnabled(true);
         searchAndReplaceWindow.open();
@@ -342,26 +356,26 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             } catch (FormulaCompilationException ex) {
                 Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
                 MaterialToast.fireToast("Error replacing formula");
-            }finally {
+            } finally {
                 customTable.getView().setRedraw(true);
                 customTable.getView().refresh();
             }
         });
-        
-        replaceAllButton.addClickHandler(event ->{
+
+        replaceAllButton.addClickHandler(event -> {
             try {
                 String s = replaceWindowFirstBox.getText();
                 controller.replaceAll(s);
             } catch (FormulaCompilationException ex) {
                 Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
                 MaterialToast.fireToast("Error replacing formula");
-            }finally {
+            } finally {
                 customTable.getView().setRedraw(true);
                 customTable.getView().refresh();
             }
         });
     }
-
+*/
     interface Binder extends UiBinder<Widget, WorkbookView> {
     }
 
@@ -443,7 +457,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     }
 
     @Inject
-    WorkbookView(Binder uiBinder) {
+    WorkbookView(Binder uiBinder,  CurrentUser currentUser) {
 
         initWidget(uiBinder.createAndBindUi(this));
 
@@ -488,6 +502,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                     this.setActiveCell(activeCell);
                 }
             }
+            updateCollapsible();
             // Window.alert("Hello");
         });
 
@@ -564,7 +579,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                 } else {
                     MaterialToast.fireToast("nao existia");
                     //CellStyleExtension.addCellStyle(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(),0,12));
-                    this.updateCellStyles(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(),0,12));
+                    this.updateCellStyles(new CellStyle(activeCell.getAddress(), Color.WHITE.ordinal(), fontcolorLst.getSelectedValue().ordinal(), 0, 12));
                 }
             }
 
@@ -604,6 +619,16 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             }
         });
 
+        //1140317
+        txtComment.addValueChangeHandler(event -> {
+
+            if (activeCell != null) {
+                CellComment c = CellCommentExtension.getCellComment(activeCell.getAddress());
+
+                customTable.getRow(activeCell.getAddress().getRow()).getWidget().getColumn(activeCell.getAddress().getColumn() + 1);
+            }
+        });
+        
         conditionalModalCloseButton.addClickHandler(event -> {
             conditionalModal.close();
         });
@@ -628,7 +653,6 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             };
 
             workbooksSvc.addWorkbookDescription(Settings.getInstance().getWorkbook().toDTO(), callback);
-            updateCollapsible();
         });
 
         // Set the visible range of the table for pager (later)
@@ -712,59 +736,79 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         macroModalDoneButton.addClickHandler(event -> {
             if (activeCell != null) {
 
-                String result = "";
+//                String result = "";
+//                try {
+//                    activeCell.setContentByMacro(macroTextArea.getText());
+//                    Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
+//                    if (extensionCond != null) {
+//
+//                        Conditional cond = ConditionalFormattingExtension.containsCondition((CellImpl) activeCell);
+//
+//                        if (cond != null) {
+//                            boolean flag = ConditionalFormattingExtension.setOperation((CellImpl) activeCell, cond.getCondOperator(), cond.getCondValue());
+//                            MaterialToast.fireToast("Update Cell. Conditional this " + activeCell.getAddress().toString() + " " + cond.getCondOperator() + " " + cond.getCondValue().toString() + " is " + flag);
+//
+//                        }
+//                    }
+//                } catch (FormulaCompilationException e) {
+//                    result = e.getMessage();
+//                } finally {
+//                    customTable.getView().setRedraw(true);
+//                    customTable.getView().refresh();
+//
+//                    this.setActiveCell(activeCell);
+//                }
+                Macro macroAux = macroList.getSelectedValue();
+
+                macroAux.addCommand(macroTextArea.getText());
+
+                ExpressionCompiler compiler = MacroCompilerManager.getInstance().getCompiler(macroAux.language().getName());
+
                 try {
-                    activeCell.setContentByMacro(macroTextArea.getText());
-                    Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
-                    if (extensionCond != null) {
+                    Expression expression = compiler.compile(activeCell, macroAux.commands());
 
-                        Conditional cond = ConditionalFormattingExtension.containsCondition((CellImpl) activeCell);
+                    Value value = expression.evaluate();
 
-                        if (cond != null) {
-                            boolean flag = ConditionalFormattingExtension.setOperation((CellImpl) activeCell, cond.getCondOperator(), cond.getCondValue());
-                            MaterialToast.fireToast("Update Cell. Conditional this " + activeCell.getAddress().toString() + " " + cond.getCondOperator() + " " + cond.getCondValue().toString() + " is " + flag);
-
-                        }
-                    }
-                } catch (FormulaCompilationException e) {
-                    result = e.getMessage();
-                } finally {
+                    activeCell.setContent(value.toString());
                     customTable.getView().setRedraw(true);
                     customTable.getView().refresh();
 
-                    this.setActiveCell(activeCell);
+                    MaterialToast.fireToast("Result of Macro : " + value.toString());
+
+                } catch (FormulaCompilationException | IllegalValueTypeException ex) {
+                    MaterialToast.fireToast(ex.getMessage());
                 }
             }
             macroModal.close();
         });
 
         searchAndReplaceButton.addClickHandler(event -> {
-            openSearchAndReplaceWindow();
+            //openSearchAndReplaceWindow(currentUser);
         });
     }
-    
-    private void updateCollapsible(){
+
+    private void updateCollapsible() {
         colapsBody.clear();
-        
-        for(String key : Settings.getInstance().getWorkbook().globalVariables().keySet()){
+
+        for (String key : Settings.getInstance().getWorkbook().globalVariables().keySet()) {
             MaterialCollapsible collaps = new MaterialCollapsible();
             MaterialCollapsibleItem item = new MaterialCollapsibleItem();
             item.add(new MaterialCollapsibleHeader(new MaterialLink(key)));
             int i = 0;
-            
-            for(GlobalVariable g : Settings.getInstance().getWorkbook().globalVariables().get(key)){
+
+            for (GlobalVariable g : Settings.getInstance().getWorkbook().globalVariables().get(key)) {
                 MaterialCollapsibleBody body = new MaterialCollapsibleBody();
-                
+
                 MaterialRow rowToAdd = new MaterialRow();
-            
+
                 MaterialLabel label = new MaterialLabel("[" + i + "] - " + g.getValue().toString());
                 MaterialModal changeModal = createModal(key, g.getValue().toString(), i);
                 label.add(changeModal);
-                
+
                 rowToAdd.addClickHandler(event -> {
                     changeModal.open();
                 });
-                
+
                 rowToAdd.add(label);
 
                 body.add(rowToAdd);
@@ -775,39 +819,39 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             colapsBody.add(collaps);
         }
     }
-    
-    private MaterialModal createModal(String globalName, String value, Integer position){
+
+    private MaterialModal createModal(String globalName, String value, Integer position) {
         MaterialModal changeModal = new MaterialModal();
-                    
+
         MaterialModalContent content = new MaterialModalContent();
 
         MaterialLabel valueLabel = new MaterialLabel("Actual Value: " + value);
         MaterialTextBox changeValue = new MaterialTextBox();
-        
+
         MaterialButton button = new MaterialButton();
         button.setText("CHANGE");
         button.setIconType(IconType.SAVE);
         button.setIconPosition(IconPosition.RIGHT);
-        
+
         button.addClickHandler(event -> {
             String newValue = changeValue.getText();
-            Settings.getInstance().getWorkbook().globalVariables().get(globalName).get(position).setValue(new Value(newValue));
+            Settings.getInstance().getWorkbook().globalVariables().get(globalName).get(position).setValue(Value.parseValue(newValue, new Value.Type[]{}));
             changeModal.close();
             updateCollapsible();
-            
+
             customTable.getView().setRedraw(true);
             customTable.getView().refresh();
         });
-        
+
         content.add(valueLabel);
         content.add(changeValue);
         content.add(button);
 
         changeModal.add(content);
-        
+
         return changeModal;
     }
-    
+
     private String getParameters(Language lang) {
         String par = "Parameters: \n";
         try {
@@ -1042,5 +1086,10 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiHandler("cancelButtonModal")
     void cancelModal(ClickEvent e) {
         modal.close();
+    }
+
+    @Override
+    public MaterialCollection getOpenWorkbooksCollection() {
+        return this.openWorkbooks;
     }
 }

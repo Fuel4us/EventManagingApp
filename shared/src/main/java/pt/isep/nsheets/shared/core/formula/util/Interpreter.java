@@ -24,6 +24,7 @@ import pt.isep.nsheets.shared.core.Value;
 import pt.isep.nsheets.shared.core.formula.BinaryOperation;
 import pt.isep.nsheets.shared.core.formula.FunctionCall;
 import pt.isep.nsheets.shared.core.formula.Literal;
+import pt.isep.nsheets.shared.core.formula.NaryOperation;
 import pt.isep.nsheets.shared.core.formula.Reference;
 import pt.isep.nsheets.shared.core.formula.UnaryOperation;
 
@@ -53,4 +54,6 @@ public abstract class Interpreter implements ExpressionVisitor {
 	}
 
 	public abstract Value visitFunctionCall(FunctionCall call);
+        
+        public abstract Value visitNaryOperation(NaryOperation operation);
 }

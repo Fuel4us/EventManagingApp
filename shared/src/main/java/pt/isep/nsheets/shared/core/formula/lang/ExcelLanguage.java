@@ -54,6 +54,11 @@ public class ExcelLanguage extends Language {
         unaryOperators.add(new Percent());
     }
 
+    @Override
+    protected void initNaryOperators() {
+        naryOperators.add(new Block());
+    }
+    
     public ExcelLanguage(String name) {
         super(name);
     }

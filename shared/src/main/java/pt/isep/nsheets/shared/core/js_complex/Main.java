@@ -33,14 +33,23 @@ public class Main {
         System.out.println("Valor $A1: " + cells.entrySet().iterator().next().getValue());
         List<Function> function = new ArrayList<>();
         function.add(new Function("func1", "console.log(\"olá\");"));
-        
+
 //        String output1 = "console.log(\"$A1 + 1 = \" + ($A1 + 1)); $A1 = \"teste\"; console.log(\"$A1 is now 'teste': \" + $A1); $A1 = 1; console.log(\"$A1 is now '1' = \" + $A1); while($A1 < 10){ $A1 = $A1 * 2; } console.log(\"The variable $A1 has the value \" + $A1);";
-        
-String output2 = "var j = 7; "
-        + "function test2(){console.log(\"olá\");}\n"
-        + "function test(){";
-        Js_complexLexer lexer = new Js_complexLexer(new ANTLRInputStream("func1();"));
-       
+        String output2 = "var j = 7; "
+                + "function test2(){console.log(\"olá\");}\n"
+                + "function test(){";
+        Js_complexLexer lexer = new Js_complexLexer(new ANTLRInputStream("function complex(){\n"
+                + "var i = 10;\n"
+                + "var j = 3;\n"
+                + "\n"
+                + "while(j>0){\n"
+                + "i = i*i;\n"
+                + "j--;\n"
+                + "}\n"
+                + "\n"
+                + "return i;\n"
+                + "}"));
+
         Js_complexParser parser = new Js_complexParser(new CommonTokenStream(lexer));
         ParseTree tree = parser.parse();
         pt.isep.nsheets.shared.core.js_complex.EvalVisitor visitor = new pt.isep.nsheets.shared.core.js_complex.EvalVisitor(cells, function);
@@ -50,8 +59,7 @@ String output2 = "var j = 7; "
 
         System.out.println(visitor.getOutput());
     }
-    
-    
+
 //    var exec = 0;
 //$B1 = 0;
 //
@@ -67,5 +75,4 @@ String output2 = "var j = 7; "
 ////var j = f4();
 //
 ////console.log($B1+" e j ="+j);
-    
 }

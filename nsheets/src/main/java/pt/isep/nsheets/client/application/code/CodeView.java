@@ -42,17 +42,14 @@ class CodeView extends ViewImpl implements CodePresenter.MyView {
     CodeView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
 
-        codeTextArea.setText("Dim x As Integer\n"
-                + "\n"
+        codeTextArea.setText("Function f1() As Integer\n"
+                + "Dim x As Integer\n"
                 + "x = 1\n"
-                + "\n"
-                + "While x <> 10\n"
-                + "\n"
                 + "Log \"The variable x has the value \" + x\n"
+                + "Return x\n"
+                + "End Function\n"
                 + "\n"
-                + "x = x + 1\n"
-                + "\n"
-                + "End While"
+                + "f1()"
         );
 
         runButton.addClickHandler(event -> {

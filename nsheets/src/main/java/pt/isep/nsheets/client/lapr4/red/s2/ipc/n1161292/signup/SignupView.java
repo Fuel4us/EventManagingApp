@@ -21,6 +21,7 @@ import javax.inject.Inject;
 public class SignupView extends ViewImpl implements SignupPresenter.MyView {
     
     protected static String URL = null;
+    public static String MODULEBASEURL = GWT.getModuleBaseURL();
     
     interface Binder extends UiBinder<Widget, SignupView> {
     }

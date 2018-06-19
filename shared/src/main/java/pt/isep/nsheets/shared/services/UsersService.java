@@ -13,10 +13,13 @@ public interface UsersService extends RemoteService {
     
     UserDTO attemptLogin(String email, String password);
 
-    UserDTO editProfile(UserDTO user);
+    boolean deleteUser(String email);
 
-    void deleteUser(String email);
+    boolean changeState(String email, boolean state, String superUserEmail, String superUserPassword);
 
+    UserDTO changePassword(String email, String oldPassword, String newPassword);
+
+    UserDTO editUser(String email, String name, String nickname, String URL);
     
 //    Iterable<WorkbookDTO> getWorkbook(UserDTO user);
 //    

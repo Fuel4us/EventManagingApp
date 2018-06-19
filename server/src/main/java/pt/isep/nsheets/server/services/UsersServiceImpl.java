@@ -71,23 +71,55 @@ public class UsersServiceImpl extends RemoteServiceServlet implements UsersServi
     }
 
     @Override
-    public UserDTO editProfile(UserDTO userDTO) {
+    public boolean deleteUser(String email) {
         EditProfileController ctrl = new EditProfileController();
+
+        return ctrl.deleteProfile(email);
+    }
+
+    @Override
+    public boolean changeState(String email, boolean state, String superUserEmail, String superUserPassword) {
+        EditProfileController ctrl = new EditProfileController();
+
         try {
-            return ctrl.editProfile(userDTO);
-        } catch (DataConcurrencyException |DataIntegrityViolationException  e) {
-            Logger.getLogger(UsersServiceImpl.class.getName()).log(Level.SEVERE, null, e);
+            return ctrl.changeState(email,state,superUserEmail,superUserPassword);
+        } catch (DataConcurrencyException e) {
+            e.printStackTrace();
+        } catch (DataIntegrityViolationException e) {
+            e.printStackTrace();
         }
 
+        return false;
+    }
+
+    @Override
+    public UserDTO changePassword(String email, String oldPassword, String newPassword) {
+        EditProfileController ctrl = new EditProfileController();
+
+        try {
+            return ctrl.changePassword(email, oldPassword, newPassword);
+        } catch (DataConcurrencyException e) {
+            e.printStackTrace();
+        } catch (DataIntegrityViolationException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
-    public void deleteUser(String email) {
+    public UserDTO editUser(String email, String name, String nickname, String URL) {
         EditProfileController ctrl = new EditProfileController();
 
-        ctrl.deleteProfile(email);
+        try {
+            return ctrl.editUser(email, name, nickname, URL);
+        } catch (DataConcurrencyException e) {
+            e.printStackTrace();
+        } catch (DataIntegrityViolationException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
 
 //    @Override
 //    public void addWorkbook(WorkbookDTO workbook, UserDTO user) {

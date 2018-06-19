@@ -25,4 +25,8 @@ public interface NotesService extends RemoteService {
      * @throws DataException
      */
     NoteDTO addNote(NoteDTO notesDTO) throws DataException;
+    
+    NoteDTO saveNote(NoteDTO noteDTO, Long id);
+    
+    Void deleteNote(Long id);
 }

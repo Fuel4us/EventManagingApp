@@ -60,4 +60,10 @@ public class FunctionServiceImpl extends RemoteServiceServlet implements Functio
 //        return new Js_controller().removeFunction(function);
 //    }
 
+    @Override
+    public Function removeFunction(Function function) {
+        PersistenceContext.setSettings(this.getPersistenceSettings());
+        return new Js_controller().removeFunction(function);
+    }
+
 }

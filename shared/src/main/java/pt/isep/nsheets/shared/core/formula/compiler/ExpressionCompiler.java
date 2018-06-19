@@ -42,4 +42,6 @@ public interface ExpressionCompiler {
 	 * @return the 
 	 */
 	public char getStarter();
+        
+        public String compilerName();
 }

@@ -1,0 +1,19 @@
+@startuml  analysis.png
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+
+User -> Browser : select workbook
+User -> Browser : type in formula
+User -> Browser : evaluate
+
+Browser ->> Server : set cell content
+
+Server ->> Formula : evaluate formula
+
+Formula ->> Function : apply function
+
+Server -> Browser : update cell view
+@enduml

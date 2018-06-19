@@ -2,6 +2,8 @@ package pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.application;
 
 import eapli.framework.persistence.DataConcurrencyException;
 import eapli.framework.persistence.DataIntegrityViolationException;
+import gwt.material.design.client.ui.MaterialToast;
+import java.util.Optional;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.domain.Note;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
 import pt.isep.nsheets.server.lapr4.red.s1.core.n1160634.notes.persistence.NoteRepository;
@@ -38,6 +40,24 @@ public class NoteService {
         noteRepository.save(note);
 
         return note;
+    }
+    
+    public Note saveNote(NoteDTO noteDTO, Long id) throws DataConcurrencyException, DataIntegrityViolationException{
+        final NoteRepository noteRepository = PersistenceContext.repositories().notes();
+
+        Note note = Note.fromDTO(noteDTO);
+        note.setPk(id);
+        noteRepository.save(note);
+
+        return note;
+    }
+    
+    public Void deleteNote(Long id){
+        final NoteRepository noteRepository = PersistenceContext.repositories().notes();
+        
+        noteRepository.deleteNote(id);
+        
+        return null;
     }
 
 }

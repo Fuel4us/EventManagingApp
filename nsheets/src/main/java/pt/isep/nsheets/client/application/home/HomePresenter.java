@@ -18,6 +18,7 @@ import gwt.material.design.client.ui.MaterialToast;
 
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialSwitch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pt.isep.nsheets.client.application.ApplicationPresenter;
@@ -25,6 +26,7 @@ import pt.isep.nsheets.client.application.menu.MenuView;
 import pt.isep.nsheets.client.event.SetPageTitleEvent;
 import pt.isep.nsheets.client.place.NameTokens;
 import pt.isep.nsheets.client.place.ParameterTokens;
+import pt.isep.nsheets.client.security.CurrentUser;
 import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.application.Settings;
@@ -73,6 +75,8 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         MaterialButton getSwitchStateButton();
 
         void switchClickHandler(ClickHandler ch);
+
+        MaterialSwitch getSwitchEvent();
     }
 
     @NameToken(NameTokens.home)
@@ -81,7 +85,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     }
 
     @Inject
-    HomePresenter(EventBus eventBus, MyView view, MyProxy proxy, PlaceManager placeManager) {
+    HomePresenter(EventBus eventBus, MyView view, MyProxy proxy, PlaceManager placeManager, CurrentUser currentUser) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_CONTENT);
 
         this.view = view;
@@ -92,7 +96,11 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         });
 
         MenuView.getUsername().addClickHandler(event -> {
-            this.redirectToProfilePage();
+            if (currentUser.isLoggedIn()) {
+                this.redirectToProfilePage();
+            } else {
+                redirectToLoginPage();
+            }
         });
 
         this.view.buttonClickHandler(e -> {
@@ -123,6 +131,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         this.view.searchClickHandler(e -> {
             WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
             String workbookName = this.view.search();
+            boolean state = true;
 
             // Set up the callback object.
             AsyncCallback<ArrayList<WorkbookDTO>> callback = new AsyncCallback<ArrayList<WorkbookDTO>>() {
@@ -141,10 +150,15 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
                     }
                 }
             };
-            if(workbookName.equals("all")) {
+            if (workbookName.equals("all")) {
                 refreshView();
-            } 
-            refreshViewAfterSearch(workbookName);
+            }
+            else if (this.view.getSwitchEvent().getValue() == true) {
+                refreshViewAfterSearch(workbookName, state);
+            } else {
+                state = false;
+                refreshViewAfterSearch(workbookName, state);
+            }
         });
 
         this.view.renameClickHandler(e -> {
@@ -177,7 +191,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
             WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
             WorkbookDTO wdto = this.view.focusedWorkbookDTO();
             boolean state;
-            if (wdto.publicState==true) {
+            if (wdto.publicState == true) {
                 state = false;
             } else {
                 state = true;
@@ -253,7 +267,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         workbooksSvc.listWorkbooksPerUser(MenuView.getUsername().toString(), callback);
     }
 
-    public void refreshViewAfterSearch(String workbookName) {
+    public void refreshViewAfterSearch(String workbookName, boolean state) {
         WorkbooksServiceAsync workbooksSvc = GWT.create(WorkbooksService.class);
 
         // Set up the callback object.
@@ -265,11 +279,12 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
             @Override
             public void onSuccess(ArrayList<WorkbookDTO> result) {
+                MaterialToast.fireToast("Workbooks searched!");
                 view.setContents(result);
             }
         };
 
-        workbooksSvc.searchWorkbooks(workbookName, callback);
+        workbooksSvc.searchWorkbooks(workbookName, state, callback);
     }
 
     @Override
@@ -281,10 +296,19 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         refreshView();
     }
 
-    private void redirectToProfilePage(){
+    private void redirectToProfilePage() {
         String token = placeManager
                 .getCurrentPlaceRequest()
                 .getParameter(ParameterTokens.REDIRECT, NameTokens.profile);
+        PlaceRequest placeRequest = new PlaceRequest.Builder().nameToken(token).build();
+
+        placeManager.revealPlace(placeRequest);
+    }
+
+    private void redirectToLoginPage() {
+        String token = placeManager
+                .getCurrentPlaceRequest()
+                .getParameter(ParameterTokens.REDIRECT, NameTokens.login);
         PlaceRequest placeRequest = new PlaceRequest.Builder().nameToken(token).build();
 
         placeManager.revealPlace(placeRequest);
