@@ -815,7 +815,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
                     
 //                    activeCell.setContent(value.toString());
                     
-                    MaterialToast.fireToast("Result of Macro function : " + macroTextArea.getText().lastIndexOf("/n") + 1);
+                    MaterialToast.fireToast("Result of Macro function : " + macroTextArea.getText());
                     
                     Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
                     if (extensionCond != null) {
