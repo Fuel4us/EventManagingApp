@@ -10,16 +10,43 @@ import eapli.framework.persistence.DataIntegrityViolationException;
 import pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.domain.Tasks;
 import pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.persistence.TasksRepository;
 import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.persistence.PersistenceContext;
+import pt.isep.nsheets.shared.services.DataException;
+import pt.isep.nsheets.shared.services.TasksDTO;
 
 /**
  *
- * @author Pedro Rodrigues
+ * @author Pedro Rodrigues - (1140572)
  */
 public class TasksCallerService {
 
-    public Tasks findByName(String name) throws DataConcurrencyException, DataIntegrityViolationException {
+    public Tasks findByName(String name) throws DataException {
         final TasksRepository tasksRepository = PersistenceContext.repositories().tasks();
 
         return tasksRepository.findByName(name);
     }
+
+    public Tasks deleteTask(TasksDTO tasksDTO) {
+        final TasksRepository tasksRepository = PersistenceContext.repositories().tasks();
+
+        return tasksRepository.deleteTask(Tasks.fromDTO(tasksDTO));
+    }
+
+    public Iterable<Tasks> listTasksNotCompleted(String user) {
+        final TasksRepository tasksRepository = PersistenceContext.repositories().tasks();
+
+        return tasksRepository.findAll();
+    }
+
+    public Tasks addTask(TasksDTO tasksDTO) throws DataConcurrencyException, DataIntegrityViolationException {
+        final TasksRepository tasksRepository = PersistenceContext.repositories().tasks();
+
+        Tasks task = new Tasks(tasksDTO.getName(), tasksDTO.getDescription(), tasksDTO.getPriorityLevel(), tasksDTO.getProgress(), tasksDTO.isTaskCompleted());
+        tasksRepository.save(task);
+        return task;
+    }
+
+    public Iterable<Tasks> searchTasks(String name) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
