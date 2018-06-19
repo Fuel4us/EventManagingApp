@@ -50,10 +50,11 @@ Use case diagram:
 
 **For US1 and US2**
 
-Replace All:
-![Design-Core 02.3.jpg](Design-Core02.3.jpg)
+Replace one ocurrance US1:
+![Design-Core 02.3.jpg](Core02.3S1.jpg)
 
-Replace one ocurrance:
+Replace All US2:
+![Design-Core 02.3.jpg](Design-Core02.3.jpg)
 
 # 4 Design
 ## 4.1 TESTS
