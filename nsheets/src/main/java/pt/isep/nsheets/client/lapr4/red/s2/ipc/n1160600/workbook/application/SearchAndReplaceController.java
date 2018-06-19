@@ -2,8 +2,10 @@ package pt.isep.nsheets.client.lapr4.red.s2.ipc.n1160600.workbook.application;
 
 import java.util.ArrayList;
 import java.util.List;
+import pt.isep.nsheets.server.lapr4.white.s1.core.n4567890.workbooks.application.WorkbookDescriptionService;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Spreadsheet;
+import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
 
 public class SearchAndReplaceController {
@@ -12,23 +14,32 @@ public class SearchAndReplaceController {
     private List<Cell> cellList = new ArrayList<>();
     private Spreadsheet spreadsheet;
     private String expression;
+    private Iterable<Workbook> workbookList;
+    
 
     public SearchAndReplaceController(Spreadsheet spreadsheet) {
      this.spreadsheet = spreadsheet;   
     }
     
-    public void searchAll(String expression) {
+    /*public void searchAll(String expression, String username) {
+        int cont=0, numSheets=0;
+        workbookList=workbookService.allWorkbooksFromUser(username);
         cellList.clear();
-        for (int c = 0; c < spreadsheet.getColumnCount(); c++) {
-            for (int r = 0; r < spreadsheet.getRowCount(); r++) {
-                Cell cell = spreadsheet.getCell(c, r);
-                if (cell.getContent().contains(expression)) {
-                    cellList.add(cell);
+        for(Workbook w: workbookList){
+            numSheets=w.getSpreadsheetCount();
+            for(Spreadsheet spread: w.getSpreadSheets()){
+                for (int c = 0; c < spread.getColumnCount(); c++) {
+                    for (int r = 0; r < spread.getRowCount(); r++) {
+                        Cell cell = spread.getCell(c, r);
+                        if (cell.getContent().contains(expression)) {
+                            cellList.add(cell);
+                        }
+                    }
                 }
             }
-        }
+        }        
         this.expression = expression;
-    }
+    }*/
 
     public void setSpreadsheet(Spreadsheet spreadsheet) {
         this.spreadsheet = spreadsheet;

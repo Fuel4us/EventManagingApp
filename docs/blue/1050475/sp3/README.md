@@ -289,4 +289,4 @@ Commits:
 1. currentPassword checked in the server side before password changes
 2. superuser email and password checked before enable or disable users 
 [#27] Security Login : Super User gets info about if selected user in the listbox is enabled or disabled (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/fd4d79fa062bfd14cbd20a599635b7bd8916e68c)
-Signed-off-by: Hernani Gil(1050475) <1050475@isep.ipp.pt>
+[#27] Security Login: SuperUser can delete any user account (https://bitbucket.org/lei-isep/lapr4-18-2db/commits/4c52c90b165ba363f13c11c649fb3265a897fd35)

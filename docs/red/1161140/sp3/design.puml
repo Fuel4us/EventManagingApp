@@ -17,6 +17,9 @@ box "Shared"
 control EvalVisitor
 end box
 
-CodeView -> CodePresenter : onReveal()
+User -> CodePresenter : Runs a script
+CodeView -> EvalVisitor : visit(tree)
+EvalVisitor -> EvalVisitor : visit()
+EvalVisitor -> CodeView : Outputs results
 
 @enduml

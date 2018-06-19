@@ -17,7 +17,6 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.constants.IconPosition;
-import gwt.material.design.client.constants.IconType;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialCard;
 import gwt.material.design.client.ui.MaterialCardContent;
@@ -26,7 +25,6 @@ import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialTextBox;
 import gwt.material.design.client.ui.MaterialToast;
-import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.services.TasksDTO;
 import pt.isep.nsheets.shared.services.TasksService;
 import pt.isep.nsheets.shared.services.TasksServiceAsync;
@@ -85,10 +83,12 @@ public class TasksView extends ViewImpl implements TasksPresenter.MyView {
 
             // Set up the callback object.
             AsyncCallback<TasksDTO> callback = new AsyncCallback<TasksDTO>() {
+                @Override
                 public void onFailure(Throwable caught) {
 
                 }
 
+                @Override
                 public void onSuccess(TasksDTO result) {
                     MaterialToast.fireToast(result.getName());
                     renameTask.setText(result.getName());
