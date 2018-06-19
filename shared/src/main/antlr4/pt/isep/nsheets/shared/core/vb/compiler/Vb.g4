@@ -4,32 +4,6 @@ parse: block EOF;
 
 block: stat*;
 
-function: initFunction stat* returnFunction endFunction;
-
-initFunction: 'Function' functionName 'As' type;
-
-functionName: ID OPAR parametersWithType CPAR;
-
-returnFunction: 'Return' ID;
-
-endFunction: 'End' 'Function';
-
-functionCall: ID OPAR parametersWithoutType CPAR;
-
-parametersWithType: type ID COMMA parametersWithType | type ID;
-
-parametersWithoutType: ID COMMA parametersWithoutType | ID;
-
-procedure: initProcedure stat* endProcedure;
-
-initProcedure: 'Sub' procedureName;
-
-procedureName: ID OPAR CPAR;
-
-endProcedure: 'End' 'Sub';
-
-procedureCall: procedureName;
-
 stat:
 	assignment
 	| declaration
@@ -37,12 +11,12 @@ stat:
 	| while_stat
 	| log
 	| function
-	| procedure
+  /*| procedure*/
 	| functionCall
-	| procedureCall
+  /*| procedureCall*/
 	| OTHER {System.err.println("unknown char: " + $OTHER.text);};
 
-declaration: 'Dim' ID 'As' type;
+declaration: DIM ID AS type;
 
 assignment: ID ASSIGN expr;
 
@@ -83,6 +57,35 @@ atom:
 
 type: TYPE_INT | TYPE_FLOAT | TYPE_STRING;
 
+function: initFunction functionBody endFunction ;
+
+initFunction: FUNCTION functionName AS type;
+
+functionName: ID OPAR /*parametersWithType*/ CPAR;
+
+functionBody: stat* returnFunction;
+
+returnFunction: RETURN ID;
+
+endFunction: END FUNCTION;
+
+functionCall: ID OPAR /*parametersWithoutType*/ CPAR;
+
+/*
+parametersWithType: type ID COMMA parametersWithType | type ID | ;
+
+parametersWithoutType: ID COMMA parametersWithoutType | ID | ;
+
+procedure: initProcedure stat* endProcedure;
+
+initProcedure: 'Sub' procedureName;
+
+procedureName: ID OPAR CPAR;
+
+endProcedure: 'End' 'Sub';
+
+procedureCall: procedureName;*/
+
 TYPE_INT: 'Integer';
 TYPE_FLOAT: 'Float';
 TYPE_STRING: 'String';
@@ -118,7 +121,16 @@ NIL: 'nil';
 IF: 'If';
 ELSE: 'Else';
 WHILE: 'While';
+
+DIM: 'Dim';
 LOG: 'Log';
+
+FUNCTION: 'Function';
+AS: 'As';
+RETURN: 'Return';
+END: 'End';
+
+SUB: 'Sub';
 
 ID: ('$')? [a-zA-Z_] [a-zA-Z_0-9]*;
 INT: [0-9]+;
@@ -127,10 +139,3 @@ STRING: '"' (~["\r\n] | '""')* '"';
 COMMENT: '#' ~[\r\n]* -> skip;
 SPACE: [ \t\r\n] -> skip;
 OTHER: .;
-
-FUNCTION: 'Function';
-AS: 'As';
-RETURN: 'Return';
-END: 'End';
-SUB: 'Sub';
-DIM: 'Dim';
