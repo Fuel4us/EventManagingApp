@@ -58,11 +58,17 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
             return cells.put(id.substring(1), value);
         }
 
-        if (!id.startsWith("$") && !ctx.getChild(0).getText().equals("var") && !memory.containsKey(id)) {
-            throw new RuntimeException("Invalid assigment");
+        if (!id.startsWith("$") && !ctx.getChild(0).getText().equals("var")) {
+
+            if(!block_memory.containsKey(id) && !memory.containsKey(id)){
+                throw new RuntimeException("Invalid assigment");
+            }
+                    
+                
         }
 
-        if (ctx.getParent().getParent() instanceof FunctionblockContext) {
+        System.out.println(ctx.getParent().getParent().getClass().getName());
+        if (ctx.getParent().getParent() instanceof FunctionblockContext ||ctx.getParent().getParent() instanceof BlockContext) {
             if (!id.startsWith("$")) {
                 if (memory.get(id) != null) {
                     return memory.put(id, value);
@@ -88,7 +94,7 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
             } else {
                 if (block_memory.get(id) != null) {
                     value = block_memory.get(id);
-                }else if (memory.get(id) != null) {
+                } else if (memory.get(id) != null) {
                     value = memory.get(id);
                 }
             }
