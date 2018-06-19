@@ -1,0 +1,16 @@
+@startuml Diogo Monteiro
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+actor User
+User->WorkbookPresenter: onReveal()
+WorkbookPresenter->FilterServiceImpl:seeIfTrue(int index, String address1, String address2, String value, WorkbookDTO workbookDto)
+FilterServiceImpl-->FilterController:create()
+FilterController-->FilterServices:create()
+FilterServiceImpl->FilterController:getRowToDelete(String address1, String address2,int index,int value,WorkbookDTO workbookDto)
+FilterController->FilterServices:getRowToDelete(String address1, String address2,int index,int value,WorkbookDTO workbookDto)
+FilterServices->FilterServices:seeIfTrue(int index,CellImpl cell,int value)
+WorkbookPresenter-->User: Notifies success of the operation
+@enduml

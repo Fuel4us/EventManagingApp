@@ -1,0 +1,41 @@
+@startuml  design3
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor AuthenticatedUser
+boundary Code_JavascriptView
+boundary Code_JavascriptPresenter
+boundary FunctionService
+control Js_controller
+boundary FunctionRepository
+database Database 
+
+box "NSheets Client"
+participant Code_JavascriptView
+participant Code_JavascriptPresenter 
+end box
+
+box "Server"
+participant FunctionService
+participant Js_controller
+participant FunctionRepository
+end box
+
+box "Database"
+participant Database
+end box
+
+AuthenticatedUser -> Code_JavascriptPresenter : onReveal() / navigate to page 
+Code_JavascriptPresenter -> Code_JavascriptView: shows view
+Code_JavascriptView ->> AuthenticatedUser : shows a collapsibable box with the function
+AuthenticatedUser -> Code_JavascriptView: clicks in the function to remove
+Code_JavascriptView -> FunctionService: removeFunction(function);
+FunctionService -> Js_controller: remove(function);
+Js_controller -> FunctionRepository: remove (function);
+FunctionRepository -> Database: remove
+Code_JavascriptView --> AuthenticatedUser: shows an updated collapsibable functions box;
+
+@enduml

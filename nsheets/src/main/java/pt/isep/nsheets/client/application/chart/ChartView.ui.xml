@@ -77,6 +77,12 @@
                 </m:MaterialColumn>
                 <m:MaterialSwitch ui:field="switch_considerFist" value="true" onLabel="Yes" offLabel="No"/>
             </m:MaterialRow>
+            <m:MaterialRow>
+                <m:MaterialColumn>
+                    <m:MaterialLabel text="Type of chart"/>
+                </m:MaterialColumn>
+                <m:MaterialSwitch ui:field="switch_typeChart" value="true" onLabel="Pie Chart" offLabel="Bar Chart"/>
+            </m:MaterialRow>
             
             <m:MaterialRow addStyleNames="{style.btn_row}">
                 <m:MaterialButton ui:field="save_btn" addStyleNames="{style.btn}" text="Save" waves="GREEN" backgroundColor="WHITE" textColor="BLACK" iconType="SAVE" iconPosition="RIGHT" iconColor="GREEN"/>

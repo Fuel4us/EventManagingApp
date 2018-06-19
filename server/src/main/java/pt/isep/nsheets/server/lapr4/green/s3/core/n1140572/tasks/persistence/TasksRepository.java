@@ -24,7 +24,12 @@ public interface TasksRepository extends Repository<Tasks, Long> {
     /**
      *
      * @param task
+     * @return
      */
     void deleteTask(Tasks task);
+
+    Iterable<Tasks> findByAnyAttribute(String name);
+
+    Iterable<Tasks> findTasksNotCompleted(String name);
 
 }

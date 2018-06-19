@@ -22,11 +22,8 @@ import gwt.material.design.client.ui.MaterialCollapsible;
 import gwt.material.design.client.ui.MaterialCollapsibleBody;
 import gwt.material.design.client.ui.MaterialCollapsibleHeader;
 import gwt.material.design.client.ui.MaterialCollapsibleItem;
-import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialLink;
-import gwt.material.design.client.ui.MaterialRow;
-import gwt.material.design.client.ui.MaterialTab;
 import gwt.material.design.client.ui.MaterialTextArea;
 import gwt.material.design.client.ui.MaterialToast;
 import gwt.material.design.client.ui.animate.MaterialAnimation;
@@ -38,11 +35,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import pt.isep.nsheets.shared.application.Settings;
 import pt.isep.nsheets.shared.core.Address;
 import pt.isep.nsheets.shared.core.Cell;
-//import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
-//import pt.isep.nsheets.shared.core.js.EvalVisitor;
-//import pt.isep.nsheets.shared.core.vb.Value;
-//import pt.isep.nsheets.shared.core.js_complex.compiler.;
-//import pt.isep.nsheets.shared.core.js.JsParser;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -73,7 +65,6 @@ class Code_JavaScriptView extends ViewImpl implements Code_JavaScriptPresenter.M
     @UiField
     MaterialCard card;
 
-
     @UiField
     MaterialCollapsible functions_area;
 
@@ -93,11 +84,7 @@ class Code_JavaScriptView extends ViewImpl implements Code_JavaScriptPresenter.M
     @Inject
     Code_JavaScriptView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
-//        tab.addSelectionHandler(selectionEvent -> {
-//            if (selectionEvent.getSelectedItem() == 1) {
-                animateCards();
-//            }
-//        });
+        animateCards();
         initialize();
         runHandler(null, text_area);
     }
@@ -202,7 +189,7 @@ class Code_JavaScriptView extends ViewImpl implements Code_JavaScriptPresenter.M
                                         fillFunctions(result);
                                     }
                                 };
-                                
+
                                 functionSrv.getFunctions(callback);
                             }
 
@@ -248,33 +235,31 @@ class Code_JavaScriptView extends ViewImpl implements Code_JavaScriptPresenter.M
             btn.setType(ButtonType.FLAT);
             btn.setFloat(Style.Float.RIGHT);
             btn.setCircle(true);
-            
-            btn.addClickHandler(handler->{
-                
-                FunctionServiceAsync functionSrv = GWT.create(FunctionService.class);
-                
-                AsyncCallback<Function> callback = new AsyncCallback<Function>() {
-                                    @Override
-                                    public void onFailure(Throwable caught) {
-                                        throw new RuntimeException("Occured an error accessign the database");
-                                    }
 
-                                    @Override
-                                    public void onSuccess(Function result) {
-                                        MaterialToast.fireToast("Function "+result.getFunctionId()+" removed!");
-                                        functions.remove(result);
-                                        fillFunctions(functions);
-                                        
-                                    }
-                                };
-                                
-                                functionSrv.removeFunction(function,callback);
-                                
+            btn.addClickHandler(handler -> {
+
+                FunctionServiceAsync functionSrv = GWT.create(FunctionService.class);
+
+                AsyncCallback<Function> callback = new AsyncCallback<Function>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        throw new RuntimeException("Occured an error accessign the database");
+                    }
+
+                    @Override
+                    public void onSuccess(Function result) {
+                        MaterialToast.fireToast("Function " + result.getFunctionId() + " removed!");
+                        functions.remove(result);
+                        fillFunctions(functions);
+
+                    }
+                };
+
+                functionSrv.removeFunction(function, callback);
+
             });
             header.add(link);
             header.add(btn);
-            
-            
 
             MaterialCollapsibleBody body = new MaterialCollapsibleBody();
             MaterialLabel body_func = getMultilineLabel(function.getFunctionBody());
@@ -289,12 +274,11 @@ class Code_JavaScriptView extends ViewImpl implements Code_JavaScriptPresenter.M
         functions_area.reload();
 
     }
-    
+
     private MaterialLabel getMultilineLabel(String text) {
-    MaterialLabel label = new MaterialLabel(text.replaceAll(" +", "\u00a0").replaceAll("\n", " "));
-    label.setWidth("1%");
-    return label;
-}
-    
+        MaterialLabel label = new MaterialLabel(text.replaceAll(" +", "\u00a0").replaceAll("\n", " "));
+        label.setWidth("1%");
+        return label;
+    }
 
 }

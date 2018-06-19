@@ -8,7 +8,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import gwt.material.design.client.ui.MaterialToast;
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Spreadsheet;
+import pt.isep.nsheets.shared.core.Workbook;
 import pt.isep.nsheets.shared.core.formula.compiler.FormulaCompilationException;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.CellDTO;
+import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.SpreadsheetDTO;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 import pt.isep.nsheets.shared.services.WorkbookDescriptionDTO;
 import pt.isep.nsheets.shared.services.WorkbooksService;
@@ -28,6 +31,7 @@ public class SearchAndReplaceController {
     }
 
     public void searchAll(String expression, String userNickname) {
+        List<CellDTO> cellListDTO= new ArrayList<>();
         cellList.clear();
         ArrayList<WorkbookDTO> workbooksList = new ArrayList<WorkbookDTO>();
 
@@ -43,7 +47,24 @@ public class SearchAndReplaceController {
                 for (WorkbookDTO w : result) {
                     workbooksList.add(w);
                 }
-
+                int numWorkbooks=0, numSheets=0;
+                numWorkbooks=workbooksList.size();
+                cellListDTO.clear();
+                for(WorkbookDTO w: workbooksList){
+                    numSheets=w.spreadsheets.size();
+                    for(SpreadsheetDTO spread:w.spreadsheets){
+                        for (int c = 0; c < spread.columns; c++) {
+                            for (int r = 0; r < spread.rows; r++) {
+                                CellDTO cell = spread.getCell(r, c);
+                                if (cell.content.contains(expression)) {
+                                    Cell finalCell = (Cell) cell;
+                                    cellList.add(finalCell);
+                                }
+                            }
+                        }
+                    }
+                } 
+                
             }
         };
 

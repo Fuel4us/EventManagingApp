@@ -7,14 +7,17 @@
     <ui:import field="pt.isep.nsheets.client.place.NameTokens.home"/>         
     <ui:with field='res' type='pt.isep.nsheets.client.resources.AppResources'/>
     
-    <g:HTMLPanel ui:field="htmlPanel">
-    
+    <m:MaterialPanel> 
+        
         <m:MaterialRow marginTop="30">
             <m:MaterialTextBox
                 m:id="fBox" ui:field="searchTask" placeholder="Search Task" label="Search Task"
                 active="true" grid="s10"/>
             <m:MaterialButton ui:field="searchButton" waves="GREEN" backgroundColor="WHITE" type="FLOATING" iconType="SEARCH" iconColor="GREEN" size="LARGE"/>
         </m:MaterialRow>
+    
+        <g:HTMLPanel ui:field="htmlPanel">
+        </g:HTMLPanel>
         
         <m:MaterialModal ui:field="optionModal" type="DEFAULT" grid="s12">
             <m:MaterialModalContent>
@@ -27,6 +30,17 @@
                 <m:MaterialButton ui:field="cancelButton" text="Cancel" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="CANCEL" iconPosition="RIGHT" iconColor="RED"/>
             </m:MaterialModalContent>
         </m:MaterialModal>
+        
+        <m:MaterialModal ui:field="newTaskModal" type="DEFAULT" grid="s12">
+            <m:MaterialModalContent>
+                <m:MaterialTextBox ui:field="nameTask" label="Name" grid="s12"/>
+                <m:MaterialTextBox ui:field="descriptionTask" label="Description" grid="s12"/>
+                <m:MaterialTextBox ui:field="priorityTask" label="Priority" grid="s12"/>
+                <m:MaterialButton ui:field="saveButton" text="Save" waves="GREEN" backgroundColor="WHITE" textColor="BLACK" iconType="SAVE" iconPosition="RIGHT" iconColor="GREEN"/>
+                <m:MaterialButton ui:field="cancel2Button" text="Cancel" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="CANCEL" iconPosition="RIGHT" iconColor="RED"/>
+            </m:MaterialModalContent>
+        </m:MaterialModal>
+    
     
         <m:MaterialFAB>
             <m:MaterialButton type="FLOATING" iconType="SETTINGS" size="LARGE"/>
@@ -34,6 +48,5 @@
                 <m:MaterialButton ui:field="addTaskButton" type="FLOATING" waves="LIGHT" iconType="ADD" tooltip="New Task" tooltipPosition="LEFT"/>
             </m:MaterialFABList>
         </m:MaterialFAB>
-        
-    </g:HTMLPanel>
+    </m:MaterialPanel>
 </ui:UiBinder>

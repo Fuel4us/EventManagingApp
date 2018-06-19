@@ -40,8 +40,10 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
 import gwt.material.design.addins.client.window.MaterialWindow;
+import gwt.material.design.client.base.MaterialWidget;
 import gwt.material.design.client.constants.IconPosition;
 import gwt.material.design.client.constants.IconType;
 
@@ -67,6 +69,7 @@ import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtensi
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleDTO;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleService;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleServiceAsync;
+import pt.isep.nsheets.shared.lapr4.green.n1140302.s3.Filter.FilterController;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetController;
@@ -167,8 +170,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     //uiObjects by 1140317
     @UiField
     MaterialButton addBasicWizardButton;
-    @UiField
-    MaterialButton chooseButton;
+//    @UiField
+//    MaterialButton chooseButton;
     @UiField
     MaterialButton doneButton;
     @UiField
@@ -178,8 +181,28 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialTextBox basicWizardTextBox;
     @UiField
-    MaterialTextBox basicWizardTextBox2, txtComment;
+    MaterialTextBox basicWizardTextBox2;
+//    MaterialTextBox addParameterBox;
+    @UiField
+    MaterialCollection parametersCollection;
+    @UiField
+    MaterialPanel basicWizardPanel;
+    @UiField
+    MaterialTextBox basicWizardResultBox;
+    @UiField
+    MaterialTextBox  txtComment;
 
+
+    @UiField
+    MaterialButton filterButton;
+    @UiField
+    MaterialWindow filterWindow;
+    @UiField
+    MaterialLink filterLink;
+    @UiField
+    MaterialTextBox filterStartCellTextBox,filterEndCellTextBox,valueTextBox;
+    @UiField
+    MaterialListBox filterListBox;
 
     /*
     Style UI objects by 1050475
@@ -505,6 +528,25 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             // Window.alert("Hello");
         });
 
+        filterLink.addClickHandler(event->{
+            filterWindow.open();
+        });
+
+        filterButton.addClickHandler(clickEvent -> {
+
+           FilterController controller = new FilterController();
+
+            int i = controller.getRowToDelete(filterStartCellTextBox.getText(),filterEndCellTextBox.getText(),filterListBox.getSelectedIndex(),Integer.parseInt(valueTextBox.getText()),Settings.getInstance().getWorkbook().toDTO());
+
+            if(i!=-1){
+                customTable.getRow(i).removeFromParent();
+                MaterialToast.fireToast("Successfully filtered, a row was removed");
+            }else{
+                MaterialToast.fireToast("Successfully filtered, no row needed to be removed");
+            }
+
+        });
+
         searchButton.addClickHandler(event -> {
             searchModal.open();
             CellsServiceAsync cellsServiceAsync = GWT.create(CellsService.class);
@@ -712,18 +754,43 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             basicWizardComboBox.add(function.getIdentifier());
         }
 
-        doneButton.addClickHandler(event -> {
-            int i = basicWizardComboBox.getSelectedIndex();
-            firstBox.setText(lang.getFunctions()[i].getIdentifier());
-            basicWizardWindow.close();
+        doneButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                int index = basicWizardComboBox.getSelectedIndex();
+                int size = parametersCollection.getWidgetCount();
+                String parameters = "";
+                for (int i = 0; i < size; i++) {
+                    String aux = parametersCollection.getWidget(i).getTitle();
+                    if (!aux.trim().isEmpty()) {
+                        parameters += aux;
+                        if (i < (size - 1) && !parameters.isEmpty()) {
+                            parameters += "; ";
+                        }
+                    }
+                }
+                firstBox.setText(updateResultString(lang));
+                basicWizardWindow.close();
+            }
         });
 
-        chooseButton.addClickHandler(event -> {
-            basicWizardTextBox.setText(getParameters(lang));
-            basicWizardTextBox2.setText(getDescription(lang));
-
-        });
-
+//        chooseButton.addClickHandler(event -> {
+////            basicWizardTextBox.setText(getParameters(lang));
+////            basicWizardTextBox2.setText(getDescription(lang));
+//            String parameter = addParameterBox.getText().trim();
+//            if (!parameter.isEmpty()) {
+//                MaterialTextBox auxBox = new MaterialTextBox();
+//                auxBox.setText(parameter);
+//                auxBox.setIconType(IconType.DELETE);
+//                auxBox.setReadOnly(true);
+//                auxBox.setTitle(parameter);
+//                parametersCollection.add(auxBox);
+//                auxBox.getIcon().addClickHandler(newEvent -> {
+//                    parametersCollection.remove(auxBox);
+//                });
+//                addParameterBox.clear();
+//            }
+//        });
         macro.addClickHandler(event -> {
             macroModal.open();
         });
@@ -784,8 +851,152 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         searchAndReplaceButton.addClickHandler(event -> {
             openSearchAndReplaceWindow(currentUser);
         });
+        firstBox.getIcon().addClickHandler(event -> {
+            basicWizardWindow.open();
+        });
+
+        basicWizardComboBox.addValueChangeHandler(event -> {
+            basicWizardTextBox.setText(getParameters(lang));
+            basicWizardTextBox2.setText(getDescription(lang));
+            parametersCollection.clear();
+            try {
+                if (!lang.getFunction(basicWizardComboBox.getSelectedValue()).isVarArg()) {
+//                    chooseButton.setEnabled(false);
+                    createParameterBoxs(lang);
+                } else {
+//                    chooseButton.setEnabled(true);
+                    createInfiniteParameterBox(lang);
+                }
+            } catch (UnknownElementException ex) {
+                Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            updateResultString(lang);
+        });
+        ScrollPanel scroll = new ScrollPanel(basicWizardPanel);
+        scroll.setSize("1000px", "600px");
+        basicWizardWindow.setWidth("1010px");
+        basicWizardWindow.add(scroll);
     }
 
+    private void createInfiniteParameterBox(Language lang) {
+        try {
+            for (FunctionParameter fp : lang.getFunction(basicWizardComboBox.getSelectedValue()).getParameters()) {
+                MaterialTextBox auxBox = new MaterialTextBox();
+                auxBox.setLabel("Add a parameter of the type  -" + fp.getName());
+                auxBox.setIconType(IconType.ADD);
+                parametersCollection.add(auxBox);
+                auxBox.getIcon().addClickHandler(event -> {
+                    if (!auxBox.getText().trim().isEmpty()) {
+                        MaterialTextBox newBox = new MaterialTextBox();
+                        newBox.setReadOnly(true);
+                        newBox.setTitle(auxBox.getText());
+                        newBox.setText(auxBox.getText());
+                        newBox.setIconType(IconType.DELETE);
+                        parametersCollection.add(newBox);
+                        newBox.getIcon().addClickHandler(newEvent -> {
+                            parametersCollection.remove(newBox);
+                            updateResultString(lang);
+                        });
+                        updateResultString(lang);
+                    } else {
+                        MaterialToast.fireToast("Empty parameter");
+                    }
+                    auxBox.setText("");
+
+                });
+            }
+        } catch (UnknownElementException ex) {
+            Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void createParameterBoxs(Language lang) {
+        try {
+            for (FunctionParameter fp : lang.getFunction(basicWizardComboBox.getSelectedValue()).getParameters()) {
+                MaterialTextBox auxBox = new MaterialTextBox();
+                auxBox.setLabel("Add a parameter of the type  -" + fp.getName());
+                IconType types[] = {IconType.ADD, IconType.EDIT};
+                auxBox.setIconType(types[0]);
+                parametersCollection.add(auxBox);
+                auxBox.getIcon().addClickHandler(event -> {
+                    if (!auxBox.getText().trim().isEmpty()) {
+                        if (auxBox.getIcon().getIconType() == types[0]) {
+                            if (!auxBox.getText().trim().isEmpty()) {
+                                auxBox.setIconType(types[1]);
+                                auxBox.setReadOnly(true);
+                                auxBox.setTitle(auxBox.getText());
+                                updateResultString(lang);
+                            } else {
+                                MaterialToast.fireToast("Empty parameter");
+                            }
+                        } else {
+                            auxBox.setIconType(types[0]);
+                            auxBox.setReadOnly(false);
+                            auxBox.setTitle("");
+                            updateResultString(lang);
+                        }
+                    }
+                });
+            }
+        } catch (UnknownElementException ex) {
+            Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private String updateResultString(Language lang) {
+        int index = basicWizardComboBox.getSelectedIndex();
+        int size = parametersCollection.getWidgetCount();
+        String parameters = "";
+        String errorMsg = "";
+        boolean error = true;
+        for (int i = 0; i < size; i++) {
+            String aux = parametersCollection.getWidget(i).getTitle();
+            if (!aux.trim().isEmpty()) {
+                parameters += aux;
+                if (i < (size - 1) && !parameters.isEmpty()) {
+                    parameters += "; ";
+                }
+            } else {
+                try {
+                    if (!lang.getFunction(basicWizardComboBox.getSelectedValue()).isVarArg()) {
+                        if(!lang.getFunction(basicWizardComboBox.getSelectedValue()).getParameters()[i].isOptional()) {
+                            errorMsg = "Missing parameter -" + lang.getFunction(basicWizardComboBox.getSelectedValue()).getParameters()[i].getName();
+                            MaterialToast.fireToast(errorMsg);
+                        }
+                    }
+                } catch (UnknownElementException ex) {
+                    Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        String result = lang.getFunctions()[index].getIdentifier() + "(" + parameters + ")";
+        if(!errorMsg.isEmpty()) {
+            basicWizardResultBox.setText(errorMsg);
+        }else {
+            if(activeCell == null) {
+                basicWizardResultBox.setText("No active cell selected");
+            }else {
+                String aux = activeCell.getContent();
+                try {
+                    activeCell.setContent("=" + result);
+                    basicWizardResultBox.setText(activeCell.getValue().toString());
+                } catch (FormulaCompilationException ex) {
+                    Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+                    MaterialToast.fireToast(ex.getMessage());
+                    basicWizardResultBox.setText("Function is not possible");
+                }
+                
+                try {
+                    activeCell.setContent(aux);
+                } catch (FormulaCompilationException ex) {  //previous content so erros shouldn't be important
+                    Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return lang.getFunctions()[index].getIdentifier() + "(" + parameters + ")";
+    }
+    
     private void updateCollapsible() {
         colapsBody.clear();
 

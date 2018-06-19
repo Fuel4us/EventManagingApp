@@ -38,17 +38,15 @@ public class Main {
         String output2 = "var j = 7; "
                 + "function test2(){console.log(\"olá\");}\n"
                 + "function test(){";
-        Js_complexLexer lexer = new Js_complexLexer(new ANTLRInputStream("function complex(){\n"
-                + "var i = 10;\n"
-                + "var j = 3;\n"
+        Js_complexLexer lexer = new Js_complexLexer(new ANTLRInputStream("var x = \"José\";\n"
+                + "console.log(\"O meu nome é\": + x);\n"
                 + "\n"
-                + "while(j>0){\n"
-                + "i = i*i;\n"
-                + "j--;\n"
+                + "function gonc(){\n"
+                + "x = \"Gonçalo\";\n"
+                + "console.log(\"O meu novo nome é\": + x);\n"
                 + "}\n"
                 + "\n"
-                + "return i;\n"
-                + "}"));
+                + "console.log(\"O meu novo nome é\": + x);"));
 
         Js_complexParser parser = new Js_complexParser(new CommonTokenStream(lexer));
         ParseTree tree = parser.parse();
