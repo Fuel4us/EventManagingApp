@@ -30,12 +30,14 @@ public class JpaTasksRepository extends NSheetsJpaRepositoryBase<Tasks, Long> im
     }
 
     @Override
-    public void deleteTask(Tasks task) {
+    public Tasks deleteTask(Tasks task) {
         entityManager().getTransaction().begin();
         entityManager().createQuery("delete from Tasks t where t.id=:taskid")
                 .setParameter("taskid", task.id())
                 .executeUpdate();
         entityManager().getTransaction().commit();
+        
+        return task;
     }
 
 }

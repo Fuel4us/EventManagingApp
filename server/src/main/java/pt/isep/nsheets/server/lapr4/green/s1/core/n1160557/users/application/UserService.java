@@ -25,4 +25,10 @@ public class UserService {
         return wb;
     }
 
+    public User findByName(String name) {
+        final UserRepository userRepository = PersistenceContext.repositories().users();
+
+        return userRepository.findByUsername(name);
+    }
+
 }

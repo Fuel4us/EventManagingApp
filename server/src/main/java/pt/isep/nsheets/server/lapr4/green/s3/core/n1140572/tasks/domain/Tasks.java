@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import pt.isep.nsheets.server.lapr4.blue.s2.core.n1160713.contacts.domain.Contact;
+import pt.isep.nsheets.shared.services.ContactDTO;
 import pt.isep.nsheets.shared.services.TasksDTO;
 
 /**
@@ -60,12 +61,12 @@ public class Tasks implements AggregateRoot<Long>, Serializable {
     protected Tasks() {
     }
 
-    public Tasks(String name, String description, int priorityLevel) {
+    public Tasks(String name, String description, int priorityLevel, int progress, boolean taskCompleted) {
         this.name = name;
         this.description = description;
         this.priorityLevel = priorityLevel;
-        this.progress = 0;
-        this.taskCompleted = false;
+        this.progress = progress;
+        this.taskCompleted = taskCompleted;
         this.contacts = new ArrayList<>();
     }
 
@@ -136,6 +137,9 @@ public class Tasks implements AggregateRoot<Long>, Serializable {
      * @param progress the progress to set
      */
     public void setProgress(int progress) {
+        if (progress == 100) {
+            setTaskCompleted(true);
+        }
         this.progress = progress;
     }
 
@@ -187,6 +191,15 @@ public class Tasks implements AggregateRoot<Long>, Serializable {
     }
 
     public static Tasks fromDTO(TasksDTO tasksDTO) throws IllegalArgumentException {
-        return new Tasks(tasksDTO.getName(), tasksDTO.getDescription(), tasksDTO.getPriorityLevel());
+        return new Tasks(tasksDTO.getName(), tasksDTO.getDescription(), tasksDTO.getPriorityLevel(), tasksDTO.getProgress(), tasksDTO.isTaskCompleted());
     }
+
+    public ArrayList<ContactDTO> convertToDTO() {
+        ArrayList<ContactDTO> converted = new ArrayList<>();
+        for (Contact contact : this.contacts) {
+            converted.add(contact.toDTO());
+        }
+        return converted;
+    }
+
 }

@@ -27,6 +27,16 @@
                 <m:MaterialButton ui:field="cancelButton" text="Cancel" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="CANCEL" iconPosition="RIGHT" iconColor="RED"/>
             </m:MaterialModalContent>
         </m:MaterialModal>
+        
+        <m:MaterialModal ui:field="newTaskModal" type="DEFAULT" grid="s12">
+            <m:MaterialModalContent>
+                <m:MaterialTextBox ui:field="nameTask" label="Name" grid="s12"/>
+                <m:MaterialTextBox ui:field="descriptionTask" label="Description" grid="s12"/>
+                <m:MaterialTextBox ui:field="priorityTask" label="Priority" grid="s12"/>
+                <m:MaterialButton ui:field="saveButton" text="Save" waves="GREEN" backgroundColor="WHITE" textColor="BLACK" iconType="SAVE" iconPosition="RIGHT" iconColor="GREEN"/>
+                <m:MaterialButton ui:field="cancel2Button" text="Cancel" waves="RED" backgroundColor="WHITE" textColor="BLACK" iconType="CANCEL" iconPosition="RIGHT" iconColor="RED"/>
+            </m:MaterialModalContent>
+        </m:MaterialModal>
     
         <m:MaterialFAB>
             <m:MaterialButton type="FLOATING" iconType="SETTINGS" size="LARGE"/>

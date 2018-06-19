@@ -24,7 +24,8 @@ public interface TasksRepository extends Repository<Tasks, Long> {
     /**
      *
      * @param task
+     * @return 
      */
-    void deleteTask(Tasks task);
+    Tasks deleteTask(Tasks task);
 
 }

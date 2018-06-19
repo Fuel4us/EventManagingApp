@@ -5,36 +5,44 @@
  */
 package pt.isep.nsheets.shared.services;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+
 /**
  *
  * @author Pedro Rodrigues - (1140572)
  */
-public class TasksDTO {
+@SuppressWarnings("serial")
+public class TasksDTO implements IsSerializable{
 
     /**
      * Name of the task
      */
-    private String name;
+    public String name;
 
     /**
      * Description of the task
      */
-    private String description;
+    public String description;
 
     /**
      * Priority level of the task
      */
-    private int priorityLevel;
+    public int priorityLevel;
 
     /**
      * Progress of the task
      */
-    private int progress;
+    public int progress;
 
     /**
      * Indicates if a task is completed
      */
-    private boolean taskCompleted;
+    public boolean taskCompleted;
+
+    public TasksDTO() {
+
+    }
 
     public TasksDTO(String name, String description, int priorityLevel, int progress, boolean taskCompleted) {
         this.name = name;
@@ -42,10 +50,6 @@ public class TasksDTO {
         this.priorityLevel = priorityLevel;
         this.progress = progress;
         this.taskCompleted = taskCompleted;
-    }
-
-    protected TasksDTO() {
-
     }
 
     /**
@@ -82,5 +86,5 @@ public class TasksDTO {
     public boolean isTaskCompleted() {
         return taskCompleted;
     }
-    
+
 }

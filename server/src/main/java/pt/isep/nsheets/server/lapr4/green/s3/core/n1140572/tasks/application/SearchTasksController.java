@@ -6,17 +6,22 @@
 package pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.application;
 
 import eapli.framework.application.Controller;
+import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.application.UserService;
+import pt.isep.nsheets.server.lapr4.green.s1.core.n1160557.users.domain.User;
 import pt.isep.nsheets.server.lapr4.green.s3.core.n1140572.tasks.domain.Tasks;
-import pt.isep.nsheets.shared.services.TasksDTO;
 
 /**
  *
  * @author Pedro Rodrigues - (1140572)
  */
-public class DeleteTaskController implements Controller {
+public class SearchTasksController implements Controller {
 
-    public Tasks deleteTask(TasksDTO taskDTO) {
-        return new TasksCallerService().deleteTask(taskDTO);
+    public User getCurrentUser(String name) {
+        return new UserService().findByName(name);
+    }
+
+    public Iterable<Tasks> getTasks() {
+        return null;
     }
 
 }
