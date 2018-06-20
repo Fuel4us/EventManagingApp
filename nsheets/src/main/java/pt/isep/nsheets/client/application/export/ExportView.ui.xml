@@ -218,12 +218,12 @@
                             <m:MaterialLink  text="ADD ELEMENTS" textColor="BLACK" iconType="ADD" iconPosition="LEFT" addStyleNames="{style.label}" />
                             <combobox:MaterialComboBox closeOnSelect="false" multiple="true" ui:field="addElementsSelect" placeholder="Elements">
                                 <m:html.Option text="Formulas"></m:html.Option>
-                                <m:html.Option enabled="false" text="Charts (disable)"></m:html.Option>
-                                <m:html.Option enabled="false" text="Comments (not implementation)"></m:html.Option>
-                                <m:html.Option enabled="false" text="Temporary Variables (not implementation)"></m:html.Option>
-                                <m:html.Option enabled="false" text="Global Variables (disable) "></m:html.Option>
-                                <m:html.Option enabled="false" text="Macros (disable)"></m:html.Option>
-                                <m:html.Option enabled="false" text="Images (disable)"></m:html.Option>
+                                <m:html.Option text="Charts"></m:html.Option>
+                                <m:html.Option text="Comments"></m:html.Option>
+                                <m:html.Option text="Temporary Variables"></m:html.Option>
+                                <m:html.Option text="Global Variables"></m:html.Option>
+                                <m:html.Option text="Macros"></m:html.Option>
+                                <m:html.Option text="Images"></m:html.Option>
                             </combobox:MaterialComboBox>
                         </m:MaterialColumn>
                         <m:MaterialColumn textAlign="CENTER" grid="s12">

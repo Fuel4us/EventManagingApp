@@ -256,10 +256,11 @@ public class CellImpl implements Cell, Serializable {
 
     public void setContentByMacro(String content) throws FormulaCompilationException {
         MacroExpressionCompiler compiler = new MacroExpressionCompiler();
-        if(!this.content.equals(content)){
+        if (!this.content.equals(content)) {
             Formula formula = null;
-            if(content.length() > 1)
+            if (content.length() > 1) {
                 formula = compiler.compile(this, content);
+            }
             this.content = content;
             this.formula = formula;
             updateDependencies();
@@ -508,6 +509,11 @@ public class CellImpl implements Cell, Serializable {
     @Override
     public boolean hasChart() {
         return this.chartList.size() > 0;
+    }
+
+    @Override
+    public boolean hasTemporaryVariable() {
+        return this.tempVariableList.size() > 0;
     }
 
     @Override

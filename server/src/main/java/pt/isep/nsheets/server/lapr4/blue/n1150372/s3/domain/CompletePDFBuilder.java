@@ -21,7 +21,6 @@ import java.io.FileOutputStream;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import pt.isep.nsheets.server.lapr4.red.s1.core.n1160630.chart.domain.Chart;
 import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.domain.ColorTranformer;
 import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.domain.DashedCell;
 import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.domain.DottedCell;
@@ -30,10 +29,11 @@ import pt.isep.nsheets.server.lapr4.red.s2.ipc.n1160630.PDFStyleExport.domain.So
 import pt.isep.nsheets.shared.core.Cell;
 import pt.isep.nsheets.shared.core.Spreadsheet;
 import pt.isep.nsheets.shared.core.Workbook;
-import pt.isep.nsheets.shared.core.formula.Formula;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.core.CellStyle;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleDTO;
+import pt.isep.nsheets.shared.lapr4.blue.n1150455.s1.temporaryVariables.TemporaryVariable;
 import pt.isep.nsheets.shared.lapr4.red.s2.ipc.n1160630.services.CellStyleLine;
+import pt.isep.nsheets.shared.services.ChartDTO;
 
 /**
  *
@@ -72,8 +72,8 @@ public class CompletePDFBuilder {
     public CompletePDFBuilder(List<Object> listOptions, List<CellStyleDTO> list, Workbook workbook) {
         this.workbook = workbook;
         cell_list = list;
-//        this.listOptions = listOptions;
-//        checkBooleans();
+        this.listOptions = listOptions;
+        checkBooleans();
         File file = new File(FILE_PATH);
         file.getParentFile().mkdirs();
     }
@@ -91,7 +91,35 @@ public class CompletePDFBuilder {
 
     private void addSubjectInfo(Document document, Spreadsheet ss) throws DocumentException {
         Paragraph preface = new Paragraph();
-        preface.add(new Paragraph("Spreadsheet: " + ss.getTitle(), SUB_FONT));
+        preface.add(new Paragraph("Spreadsheet: " + ss.getTitle(), SUB_FONT_WORK));
+        addEmptyLine(preface, 1);
+        document.add(preface);
+    }
+
+    private void addSubjectResult(Document document, Spreadsheet ss) throws DocumentException {
+        Paragraph preface = new Paragraph();
+        preface.add(new Paragraph("Spreadsheet Copy", SUB_FONT));
+        addEmptyLine(preface, 1);
+        document.add(preface);
+    }
+
+    private void addSubjectFormula(Document document, Spreadsheet ss) throws DocumentException {
+        Paragraph preface = new Paragraph();
+        preface.add(new Paragraph("\n\n\n\n\n\n Formulas", SUB_FONT));
+        addEmptyLine(preface, 1);
+        document.add(preface);
+    }
+
+    private void addSubjectCharts(Document document, Spreadsheet ss) throws DocumentException {
+        Paragraph preface = new Paragraph();
+        preface.add(new Paragraph("\n\n Charts : WITH PROBLEMS IN PERSISTENCE", SUB_FONT));
+        addEmptyLine(preface, 1);
+        document.add(preface);
+    }
+
+    private void addSubjectTempVar(Document document, Spreadsheet ss) throws DocumentException {
+        Paragraph preface = new Paragraph();
+        preface.add(new Paragraph("\n\n\n\n\n TemporaryVariables : WITH BUGS IMPLEMENTATION", SUB_FONT));
         addEmptyLine(preface, 1);
         document.add(preface);
     }
@@ -137,79 +165,40 @@ public class CompletePDFBuilder {
             for (int k = 0; k < workbook.getSpreadsheetCount(); k++) {
 
                 ss = workbook.getSpreadsheet(k);
-                char letter = 'A';
-                table = new PdfPTable(ss.getColumnCount() + 1);
 
                 addSubjectInfo(document, ss);
 
-                for (int firstLine = -1; firstLine < ss.getColumnCount(); firstLine++) {
-
-                    if (firstLine < 0) {
-                        cell = new PdfPCell(new Phrase("", TABLE_FONT));
-                        letter--;
-                    } else {
-                        Font font = new Font(TABLE_FONT);
-                        font.setStyle(Font.BOLD);
-                        cell = new PdfPCell(new Phrase(String.valueOf(letter), font));
-                    }
-
-                    cell.setBackgroundColor(TITLE_COLOR);
-                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    cellPropertiesRender(cell, size, 35);
-                    table.addCell(cell);
-                    letter++;
+                addTableResult(document, ss, size);
+                if (formula) {
+                    addTableFormula(document, ss, size);
                 }
 
-                for (int i = 0; i < ss.getRowCount(); i++) {
-                    cell = new PdfPCell(new Phrase(String.valueOf(i + 1), TABLE_FONT));
-                    cell.setBackgroundColor(TITLE_COLOR);
-                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    cellPropertiesRender(cell, size, 20);
-                    table.addCell(cell);
-                    for (int j = 0; j < ss.getColumnCount(); j++) {
-
-                        Cell spread_cell = ss.getCell(j, i);
-
-                        Font text_font = new Font(TABLE_FONT);
-
-                        CellStyle style_cell = cellStyle(spread_cell, cell_list);
-
-                        if (style_cell != null) {
-
-                            String hex_back_color = ColorTranformer.getHexColorByGWTColor(style_cell.getBackgroungColor());
-                            String hex_text_color = ColorTranformer.getHexColorByGWTColor(style_cell.getFontColor());
-
-                            Color back_util_color = Color.decode(hex_back_color);
-                            Color text_util_color = Color.decode(hex_text_color);
-
-                            cell = new PdfPCell(new Phrase(spread_cell.getContent(), text_font));
-
-                            BaseColor bc = new BaseColor(back_util_color.getRed(), back_util_color.getGreen(), back_util_color.getBlue());
-                            cell.setBackgroundColor(bc);
-                            cell.setHorizontalAlignment(style_cell.getTextALIGN() + 1); //Because 0 - left, 1-center, 2 - right
-
-                            text_font.setColor(text_util_color.getRed(), text_util_color.getGreen(), text_util_color.getBlue());
-                            text_font.setSize(style_cell.getFontSize());
-
-                        } else {
-                            String content = spread_cell.getContent();
-//                            if (formula) {
-//                                Formula form = spread_cell.getFormula();
-//                                content += "\n" + form.toString();
-//                            }
-                            cell = new PdfPCell(new Phrase(content, text_font));
-
-                            cell.setBackgroundColor(BaseColor.WHITE);
-                            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-
-                        }
-                        cellPropertiesRender(cell, size, 20);
-                        table.addCell(cell);
-                    }
+                if (charts) {
+                    addTableCharts(document, ss, size);
                 }
-                table.setWidthPercentage(110);
-                document.add(table);
+
+                if (temporaryVariables) {
+                    addTableTempVar(document, ss, size);
+                }
+
+                if (globalVariables) {
+                    addGlobalsVariables(document);
+                }
+
+                if (comments) {
+                    addCommentsSpreadsheet(document);
+                }
+
+                if (macros) {
+                    addMacros(document);
+                }
+
+                if (images) {
+                    addImagesName(document);
+                }
+
             }
+
             document.close();
             return true;
         } catch (DocumentException ex) {
@@ -283,4 +272,301 @@ public class CompletePDFBuilder {
         }
     }
 
+    private void addTableFormula(Document document, Spreadsheet ss, int size) throws DocumentException {
+        PdfPTable table;
+
+        PdfPCell cell;
+
+        char letter = 'A';
+        table = new PdfPTable(ss.getColumnCount() + 1);
+
+        addSubjectFormula(document, ss);
+
+        for (int firstLine = -1; firstLine < ss.getColumnCount(); firstLine++) {
+
+            if (firstLine < 0) {
+                cell = new PdfPCell(new Phrase("", TABLE_FONT));
+                letter--;
+            } else {
+                Font font = new Font(TABLE_FONT);
+                font.setStyle(Font.BOLD);
+                cell = new PdfPCell(new Phrase(String.valueOf(letter), font));
+            }
+
+            cell.setBackgroundColor(TITLE_COLOR);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellPropertiesRender(cell, size, 35);
+            table.addCell(cell);
+            letter++;
+        }
+
+        for (int i = 0; i < ss.getRowCount(); i++) {
+            cell = new PdfPCell(new Phrase(String.valueOf(i + 1), TABLE_FONT));
+            cell.setBackgroundColor(TITLE_COLOR);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellPropertiesRender(cell, size, 20);
+            table.addCell(cell);
+            for (int j = 0; j < ss.getColumnCount(); j++) {
+
+                Cell spread_cell = ss.getCell(j, i);
+
+                Font text_font = new Font(TABLE_FONT);
+
+                CellStyle style_cell = cellStyle(spread_cell, cell_list);
+
+                String content = spread_cell.getContent();
+                cell = new PdfPCell(new Phrase(content, text_font));
+                cell.setBackgroundColor(BaseColor.WHITE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+                cellPropertiesRender(cell, size, 20);
+                table.addCell(cell);
+            }
+        }
+        table.setWidthPercentage(110);
+        document.add(table);
+    }
+
+    private void addTableResult(Document document, Spreadsheet ss, int size) throws DocumentException {
+
+        PdfPTable table;
+
+        PdfPCell cell;
+
+        char letter = 'A';
+        table = new PdfPTable(ss.getColumnCount() + 1);
+
+        addSubjectResult(document, ss);
+
+        for (int firstLine = -1; firstLine < ss.getColumnCount(); firstLine++) {
+
+            if (firstLine < 0) {
+                cell = new PdfPCell(new Phrase("", TABLE_FONT));
+                letter--;
+            } else {
+                Font font = new Font(TABLE_FONT);
+                font.setStyle(Font.BOLD);
+                cell = new PdfPCell(new Phrase(String.valueOf(letter), font));
+            }
+
+            cell.setBackgroundColor(TITLE_COLOR);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellPropertiesRender(cell, size, 35);
+            table.addCell(cell);
+            letter++;
+        }
+
+        for (int i = 0; i < ss.getRowCount(); i++) {
+            cell = new PdfPCell(new Phrase(String.valueOf(i + 1), TABLE_FONT));
+            cell.setBackgroundColor(TITLE_COLOR);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellPropertiesRender(cell, size, 20);
+            table.addCell(cell);
+            for (int j = 0; j < ss.getColumnCount(); j++) {
+
+                Cell spread_cell = ss.getCell(j, i);
+
+                Font text_font = new Font(TABLE_FONT);
+
+                CellStyle style_cell = cellStyle(spread_cell, cell_list);
+
+                if (style_cell != null) {
+
+                    String hex_back_color = ColorTranformer.getHexColorByGWTColor(style_cell.getBackgroungColor());
+                    String hex_text_color = ColorTranformer.getHexColorByGWTColor(style_cell.getFontColor());
+
+                    Color back_util_color = Color.decode(hex_back_color);
+                    Color text_util_color = Color.decode(hex_text_color);
+
+                    cell = new PdfPCell(new Phrase(spread_cell.getContent(), text_font));
+//                    cell = new PdfPCell(new Phrase(spread_cell.getValue().toString(), text_font));
+
+                    BaseColor bc = new BaseColor(back_util_color.getRed(), back_util_color.getGreen(), back_util_color.getBlue());
+                    cell.setBackgroundColor(bc);
+                    cell.setHorizontalAlignment(style_cell.getTextALIGN() + 1); //Because 0 - left, 1-center, 2 - right
+
+                    text_font.setColor(text_util_color.getRed(), text_util_color.getGreen(), text_util_color.getBlue());
+                    text_font.setSize(style_cell.getFontSize());
+
+                } else {
+                    cell = new PdfPCell(new Phrase(spread_cell.getContent(), text_font));
+//                    cell = new PdfPCell(new Phrase(spread_cell.getValue().toString(), text_font));
+                    cell.setBackgroundColor(BaseColor.WHITE);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+                }
+                cellPropertiesRender(cell, size, 20);
+                table.addCell(cell);
+            }
+        }
+        table.setWidthPercentage(110);
+        document.add(table);
+    }
+
+    private void addTableCharts(Document document, Spreadsheet ss, int size) throws DocumentException {
+        PdfPTable table;
+
+        PdfPCell cell;
+
+        char letter = 'A';
+        table = new PdfPTable(ss.getColumnCount() + 1);
+
+        addSubjectCharts(document, ss);
+
+        for (int firstLine = -1; firstLine < ss.getColumnCount(); firstLine++) {
+
+            if (firstLine < 0) {
+                cell = new PdfPCell(new Phrase("", TABLE_FONT));
+                letter--;
+            } else {
+                Font font = new Font(TABLE_FONT);
+                font.setStyle(Font.BOLD);
+                cell = new PdfPCell(new Phrase(String.valueOf(letter), font));
+            }
+
+            cell.setBackgroundColor(TITLE_COLOR);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellPropertiesRender(cell, size, 35);
+            table.addCell(cell);
+            letter++;
+        }
+
+        for (int i = 0; i < ss.getRowCount(); i++) {
+            cell = new PdfPCell(new Phrase(String.valueOf(i + 1), TABLE_FONT));
+            cell.setBackgroundColor(TITLE_COLOR);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellPropertiesRender(cell, size, 20);
+            table.addCell(cell);
+            for (int j = 0; j < ss.getColumnCount(); j++) {
+
+                Cell spread_cell = ss.getCell(j, i);
+
+                Font text_font = new Font(TABLE_FONT);
+
+                CellStyle style_cell = cellStyle(spread_cell, cell_list);
+
+                if (!spread_cell.hasChart()) {
+                    cell = new PdfPCell(new Phrase(" ", text_font));
+                } else {
+                    String content = "";
+                    for (ChartDTO chartDTO : spread_cell.chartList()) {
+                        content += "\nCHAR :" + chartDTO.getGraph_name() + ";";
+                    }
+
+                    cell = new PdfPCell(new Phrase(content, text_font));
+                }
+
+                cell.setBackgroundColor(BaseColor.WHITE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+                cellPropertiesRender(cell, size, 20);
+                table.addCell(cell);
+            }
+        }
+        table.setWidthPercentage(110);
+        document.add(table);
+    }
+
+    private void addTableTempVar(Document document, Spreadsheet ss, int size) throws DocumentException {
+        PdfPTable table;
+
+        PdfPCell cell;
+
+        char letter = 'A';
+        table = new PdfPTable(ss.getColumnCount() + 1);
+
+        addSubjectTempVar(document, ss);
+
+        for (int firstLine = -1; firstLine < ss.getColumnCount(); firstLine++) {
+
+            if (firstLine < 0) {
+                cell = new PdfPCell(new Phrase("", TABLE_FONT));
+                letter--;
+            } else {
+                Font font = new Font(TABLE_FONT);
+                font.setStyle(Font.BOLD);
+                cell = new PdfPCell(new Phrase(String.valueOf(letter), font));
+            }
+
+            cell.setBackgroundColor(TITLE_COLOR);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellPropertiesRender(cell, size, 35);
+            table.addCell(cell);
+            letter++;
+        }
+
+        for (int i = 0; i < ss.getRowCount(); i++) {
+            cell = new PdfPCell(new Phrase(String.valueOf(i + 1), TABLE_FONT));
+            cell.setBackgroundColor(TITLE_COLOR);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellPropertiesRender(cell, size, 20);
+            table.addCell(cell);
+            for (int j = 0; j < ss.getColumnCount(); j++) {
+
+                Cell spread_cell = ss.getCell(j, i);
+
+                Font text_font = new Font(TABLE_FONT);
+
+                CellStyle style_cell = cellStyle(spread_cell, cell_list);
+
+                if (!spread_cell.hasTemporaryVariable()) {
+                    cell = new PdfPCell(new Phrase(" ", text_font));
+                } else {
+                    String content = "";
+                    for (TemporaryVariable tempVar : spread_cell.tempVariableList()) {
+                        content += "\nTemp. Var :" + tempVar.getName() + ";";
+                    }
+
+                    cell = new PdfPCell(new Phrase(content, text_font));
+                }
+                cell.setBackgroundColor(BaseColor.WHITE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+                cellPropertiesRender(cell, size, 20);
+                table.addCell(cell);
+            }
+        }
+        table.setWidthPercentage(110);
+        document.add(table);
+    }
+
+    private void addCommentsSpreadsheet(Document document) throws DocumentException {
+        Paragraph preface = new Paragraph();
+        addEmptyLine(preface, 1);
+        preface.add(new Paragraph("COMMENTS WITH BUGS IMPLEMENTATIONT!", SUB_FONT));
+        addEmptyLine(preface, 1);
+        document.add(preface);
+    }
+
+    private void addGlobalsVariables(Document document) throws DocumentException {
+        Paragraph preface = new Paragraph();
+        addEmptyLine(preface, 1);
+        preface.add(new Paragraph("Global Variables : WITH PROBLEMS IN PERSISTENCE", SUB_FONT));
+        addEmptyLine(preface, 1);
+        workbook.globalVariables().keySet().forEach((name) -> {
+            preface.add(new Paragraph("Global \" " + name + " \" : " + workbook.getGlobalVariable(name, 0), TABLE_FONT));
+        });
+        document.add(preface);
+    }
+
+    private void addMacros(Document document) throws DocumentException {
+        Paragraph preface = new Paragraph();
+        addEmptyLine(preface, 1);
+        preface.add(new Paragraph("Macros", SUB_FONT));
+        addEmptyLine(preface, 1);
+        workbook.macros().forEach((macro) -> {
+            preface.add(new Paragraph(macro.toString(), TABLE_FONT));
+        });
+        document.add(preface);
+    }
+
+    private void addImagesName(Document document) throws DocumentException {
+        Paragraph preface = new Paragraph();
+        addEmptyLine(preface, 1);
+        preface.add(new Paragraph("Images", SUB_FONT));
+        addEmptyLine(preface, 1);
+        preface.add(new Paragraph("NAME USER : " + workbook.getUserName() + "\nImage not working", TABLE_FONT));
+
+        document.add(preface);
+    }
 }

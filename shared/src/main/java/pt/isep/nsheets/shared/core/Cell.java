@@ -189,6 +189,8 @@ public interface Cell extends Comparable<Cell>, Extensible<Cell>, Serializable {
     /*
     * Cell Style
     */
+
+    public boolean hasTemporaryVariable();
     
     
 }
