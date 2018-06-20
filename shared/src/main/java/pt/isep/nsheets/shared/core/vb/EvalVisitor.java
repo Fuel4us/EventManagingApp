@@ -2,6 +2,8 @@ package pt.isep.nsheets.shared.core.vb;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
 import pt.isep.nsheets.shared.core.vb.compiler.VbBaseVisitor;
@@ -18,63 +20,16 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     public static final double SMALL_VALUE = 0.00000000001;
 
     private Map<String, Value> memory = new HashMap<>();
+    private Map<String, Value> functionMemory;
     private Map<String, Value> cells;
     private String output = "";
+
+    private Map<String, Function> functions = new HashMap<>();
+    Function function;
 
     //receives current sheet cells
     public EvalVisitor(Map<String, Value> cells) {
         this.cells = cells;
-    }
-
-    @Override
-    public Value visitFunction(@NotNull VbParser.FunctionContext ctx) {
-        this.visit(ctx.initFunction());
-        ctx.stat().forEach((stat) -> this.visit(stat));
-        this.visit(ctx.returnFunction());
-        this.visit(ctx.endFunction());
-
-        return Value.VOID;
-    }
-
-    @Override
-    public Value visitInitFunction(@NotNull VbParser.InitFunctionContext ctx) {
-        String id = ctx.functionName().getText();
-        Value value = this.visit(ctx.functionName().parametersWithType());
-
-        return memory.put(id, value);
-    }
-
-    @Override
-    public Value visitParametersWithType(@NotNull VbParser.ParametersWithTypeContext ctx) {
-        this.visit(ctx.type());
-        String id = ctx.ID().getText();
-        Value value;
-
-        if ((value = this.visit(ctx.parametersWithType())) == null) {
-            return memory.put(id, value);
-        }
-
-        return Value.VOID;
-    }
-
-    @Override
-    public Value visitReturnFunction(@NotNull VbParser.ReturnFunctionContext ctx) {
-        String id = ctx.ID().getText();
-        Value value = new Value(0);
-
-        return memory.put(id, value);
-    }
-
-    @Override
-    public Value visitFunctionCall(@NotNull VbParser.FunctionCallContext ctx) {
-        String functionName = ctx.ID().getText();
-
-        VbLexer lexer = new VbLexer(new ANTLRInputStream(functionName));
-        VbParser parser = new VbParser(new CommonTokenStream(lexer));
-        ParseTree tree = parser.block();
-        Value value = this.visit(tree);
-
-        return value;
     }
 
     @Override
@@ -312,6 +267,78 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
         }
 
         return Value.VOID;
+    }
+
+    @Override
+    public Value visitFunction(@NotNull VbParser.FunctionContext ctx) {
+        String functionName = ctx.initFunction().methodName().ID().getText();
+        String functionBody = getText(ctx.functionBody());
+
+        functionMemory = new HashMap<>();
+        function = new Function(functionName, functionBody);
+
+        return this.visit(ctx.functionBody());
+    }
+
+    @Override
+    public Value visitFunctionBody(@NotNull VbParser.FunctionBodyContext ctx) {
+        ctx.stat().forEach((stat) -> this.visit(stat));
+
+        return this.visit(ctx.returnFunction());
+    }
+
+    @Override
+    public Value visitReturnFunction(@NotNull VbParser.ReturnFunctionContext ctx) {
+        if (ctx.ID() != null) {
+            return this.visit(ctx.ID());
+        } else {
+            return Value.VOID;
+        }
+    }
+
+    @Override
+    public Value visitMethodCall(@NotNull VbParser.MethodCallContext ctx) {
+        String functionBody = function.getFunction();
+
+        VbLexer lexer = new VbLexer(new ANTLRInputStream(functionBody));
+        VbParser parser = new VbParser(new CommonTokenStream(lexer));
+        ParseTree tree = parser.block();
+        Value value = this.visit(tree);
+
+        return value;
+    }
+
+    @Override
+    public Value visitProcedure(@NotNull VbParser.ProcedureContext ctx) {
+        String functionName = ctx.initProcedure().methodName().ID().getText();
+        //String functionBody = getText(ctx.stat().forEach((stat) -> this.visit(stat)));
+
+        functionMemory = new HashMap<>();
+        //function = new Function(functionName, functionBody);
+
+        return Value.VOID;
+    }
+
+    @Override
+    public Value visitParametersWithType(@NotNull VbParser.ParametersWithTypeContext ctx) {
+        String id = ctx.ID().getText();
+        Value value = this.visit(ctx.type());
+
+        function.addParameter(id, value);
+
+        return Value.VOID;
+    }
+
+    @Override
+    public Value visitParametersWithoutType(@NotNull VbParser.ParametersWithoutTypeContext ctx) {
+        return visit(ctx.atom());
+    }
+
+    public static String getText(ParserRuleContext ctx) {
+        if (ctx.start == null || ctx.stop == null || ctx.start.getStartIndex() < 0 || ctx.stop.getStopIndex() < 0) {
+            return ctx.getText();
+        }
+        return ctx.start.getInputStream().getText(Interval.of(ctx.start.getStartIndex(), ctx.stop.getStopIndex()));
     }
 
     public String getOutput() {

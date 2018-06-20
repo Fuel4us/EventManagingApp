@@ -79,11 +79,15 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
     private int range;
     private final List<MaterialRadioButton> radiolist;
 
+    private final List<MaterialRadioButton> radiolist2;
+
     @Inject
     ExportView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
         dotted.setValue(Boolean.TRUE);
         radiolist = createMaterialRadioButtonArray();
+
+        radiolist2 = createMaterialRadioButtonArrayComplete();
     }
 
     @UiHandler("style_export_pdf")
@@ -102,7 +106,7 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
         WorkbookDTO workbookDTO = Settings.getInstance().getWorkbook().toDTO();
 
         color = color_line.getValue();
-        style = findSelected().getFormValue();
+        style = findSelected(radiolist).getFormValue();
         range = rangeSetValue.getValue();
 
         ExportServiceAsync exportServiceAsync = GWT.create(ExportService.class);
@@ -133,14 +137,12 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
 
     @UiHandler("save_complete")
     void saveComplete(ClickEvent event) {
-
+        MaterialToast.fireToast("SAVECOMPLETE");
         WorkbookDTO workbookDTO = Settings.getInstance().getWorkbook().toDTO();
-
-        color = color_line.getValue();
-        style = findSelected().getFormValue();
-        range = rangeSetValue.getValue();
-        List<Object> listOptions = new ArrayList<>();
-        listOptions = addElementsSelect.getSelectedValues();
+        color = color_line2.getValue();
+        style = findSelected(radiolist2).getFormValue();
+        range = rangeSetValue2.getValue();
+        List<Object> listOptions = addElementsSelect.getSelectedValues();
 
         ExportServiceAsync exportServiceAsync = GWT.create(ExportService.class);
         AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
@@ -225,7 +227,19 @@ class ExportView extends ViewImpl implements ExportPresenter.MyView {
 
     }
 
-    private MaterialRadioButton findSelected() {
+    private List<MaterialRadioButton> createMaterialRadioButtonArrayComplete() {
+
+        List<MaterialRadioButton> list = new ArrayList<>();
+        list.add(dotted2);
+        list.add(double_2);
+        list.add(solid2);
+        list.add(dashed2);
+
+        return list;
+
+    }
+
+    private MaterialRadioButton findSelected(List<MaterialRadioButton> radiolist) {
 
         for (MaterialRadioButton button : radiolist) {
             if (button.getValue()) {

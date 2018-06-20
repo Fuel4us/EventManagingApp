@@ -25,6 +25,8 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.regexp.shared.MatchResult;
+import com.google.gwt.regexp.shared.RegExp;
 import gwt.material.design.client.constants.Color;
 import javax.inject.Inject;
 
@@ -493,12 +495,49 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         loadCellStyles();
 
+        String regex = "\\$([\\s\\S]*?)\\$([\\d]*?)\\$([A-z][0-9]?)";
         firstButton.addClickHandler(event -> {
             if (activeCell != null) {
 
                 String result = "";
                 try {
-                    activeCell.setContent(firstBox.getText());
+                    String content = firstBox.getText();
+
+                    if(content.charAt(0) == '=') {
+                        RegExp regExp = RegExp.compile(regex, "g");
+                        ArrayList<String> refs = new ArrayList<>();
+                        for (MatchResult matcher = regExp.exec(content); matcher != null; matcher = regExp.exec(content))
+                            refs.add(matcher.getGroup(0));
+
+                        for (String ref : refs) {
+                            String[] parts = ref.split("\\$");
+                            boolean found = false;
+                            for (Workbook w : Settings.getInstance().getOpenedWorkbooks()) {
+                                if (w.name().equals(parts[1])) {
+                                    found = true;
+
+                                    String value = "";
+                                    Address address = new Address(parts[3]);
+                                    try {
+                                        value = w.getSpreadsheet(Integer.parseInt(parts[2])).getCell(address).getValue().toString();
+                                    } catch (IndexOutOfBoundsException e) {
+                                        MaterialToast.fireToast("This spreadsheet does not exist, using this one instead");
+                                        value = this.customTable.getRow(0).getData().sheet.getCell(address).getValue().toString();
+                                    }
+                                    MaterialToast.fireToast("Cell " + parts[3] + " value: " + value);
+                                    content = content.replace(ref, value);
+
+                                    break;
+                                }
+                            }
+                            if (!found) {
+                                MaterialToast.fireToast("Workbook " + parts[1] + " is not opened, aborting!");
+                                return;
+                            }
+                        }
+                    }
+
+                    activeCell.setContent(content);
 //                    SpreadsheetImpl.fromDTO(Settings.getInstance().getWorkbook().spreadsheets.get(0).cells(activeCell.getAddress()).setContent(firstBox.getText());
                     Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
                     if (extensionCond != null) {

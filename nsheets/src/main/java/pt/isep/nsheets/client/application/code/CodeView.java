@@ -44,10 +44,10 @@ class CodeView extends ViewImpl implements CodePresenter.MyView {
 
         codeTextArea.setText("Function f1() As Integer\n"
                 + "Dim x As Integer\n"
-                + "x = 1\n"
-                + "Log \"The variable x has the value \" + x\n"
+                + "x=1\n"
+                + "Log x\n"
                 + "Return x\n"
-                + "End Function\n"
+                + "End Function\n "
                 + "\n"
                 + "f1()"
         );
