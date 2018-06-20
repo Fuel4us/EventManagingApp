@@ -14,6 +14,7 @@ public class Main {
     public static void main(String[] args) {
         Map<String, Value> cells = new HashMap<>();
         cells.put("A1", new Value(Double.valueOf("10")));
+
         Map<String, Value> map = new HashMap<>();
         map.put(cells.entrySet().iterator().next().getKey(), cells.entrySet().iterator().next().getValue());
 

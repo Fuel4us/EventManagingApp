@@ -11,9 +11,8 @@ stat:
 	| while_stat
 	| log
 	| function
-  /*| procedure*/
-	| functionCall
-  /*| procedureCall*/
+    | procedure
+	| methodCall
 	| OTHER {System.err.println("unknown char: " + $OTHER.text);};
 
 declaration: DIM ID AS type;
@@ -59,9 +58,7 @@ type: TYPE_INT | TYPE_FLOAT | TYPE_STRING;
 
 function: initFunction functionBody endFunction ;
 
-initFunction: FUNCTION functionName AS type;
-
-functionName: ID OPAR /*parametersWithType*/ CPAR;
+initFunction: FUNCTION methodName AS type;
 
 functionBody: stat* returnFunction;
 
@@ -69,22 +66,19 @@ returnFunction: RETURN ID;
 
 endFunction: END FUNCTION;
 
-functionCall: ID OPAR /*parametersWithoutType*/ CPAR;
-
-/*
-parametersWithType: type ID COMMA parametersWithType | type ID | ;
-
-parametersWithoutType: ID COMMA parametersWithoutType | ID | ;
-
 procedure: initProcedure stat* endProcedure;
 
-initProcedure: 'Sub' procedureName;
+initProcedure: SUB methodName;
 
-procedureName: ID OPAR CPAR;
+endProcedure: END SUB;
 
-endProcedure: 'End' 'Sub';
+methodName: ID OPAR parametersWithType? CPAR;
 
-procedureCall: procedureName;*/
+methodCall: ID OPAR parametersWithoutType? CPAR;
+
+parametersWithType: ID AS type COMMA parametersWithType | ID AS TYPE;
+
+parametersWithoutType: atom COMMA parametersWithoutType | atom;
 
 TYPE_INT: 'Integer';
 TYPE_FLOAT: 'Float';

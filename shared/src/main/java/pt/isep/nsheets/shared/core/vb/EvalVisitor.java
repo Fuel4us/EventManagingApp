@@ -271,28 +271,14 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
 
     @Override
     public Value visitFunction(@NotNull VbParser.FunctionContext ctx) {
-        String functionName = ctx.initFunction().functionName().ID().getText();
+        String functionName = ctx.initFunction().methodName().ID().getText();
         String functionBody = getText(ctx.functionBody());
 
         functionMemory = new HashMap<>();
         function = new Function(functionName, functionBody);
-        this.functionMemory.clear();
 
         return this.visit(ctx.functionBody());
     }
-
-  /*@Override
-    public Value visitParametersWithoutType(@NotNull VbParser.ParametersWithoutTypeContext ctx) {
-        return visit(ctx.ID());
-    }
-
-    @Override
-    public Value visitParametersWithType(@NotNull VbParser.ParametersWithTypeContext ctx) {
-        String id = ctx.ID().getText();
-        Value value = this.visit(ctx.type());
-
-        return functionMemory.put(id, value);
-    }*/
 
     @Override
     public Value visitFunctionBody(@NotNull VbParser.FunctionBodyContext ctx) {
@@ -311,7 +297,7 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitFunctionCall(@NotNull VbParser.FunctionCallContext ctx) {
+    public Value visitMethodCall(@NotNull VbParser.MethodCallContext ctx) {
         String functionBody = function.getFunction();
 
         VbLexer lexer = new VbLexer(new ANTLRInputStream(functionBody));
@@ -320,6 +306,32 @@ public class EvalVisitor extends VbBaseVisitor<Value> {
         Value value = this.visit(tree);
 
         return value;
+    }
+
+    @Override
+    public Value visitProcedure(@NotNull VbParser.ProcedureContext ctx) {
+        String functionName = ctx.initProcedure().methodName().ID().getText();
+        //String functionBody = getText(ctx.stat().forEach((stat) -> this.visit(stat)));
+
+        functionMemory = new HashMap<>();
+        //function = new Function(functionName, functionBody);
+
+        return Value.VOID;
+    }
+
+    @Override
+    public Value visitParametersWithType(@NotNull VbParser.ParametersWithTypeContext ctx) {
+        String id = ctx.ID().getText();
+        Value value = this.visit(ctx.type());
+
+        function.addParameter(id, value);
+
+        return Value.VOID;
+    }
+
+    @Override
+    public Value visitParametersWithoutType(@NotNull VbParser.ParametersWithoutTypeContext ctx) {
+        return visit(ctx.atom());
     }
 
     public static String getText(ParserRuleContext ctx) {
