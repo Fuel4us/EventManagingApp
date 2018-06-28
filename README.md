@@ -1,6 +1,10 @@
 LAPR4/NSheets Project Repository
 ================================
 
+# Brief Note
+
+This project belongs to ISEP and It's contributors. It's free to check and to help you but it should be credited! 
+
 # 1. Introduction
 	
 This project aims at building a web version of Cleansheets, a Desktop worksheet application available at [Bitbucket](https://bitbucket.org/lei-isep/csheets). 	
