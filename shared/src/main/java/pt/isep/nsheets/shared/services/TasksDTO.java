@@ -5,38 +5,46 @@
  */
 package pt.isep.nsheets.shared.services;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Pedro Rodrigues - (1140572)
  */
-public class TasksDTO {
+@SuppressWarnings("serial")
+public class TasksDTO implements Serializable {
 
     /**
      * Name of the task
      */
-    private String name;
+    public String name;
 
     /**
      * Description of the task
      */
-    private String description;
+    public String description;
 
     /**
      * Priority level of the task
      */
-    private int priorityLevel;
+    public String priorityLevel;
 
     /**
      * Progress of the task
      */
-    private int progress;
+    public String progress;
 
     /**
      * Indicates if a task is completed
      */
-    private boolean taskCompleted;
+    public boolean taskCompleted;
 
-    public TasksDTO(String name, String description, int priorityLevel, int progress, boolean taskCompleted) {
+    public TasksDTO() {
+    }
+
+    ;
+
+    public TasksDTO(String name, String description, String priorityLevel, String progress, boolean taskCompleted) {
         this.name = name;
         this.description = description;
         this.priorityLevel = priorityLevel;
@@ -44,43 +52,4 @@ public class TasksDTO {
         this.taskCompleted = taskCompleted;
     }
 
-    protected TasksDTO() {
-
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @return the description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * @return the priorityLevel
-     */
-    public int getPriorityLevel() {
-        return priorityLevel;
-    }
-
-    /**
-     * @return the progress
-     */
-    public int getProgress() {
-        return progress;
-    }
-
-    /**
-     * @return the taskCompleted
-     */
-    public boolean isTaskCompleted() {
-        return taskCompleted;
-    }
-    
 }

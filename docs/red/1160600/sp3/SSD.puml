@@ -1,0 +1,22 @@
+@startuml
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor User
+entity Browser
+
+
+User -> Browser : user opens funtion wizard
+Browser --> User : Shows Functions
+User -> Browser : picks a function
+loop
+Browser --> User : asks for parameter
+User ->Browser : adds parameter
+end
+Browser-> User : shows result
+User -> Browser : confirms
+Browser -> Browser : writes function in activeCell input Box
+@enduml

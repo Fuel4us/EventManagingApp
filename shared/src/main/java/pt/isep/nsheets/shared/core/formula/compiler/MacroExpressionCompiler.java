@@ -26,7 +26,7 @@ public class MacroExpressionCompiler implements ExpressionCompiler{
     }
 
     @Override
-    public Expression compile(Cell cell, String source) throws FormulaCompilationException {
+    public Formula compile(Cell cell, String source) throws FormulaCompilationException {
 
         // Create the lexer and parser
         ANTLRInputStream input = new ANTLRInputStream(source);
@@ -52,7 +52,8 @@ public class MacroExpressionCompiler implements ExpressionCompiler{
         if (eval.getNumberOfErrors() > 0) {
             throw new FormulaCompilationException(eval.getErrorsMessage());
         }
-        return result;
+        return new Formula(cell, result);
+//        return result;
     }
 
     @Override

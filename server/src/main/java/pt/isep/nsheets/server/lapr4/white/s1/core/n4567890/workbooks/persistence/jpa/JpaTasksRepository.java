@@ -38,4 +38,25 @@ public class JpaTasksRepository extends NSheetsJpaRepositoryBase<Tasks, Long> im
         entityManager().getTransaction().commit();
     }
 
+    @Override
+    public Iterable<Tasks> findByAnyAttribute(String name) {
+        final Map<String, Object> params = new HashMap<>();
+        params.put("name", name);
+        params.put("description", name);
+        params.put("priorityLevel", name);
+        params.put("progress", name);
+
+        return match("e.name=:name or e.description=:description or e.priorityLevel=:priorityLevel or e.progress=:progress", params);
+
+    }
+
+    @Override
+    public Iterable<Tasks> findTasksNotCompleted(String name) {
+        boolean check = false;
+        final Map<String, Object> params = new HashMap<>();
+        params.put("check", check);
+
+        return match("e.taskCompleted=:check", params);
+    }
+
 }

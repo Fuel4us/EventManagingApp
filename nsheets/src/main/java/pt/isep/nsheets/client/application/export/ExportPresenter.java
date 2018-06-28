@@ -129,6 +129,10 @@ public class ExportPresenter extends Presenter<ExportPresenter.MyView, ExportPre
         getView().closeModal(e -> {
             this.getView().getOverlay().close();
         });
+        
+        getView().closeModalComplete(e -> {
+            this.getView().getOverlayComplete().close();
+        });
 
     }
 

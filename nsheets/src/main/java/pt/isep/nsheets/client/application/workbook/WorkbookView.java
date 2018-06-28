@@ -25,6 +25,8 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.regexp.shared.MatchResult;
+import com.google.gwt.regexp.shared.RegExp;
 import gwt.material.design.client.constants.Color;
 import javax.inject.Inject;
 
@@ -40,8 +42,10 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import gwt.material.design.addins.client.popupmenu.MaterialPopupMenu;
 import gwt.material.design.addins.client.window.MaterialWindow;
+import gwt.material.design.client.base.MaterialWidget;
 import gwt.material.design.client.constants.IconPosition;
 import gwt.material.design.client.constants.IconType;
 
@@ -67,6 +71,7 @@ import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.extensions.CellStyleExtensi
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleDTO;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleService;
 import pt.isep.nsheets.shared.lapr4.blue.n1050475.s2.services.CellStyleServiceAsync;
+import pt.isep.nsheets.shared.lapr4.green.n1140302.s3.Filter.FilterController;
 import pt.isep.nsheets.shared.lapr4.red.s1.core.n1161292.services.WorkbookDTO;
 
 import pt.isep.nsheets.client.lapr4.red.s1.core.n1160600.workbook.application.SortSpreadsheetController;
@@ -167,8 +172,8 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     //uiObjects by 1140317
     @UiField
     MaterialButton addBasicWizardButton;
-    @UiField
-    MaterialButton chooseButton;
+//    @UiField
+//    MaterialButton chooseButton;
     @UiField
     MaterialButton doneButton;
     @UiField
@@ -178,8 +183,28 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     @UiField
     MaterialTextBox basicWizardTextBox;
     @UiField
-    MaterialTextBox basicWizardTextBox2, txtComment;
+    MaterialTextBox basicWizardTextBox2;
+//    MaterialTextBox addParameterBox;
+    @UiField
+    MaterialCollection parametersCollection;
+    @UiField
+    MaterialPanel basicWizardPanel;
+    @UiField
+    MaterialTextBox basicWizardResultBox;
+    @UiField
+    MaterialTextBox  txtComment;
 
+
+    @UiField
+    MaterialButton filterButton;
+    @UiField
+    MaterialWindow filterWindow;
+    @UiField
+    MaterialLink filterLink;
+    @UiField
+    MaterialTextBox filterStartCellTextBox,filterEndCellTextBox,valueTextBox;
+    @UiField
+    MaterialListBox filterListBox;
 
     /*
     Style UI objects by 1050475
@@ -249,11 +274,9 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialTextBox descriptionModal;
 
     @UiField
-    MaterialLink macro;
+    MaterialLink macroLink;
     @UiField
     MaterialModal macroModal;
-    @UiField
-    MaterialTitle macroTitle;
     @UiField
     MaterialTextArea macroTextArea;
     @UiField
@@ -262,7 +285,13 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
     MaterialIcon macroModalCloseButton;
     @UiField
     MaterialListValueBox<Macro> macroList;
-
+    @UiField
+    MaterialTextBox saveMacroName;
+    @UiField
+    MaterialButton saveMacro;
+    @UiField
+    MaterialButton removeMacro;
+    
     @UiField
     MaterialCollection openWorkbooks;
 
@@ -424,7 +453,7 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
         }
 
     }
-
+    
     @Override
     public void initWorkbook() {
         Spreadsheet sh = getCurrentSpreadsheet();
@@ -466,12 +495,49 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
 
         loadCellStyles();
 
+        String regex = "\\$([\\s\\S]*?)\\$([\\d]*?)\\$([A-z][0-9]?)";
         firstButton.addClickHandler(event -> {
             if (activeCell != null) {
 
                 String result = "";
                 try {
-                    activeCell.setContent(firstBox.getText());
+                    String content = firstBox.getText();
+
+                    if(content.charAt(0) == '=') {
+                        RegExp regExp = RegExp.compile(regex, "g");
+                        ArrayList<String> refs = new ArrayList<>();
+                        for (MatchResult matcher = regExp.exec(content); matcher != null; matcher = regExp.exec(content))
+                            refs.add(matcher.getGroup(0));
+
+                        for (String ref : refs) {
+                            String[] parts = ref.split("\\$");
+                            boolean found = false;
+                            for (Workbook w : Settings.getInstance().getOpenedWorkbooks()) {
+                                if (w.name().equals(parts[1])) {
+                                    found = true;
+
+                                    String value = "";
+                                    Address address = new Address(parts[3]);
+                                    try {
+                                        value = w.getSpreadsheet(Integer.parseInt(parts[2])).getCell(address).getValue().toString();
+                                    } catch (IndexOutOfBoundsException e) {
+                                        MaterialToast.fireToast("This spreadsheet does not exist, using this one instead");
+                                        value = this.customTable.getRow(0).getData().sheet.getCell(address).getValue().toString();
+                                    }
+                                    MaterialToast.fireToast("Cell " + parts[3] + " value: " + value);
+                                    content = content.replace(ref, value);
+
+                                    break;
+                                }
+                            }
+                            if (!found) {
+                                MaterialToast.fireToast("Workbook " + parts[1] + " is not opened, aborting!");
+                                return;
+                            }
+                        }
+                    }
+
+                    activeCell.setContent(content);
 //                    SpreadsheetImpl.fromDTO(Settings.getInstance().getWorkbook().spreadsheets.get(0).cells(activeCell.getAddress()).setContent(firstBox.getText());
                     Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
                     if (extensionCond != null) {
@@ -503,6 +569,25 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             }
             updateCollapsible();
             // Window.alert("Hello");
+        });
+
+        filterLink.addClickHandler(event->{
+            filterWindow.open();
+        });
+
+        filterButton.addClickHandler(clickEvent -> {
+
+           FilterController controller = new FilterController();
+
+            int i = controller.getRowToDelete(filterStartCellTextBox.getText(),filterEndCellTextBox.getText(),filterListBox.getSelectedIndex(),Integer.parseInt(valueTextBox.getText()),Settings.getInstance().getWorkbook().toDTO());
+
+            if(i!=-1){
+                customTable.getRow(i).removeFromParent();
+                MaterialToast.fireToast("Successfully filtered, a row was removed");
+            }else{
+                MaterialToast.fireToast("Successfully filtered, no row needed to be removed");
+            }
+
         });
 
         searchButton.addClickHandler(event -> {
@@ -712,19 +797,27 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             basicWizardComboBox.add(function.getIdentifier());
         }
 
-        doneButton.addClickHandler(event -> {
-            int i = basicWizardComboBox.getSelectedIndex();
-            firstBox.setText(lang.getFunctions()[i].getIdentifier());
-            basicWizardWindow.close();
+        doneButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                int index = basicWizardComboBox.getSelectedIndex();
+                int size = parametersCollection.getWidgetCount();
+                String parameters = "";
+                for (int i = 0; i < size; i++) {
+                    String aux = parametersCollection.getWidget(i).getTitle();
+                    if (!aux.trim().isEmpty()) {
+                        parameters += aux;
+                        if (i < (size - 1) && !parameters.isEmpty()) {
+                            parameters += "; ";
+                        }
+                    }
+                }
+                firstBox.setText(updateResultString(lang));
+                basicWizardWindow.close();
+            }
         });
-
-        chooseButton.addClickHandler(event -> {
-            basicWizardTextBox.setText(getParameters(lang));
-            basicWizardTextBox2.setText(getDescription(lang));
-
-        });
-
-        macro.addClickHandler(event -> {
+        
+        macroLink.addClickHandler(event -> {
             macroModal.open();
         });
 
@@ -732,60 +825,259 @@ public class WorkbookView extends ViewImpl implements WorkbookPresenter.MyView {
             macroModal.close();
         });
 
+        macroList.addValueChangeHandler(selectEvent -> {
+
+            MaterialToast.fireToast("Selected macro function : " + macroList.getSelectedValue().name());
+            
+            macroTextArea.setText(macroList.getSelectedValue().commands());
+            
+        });
+        
         macroModalDoneButton.addClickHandler(event -> {
             if (activeCell != null) {
+                
+                String result = "";
+                
+//                Macro macroAux = macroList.getSelectedValue();
 
-//                String result = "";
-//                try {
-//                    activeCell.setContentByMacro(macroTextArea.getText());
-//                    Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
-//                    if (extensionCond != null) {
-//
-//                        Conditional cond = ConditionalFormattingExtension.containsCondition((CellImpl) activeCell);
-//
-//                        if (cond != null) {
-//                            boolean flag = ConditionalFormattingExtension.setOperation((CellImpl) activeCell, cond.getCondOperator(), cond.getCondValue());
-//                            MaterialToast.fireToast("Update Cell. Conditional this " + activeCell.getAddress().toString() + " " + cond.getCondOperator() + " " + cond.getCondValue().toString() + " is " + flag);
-//
-//                        }
-//                    }
-//                } catch (FormulaCompilationException e) {
-//                    result = e.getMessage();
-//                } finally {
-//                    customTable.getView().setRedraw(true);
-//                    customTable.getView().refresh();
-//
-//                    this.setActiveCell(activeCell);
-//                }
-                Macro macroAux = macroList.getSelectedValue();
+//                macroAux.addCommand(macroTextArea.getText());
 
-                macroAux.addCommand(macroTextArea.getText());
-
-                ExpressionCompiler compiler = MacroCompilerManager.getInstance().getCompiler(macroAux.language().getName());
+//                ExpressionCompiler compiler = MacroCompilerManager.getInstance().getCompiler("MacroExel");
 
                 try {
-                    Expression expression = compiler.compile(activeCell, macroAux.commands());
+                    
+//                    Expression expression = compiler.compile(activeCell, macroAux.commands());
+                    
+//                    Value value = expression.evaluate();
+                    
+                    activeCell.setContentByMacro(macroTextArea.getText());
+                    
+//                    activeCell.setContent(value.toString());
+                    
+                    MaterialToast.fireToast("Result of Macro function : " + macroTextArea.getText());
+                    
+                    Extension extensionCond = ExtensionManager.getInstance().getExtension("ConditionalFormatting");
+                    if (extensionCond != null) {
 
-                    Value value = expression.evaluate();
+                        Conditional cond = ConditionalFormattingExtension.containsCondition((CellImpl) activeCell);
 
-                    activeCell.setContent(value.toString());
+                        if (cond != null) {
+                            boolean flag = ConditionalFormattingExtension.setOperation((CellImpl) activeCell, cond.getCondOperator(), cond.getCondValue());
+                            MaterialToast.fireToast("Update Cell. Conditional this " + activeCell.getAddress().toString() + " " + cond.getCondOperator() + " " + cond.getCondValue().toString() + " is " + flag);
+                        }
+                    }
+                } catch (FormulaCompilationException e) {
+                    MaterialToast.fireToast(e.getMessage());
+//                } catch (IllegalValueTypeException ex) {
+//                    Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+//                    MaterialToast.fireToast(ex.getMessage());
+                } finally {
                     customTable.getView().setRedraw(true);
                     customTable.getView().refresh();
 
-                    MaterialToast.fireToast("Result of Macro : " + value.toString());
-
-                } catch (FormulaCompilationException | IllegalValueTypeException ex) {
-                    MaterialToast.fireToast(ex.getMessage());
+                    this.setActiveCell(activeCell);
                 }
+                
             }
-            macroModal.close();
+
+        });
+        
+        saveMacro.addClickHandler(event -> {
+
+            if (saveMacroName.getText().isEmpty()) {
+                MaterialToast.fireToast("Macro function name is empty!");
+            } else {
+                if (macroTextArea.getText().isEmpty()) {
+                    MaterialToast.fireToast("There are no commands to add to the macro function!");
+                } else {
+                    Macro macro = new Macro(saveMacroName.getText());
+                    macro.addCommand(macroTextArea.getText());
+
+                    boolean flag = false;
+
+                    for (Macro m : Settings.getInstance().getWorkbook().macros()) {
+                        if (m.name().equalsIgnoreCase(saveMacroName.getText())) {
+                            flag = true;
+                        }
+                    }
+
+                    if (!flag) {
+                        if (Settings.getInstance().getWorkbook().addMacro(macro)) {
+                            MaterialToast.fireToast("Macro function " + macro.name() + " added to the workbook.");
+                            
+                            macroList.addItem(macro, macro.toString());
+                            
+                            saveMacroName.clear();
+                            macroTextArea.clear();
+                        }
+                    } else {
+                        
+                        MaterialToast.fireToast("Could not add macro function: name already exists!");
+                    }
+                }
+                
+            }
+        });
+        
+        removeMacro.addClickHandler(event -> {
+            String macroName = saveMacroName.getText();
+
+            if (Settings.getInstance().getWorkbook().removeMacro(macroName)) {
+                MaterialToast.fireToast("Macro Function " + macroName + " was removed with success.");
+            } else {
+                MaterialToast.fireToast("Could not find/delete macro function " + macroName + "!");
+            }
         });
 
         searchAndReplaceButton.addClickHandler(event -> {
             openSearchAndReplaceWindow(currentUser);
         });
+        firstBox.getIcon().addClickHandler(event -> {
+            basicWizardWindow.open();
+        });
+
+        basicWizardComboBox.addValueChangeHandler(event -> {
+            basicWizardTextBox.setText(getParameters(lang));
+            basicWizardTextBox2.setText(getDescription(lang));
+            parametersCollection.clear();
+            try {
+                if (!lang.getFunction(basicWizardComboBox.getSelectedValue()).isVarArg()) {
+//                    chooseButton.setEnabled(false);
+                    createParameterBoxs(lang);
+                } else {
+//                    chooseButton.setEnabled(true);
+                    createInfiniteParameterBox(lang);
+                }
+            } catch (UnknownElementException ex) {
+                Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            updateResultString(lang);
+        });
+        ScrollPanel scroll = new ScrollPanel(basicWizardPanel);
+        scroll.setSize("1000px", "600px");
+        basicWizardWindow.setWidth("1010px");
+        basicWizardWindow.add(scroll);
     }
 
+    private void createInfiniteParameterBox(Language lang) {
+        try {
+            for (FunctionParameter fp : lang.getFunction(basicWizardComboBox.getSelectedValue()).getParameters()) {
+                MaterialTextBox auxBox = new MaterialTextBox();
+                auxBox.setLabel("Add a parameter of the type  -" + fp.getName());
+                auxBox.setIconType(IconType.ADD);
+                parametersCollection.add(auxBox);
+                auxBox.getIcon().addClickHandler(event -> {
+                    if (!auxBox.getText().trim().isEmpty()) {
+                        MaterialTextBox newBox = new MaterialTextBox();
+                        newBox.setReadOnly(true);
+                        newBox.setTitle(auxBox.getText());
+                        newBox.setText(auxBox.getText());
+                        newBox.setIconType(IconType.DELETE);
+                        parametersCollection.add(newBox);
+                        newBox.getIcon().addClickHandler(newEvent -> {
+                            parametersCollection.remove(newBox);
+                            updateResultString(lang);
+                        });
+                        updateResultString(lang);
+                    } else {
+                        MaterialToast.fireToast("Empty parameter");
+                    }
+                    auxBox.setText("");
+
+                });
+            }
+        } catch (UnknownElementException ex) {
+            Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void createParameterBoxs(Language lang) {
+        try {
+            for (FunctionParameter fp : lang.getFunction(basicWizardComboBox.getSelectedValue()).getParameters()) {
+                MaterialTextBox auxBox = new MaterialTextBox();
+                auxBox.setLabel("Add a parameter of the type  -" + fp.getName());
+                IconType types[] = {IconType.ADD, IconType.EDIT};
+                auxBox.setIconType(types[0]);
+                parametersCollection.add(auxBox);
+                auxBox.getIcon().addClickHandler(event -> {
+                    if (!auxBox.getText().trim().isEmpty()) {
+                        if (auxBox.getIcon().getIconType() == types[0]) {
+                            if (!auxBox.getText().trim().isEmpty()) {
+                                auxBox.setIconType(types[1]);
+                                auxBox.setReadOnly(true);
+                                auxBox.setTitle(auxBox.getText());
+                                updateResultString(lang);
+                            } else {
+                                MaterialToast.fireToast("Empty parameter");
+                            }
+                        } else {
+                            auxBox.setIconType(types[0]);
+                            auxBox.setReadOnly(false);
+                            auxBox.setTitle("");
+                            updateResultString(lang);
+                        }
+                    }
+                });
+            }
+        } catch (UnknownElementException ex) {
+            Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private String updateResultString(Language lang) {
+        int index = basicWizardComboBox.getSelectedIndex();
+        int size = parametersCollection.getWidgetCount();
+        String parameters = "";
+        String errorMsg = "";
+        boolean error = true;
+        for (int i = 0; i < size; i++) {
+            String aux = parametersCollection.getWidget(i).getTitle();
+            if (!aux.trim().isEmpty()) {
+                parameters += aux;
+                if (i < (size - 1) && !parameters.isEmpty()) {
+                    parameters += "; ";
+                }
+            } else {
+                try {
+                    if (!lang.getFunction(basicWizardComboBox.getSelectedValue()).isVarArg()) {
+                        if(!lang.getFunction(basicWizardComboBox.getSelectedValue()).getParameters()[i].isOptional()) {
+                            errorMsg = "Missing parameter -" + lang.getFunction(basicWizardComboBox.getSelectedValue()).getParameters()[i].getName();
+                            MaterialToast.fireToast(errorMsg);
+                        }
+                    }
+                } catch (UnknownElementException ex) {
+                    Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        String result = lang.getFunctions()[index].getIdentifier() + "(" + parameters + ")";
+        if(!errorMsg.isEmpty()) {
+            basicWizardResultBox.setText(errorMsg);
+        }else {
+            if(activeCell == null) {
+                basicWizardResultBox.setText("No active cell selected");
+            }else {
+                String aux = activeCell.getContent();
+                try {
+                    activeCell.setContent("=" + result);
+                    basicWizardResultBox.setText(activeCell.getValue().toString());
+                } catch (FormulaCompilationException ex) {
+                    Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+                    MaterialToast.fireToast(ex.getMessage());
+                    basicWizardResultBox.setText("Function is not possible");
+                }
+                
+                try {
+                    activeCell.setContent(aux);
+                } catch (FormulaCompilationException ex) {  //previous content so erros shouldn't be important
+                    Logger.getLogger(WorkbookView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return lang.getFunctions()[index].getIdentifier() + "(" + parameters + ")";
+    }
+    
     private void updateCollapsible() {
         colapsBody.clear();
 

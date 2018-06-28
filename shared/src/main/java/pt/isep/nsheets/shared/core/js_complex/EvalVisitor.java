@@ -58,15 +58,21 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
             return cells.put(id.substring(1), value);
         }
 
-        if (!id.startsWith("$") && !ctx.getChild(0).getText().equals("var") && !memory.containsKey(id)) {
-            throw new RuntimeException("Invalid assigment");
+        if (!id.startsWith("$") && !ctx.getChild(0).getText().equals("var")) {
+
+            if (!block_memory.containsKey(id) && !memory.containsKey(id)) {
+                throw new RuntimeException("Invalid assigment");
+            }
+
         }
 
-        if (ctx.getParent().getParent().getParent().getRuleIndex() == Js_complexParser.RULE_functionblock) {
-            if (!id.startsWith("$")) {
-                if (memory.get(id) != null) {
-                    return memory.put(id, value);
-                }
+        System.out.println(ctx.getParent().getParent().getClass().getName());
+
+        if (!id.startsWith("$")) {
+            if (memory.get(id) != null) {
+                return memory.put(id, value);
+            }
+            if (ctx.getParent() instanceof FunctionblockContext) {
                 return block_memory.put(id, value);
             }
         }
@@ -76,18 +82,22 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
     @Override
     public Value visitIdAtom(IdAtomContext ctx) {
         String id = ctx.getText();
-        Value value;
+        Value value = null;
+
         if (id.startsWith("$")) {
             value = cells.get(id.substring(1));
         } else {
-            if (memory.get(id) != null) {
-                value = memory.get(id);
-            } else if (block_memory.get(id) != null) {
-                value = block_memory.get(id);
+            if (block_memory == null) {
+                if (memory.get(id) != null) {
+                    value = memory.get(id);
+                }
             } else {
-                value = null;
+                if (block_memory.get(id) != null) {
+                    value = block_memory.get(id);
+                } else if (memory.get(id) != null) {
+                    value = memory.get(id);
+                }
             }
-
         }
         if (value == null) {
             throw new RuntimeException("no such variable: " + id);
@@ -328,7 +338,7 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
     @Override
     public Value visitFunctionblock(@NotNull FunctionblockContext ctx) {
         Value returnValue;
-        
+
         ctx.stat().forEach((stat) -> {
             this.visit(stat);
         });
@@ -366,7 +376,6 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
 
         } else {
 
-            
             Function f = new Function(id, getFullText(ctx.functionblock()));
             newFunctions.add(f);
 
@@ -375,8 +384,8 @@ public class EvalVisitor extends Js_complexBaseVisitor<Value> {
                 consoleError(error);
                 return Value.VOID;
             }
-            
-                return_value = this.visit(ctx.functionblock());
+
+            return_value = this.visit(ctx.functionblock());
 
         }
         this.block_memory.clear();

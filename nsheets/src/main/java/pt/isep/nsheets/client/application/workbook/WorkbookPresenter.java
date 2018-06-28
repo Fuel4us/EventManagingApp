@@ -188,15 +188,23 @@ public class WorkbookPresenter extends Presenter<WorkbookPresenter.MyView, Workb
         
         for(Workbook w : workbooks) {
             MaterialCollectionItem item = new MaterialCollectionItem();
-            MaterialLabel lbl = new MaterialLabel();
-            lbl.setText(w.name());
-            item.add(lbl);
+            MaterialLink link = new MaterialLink();
+            link.setText(w.name());
+            link.addClickHandler(e -> {
+                MaterialToast.fireToast("Abre workbook: " + w.name());
+                Settings.getInstance().updateWorkbook(w.toDTO());
+                onReveal();
+            });
+
+            item.add(link);
             
             MaterialCollectionSecondary itemClose = new MaterialCollectionSecondary();
             MaterialButton closeBtn = new MaterialButton();
             closeBtn.setText("Close");
             closeBtn.addClickHandler(e -> {
+                MaterialToast.fireToast("Fecha workbook: " + w.name());
                 Settings.getInstance().closeOpenedWorkbook(w);
+                listOpenedWorkbooks();
             });
             
             itemClose.add(closeBtn);
